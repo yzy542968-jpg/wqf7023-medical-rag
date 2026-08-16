@@ -72,7 +72,9 @@ On the result-blind second set, the hybrid-minus-lexical Macro F1 difference is 
 
 The frozen V2.1 Platt model also fails to transfer cleanly: for V2.3 hybrid on wording set 2, raw ECE is `0.1002`, while applying the original calibration model raises ECE to `0.1688` and false-answer rate from `0.3194` to `0.3380`. Calibration is therefore distribution-specific in this experiment. The V2.3 table uses the V2.1 frozen answerability threshold for every system; its wording-set-1 values should not be compared as a pure planner effect against V2.2, which selected a separate semantic-system threshold on development.
 
-The new planner pack was generated locally on an NVIDIA GeForce RTX 5070 Laptop GPU with 8,151 MiB, batch size 32, and eight maximum new tokens. One descriptive cold-start run, including model loading, processed 432 planner prompts in 15.597 seconds (`27.70` prompts/second). This measurement describes one machine and is not presented as a general latency claim. The policy avoids semantic planning for `96.76%` of original questions but only `12.73%` of second-set questions, so deployment cost depends strongly on wording distribution.
+The new planner pack was profiled locally on an NVIDIA GeForce RTX 5070 Laptop GPU with 8,150.6 MiB, batch size 32, and eight maximum new tokens. Model and tokenizer loading took `2.813s`; generation for 432 planner prompts took `8.159s`; total process time was `14.696s`. Generation-only throughput was `52.95` prompts/second and throughput including loading was `29.40` prompts/second. PyTorch measured peak CUDA memory of `3,387.6 MiB` allocated and `3,654.0 MiB` reserved. This is one cache- and machine-dependent run, not a deployment latency claim.
+
+The hybrid policy's semantic-planner call rate is `3.24%` on original wording, `100%` on reserved wording set 1, and `87.27%` on set 2. Corresponding mean evidence-retrieval calls are `1.032`, `1.046`, and `0.868`; mean returned chunks are `2.245`, `2.178`, and `1.956`. Cost therefore depends strongly on language distribution: the lexical gate nearly eliminates LLM planning on familiar forms but saves only `12.73%` of planner calls on the second transfer set.
 
 ## Untouched locked-system replication
 
@@ -112,6 +114,7 @@ python scripts/build_v23_hybrid_preregistration.py
 python scripts/run_hf_generation.py `
   --prompt-pack data/processed/prompt_packs/v23_hybrid_transfer2_planner.jsonl `
   --output experiments/post_submission_v23/planner_generations_qwen15.jsonl `
+  --metrics-output experiments/post_submission_v23/generation_runtime_profile.json `
   --model Qwen/Qwen2.5-1.5B-Instruct --device cuda `
   --max-new-tokens 8 --batch-size 32 --temperature 0 --local-files-only
 python scripts/evaluate_v23_hybrid_planner.py

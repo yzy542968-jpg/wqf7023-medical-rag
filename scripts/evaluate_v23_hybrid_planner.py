@@ -39,10 +39,15 @@ def _read_jsonl(path: Path) -> list[dict[str, Any]]:
     ]
 
 
-def _git_commit() -> str:
-    return subprocess.check_output(
-        ["git", "rev-parse", "HEAD"], cwd=ROOT, text=True
-    ).strip()
+def _git_introduction_commit(relative_path: str) -> str:
+    commits = subprocess.check_output(
+        ["git", "log", "--diff-filter=A", "--format=%H", "--", relative_path],
+        cwd=ROOT,
+        text=True,
+    ).splitlines()
+    if not commits:
+        raise RuntimeError(f"Cannot locate introduction commit for {relative_path}")
+    return commits[-1].strip()
 
 
 def _canonical_json_sha256(payload: dict[str, Any]) -> str:
@@ -312,8 +317,14 @@ def main() -> None:
         type=Path,
         default=ROOT / "experiments" / "post_submission_v23",
     )
-    parser.add_argument("--generation-seconds", type=float)
-    parser.add_argument("--generation-gpu")
+    parser.add_argument(
+        "--runtime-profile",
+        type=Path,
+        default=ROOT
+        / "experiments"
+        / "post_submission_v23"
+        / "generation_runtime_profile.json",
+    )
     args = parser.parse_args()
 
     benchmark = json.loads(args.benchmark.read_text(encoding="utf-8"))
@@ -367,7 +378,9 @@ def main() -> None:
         "experiment": "v23_preregistered_hybrid_planner",
         "protocol": {
             **manifest,
-            "preregistration_git_commit": _git_commit(),
+            "preregistration_git_commit": _git_introduction_commit(
+                "experiments/post_submission_v23/preregistration_manifest.json"
+            ),
             "preregistration_manifest_canonical_sha256": _canonical_json_sha256(
                 manifest
             ),
@@ -377,18 +390,27 @@ def main() -> None:
         },
         "evaluation_sets": summaries,
     }
-    if args.generation_seconds is not None:
-        output["runtime_profile"] = {
-            "scope": "second reserved wording planner pack only",
-            "records": len(v23_pack),
-            "elapsed_seconds": args.generation_seconds,
-            "records_per_second": len(v23_pack) / args.generation_seconds,
-            "gpu": args.generation_gpu,
-            "batch_size": 32,
-            "max_new_tokens": 8,
-            "includes_model_load": True,
-            "interpretation": "single-machine descriptive measurement, not a latency claim",
+    if args.runtime_profile.exists():
+        runtime_profile = json.loads(args.runtime_profile.read_text(encoding="utf-8"))
+        if runtime_profile.get("records_generated") != len(v23_pack):
+            raise ValueError("Runtime profile does not cover the complete V2.3 pack.")
+        output["runtime_profile"] = runtime_profile
+    output["cost_profile"] = {
+        set_name: {
+            "semantic_planner_call_rate": result["hybrid_policy_usage"][
+                "semantic_planner_call_rate"
+            ],
+            "semantic_planner_calls_per_100_questions": 100
+            * result["hybrid_policy_usage"]["semantic_planner_call_rate"],
+            "mean_evidence_retrieval_calls": result["systems"]["hybrid"]["raw"][
+                "mean_retrieval_calls"
+            ],
+            "mean_retrieved_chunks": result["systems"]["hybrid"]["raw"][
+                "mean_retrieved_chunks"
+            ],
         }
+        for set_name, result in summaries.items()
+    }
     args.output_dir.mkdir(parents=True, exist_ok=True)
     with (args.output_dir / "rows.jsonl").open("w", encoding="utf-8") as handle:
         for row in all_rows:

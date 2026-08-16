@@ -8,6 +8,8 @@ import pytest
 from scripts.run_hf_generation import (
     _acquire_output_lock,
     _deduplicate_existing_output,
+    _rate,
+    _sha256,
 )
 
 
@@ -31,3 +33,11 @@ def test_output_lock_rejects_concurrent_writer(tmp_path: Path) -> None:
             _acquire_output_lock(output)
     finally:
         lock.unlink(missing_ok=True)
+
+
+def test_runtime_helpers_are_deterministic(tmp_path: Path) -> None:
+    payload = tmp_path / "pack.jsonl"
+    payload.write_text('{"qid":"q1"}\n', encoding="utf-8")
+    assert _sha256(payload) == _sha256(payload)
+    assert _rate(10, 2.0) == 5.0
+    assert _rate(10, 0.0) is None

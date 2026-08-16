@@ -136,6 +136,12 @@ def main() -> None:
     hybrid_summary = _read(
         ROOT / "experiments" / "post_submission_v23" / "summary.json"
     )
+    runtime_artifact = _read(
+        ROOT
+        / "experiments"
+        / "post_submission_v23"
+        / "generation_runtime_profile.json"
+    )
     replication_summary = _read(
         ROOT / "experiments" / "locked_replication" / "summary.json"
     )
@@ -207,6 +213,24 @@ def main() -> None:
     )
     if macro_ci[0] is None or macro_ci[0] <= 0:
         failures.append("v2.3 transfer robustness gain is not positive at CI lower bound")
+    runtime_profile = hybrid_summary.get("runtime_profile", {})
+    if runtime_profile != runtime_artifact:
+        failures.append("v2.3 embedded runtime profile differs from tracked artifact")
+    cuda_profile = runtime_profile.get("cuda", {}) or {}
+    if runtime_profile.get("records_generated") != hybrid_manifest.get("record_count"):
+        failures.append("v2.3 runtime profile does not cover the frozen planner pack")
+    if runtime_profile.get("device") != "cuda":
+        failures.append("v2.3 runtime profile is not a CUDA measurement")
+    peak_allocated = cuda_profile.get("peak_allocated_bytes")
+    peak_reserved = cuda_profile.get("peak_reserved_bytes")
+    total_memory = cuda_profile.get("total_memory_bytes")
+    if not all(
+        isinstance(value, (int, float)) and value > 0
+        for value in (peak_allocated, peak_reserved, total_memory)
+    ):
+        failures.append("v2.3 CUDA peak-memory measurements are missing")
+    elif not peak_allocated <= peak_reserved <= total_memory:
+        failures.append("v2.3 CUDA memory measurements are inconsistent")
     if replication_summary.get("status") != "complete":
         failures.append("locked replication is not complete")
     if replication_summary.get("generation", {}).get("unique_qid_count") != replication[
@@ -277,6 +301,16 @@ def main() -> None:
             )
             .get("false_answer_rate_delta_hybrid_minus_lexical", {})
             .get("ci95"),
+            "runtime": {
+                "model_load_seconds": runtime_profile.get("timing_seconds", {}).get(
+                    "model_and_tokenizer_load"
+                ),
+                "generation_seconds": runtime_profile.get("timing_seconds", {}).get(
+                    "generation"
+                ),
+                "peak_allocated_mib": cuda_profile.get("peak_allocated_mib"),
+                "peak_reserved_mib": cuda_profile.get("peak_reserved_mib"),
+            },
         },
         "human_evaluation_disposition": "future_work_not_conducted",
         "failures": failures,

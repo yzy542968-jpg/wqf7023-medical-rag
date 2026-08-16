@@ -998,6 +998,27 @@ def render_results() -> None:
         f"[{false_delta['ci95'][0]:+.3f}, {false_delta['ci95'][1]:+.3f}]). "
         "The policy is robust but not safety-dominant under wording shift."
     )
+    runtime = v23["runtime_profile"]
+    cuda_runtime = runtime["cuda"]
+    runtime_metrics = st.columns(4)
+    runtime_metrics[0].metric(
+        "Model load", f"{runtime['timing_seconds']['model_and_tokenizer_load']:.2f} s"
+    )
+    runtime_metrics[1].metric(
+        "432 planner prompts", f"{runtime['timing_seconds']['generation']:.2f} s"
+    )
+    runtime_metrics[2].metric(
+        "Generation throughput",
+        f"{runtime['throughput_records_per_second']['generation_only']:.1f}/s",
+    )
+    runtime_metrics[3].metric(
+        "Peak CUDA allocated", f"{cuda_runtime['peak_allocated_mib']:.0f} MiB"
+    )
+    st.caption(
+        "Single local CUDA run on "
+        f"{cuda_runtime['name']}; peak reserved {cuda_runtime['peak_reserved_mib']:.0f} MiB. "
+        "Timing includes cached local model files and is descriptive, not a deployment SLA."
+    )
 
     st.subheader("Locked 300-case replication")
     replication_metrics = st.columns(5)

@@ -9,7 +9,10 @@ from scripts.build_v23_hybrid_preregistration import (
     second_transfer_question,
 )
 from scripts.evaluate_v21_template_transfer import transfer_question
-from scripts.evaluate_v23_hybrid_planner import _paired_case_bootstrap
+from scripts.evaluate_v23_hybrid_planner import (
+    _git_introduction_commit,
+    _paired_case_bootstrap,
+)
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -74,3 +77,11 @@ def test_paired_bootstrap_preserves_case_groups() -> None:
     assert result["case_count"] == 2
     assert result["macro_f1_delta_hybrid_minus_lexical"]["observed"] > 0
     assert result["false_answer_rate_delta_hybrid_minus_lexical"]["observed"] < 0
+
+
+def test_preregistration_commit_is_the_manifest_introduction() -> None:
+    commit = _git_introduction_commit(
+        "experiments/post_submission_v23/preregistration_manifest.json"
+    )
+    assert len(commit) == 40
+    assert commit.startswith("47a2c1a")

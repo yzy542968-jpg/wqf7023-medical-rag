@@ -2,9 +2,11 @@ from __future__ import annotations
 
 import argparse
 import atexit
+import hashlib
 import json
 import os
 from pathlib import Path
+import time
 from typing import Iterable
 
 
@@ -99,6 +101,18 @@ def _batched(records: list[dict], batch_size: int) -> Iterable[list[dict]]:
         yield records[start : start + batch_size]
 
 
+def _sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for block in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def _rate(count: int, seconds: float) -> float | None:
+    return count / seconds if seconds > 0 else None
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Run Hugging Face LLM generation over a prompt pack.")
     parser.add_argument("--prompt-pack", required=True, type=Path)
@@ -109,6 +123,11 @@ def main() -> None:
     parser.add_argument("--max-new-tokens", default=256, type=int)
     parser.add_argument("--batch-size", default=1, type=int)
     parser.add_argument("--temperature", default=0.0, type=float)
+    parser.add_argument(
+        "--metrics-output",
+        type=Path,
+        help="Optional JSON path for timing, throughput, and CUDA peak-memory metrics.",
+    )
     parser.add_argument("--trust-remote-code", action="store_true")
     parser.add_argument("--local-files-only", action="store_true")
     parser.add_argument(
@@ -118,6 +137,7 @@ def main() -> None:
     )
     args = parser.parse_args()
 
+    total_started = time.perf_counter()
     args.output.parent.mkdir(parents=True, exist_ok=True)
     lock_path = _acquire_output_lock(args.output)
     deduplicated_count = (
@@ -127,6 +147,11 @@ def main() -> None:
     torch, AutoModelForCausalLM, AutoTokenizer = _require_generation_stack()
     selected_device = args.device or ("cuda" if torch.cuda.is_available() else "cpu")
 
+    if selected_device == "cuda":
+        torch.cuda.reset_peak_memory_stats()
+        torch.cuda.synchronize()
+
+    load_started = time.perf_counter()
     tokenizer = AutoTokenizer.from_pretrained(
         args.model,
         trust_remote_code=args.trust_remote_code,
@@ -142,6 +167,10 @@ def main() -> None:
         local_files_only=args.local_files_only,
     ).to(selected_device)
     model.eval()
+    if selected_device == "cuda":
+        torch.cuda.synchronize()
+    load_seconds = time.perf_counter() - load_started
+    parameter_count = sum(parameter.numel() for parameter in model.parameters())
 
     records = _load_prompt_records(args.prompt_pack, args.max_items)
     completed_qids = _load_completed_qids(args.output) if args.resume else set()
@@ -154,6 +183,7 @@ def main() -> None:
     }
     generation_kwargs = {key: value for key, value in generation_kwargs.items() if value is not None}
 
+    generation_started = time.perf_counter()
     mode = "a" if args.resume else "w"
     with args.output.open(mode, encoding="utf-8") as file:
         for batch in _batched(records_to_run, args.batch_size):
@@ -187,6 +217,64 @@ def main() -> None:
                 file.write(json.dumps(output_record, ensure_ascii=False) + "\n")
             file.flush()
 
+    if selected_device == "cuda":
+        torch.cuda.synchronize()
+    generation_seconds = time.perf_counter() - generation_started
+    total_seconds = time.perf_counter() - total_started
+
+    gpu_metrics = None
+    if selected_device == "cuda":
+        device_index = torch.cuda.current_device()
+        properties = torch.cuda.get_device_properties(device_index)
+        peak_allocated = torch.cuda.max_memory_allocated(device_index)
+        peak_reserved = torch.cuda.max_memory_reserved(device_index)
+        gpu_metrics = {
+            "device_index": device_index,
+            "name": properties.name,
+            "total_memory_bytes": properties.total_memory,
+            "total_memory_mib": properties.total_memory / (1024**2),
+            "peak_allocated_bytes": peak_allocated,
+            "peak_allocated_mib": peak_allocated / (1024**2),
+            "peak_reserved_bytes": peak_reserved,
+            "peak_reserved_mib": peak_reserved / (1024**2),
+        }
+
+    runtime_metrics = {
+        "measurement": "hugging_face_generation_runtime",
+        "prompt_pack": str(args.prompt_pack),
+        "prompt_pack_sha256": _sha256(args.prompt_pack),
+        "output": str(args.output),
+        "model": args.model,
+        "device": selected_device,
+        "dtype": "float16" if selected_device == "cuda" else "float32",
+        "parameter_count": parameter_count,
+        "batch_size": args.batch_size,
+        "max_new_tokens": args.max_new_tokens,
+        "temperature": args.temperature,
+        "records_loaded": len(records),
+        "records_skipped": len(completed_qids),
+        "records_generated": len(records_to_run),
+        "timing_seconds": {
+            "model_and_tokenizer_load": load_seconds,
+            "generation": generation_seconds,
+            "total_process": total_seconds,
+        },
+        "throughput_records_per_second": {
+            "generation_only": _rate(len(records_to_run), generation_seconds),
+            "including_model_load": _rate(len(records_to_run), total_seconds),
+        },
+        "cuda": gpu_metrics,
+        "notes": [
+            "Single local run; timings are machine- and cache-dependent.",
+            "Peak allocated/reserved values are reported by PyTorch for this process.",
+        ],
+    }
+    if args.metrics_output is not None:
+        args.metrics_output.parent.mkdir(parents=True, exist_ok=True)
+        args.metrics_output.write_text(
+            json.dumps(runtime_metrics, indent=2), encoding="utf-8"
+        )
+
     print(
         json.dumps(
             {
@@ -197,6 +285,10 @@ def main() -> None:
                 "model": args.model,
                 "batch_size": args.batch_size,
                 "existing_unique_records": deduplicated_count,
+                "runtime_metrics": runtime_metrics,
+                "metrics_output": (
+                    str(args.metrics_output) if args.metrics_output is not None else None
+                ),
             },
             indent=2,
         )
