@@ -7,6 +7,7 @@ from pathlib import Path
 import pytest
 
 from medical_rag.multimodal.fusion import minmax_normalize, shortlist_score_fusion
+from medical_rag.multimodal.reproducibility import json_content_equal
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -59,3 +60,11 @@ def test_shortlist_fusion_reranks_only_fixed_candidate_prefix() -> None:
 def test_shortlist_fusion_rejects_candidate_mismatch() -> None:
     with pytest.raises(ValueError, match="same case IDs"):
         shortlist_score_fusion(["A", "B"], [2.0, 1.0], {"A": 0.1}, 1, 0.5)
+
+
+def test_git_json_verification_ignores_windows_line_endings_only() -> None:
+    committed = b'{\n  "passed": true,\n  "score": 0.6\n}\n'
+    working = b'{\r\n  "passed": true,\r\n  "score": 0.6\r\n}\r\n'
+    changed = b'{\r\n  "passed": false,\r\n  "score": 0.6\r\n}\r\n'
+    assert json_content_equal(committed, working) is True
+    assert json_content_equal(committed, changed) is False

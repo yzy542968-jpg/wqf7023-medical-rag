@@ -25,6 +25,7 @@ from medical_rag.multimodal.evaluation import (
 )
 from medical_rag.multimodal.fusion import reciprocal_rank_fusion, select_text_weight
 from medical_rag.multimodal.openi_images import resolve_official_image
+from medical_rag.multimodal.reproducibility import json_content_equal
 from medical_rag.retrieval.bm25_retriever import BM25Retriever
 from medical_rag.retrieval.tfidf_retriever import load_cases_jsonl
 
@@ -61,13 +62,13 @@ def _git_blob(commit: str, path: str) -> bytes:
 
 def verify_preregistered_config(commit: str, config_path: Path) -> None:
     relative = str(config_path.relative_to(ROOT)).replace("\\", "/")
-    if _git_blob(commit, relative) != config_path.read_bytes():
+    if not json_content_equal(_git_blob(commit, relative), config_path.read_bytes()):
         raise RuntimeError("Current multimodal configuration differs from the preregistered Git blob.")
 
 
 def verify_committed_selection(commit: str, selection_path: Path) -> None:
     relative = str(selection_path.relative_to(ROOT)).replace("\\", "/")
-    if _git_blob(commit, relative) != selection_path.read_bytes():
+    if not json_content_equal(_git_blob(commit, relative), selection_path.read_bytes()):
         raise RuntimeError("Current development selection differs from the committed Git blob.")
 
 
