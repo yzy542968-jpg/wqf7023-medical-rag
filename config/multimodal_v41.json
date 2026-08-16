@@ -1,0 +1,94 @@
+{
+  "experiment": "v4_1_biovil_t_paired_retrieval",
+  "status": "preregistered_before_biovil_t_retrieval_outcomes",
+  "parent_experiment": {
+    "name": "v4_paired_image_report_rag",
+    "development_result_commit": "cf7eb66",
+    "reason_for_revision": "The generic BiomedCLIP image branch produced development MRR 0.016839 and fusion selected text weight 1.0."
+  },
+  "research_scope": "Chest-X-ray-specific paired image-report retrieval plus report-grounded question answering",
+  "source": {
+    "dataset": "Indiana University Chest X-ray / OpenI",
+    "official_image_archive_url": "https://openi.nlm.nih.gov/imgs/collections/NLMCXR_png.tgz",
+    "official_image_archive_sha256": "baf3abfe19ba5d58efe69002aed1e71aa2e6d5efb3238db9adcac210ad44bdf2",
+    "cases_path": "data/processed/openi_cases.jsonl"
+  },
+  "cohorts": {
+    "development": {
+      "benchmark_path": "data/processed/openi_case_scoped_benchmark_v2.json",
+      "case_count": 600,
+      "question_count": 1800,
+      "case_id_fingerprint_sha256": "b3bad81969605fa11979322256bc62b2142e9c80242a2ad1f2583d863b7bd971",
+      "content_fingerprint_sha256": "b21d0aec8618fdfd25fdf793e5e8628158a4d45eef99ada37d1d0ee1bbd545d3"
+    },
+    "confirmation": {
+      "benchmark_path": "data/processed/openi_case_scoped_confirmation_v2.json",
+      "case_count": 120,
+      "question_count": 360,
+      "case_id_fingerprint_sha256": "fecdc4c674f98990bfd46857caf6995e6214348dc231606b04c47d1acd777971",
+      "content_fingerprint_sha256": "a6c019847beca77e10a8a07b98e67d08da8bcc846cbd0e4017d03b3c73a364b4"
+    }
+  },
+  "input_protocol": {
+    "text_query_template": "Clinical indication: {indication}\nQuestion: {question}",
+    "report_embedding_template": "Findings: {findings}\nImpression: {impression}",
+    "candidate_pool": "Union of the 600 development and 120 confirmation cases",
+    "view_policy": "Encode each available projection independently as current_image with previous_image=None, mean normalized view embeddings per case, then L2-normalize",
+    "missing_image_policy": "Exclude before encoding only if no declared image matches the verified official archive; report exclusions before outcomes"
+  },
+  "systems": [
+    "report_only_bm25",
+    "image_only_biovil_t",
+    "paired_biovil_t_rrf"
+  ],
+  "retrieval": {
+    "text_retriever": "BM25(k1=1.5,b=0.75)",
+    "joint_encoder": "microsoft/BiomedVLP-BioViL-T",
+    "text_model_revision": "692f09e",
+    "image_model_revision": "v1.0",
+    "image_weights_filename": "biovil_t_image_model_proj_size_128.pt",
+    "image_weights_md5": "a83080e2f23aa584a4f2b24c39b1bb64",
+    "joint_embedding_dimension": 128,
+    "text_max_length": 256,
+    "image_resize": 512,
+    "image_center_crop": 448,
+    "fusion": "weighted reciprocal-rank fusion",
+    "rrf_constant": 60,
+    "text_weight_grid": [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
+    "selection_metric": "development_mrr",
+    "tie_break": "smallest absolute distance to 0.5, then smaller text weight",
+    "top_k_values": [1, 5, 10]
+  },
+  "primary_metrics": [
+    "hit@1",
+    "hit@5",
+    "hit@10",
+    "mrr",
+    "token_f1"
+  ],
+  "confirmation_gate": {
+    "biovil_t_image_mrr_must_exceed_v4_biomedclip_mrr": 0.016839106114308357,
+    "fusion_mrr_must_exceed_report_only_mrr": true,
+    "selected_text_weight_must_be_less_than": 1.0,
+    "on_failure": "Do not evaluate confirmation and report the development result as another negative finding"
+  },
+  "statistical_protocol": {
+    "unit": "case_id",
+    "bootstrap_resamples": 5000,
+    "confidence_level": 0.95,
+    "seed": 7023,
+    "confirmation_tuning": false,
+    "confirmation_run_limit": 1
+  },
+  "hypotheses": [
+    "A chest-X-ray-specific joint encoder improves development image-to-report MRR over generic BiomedCLIP.",
+    "Paired BioViL-T RRF improves development and gated confirmation MRR over report-only BM25.",
+    "Improved paired retrieval increases deterministic top-1 report-grounded Token-F1."
+  ],
+  "claim_limits": [
+    "The task evaluates matching images to existing paired reports, not diagnosis of new patients.",
+    "IU-Xray is the same source as prior report experiments, so this is a modality extension rather than external validation.",
+    "The model is used for research only and not for clinical deployment.",
+    "Automatic report-derived questions and metrics do not constitute radiologist validation."
+  ]
+}

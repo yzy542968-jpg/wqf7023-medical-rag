@@ -1,0 +1,33 @@
+{
+  "experiment": "v4_1_biovil_t_paired_retrieval",
+  "policy_frozen_before_biovil_t_retrieval_outcomes": true,
+  "config_sha256": "f9b022a3aa5b92fabcf76a2764bef0f83480b07014881a09bb49dab65c9deac5",
+  "source_files": [
+    {
+      "path": "data/processed/openi_cases.jsonl",
+      "sha256": "56e367190396011d4d67f43e7e733389a8346890bf8729e82fb4326d063bbd68"
+    },
+    {
+      "path": "data/processed/openi_case_scoped_benchmark_v2.json",
+      "sha256": "df3de6c82e90a525b6d81247436d8f6d656f364da607555aad5b181c9cc62b14"
+    },
+    {
+      "path": "data/processed/openi_case_scoped_confirmation_v2.json",
+      "sha256": "389bdc375c5c77d72835aefcb6ccf3ee0e0aefc702b17a4cc206ebfb7c386502"
+    },
+    {
+      "path": "data/processed/openi_multimodal_source_manifest.json",
+      "sha256": "b54db024233989f8cdf7604383987226b298c1584e3a7ca0b9d8ddb69020eb75"
+    }
+  ],
+  "development_selection_only": true,
+  "confirmation_gate": {
+    "biovil_t_image_mrr_must_exceed_v4_biomedclip_mrr": 0.016839106114308357,
+    "fusion_mrr_must_exceed_report_only_mrr": true,
+    "selected_text_weight_must_be_less_than": 1.0,
+    "on_failure": "Do not evaluate confirmation and report the development result as another negative finding"
+  },
+  "confirmation_tuning": false,
+  "confirmation_run_limit": 1,
+  "protected_submission_artifacts_unchanged": true
+}

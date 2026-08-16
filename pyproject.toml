@@ -26,6 +26,7 @@ models = [
   "transformers>=4.45,<5",
   "open_clip_torch>=2.23,<4",
   "qwen-vl-utils>=0.0.8,<1",
+  "hi-ml-multimodal==0.2.2",
 ]
 documents = ["python-docx>=1.1,<2"]
 test = ["pytest>=8,<10"]
@@ -38,6 +39,7 @@ all = [
   "transformers>=4.45,<5",
   "open_clip_torch>=2.23,<4",
   "qwen-vl-utils>=0.0.8,<1",
+  "hi-ml-multimodal==0.2.2",
 ]
 
 [tool.setuptools.packages.find]
