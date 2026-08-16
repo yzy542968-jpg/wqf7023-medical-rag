@@ -14,7 +14,9 @@ data/raw/radqa/dev.json
 data/raw/radqa/test.json
 ```
 
-Access is controlled by PhysioNet. Do not commit or redistribute these files.
+Access is controlled by [PhysioNet](https://physionet.org/content/radqa/). Only the credentialed user who signs the data-use agreement may access the files; do not commit, redistribute, or ask another person to transfer them.
+
+As verified on 16 August 2026, access requires a PhysioNet credentialed account, the specified CITI human-research training, and acceptance of the PhysioNet Credentialed Health Data Use Agreement. After approval, download the official files while signed in and place them at the paths above. The project cannot automate or bypass these identity-bound requirements.
 
 ## Build and Audit
 

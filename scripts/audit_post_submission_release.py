@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import subprocess
 import sys
 from pathlib import Path
 from typing import Any
@@ -23,6 +24,24 @@ def _sha256(path: Path) -> str:
         for block in iter(lambda: handle.read(1024 * 1024), b""):
             digest.update(block)
     return digest.hexdigest()
+
+
+def _canonical_json_sha256(payload: dict[str, Any]) -> str:
+    canonical = json.dumps(payload, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+
+
+def _read_git_json(commit: str, relative_path: str) -> dict[str, Any] | None:
+    try:
+        content = subprocess.check_output(
+            ["git", "show", f"{commit}:{relative_path}"],
+            cwd=ROOT,
+            text=True,
+            stderr=subprocess.DEVNULL,
+        )
+    except (OSError, subprocess.CalledProcessError):
+        return None
+    return json.loads(content)
 
 
 def _case_ids(payload: dict[str, Any]) -> set[str]:
@@ -108,6 +127,15 @@ def main() -> None:
     semantic_summary = _read(
         ROOT / "experiments" / "post_submission_v22" / "summary.json"
     )
+    hybrid_manifest = _read(
+        ROOT
+        / "experiments"
+        / "post_submission_v23"
+        / "preregistration_manifest.json"
+    )
+    hybrid_summary = _read(
+        ROOT / "experiments" / "post_submission_v23" / "summary.json"
+    )
     replication_summary = _read(
         ROOT / "experiments" / "locked_replication" / "summary.json"
     )
@@ -141,6 +169,44 @@ def main() -> None:
         failures.append("v2.2 planner output count does not match manifest")
     if semantic_summary.get("planner", {}).get("parse_failure_count") != 0:
         failures.append("v2.2 planner contains parse failures")
+    hybrid_protocol = hybrid_summary.get("protocol", {})
+    if hybrid_protocol.get("policy_id") != hybrid_manifest.get("policy_id"):
+        failures.append("v2.3 policy ID differs from preregistration")
+    if hybrid_protocol.get("test_or_transfer_tuning") is not False:
+        failures.append("v2.3 no-test-tuning declaration is missing")
+    if hybrid_protocol.get("policy_frozen_before_generation") is not True:
+        failures.append("v2.3 policy-freeze declaration is missing")
+    prereg_commit = str(hybrid_protocol.get("preregistration_git_commit", ""))
+    committed_manifest = _read_git_json(
+        prereg_commit,
+        "experiments/post_submission_v23/preregistration_manifest.json",
+    )
+    if committed_manifest != hybrid_manifest:
+        failures.append("v2.3 manifest does not match the preregistration commit")
+    if hybrid_protocol.get(
+        "preregistration_manifest_canonical_sha256"
+    ) != _canonical_json_sha256(hybrid_manifest):
+        failures.append("v2.3 preregistration manifest hash mismatch")
+    hybrid_sets = hybrid_summary.get("evaluation_sets", {})
+    original_hybrid = (
+        hybrid_sets.get("original_test", {})
+        .get("systems", {})
+        .get("hybrid", {})
+        .get("raw", {})
+    )
+    original_frozen = hard_summary["systems"]["closed_loop_agent_v2"]["test"]
+    if original_hybrid != original_frozen:
+        failures.append("v2.3 does not reproduce frozen v2.1 original-test metrics")
+    transfer2 = hybrid_sets.get("reserved_wording_set_2", {})
+    if transfer2.get("semantic_planner", {}).get("parse_failure_count") != 0:
+        failures.append("v2.3 second transfer set contains planner parse failures")
+    macro_ci = (
+        transfer2.get("paired_case_bootstrap", {})
+        .get("macro_f1_delta_hybrid_minus_lexical", {})
+        .get("ci95", [None, None])
+    )
+    if macro_ci[0] is None or macro_ci[0] <= 0:
+        failures.append("v2.3 transfer robustness gain is not positive at CI lower bound")
     if replication_summary.get("status") != "complete":
         failures.append("locked replication is not complete")
     if replication_summary.get("generation", {}).get("unique_qid_count") != replication[
@@ -190,6 +256,27 @@ def main() -> None:
             "transfer_macro_f1": semantic_summary.get("transfer_test", {})
             .get("raw", {})
             .get("macro_f1"),
+        },
+        "hybrid_planner": {
+            "policy_id": hybrid_protocol.get("policy_id"),
+            "preregistration_git_commit": prereg_commit,
+            "manifest_matches_preregistration_commit": committed_manifest
+            == hybrid_manifest,
+            "original_macro_f1": original_hybrid.get("macro_f1"),
+            "transfer2_lexical_macro_f1": transfer2.get("systems", {})
+            .get("lexical", {})
+            .get("raw", {})
+            .get("macro_f1"),
+            "transfer2_hybrid_macro_f1": transfer2.get("systems", {})
+            .get("hybrid", {})
+            .get("raw", {})
+            .get("macro_f1"),
+            "transfer2_macro_f1_delta_ci95": macro_ci,
+            "transfer2_false_answer_rate_delta_ci95": transfer2.get(
+                "paired_case_bootstrap", {}
+            )
+            .get("false_answer_rate_delta_hybrid_minus_lexical", {})
+            .get("ci95"),
         },
         "human_evaluation_disposition": "future_work_not_conducted",
         "failures": failures,

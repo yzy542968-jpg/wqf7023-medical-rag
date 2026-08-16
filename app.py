@@ -102,6 +102,7 @@ LOCKED_REPLICATION_SUMMARY_PATH = (
     ROOT / "experiments" / "locked_replication" / "summary.json"
 )
 V22_SUMMARY_PATH = ROOT / "experiments" / "post_submission_v22" / "summary.json"
+V23_SUMMARY_PATH = ROOT / "experiments" / "post_submission_v23" / "summary.json"
 MODEL_OPTIONS = {
     "Qwen2.5-1.5B (full experiment)": "Qwen/Qwen2.5-1.5B-Instruct",
     "Qwen2.5-0.5B (faster demo)": "Qwen/Qwen2.5-0.5B-Instruct",
@@ -701,6 +702,7 @@ def render_results() -> None:
         LOCKED_REPLICATION_SUMMARY_PATH.read_text(encoding="utf-8")
     )
     v22 = json.loads(V22_SUMMARY_PATH.read_text(encoding="utf-8"))
+    v23 = json.loads(V23_SUMMARY_PATH.read_text(encoding="utf-8"))
 
     st.subheader("Locked held-out test")
     metrics = st.columns(5)
@@ -942,6 +944,59 @@ def render_results() -> None:
         f"{semantic_transfer['macro_f1']:.3f}. It improves paraphrase transfer but "
         "weakens rejection of missing near-domain facts, so it is reported as a trade-off "
         "rather than replacing the frozen rule planner."
+    )
+    st.subheader("Preregistered V2.3: lexical-first semantic fallback")
+    v23_rows = []
+    v23_labels = {
+        "original_test": "Original wording",
+        "reserved_wording_set_1": "Reserved wording 1",
+        "reserved_wording_set_2": "Reserved wording 2",
+    }
+    for set_name, label in v23_labels.items():
+        result = v23["evaluation_sets"][set_name]
+        for system in ("lexical", "hybrid"):
+            metrics_row = result["systems"][system]["raw"]
+            v23_rows.append(
+                {
+                    "Evaluation": label,
+                    "System": "Lexical" if system == "lexical" else "Hybrid",
+                    "Macro F1": metrics_row["macro_f1"],
+                    "False-answer rate": metrics_row["false_answer_rate"],
+                    "Evidence hit rate": metrics_row["retrieval_hit_rate_answerable"],
+                    "Semantic call rate": (
+                        0.0
+                        if system == "lexical"
+                        else result["hybrid_policy_usage"][
+                            "semantic_planner_call_rate"
+                        ]
+                    ),
+                }
+            )
+    st.dataframe(
+        pd.DataFrame(v23_rows),
+        width="stretch",
+        hide_index=True,
+        column_config={
+            "Macro F1": st.column_config.NumberColumn(format="%.3f"),
+            "False-answer rate": st.column_config.NumberColumn(format="%.1%%"),
+            "Evidence hit rate": st.column_config.NumberColumn(format="%.1%%"),
+            "Semantic call rate": st.column_config.NumberColumn(format="%.1%%"),
+        },
+    )
+    transfer2_bootstrap = v23["evaluation_sets"]["reserved_wording_set_2"][
+        "paired_case_bootstrap"
+    ]
+    macro_delta = transfer2_bootstrap["macro_f1_delta_hybrid_minus_lexical"]
+    false_delta = transfer2_bootstrap[
+        "false_answer_rate_delta_hybrid_minus_lexical"
+    ]
+    st.warning(
+        "On the second result-blind wording set, hybrid routing improves Macro F1 by "
+        f"{macro_delta['observed']:+.3f} (case-bootstrap 95% CI "
+        f"[{macro_delta['ci95'][0]:+.3f}, {macro_delta['ci95'][1]:+.3f}]) but also "
+        f"raises false-answer rate by {false_delta['observed']:+.3f} (95% CI "
+        f"[{false_delta['ci95'][0]:+.3f}, {false_delta['ci95'][1]:+.3f}]). "
+        "The policy is robust but not safety-dominant under wording shift."
     )
 
     st.subheader("Locked 300-case replication")

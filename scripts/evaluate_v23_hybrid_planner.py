@@ -3,7 +3,9 @@ from __future__ import annotations
 import argparse
 from collections import Counter
 from dataclasses import asdict
+import hashlib
 import json
+import random
 import subprocess
 import sys
 from pathlib import Path
@@ -41,6 +43,11 @@ def _git_commit() -> str:
     return subprocess.check_output(
         ["git", "rev-parse", "HEAD"], cwd=ROOT, text=True
     ).strip()
+
+
+def _canonical_json_sha256(payload: dict[str, Any]) -> str:
+    canonical = json.dumps(payload, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
 
 
 def _run_systems(
@@ -115,7 +122,16 @@ def _summarize_set(
     source_counts = Counter(
         row["hybrid_planner_source"] for row in systems["hybrid"]
     )
+    planner_confusion: dict[str, dict[str, int]] = {}
+    for row in systems["hybrid"]:
+        expected = str(row["expected_planner_label"])
+        predicted = str(row["planner_label"])
+        planner_confusion.setdefault(expected, {}).setdefault(predicted, 0)
+        planner_confusion[expected][predicted] += 1
     semantic_call_rate = source_counts["semantic_fallback"] / len(systems["hybrid"])
+    system_diagnostics = {
+        name: _failure_taxonomy(rows, threshold) for name, rows in systems.items()
+    }
     return {
         "systems": {
             name: {
@@ -139,6 +155,117 @@ def _summarize_set(
                 row["planner_label"] == "PARSE_FAILURE"
                 for row in systems["hybrid"]
             ),
+            "label_confusion": planner_confusion,
+        },
+        "failure_taxonomy": system_diagnostics,
+        "paired_case_bootstrap": _paired_case_bootstrap(
+            systems["lexical"], systems["hybrid"], threshold
+        ),
+    }
+
+
+def _failure_taxonomy(
+    rows: list[dict[str, Any]], threshold: float
+) -> dict[str, int]:
+    outcomes: Counter[str] = Counter()
+    for row in rows:
+        predicts_answer = float(row["answer_probability"]) >= threshold
+        hit = bool(set(row["relevant_chunk_ids"]) & set(row["retrieved_chunk_ids"]))
+        if not row["is_answerable"]:
+            category = (
+                "false_answer_unanswerable" if predicts_answer else "correct_abstention"
+            )
+        elif not predicts_answer:
+            category = "missed_answerable"
+        elif not hit:
+            category = "retrieval_miss"
+        elif row["final_intent"] != row["expected_intent"]:
+            category = "wrong_section_route_with_evidence_hit"
+        else:
+            category = "correct_answer_action"
+        outcomes[category] += 1
+    return dict(sorted(outcomes.items()))
+
+
+def _binary_metrics(rows: list[dict[str, Any]], threshold: float) -> tuple[float, float]:
+    truth = [bool(row["is_answerable"]) for row in rows]
+    predicted = [float(row["answer_probability"]) >= threshold for row in rows]
+    tp = sum(actual and guess for actual, guess in zip(truth, predicted))
+    tn = sum(not actual and not guess for actual, guess in zip(truth, predicted))
+    fp = sum(not actual and guess for actual, guess in zip(truth, predicted))
+    fn = sum(actual and not guess for actual, guess in zip(truth, predicted))
+
+    def f1(true_positive: int, false_positive: int, false_negative: int) -> float:
+        denominator = 2 * true_positive + false_positive + false_negative
+        return 2 * true_positive / denominator if denominator else 0.0
+
+    macro_f1 = (f1(tp, fp, fn) + f1(tn, fn, fp)) / 2
+    false_answer_rate = fp / (fp + tn) if fp + tn else 0.0
+    return macro_f1, false_answer_rate
+
+
+def _percentile(values: list[float], probability: float) -> float:
+    ordered = sorted(values)
+    index = round((len(ordered) - 1) * probability)
+    return ordered[index]
+
+
+def _paired_case_bootstrap(
+    lexical_rows: list[dict[str, Any]],
+    hybrid_rows: list[dict[str, Any]],
+    threshold: float,
+    *,
+    resamples: int = 5000,
+    seed: int = 20260816,
+) -> dict[str, Any]:
+    lexical_by_case: dict[str, list[dict[str, Any]]] = {}
+    hybrid_by_case: dict[str, list[dict[str, Any]]] = {}
+    for row in lexical_rows:
+        lexical_by_case.setdefault(str(row["scope_case_id"]), []).append(row)
+    for row in hybrid_rows:
+        hybrid_by_case.setdefault(str(row["scope_case_id"]), []).append(row)
+    case_ids = sorted(lexical_by_case)
+    if case_ids != sorted(hybrid_by_case):
+        raise ValueError("Paired bootstrap requires identical case IDs.")
+    rng = random.Random(seed)
+    macro_deltas: list[float] = []
+    false_answer_deltas: list[float] = []
+    for _ in range(resamples):
+        sampled = [rng.choice(case_ids) for _ in case_ids]
+        lexical_sample = [row for case_id in sampled for row in lexical_by_case[case_id]]
+        hybrid_sample = [row for case_id in sampled for row in hybrid_by_case[case_id]]
+        lexical_macro, lexical_false = _binary_metrics(lexical_sample, threshold)
+        hybrid_macro, hybrid_false = _binary_metrics(hybrid_sample, threshold)
+        macro_deltas.append(hybrid_macro - lexical_macro)
+        false_answer_deltas.append(hybrid_false - lexical_false)
+    lexical_macro, lexical_false = _binary_metrics(lexical_rows, threshold)
+    hybrid_macro, hybrid_false = _binary_metrics(hybrid_rows, threshold)
+    return {
+        "unit": "case_id",
+        "case_count": len(case_ids),
+        "resamples": resamples,
+        "seed": seed,
+        "macro_f1_delta_hybrid_minus_lexical": {
+            "observed": hybrid_macro - lexical_macro,
+            "ci95": [
+                _percentile(macro_deltas, 0.025),
+                _percentile(macro_deltas, 0.975),
+            ],
+            "bootstrap_probability_positive": sum(
+                value > 0 for value in macro_deltas
+            )
+            / resamples,
+        },
+        "false_answer_rate_delta_hybrid_minus_lexical": {
+            "observed": hybrid_false - lexical_false,
+            "ci95": [
+                _percentile(false_answer_deltas, 0.025),
+                _percentile(false_answer_deltas, 0.975),
+            ],
+            "bootstrap_probability_positive": sum(
+                value > 0 for value in false_answer_deltas
+            )
+            / resamples,
         },
     }
 
@@ -185,6 +312,8 @@ def main() -> None:
         type=Path,
         default=ROOT / "experiments" / "post_submission_v23",
     )
+    parser.add_argument("--generation-seconds", type=float)
+    parser.add_argument("--generation-gpu")
     args = parser.parse_args()
 
     benchmark = json.loads(args.benchmark.read_text(encoding="utf-8"))
@@ -239,12 +368,27 @@ def main() -> None:
         "protocol": {
             **manifest,
             "preregistration_git_commit": _git_commit(),
+            "preregistration_manifest_canonical_sha256": _canonical_json_sha256(
+                manifest
+            ),
             "evaluation_after_preregistration_commit": True,
             "answerability_threshold": threshold,
             "probability_calibration_reused_without_refit": True,
         },
         "evaluation_sets": summaries,
     }
+    if args.generation_seconds is not None:
+        output["runtime_profile"] = {
+            "scope": "second reserved wording planner pack only",
+            "records": len(v23_pack),
+            "elapsed_seconds": args.generation_seconds,
+            "records_per_second": len(v23_pack) / args.generation_seconds,
+            "gpu": args.generation_gpu,
+            "batch_size": 32,
+            "max_new_tokens": 8,
+            "includes_model_load": True,
+            "interpretation": "single-machine descriptive measurement, not a latency claim",
+        }
     args.output_dir.mkdir(parents=True, exist_ok=True)
     with (args.output_dir / "rows.jsonl").open("w", encoding="utf-8") as handle:
         for row in all_rows:

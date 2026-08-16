@@ -58,6 +58,22 @@ The semantic planner improves wording transfer substantially but is not a replac
 
 This is a useful negative and complementary result: lexical rules provide precision on known forms, while semantic planning provides linguistic coverage. A rule-first semantic-fallback cascade is a plausible next hypothesis, but it must be designed before and evaluated on a second reserved wording set; combining the two after observing these tests would otherwise tune to test behavior.
 
+## V2.3 preregistered hybrid planner
+
+The hybrid hypothesis was frozen and pushed in Git commit `47a2c1a` before any V2.3 planner generation or outcome evaluation. The policy keeps recognized lexical intents and the development-known report-fact frame; it calls the unchanged V2.2 semantic planner only for other unknown wording. A second deterministic reserved wording set contains 432 questions over the same 72 test cases and has fingerprint `d23ea907ec7da80c73f9b862976d59c4cd4cf2a3c99250b704ba359d6f0733e2`. No threshold, calibration model, prompt, or policy component was fitted on either wording-transfer set.
+
+| Evaluation | Lexical Macro F1 | Hybrid Macro F1 | Lexical false-answer rate | Hybrid false-answer rate | Hybrid semantic-call rate |
+|---|---:|---:|---:|---:|---:|
+| Original wording | 0.9583 | 0.9583 | 0.0556 | 0.0556 | 0.0324 |
+| Reserved wording set 1 | 0.6972 | 0.9139 | 0.1806 | 0.1574 | 1.0000 |
+| Reserved wording set 2 | 0.7357 | 0.8204 | 0.2222 | 0.3194 | 0.8727 |
+
+On the result-blind second set, the hybrid-minus-lexical Macro F1 difference is `+0.0847`; a paired 5,000-resample case bootstrap gives 95% CI `[+0.0515, +0.1186]`. The false-answer-rate difference is also positive at `+0.0972`, 95% CI `[+0.0370, +0.1528]`. Thus V2.3 improves wording robustness and preserves original performance, but it is not safety-dominant under distribution shift. Its second-set failures include 69 false answers to unanswerable questions, 25 retrieval misses, 7 missed answerable questions, and 6 wrong-section routes despite an evidence hit.
+
+The frozen V2.1 Platt model also fails to transfer cleanly: for V2.3 hybrid on wording set 2, raw ECE is `0.1002`, while applying the original calibration model raises ECE to `0.1688` and false-answer rate from `0.3194` to `0.3380`. Calibration is therefore distribution-specific in this experiment. The V2.3 table uses the V2.1 frozen answerability threshold for every system; its wording-set-1 values should not be compared as a pure planner effect against V2.2, which selected a separate semantic-system threshold on development.
+
+The new planner pack was generated locally on an NVIDIA GeForce RTX 5070 Laptop GPU with 8,151 MiB, batch size 32, and eight maximum new tokens. One descriptive cold-start run, including model loading, processed 432 planner prompts in 15.597 seconds (`27.70` prompts/second). This measurement describes one machine and is not presented as a general latency claim. The policy avoids semantic planning for `96.76%` of original questions but only `12.73%` of second-set questions, so deployment cost depends strongly on wording distribution.
+
 ## Untouched locked-system replication
 
 A second cohort contains 300 cases and 900 questions. These cases exclude all 1,080 cases used by V1, V2, V2 confirmation, and v2.1. The experiment reuses the original question construction while searching the full 3,851-case corpus.
@@ -92,6 +108,13 @@ python scripts/evaluate_case_scoped_hard_v21.py
 python scripts/evaluate_v21_template_transfer.py
 python scripts/build_v22_semantic_planner_pack.py
 python scripts/evaluate_v22_semantic_planner.py
+python scripts/build_v23_hybrid_preregistration.py
+python scripts/run_hf_generation.py `
+  --prompt-pack data/processed/prompt_packs/v23_hybrid_transfer2_planner.jsonl `
+  --output experiments/post_submission_v23/planner_generations_qwen15.jsonl `
+  --model Qwen/Qwen2.5-1.5B-Instruct --device cuda `
+  --max-new-tokens 8 --batch-size 32 --temperature 0 --local-files-only
+python scripts/evaluate_v23_hybrid_planner.py
 python scripts/run_locked_replication_cohort.py
 python scripts/run_hf_generation.py `
   --prompt-pack experiments/locked_replication/direct_prompt_pack.jsonl `

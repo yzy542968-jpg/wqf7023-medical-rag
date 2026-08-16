@@ -112,11 +112,7 @@ def _system_metrics(rows: list[dict[str, Any]], threshold: float) -> dict[str, A
                 " ".join(row["retrieved_texts"]) if predicts_answer else "NOT ANSWERABLE"
             )
             answer_f1s.append(token_f1(answer, row["reference_answer"]))
-            if row["system"] in {
-                "route_only_agent",
-                "closed_loop_agent_v2",
-                "semantic_planner_agent_v22",
-            }:
+            if "final_intent" in row:
                 route_hits.append(row["final_intent"] == row["expected_intent"])
         else:
             correct = not predicts_answer

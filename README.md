@@ -117,4 +117,4 @@ Do not commit raw radiology files, image pixels, model weights, caches, generate
 
 Post-submission improvements and explicitly deferred independent human evaluation are documented in `docs/POST_SUBMISSION_RESEARCH_ROADMAP.md`. These additions do not modify the frozen P2 submission artifacts.
 
-Methods and results for the v2.1 hard benchmark, reserved wording-transfer stress test, frozen v2.2 semantic-planner experiment, and 300-case locked replication are in `docs/POST_SUBMISSION_EXPERIMENTS.md`. V2.2 improves transfer robustness but regresses the original test and is therefore retained as an analyzed research branch, not promoted as the default system.
+Methods and results for the v2.1 hard benchmark, two reserved wording-transfer tests, frozen v2.2 semantic planner, preregistered v2.3 hybrid planner, and 300-case locked replication are in `docs/POST_SUBMISSION_EXPERIMENTS.md`. V2.3 preserves the original result and improves transfer Macro F1, but raises false-answer risk on the second wording set; it is therefore reported as a robustness/safety trade-off rather than promoted as an unqualified replacement.

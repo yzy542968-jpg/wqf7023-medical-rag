@@ -11,6 +11,8 @@ This document describes work added after the frozen P2 submission and work that 
 - A bounded closed-loop evidence agent with an auditable plan/retrieve/assess/rewrite/retry/answer-or-abstain trace.
 - Answerability calibration, false-answer rate, ECE, Brier score, risk-coverage curves, and AURC.
 - A locked-system replication cohort that cannot alter previously selected hyperparameters.
+- A result-blind second wording-transfer set and preregistered lexical-first semantic-fallback V2.3 policy.
+- Paired case-bootstrap intervals, transfer failure taxonomy, and semantic-planner compute-budget reporting.
 
 ## Future work: independent human evaluation
 
@@ -51,7 +53,7 @@ The dashboard remains a research demonstrator and must not be used for diagnosis
 
 ## Other future validation
 
-- Evaluate a rule-first/semantic-fallback planner cascade on a second reserved paraphrase set; do not select the cascade using the already observed first transfer test.
+- Pre-register a shift-aware abstention or escalation policy on new development data, then evaluate it on a third untouched wording distribution; V2.3 improved robustness but increased false answers on the second reserved set.
 - External replication on a separately licensed institution or benchmark rather than another split of OpenI.
 - Prospective evaluation of abstention and escalation under distribution shift.
 - Multimodal image-and-report retrieval once image licensing and image-level ground truth are available.
