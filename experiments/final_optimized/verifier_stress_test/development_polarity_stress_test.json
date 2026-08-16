@@ -1,0 +1,1212 @@
+{
+  "split": "development_only",
+  "pair_count": 120,
+  "rule_positive_accepted_rate": 1.0,
+  "rule_contradiction_rejected_rate": 0.9916666666666667,
+  "semantic_positive_accepted_rate": 1.0,
+  "semantic_contradiction_rejected_rate": 1.0,
+  "synthetic_construction": "explicit negation removal or polarity phrase replacement",
+  "limitation": "This stress test validates polarity sensitivity, not general clinical verifier accuracy.",
+  "rows": [
+    {
+      "case_id": "CXR1054",
+      "evidence": "Heart size is normal. Stable mediastinal contour. No focal airspace consolidation, suspicious pulmonary opacity, pneumothorax, or pleural effusion. Mild thoracic spine degenerative change. No acute cardiopulmonary abnormality.",
+      "entailed_claim": "No focal airspace consolidation, suspicious pulmonary opacity, pneumothorax, or pleural effusion.",
+      "contradictory_claim": "Focal airspace consolidation, suspicious pulmonary opacity, pneumothorax, or pleural effusion.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR1054",
+      "evidence": "Heart size is normal. Stable mediastinal contour. No focal airspace consolidation, suspicious pulmonary opacity, pneumothorax, or pleural effusion. Mild thoracic spine degenerative change. No acute cardiopulmonary abnormality.",
+      "entailed_claim": "No acute cardiopulmonary abnormality.",
+      "contradictory_claim": "Acute cardiopulmonary abnormality.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR1061",
+      "evidence": "The heart, pulmonary XXXX and mediastinum are within normal limits. There is no pleural effusion or pneumothorax. There is no focal air space opacity to suggest a pneumonia. There is slight wedge XXXX deformity of the mid to lower thoracic vertebral body unchanged from the comparison study. No acute cardiopulmonary disease.",
+      "entailed_claim": "There is no pleural effusion or pneumothorax.",
+      "contradictory_claim": "There is pleural effusion or pneumothorax.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR1061",
+      "evidence": "The heart, pulmonary XXXX and mediastinum are within normal limits. There is no pleural effusion or pneumothorax. There is no focal air space opacity to suggest a pneumonia. There is slight wedge XXXX deformity of the mid to lower thoracic vertebral body unchanged from the comparison study. No acute cardiopulmonary disease.",
+      "entailed_claim": "There is no focal air space opacity to suggest a pneumonia.",
+      "contradictory_claim": "There is focal air space opacity to suggest a pneumonia.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR1061",
+      "evidence": "The heart, pulmonary XXXX and mediastinum are within normal limits. There is no pleural effusion or pneumothorax. There is no focal air space opacity to suggest a pneumonia. There is slight wedge XXXX deformity of the mid to lower thoracic vertebral body unchanged from the comparison study. No acute cardiopulmonary disease.",
+      "entailed_claim": "No acute cardiopulmonary disease.",
+      "contradictory_claim": "Acute cardiopulmonary disease.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR1087",
+      "evidence": "There is a calcified granuloma in the left upper lobe. Lungs otherwise are believed to be clear. The heart is normal. There are calcified left hilar and mediastinal lymph XXXX. The skeletal structures show some senescent changes. Old granulomatous disease. No acute pulmonary disease.",
+      "entailed_claim": "No acute pulmonary disease.",
+      "contradictory_claim": "Acute pulmonary disease.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR1094",
+      "evidence": "No acute osseous abnormality. The soft tissues are within normal limits. Normal appearing cardiomediastinal silhouette and hilar contours. Left lower lobe XXXX density XXXX representing atelectasis. No focal area of consolidation, pleural effusion, pneumothorax. No focal lung consolidation.",
+      "entailed_claim": "No acute osseous abnormality.",
+      "contradictory_claim": "Acute osseous abnormality.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR1094",
+      "evidence": "No acute osseous abnormality. The soft tissues are within normal limits. Normal appearing cardiomediastinal silhouette and hilar contours. Left lower lobe XXXX density XXXX representing atelectasis. No focal area of consolidation, pleural effusion, pneumothorax. No focal lung consolidation.",
+      "entailed_claim": "No focal area of consolidation, pleural effusion, pneumothorax.",
+      "contradictory_claim": "Focal area of consolidation, pleural effusion, pneumothorax.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR1094",
+      "evidence": "No acute osseous abnormality. The soft tissues are within normal limits. Normal appearing cardiomediastinal silhouette and hilar contours. Left lower lobe XXXX density XXXX representing atelectasis. No focal area of consolidation, pleural effusion, pneumothorax. No focal lung consolidation.",
+      "entailed_claim": "No focal lung consolidation.",
+      "contradictory_claim": "Focal lung consolidation.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR1130",
+      "evidence": "Heart size and pulmonary vascularity appear within normal limits. Calcified granuloma is present in the right base. No pneumothorax or pleural effusion is seen. In the lateral right base is identified an ill-defined somewhat oblong opacity. This was not present on the previous study. The remainder of the lungs appear clear. 1. Ill-defined oblong opacity in the lateral right base. This may represent pleural based process. The exact XXXX is unclear. Followup exam is suggested to confirm clearing or stability.",
+      "entailed_claim": "No pneumothorax or pleural effusion is seen.",
+      "contradictory_claim": "Pneumothorax or pleural effusion is seen.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR1173",
+      "evidence": "PA and moderate loss of the chest demonstrate stable moderate cardiomediastinal silhouette with atherosclerotic calcifications of the aortic XXXX and mild aortic ectasia. Emphysematous changes with flattening of the hemidiaphragms. Blunting of the costophrenic XXXX, and XXXX secondary to scarring/emphysematous changes. No evidence of focal airspace consolidation large pleural effusion or pneumothorax. Visualized osseous structures appear intact. Emphysematous changes without evidence of focal airspace disease or pulmonary edema.",
+      "entailed_claim": "No evidence of focal airspace consolidation large pleural effusion or pneumothorax.",
+      "contradictory_claim": "Evidence of focal airspace consolidation large pleural effusion or pneumothorax.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR1173",
+      "evidence": "PA and moderate loss of the chest demonstrate stable moderate cardiomediastinal silhouette with atherosclerotic calcifications of the aortic XXXX and mild aortic ectasia. Emphysematous changes with flattening of the hemidiaphragms. Blunting of the costophrenic XXXX, and XXXX secondary to scarring/emphysematous changes. No evidence of focal airspace consolidation large pleural effusion or pneumothorax. Visualized osseous structures appear intact. Emphysematous changes without evidence of focal airspace disease or pulmonary edema.",
+      "entailed_claim": "Emphysematous changes without evidence of focal airspace disease or pulmonary edema.",
+      "contradictory_claim": "Emphysematous changes with evidence of focal airspace disease or pulmonary edema.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR1234",
+      "evidence": "2 images. The cardiac silhouette is enlarged. Thoracic aortic atherosclerotic calcifications are present. There are finding status post sternotomy and CABG. XXXX atelectasis or scar is noted within the left midlung. There is blunting of the left costophrenic XXXX. No pneumothorax. 1. Cardiomegaly. 2. Minimal left midlung atelectasis. 3. Blunting of left costophrenic XXXX. This could indicate a small amount of pleural fluid versus pleural-parenchymal scarring.",
+      "entailed_claim": "No pneumothorax.",
+      "contradictory_claim": "Pneumothorax.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR1241",
+      "evidence": "The heart size and pulmonary vascularity appear within normal limits. The lungs are free of focal airspace disease. No pleural effusion or pneumothorax is seen. There is a scoliosis of the thoracic spine. The ribs, as visualized, appear unremarkable. No evidence of active disease.",
+      "entailed_claim": "No pleural effusion or pneumothorax is seen.",
+      "contradictory_claim": "Pleural effusion or pneumothorax is seen.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR1241",
+      "evidence": "The heart size and pulmonary vascularity appear within normal limits. The lungs are free of focal airspace disease. No pleural effusion or pneumothorax is seen. There is a scoliosis of the thoracic spine. The ribs, as visualized, appear unremarkable. No evidence of active disease.",
+      "entailed_claim": "No evidence of active disease.",
+      "contradictory_claim": "Evidence of active disease.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR1249",
+      "evidence": "The lungs are clear without evidence of focal airspace disease. There are calcified granulomas in the left lower lobe. There is no evidence of pneumothorax or large pleural effusion. The cardiac and mediastinal contours are within normal limits. The XXXX are unremarkable. No radiographic evidence of acute cardiopulmonary disease.",
+      "entailed_claim": "The lungs are clear without evidence of focal airspace disease.",
+      "contradictory_claim": "The lungs are clear with evidence of focal airspace disease.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR1249",
+      "evidence": "The lungs are clear without evidence of focal airspace disease. There are calcified granulomas in the left lower lobe. There is no evidence of pneumothorax or large pleural effusion. The cardiac and mediastinal contours are within normal limits. The XXXX are unremarkable. No radiographic evidence of acute cardiopulmonary disease.",
+      "entailed_claim": "There is no evidence of pneumothorax or large pleural effusion.",
+      "contradictory_claim": "There is evidence of pneumothorax or large pleural effusion.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR1249",
+      "evidence": "The lungs are clear without evidence of focal airspace disease. There are calcified granulomas in the left lower lobe. There is no evidence of pneumothorax or large pleural effusion. The cardiac and mediastinal contours are within normal limits. The XXXX are unremarkable. No radiographic evidence of acute cardiopulmonary disease.",
+      "entailed_claim": "No radiographic evidence of acute cardiopulmonary disease.",
+      "contradictory_claim": "Radiographic evidence of acute cardiopulmonary disease.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR1279",
+      "evidence": "There is no focal consolidation. There is no pneumothorax or large pleural effusion. The cardiomediastinal contours are grossly unremarkable. The heart size is within normal limits. The right upper extremity PICC tip is in the upper SVC. Surgical clips in the right upper abdomen. No acute cardiopulmonary findings.",
+      "entailed_claim": "There is no focal consolidation.",
+      "contradictory_claim": "There is focal consolidation.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR1279",
+      "evidence": "There is no focal consolidation. There is no pneumothorax or large pleural effusion. The cardiomediastinal contours are grossly unremarkable. The heart size is within normal limits. The right upper extremity PICC tip is in the upper SVC. Surgical clips in the right upper abdomen. No acute cardiopulmonary findings.",
+      "entailed_claim": "There is no pneumothorax or large pleural effusion.",
+      "contradictory_claim": "There is pneumothorax or large pleural effusion.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR1279",
+      "evidence": "There is no focal consolidation. There is no pneumothorax or large pleural effusion. The cardiomediastinal contours are grossly unremarkable. The heart size is within normal limits. The right upper extremity PICC tip is in the upper SVC. Surgical clips in the right upper abdomen. No acute cardiopulmonary findings.",
+      "entailed_claim": "No acute cardiopulmonary findings.",
+      "contradictory_claim": "Acute cardiopulmonary findings.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR1285",
+      "evidence": "PA and lateral views of the chest were obtained. The cardiomediastinal silhouette is normal in size and configuration. Mild nodular prominence of the right hilum, without significant change. Lung volumes are decreased, with crowding. There is no pneumothorax, pleural effusion, or focal air space consolidation. 1. Low lung volumes with mild crowding.",
+      "entailed_claim": "There is no pneumothorax, pleural effusion, or focal air space consolidation.",
+      "contradictory_claim": "There is pneumothorax, pleural effusion, or focal air space consolidation.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR1292",
+      "evidence": "Borderline enlarged heart. Torturous/ectatic thoracic aorta. No focal pulmonary opacity, pleural effusion or pneumothorax. There are degenerative changes of the spine. There is fracture of distal right clavicle, better seen on the right shoulder radiographs dated XXXX. Small round lucency in the distal left clavicle, appears benign. Degenerative changes of both XXXX joints. 1. Borderline enlarged heart. 2. Tortuous/ectatic thoracic aorta. 3. Fracture of the distal right clavicle, better seen on today's radiograph of the shoulder.",
+      "entailed_claim": "No focal pulmonary opacity, pleural effusion or pneumothorax.",
+      "contradictory_claim": "Focal pulmonary opacity, pleural effusion or pneumothorax.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR1311",
+      "evidence": "Low lung volumes with redemonstrated bronchovascular crowding. The trachea is midline. Negative for pneumothorax, pleural effusion or focal airspace consolidation. The cardiac silhouette size is borderline enlarged. 1. Borderline enlargement of cardiac silhouette, otherwise no acute cardiopulmonary abnormality. No evidence for active TB.",
+      "entailed_claim": "Negative for pneumothorax, pleural effusion or focal airspace consolidation.",
+      "contradictory_claim": "Positive for pneumothorax, pleural effusion or focal airspace consolidation.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR1311",
+      "evidence": "Low lung volumes with redemonstrated bronchovascular crowding. The trachea is midline. Negative for pneumothorax, pleural effusion or focal airspace consolidation. The cardiac silhouette size is borderline enlarged. 1. Borderline enlargement of cardiac silhouette, otherwise no acute cardiopulmonary abnormality. No evidence for active TB.",
+      "entailed_claim": "No evidence for active TB.",
+      "contradictory_claim": "Evidence for active TB.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR1353",
+      "evidence": "There is diffuse right-sided airspace disease, with dense consolidation in the right base. A right upper extremity PICC is seen with the tip in the right brachiocephalic vein, representing an interval retraction of approximately 6 cm. No pneumothorax or large effusions. Heart size within normal limits. Multifocal right-sided pneumonia.",
+      "entailed_claim": "No pneumothorax or large effusions.",
+      "contradictory_claim": "Pneumothorax or large effusions.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR1388",
+      "evidence": "The cardiomediastinal silhouette is normal in size and contour. No focal consolidation, pneumothorax or large pleural effusion. Normal XXXX. XXXX cholecystectomy. Low lung volumes, otherwise clear.",
+      "entailed_claim": "No focal consolidation, pneumothorax or large pleural effusion.",
+      "contradictory_claim": "Focal consolidation, pneumothorax or large pleural effusion.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR1499",
+      "evidence": "Cardiomediastinal silhouettes are within normal limits. Low lung volumes. Lungs are clear without focal consolidation, pneumothorax, or pleural effusion. Bony thorax is unremarkable. No acute cardiopulmonary abnormalities.",
+      "entailed_claim": "No acute cardiopulmonary abnormalities.",
+      "contradictory_claim": "Acute cardiopulmonary abnormalities.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR1586",
+      "evidence": "The cardiac silhouette mediastinal contours are within normal limits. The lungs are clear bilaterally. No focal opacities. There is no large pleural effusion. No pneumothorax. There is XXXX deformities involving multiple vertebral bodies of the thoracic spine which appear stable compared to the previous exam. No acute cardiopulmonary abnormality. Stable XXXX deformities of the upper thoracic segments.",
+      "entailed_claim": "No focal opacities.",
+      "contradictory_claim": "Focal opacities.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR1586",
+      "evidence": "The cardiac silhouette mediastinal contours are within normal limits. The lungs are clear bilaterally. No focal opacities. There is no large pleural effusion. No pneumothorax. There is XXXX deformities involving multiple vertebral bodies of the thoracic spine which appear stable compared to the previous exam. No acute cardiopulmonary abnormality. Stable XXXX deformities of the upper thoracic segments.",
+      "entailed_claim": "There is no large pleural effusion.",
+      "contradictory_claim": "There is large pleural effusion.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR1586",
+      "evidence": "The cardiac silhouette mediastinal contours are within normal limits. The lungs are clear bilaterally. No focal opacities. There is no large pleural effusion. No pneumothorax. There is XXXX deformities involving multiple vertebral bodies of the thoracic spine which appear stable compared to the previous exam. No acute cardiopulmonary abnormality. Stable XXXX deformities of the upper thoracic segments.",
+      "entailed_claim": "No pneumothorax.",
+      "contradictory_claim": "Pneumothorax.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR1586",
+      "evidence": "The cardiac silhouette mediastinal contours are within normal limits. The lungs are clear bilaterally. No focal opacities. There is no large pleural effusion. No pneumothorax. There is XXXX deformities involving multiple vertebral bodies of the thoracic spine which appear stable compared to the previous exam. No acute cardiopulmonary abnormality. Stable XXXX deformities of the upper thoracic segments.",
+      "entailed_claim": "No acute cardiopulmonary abnormality.",
+      "contradictory_claim": "Acute cardiopulmonary abnormality.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR1624",
+      "evidence": "Heart size mildly enlarged, stable mediastinal and hilar contours, mediastinal calcifications suggest a previous granulomatous process. No focal alveolar consolidation, no definite pleural effusion seen. No typical findings of pulmonary edema. Mild cardiomegaly, no acute pulmonary findings",
+      "entailed_claim": "No focal alveolar consolidation, no definite pleural effusion seen.",
+      "contradictory_claim": "Focal alveolar consolidation, no definite pleural effusion seen.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": false,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR1624",
+      "evidence": "Heart size mildly enlarged, stable mediastinal and hilar contours, mediastinal calcifications suggest a previous granulomatous process. No focal alveolar consolidation, no definite pleural effusion seen. No typical findings of pulmonary edema. Mild cardiomegaly, no acute pulmonary findings",
+      "entailed_claim": "No typical findings of pulmonary edema.",
+      "contradictory_claim": "Typical findings of pulmonary edema.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR1649",
+      "evidence": "There is a moderate layering left pleural effusion, grossly stable. There is a moderate right pleural effusion, which is partially loculated. There is some pleural fluid tracking along the right XXXX fissure. There is bibasilar airspace disease, possibly passive atelectasis. No pneumothorax is identified. Heart size is within normal limits. Right PICC tip is at the SVC. There are mild degenerative changes of the spine. 1. Partially loculated right pleural effusion, grossly stable. 2. Stable moderate layering left pleural effusion. 3. Bibasilar airspace disease, possibly atelectasis.",
+      "entailed_claim": "No pneumothorax is identified.",
+      "contradictory_claim": "Pneumothorax is identified.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR1662",
+      "evidence": "No focal consolidation. There are prominent interstitial markings, including focally in right upper lobe, which are similar from prior examination. No visualized pneumothorax. The heart size is normal. There are no pleural effusions. 1. No acute cardiopulmonary findings.",
+      "entailed_claim": "No focal consolidation.",
+      "contradictory_claim": "Focal consolidation.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR1662",
+      "evidence": "No focal consolidation. There are prominent interstitial markings, including focally in right upper lobe, which are similar from prior examination. No visualized pneumothorax. The heart size is normal. There are no pleural effusions. 1. No acute cardiopulmonary findings.",
+      "entailed_claim": "No visualized pneumothorax.",
+      "contradictory_claim": "Visualized pneumothorax.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR1662",
+      "evidence": "No focal consolidation. There are prominent interstitial markings, including focally in right upper lobe, which are similar from prior examination. No visualized pneumothorax. The heart size is normal. There are no pleural effusions. 1. No acute cardiopulmonary findings.",
+      "entailed_claim": "There are no pleural effusions.",
+      "contradictory_claim": "There are pleural effusions.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR1687",
+      "evidence": "Feeding tube noted with tip XXXX distal to the gastroesophageal junction. No focal areas of consolidation. Heart size within normal limits. No pleural effusions. Osseous structures intact. 1. No acute cardiopulmonary abnormality. 2. Feeding tube tip XXXX distal to the gastroesophageal junction.",
+      "entailed_claim": "No focal areas of consolidation.",
+      "contradictory_claim": "Focal areas of consolidation.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR1687",
+      "evidence": "Feeding tube noted with tip XXXX distal to the gastroesophageal junction. No focal areas of consolidation. Heart size within normal limits. No pleural effusions. Osseous structures intact. 1. No acute cardiopulmonary abnormality. 2. Feeding tube tip XXXX distal to the gastroesophageal junction.",
+      "entailed_claim": "No pleural effusions.",
+      "contradictory_claim": "Pleural effusions.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR1768",
+      "evidence": "There is minimal scarring in the lung apices. The lungs are otherwise clear. Heart size is normal. No pneumothorax. There is dextrocurvature within the spine. No acute cardiopulmonary abnormality. .",
+      "entailed_claim": "No pneumothorax.",
+      "contradictory_claim": "Pneumothorax.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR1768",
+      "evidence": "There is minimal scarring in the lung apices. The lungs are otherwise clear. Heart size is normal. No pneumothorax. There is dextrocurvature within the spine. No acute cardiopulmonary abnormality. .",
+      "entailed_claim": "No acute cardiopulmonary abnormality.",
+      "contradictory_claim": "Acute cardiopulmonary abnormality.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR1806",
+      "evidence": "The heart and lungs have XXXX XXXX in the interval. Both lungs are clear and expanded. Heart and mediastinum normal. No active disease.",
+      "entailed_claim": "No active disease.",
+      "contradictory_claim": "Active disease.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR1811",
+      "evidence": "There is mild cardiomegaly and tortuous aorta. Mildly low lung volumes. No focal consolidation, pleural effusion, or pneumothorax. The XXXX XXXX are intact and without acute osseous abnormality. Mild degenerative changes of the thoracic spine. Chest radiograph. No acute radiographic cardiopulmonary process.",
+      "entailed_claim": "No focal consolidation, pleural effusion, or pneumothorax.",
+      "contradictory_claim": "Focal consolidation, pleural effusion, or pneumothorax.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR1811",
+      "evidence": "There is mild cardiomegaly and tortuous aorta. Mildly low lung volumes. No focal consolidation, pleural effusion, or pneumothorax. The XXXX XXXX are intact and without acute osseous abnormality. Mild degenerative changes of the thoracic spine. Chest radiograph. No acute radiographic cardiopulmonary process.",
+      "entailed_claim": "No acute radiographic cardiopulmonary process.",
+      "contradictory_claim": "Acute radiographic cardiopulmonary process.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR1876",
+      "evidence": "Cardiomediastinal silhouettes are within normal limits. Lungs are clear without focal consolidation, pneumothorax, or pleural effusion. Right apical pleural retraction. Hyperexpansion, flattening of diaphragms, and increased AP diameter consistent with history of COPD. Degenerative disease of the thoracic spine is present. No acute cardiopulmonary abnormalities.",
+      "entailed_claim": "No acute cardiopulmonary abnormalities.",
+      "contradictory_claim": "Acute cardiopulmonary abnormalities.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR1958",
+      "evidence": "The lungs are hyperaerated suggestive of chronic obstructive pulmonary disease. No focal lung consolidation. No pleural effusion. No definite pneumothorax. Heart is not enlarged. Postsurgical changes with mediastinal clips and XXXX XXXX. COPD. No acute abnormality.",
+      "entailed_claim": "No focal lung consolidation.",
+      "contradictory_claim": "Focal lung consolidation.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR1958",
+      "evidence": "The lungs are hyperaerated suggestive of chronic obstructive pulmonary disease. No focal lung consolidation. No pleural effusion. No definite pneumothorax. Heart is not enlarged. Postsurgical changes with mediastinal clips and XXXX XXXX. COPD. No acute abnormality.",
+      "entailed_claim": "No pleural effusion.",
+      "contradictory_claim": "Pleural effusion.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR1958",
+      "evidence": "The lungs are hyperaerated suggestive of chronic obstructive pulmonary disease. No focal lung consolidation. No pleural effusion. No definite pneumothorax. Heart is not enlarged. Postsurgical changes with mediastinal clips and XXXX XXXX. COPD. No acute abnormality.",
+      "entailed_claim": "No definite pneumothorax.",
+      "contradictory_claim": "Definite pneumothorax.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR1958",
+      "evidence": "The lungs are hyperaerated suggestive of chronic obstructive pulmonary disease. No focal lung consolidation. No pleural effusion. No definite pneumothorax. Heart is not enlarged. Postsurgical changes with mediastinal clips and XXXX XXXX. COPD. No acute abnormality.",
+      "entailed_claim": "No acute abnormality.",
+      "contradictory_claim": "Acute abnormality.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR2003",
+      "evidence": "Borderline enlarged heart. Pulmonary vasculature appears within normal limits. No focal pulmonary opacity, pleural effusion or pneumothorax. No acute bony abnormality. Possible right shoulder calcific tendinitis. Calcifications of the abdominal aorta are seen. 1. Borderline enlarged heart without acute abnormality.",
+      "entailed_claim": "No focal pulmonary opacity, pleural effusion or pneumothorax.",
+      "contradictory_claim": "Focal pulmonary opacity, pleural effusion or pneumothorax.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR2003",
+      "evidence": "Borderline enlarged heart. Pulmonary vasculature appears within normal limits. No focal pulmonary opacity, pleural effusion or pneumothorax. No acute bony abnormality. Possible right shoulder calcific tendinitis. Calcifications of the abdominal aorta are seen. 1. Borderline enlarged heart without acute abnormality.",
+      "entailed_claim": "No acute bony abnormality.",
+      "contradictory_claim": "Acute bony abnormality.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR2014",
+      "evidence": "Frontal and lateral views of the chest show an unchanged cardiomediastinal silhouette. Normal mediastinal contour, pulmonary XXXX and vasculature, central airways and aeration of the lungs. No focal airspace consolidation or pleural effusion. There is subphrenic intraperitoneal extraluminal XXXX free XXXX. 1. No acute or active cardiac, pulmonary or pleural disease. 2. Pneumoperitoneum, attributed to the patient's recent abdominal surgery.",
+      "entailed_claim": "No focal airspace consolidation or pleural effusion.",
+      "contradictory_claim": "Focal airspace consolidation or pleural effusion.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR2150",
+      "evidence": "The heart is normal in size. The mediastinum is unremarkable. Small nodule seen in the left upper lung, possibly granuloma. The lungs are otherwise clear. No acute disease. Left lung nodule. Correlate with prior films if available. If none are available, followup imaging in 6 months is suggested.",
+      "entailed_claim": "No acute disease.",
+      "contradictory_claim": "Acute disease.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR2169",
+      "evidence": "The lungs are hyperexpanded. There is a large rounded lucency in the right upper lung, XXXX large emphysematous XXXX. There are XXXX biapical opacities, XXXX scarring. No focal airspace consolidation to suggest pneumonia. There is no pleural effusion. No pneumothorax. Normal heart size. There are minimal degenerative changes of the spine. Emphysema. Large right upper lobe XXXX. Biapical scarring.",
+      "entailed_claim": "No focal airspace consolidation to suggest pneumonia.",
+      "contradictory_claim": "Focal airspace consolidation to suggest pneumonia.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR2169",
+      "evidence": "The lungs are hyperexpanded. There is a large rounded lucency in the right upper lung, XXXX large emphysematous XXXX. There are XXXX biapical opacities, XXXX scarring. No focal airspace consolidation to suggest pneumonia. There is no pleural effusion. No pneumothorax. Normal heart size. There are minimal degenerative changes of the spine. Emphysema. Large right upper lobe XXXX. Biapical scarring.",
+      "entailed_claim": "There is no pleural effusion.",
+      "contradictory_claim": "There is pleural effusion.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR2169",
+      "evidence": "The lungs are hyperexpanded. There is a large rounded lucency in the right upper lung, XXXX large emphysematous XXXX. There are XXXX biapical opacities, XXXX scarring. No focal airspace consolidation to suggest pneumonia. There is no pleural effusion. No pneumothorax. Normal heart size. There are minimal degenerative changes of the spine. Emphysema. Large right upper lobe XXXX. Biapical scarring.",
+      "entailed_claim": "No pneumothorax.",
+      "contradictory_claim": "Pneumothorax.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR2172",
+      "evidence": "The cardiomediastinal silhouette is normal in size and contour. Biapical fibronodular thickening/scarring. Hyperexpanded lungs without focal consolidation, pneumothorax or large pleural effusion. Negative for acute bone abnormality. Hyperexpanded lungs. Negative for acute abnormality.",
+      "entailed_claim": "Negative for acute bone abnormality.",
+      "contradictory_claim": "Positive for acute bone abnormality.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR2172",
+      "evidence": "The cardiomediastinal silhouette is normal in size and contour. Biapical fibronodular thickening/scarring. Hyperexpanded lungs without focal consolidation, pneumothorax or large pleural effusion. Negative for acute bone abnormality. Hyperexpanded lungs. Negative for acute abnormality.",
+      "entailed_claim": "Negative for acute abnormality.",
+      "contradictory_claim": "Positive for acute abnormality.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR2187",
+      "evidence": "The heart size is normal. Tortuous aorta. Calcifications are seen within the aortic XXXX. The mediastinal contour is within normal limits. The lungs are free of any focal infiltrates. Stable calcified granuloma within the lingula. There are no nodules or masses. No visible pneumothorax. No visible pleural fluid. The XXXX are grossly normal. There is no visible free intraperitoneal air under the diaphragm. Surgical clips are seen within the right upper abdomen. 1. No acute radiographic cardiopulmonary process.",
+      "entailed_claim": "There are no nodules or masses.",
+      "contradictory_claim": "There are nodules or masses.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR2187",
+      "evidence": "The heart size is normal. Tortuous aorta. Calcifications are seen within the aortic XXXX. The mediastinal contour is within normal limits. The lungs are free of any focal infiltrates. Stable calcified granuloma within the lingula. There are no nodules or masses. No visible pneumothorax. No visible pleural fluid. The XXXX are grossly normal. There is no visible free intraperitoneal air under the diaphragm. Surgical clips are seen within the right upper abdomen. 1. No acute radiographic cardiopulmonary process.",
+      "entailed_claim": "No visible pneumothorax.",
+      "contradictory_claim": "Visible pneumothorax.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR2187",
+      "evidence": "The heart size is normal. Tortuous aorta. Calcifications are seen within the aortic XXXX. The mediastinal contour is within normal limits. The lungs are free of any focal infiltrates. Stable calcified granuloma within the lingula. There are no nodules or masses. No visible pneumothorax. No visible pleural fluid. The XXXX are grossly normal. There is no visible free intraperitoneal air under the diaphragm. Surgical clips are seen within the right upper abdomen. 1. No acute radiographic cardiopulmonary process.",
+      "entailed_claim": "No visible pleural fluid.",
+      "contradictory_claim": "Visible pleural fluid.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR2187",
+      "evidence": "The heart size is normal. Tortuous aorta. Calcifications are seen within the aortic XXXX. The mediastinal contour is within normal limits. The lungs are free of any focal infiltrates. Stable calcified granuloma within the lingula. There are no nodules or masses. No visible pneumothorax. No visible pleural fluid. The XXXX are grossly normal. There is no visible free intraperitoneal air under the diaphragm. Surgical clips are seen within the right upper abdomen. 1. No acute radiographic cardiopulmonary process.",
+      "entailed_claim": "There is no visible free intraperitoneal air under the diaphragm.",
+      "contradictory_claim": "There is visible free intraperitoneal air under the diaphragm.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR2246",
+      "evidence": "Normal heart size and mediastinal contour. Right lung base airspace disease on frontal XXXX. XXXX opacities in the left lung base consistent with atelectasis. No pneumothorax. No pleural effusion. Mild wedge XXXX deformity of T12. Right lung base airspace disease and left base atelectasis.",
+      "entailed_claim": "No pneumothorax.",
+      "contradictory_claim": "Pneumothorax.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR2246",
+      "evidence": "Normal heart size and mediastinal contour. Right lung base airspace disease on frontal XXXX. XXXX opacities in the left lung base consistent with atelectasis. No pneumothorax. No pleural effusion. Mild wedge XXXX deformity of T12. Right lung base airspace disease and left base atelectasis.",
+      "entailed_claim": "No pleural effusion.",
+      "contradictory_claim": "Pleural effusion.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR2298",
+      "evidence": "The heart is normal size. The mediastinum is unremarkable. There is no pleural effusion, pneumothorax, or focal airspace disease. Chronic degenerative changes are present within the spine. No acute cardiopulmonary abnormality.",
+      "entailed_claim": "There is no pleural effusion, pneumothorax, or focal airspace disease.",
+      "contradictory_claim": "There is pleural effusion, pneumothorax, or focal airspace disease.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR2298",
+      "evidence": "The heart is normal size. The mediastinum is unremarkable. There is no pleural effusion, pneumothorax, or focal airspace disease. Chronic degenerative changes are present within the spine. No acute cardiopulmonary abnormality.",
+      "entailed_claim": "No acute cardiopulmonary abnormality.",
+      "contradictory_claim": "Acute cardiopulmonary abnormality.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR2307",
+      "evidence": "The heart is normal in size. The mediastinum is unremarkable. The lungs are hyperinflated with XXXX XXXX opacities compatible with pleural-parenchymal scarring. There is no acute infiltrate or effusion. Emphysema and scarring without acute disease",
+      "entailed_claim": "There is no acute infiltrate or effusion.",
+      "contradictory_claim": "There is acute infiltrate or effusion.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR2412",
+      "evidence": "The heart size and mediastinal silhouette are within normal limits. No pneumothorax or pleural effusions. The lungs are clear. No focal consolidations. The osseous structures are intact. Calcification in the right upper quadrant of the abdomen XXXX consistent with gallstone. No acute cardiopulmonary abnormalities.",
+      "entailed_claim": "No pneumothorax or pleural effusions.",
+      "contradictory_claim": "Pneumothorax or pleural effusions.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR2412",
+      "evidence": "The heart size and mediastinal silhouette are within normal limits. No pneumothorax or pleural effusions. The lungs are clear. No focal consolidations. The osseous structures are intact. Calcification in the right upper quadrant of the abdomen XXXX consistent with gallstone. No acute cardiopulmonary abnormalities.",
+      "entailed_claim": "No focal consolidations.",
+      "contradictory_claim": "Focal consolidations.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR2412",
+      "evidence": "The heart size and mediastinal silhouette are within normal limits. No pneumothorax or pleural effusions. The lungs are clear. No focal consolidations. The osseous structures are intact. Calcification in the right upper quadrant of the abdomen XXXX consistent with gallstone. No acute cardiopulmonary abnormalities.",
+      "entailed_claim": "No acute cardiopulmonary abnormalities.",
+      "contradictory_claim": "Acute cardiopulmonary abnormalities.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR2440",
+      "evidence": "The heart is normal in size. The mediastinum is stable. The aorta is atherosclerotic. Emphysematous changes are identified. There is no acute infiltrate or effusion. Emphysema without acute disease.",
+      "entailed_claim": "There is no acute infiltrate or effusion.",
+      "contradictory_claim": "There is acute infiltrate or effusion.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR2589",
+      "evidence": "There are no acute osseous abnormalities. Soft tissues are within normal limits. There is stable enlargement of the heart. Calcific aorta. Stable bilateral calcified granulomas. The lungs are clear bilaterally without focal area of consolidation, pleural effusion, or pneumothorax. No acute radiographic cardiopulmonary process.",
+      "entailed_claim": "There are no acute osseous abnormalities.",
+      "contradictory_claim": "There are acute osseous abnormalities.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR2589",
+      "evidence": "There are no acute osseous abnormalities. Soft tissues are within normal limits. There is stable enlargement of the heart. Calcific aorta. Stable bilateral calcified granulomas. The lungs are clear bilaterally without focal area of consolidation, pleural effusion, or pneumothorax. No acute radiographic cardiopulmonary process.",
+      "entailed_claim": "No acute radiographic cardiopulmonary process.",
+      "contradictory_claim": "Acute radiographic cardiopulmonary process.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR2708",
+      "evidence": "The cardiac and mediastinal contours are within normal limits. There are calcified mediastinal lymph XXXX, with a calcified right lower lobe pulmonary nodule. The lungs are well-inflated and clear. There is no focal consolidation, pneumothorax, or effusion. There are degenerative changes of the first costochondral joints bilaterally. No acute bony abnormalities are seen. 1. No evidence of acute cardiopulmonary process. Stable appearance of the chest. 2. Evidence of prior granulomatous disease and degenerative changes of the costochondral junctions.",
+      "entailed_claim": "There is no focal consolidation, pneumothorax, or effusion.",
+      "contradictory_claim": "There is focal consolidation, pneumothorax, or effusion.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR2708",
+      "evidence": "The cardiac and mediastinal contours are within normal limits. There are calcified mediastinal lymph XXXX, with a calcified right lower lobe pulmonary nodule. The lungs are well-inflated and clear. There is no focal consolidation, pneumothorax, or effusion. There are degenerative changes of the first costochondral joints bilaterally. No acute bony abnormalities are seen. 1. No evidence of acute cardiopulmonary process. Stable appearance of the chest. 2. Evidence of prior granulomatous disease and degenerative changes of the costochondral junctions.",
+      "entailed_claim": "No acute bony abnormalities are seen.",
+      "contradictory_claim": "Acute bony abnormalities are seen.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR2721",
+      "evidence": "Heart size at the upper limits of normal. There are scattered calcified granulomas. No focal airspace consolidation, large effusion, or appreciable pneumothorax. Tortuous, unfolded to descending aorta. Calcified aortic XXXX. XXXX curvature of the thoracic spine. Exaggerated kyphosis. XXXX are diffusely osteopenic. Multilevel degenerative changes of the thoracic spine with minimal anterior XXXX loss of several vertebral bodies. Chronic changes without acute cardiopulmonary findings.",
+      "entailed_claim": "No focal airspace consolidation, large effusion, or appreciable pneumothorax.",
+      "contradictory_claim": "Focal airspace consolidation, large effusion, or appreciable pneumothorax.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR2763",
+      "evidence": "Heart size and pulmonary vascularity appear within normal limits. The lungs are free of focal airspace disease. No pleural effusion or pneumothorax is seen. There is mild prominence of the interstitial markings which are unchanged. 1. No evidence of acute disease.",
+      "entailed_claim": "No pleural effusion or pneumothorax is seen.",
+      "contradictory_claim": "Pleural effusion or pneumothorax is seen.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR2882",
+      "evidence": "There are no focal areas of consolidation. No suspicious bony opacities. Heart size slightly enlarged. No pleural effusions. There is no evidence of pneumothorax. Degenerative changes of the thoracic spine. 1. No acute cardiopulmonary abnormality. 2. Mild cardiomegaly, stable.",
+      "entailed_claim": "There are no focal areas of consolidation.",
+      "contradictory_claim": "There are focal areas of consolidation.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR2882",
+      "evidence": "There are no focal areas of consolidation. No suspicious bony opacities. Heart size slightly enlarged. No pleural effusions. There is no evidence of pneumothorax. Degenerative changes of the thoracic spine. 1. No acute cardiopulmonary abnormality. 2. Mild cardiomegaly, stable.",
+      "entailed_claim": "No suspicious bony opacities.",
+      "contradictory_claim": "Suspicious bony opacities.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR2882",
+      "evidence": "There are no focal areas of consolidation. No suspicious bony opacities. Heart size slightly enlarged. No pleural effusions. There is no evidence of pneumothorax. Degenerative changes of the thoracic spine. 1. No acute cardiopulmonary abnormality. 2. Mild cardiomegaly, stable.",
+      "entailed_claim": "No pleural effusions.",
+      "contradictory_claim": "Pleural effusions.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR2882",
+      "evidence": "There are no focal areas of consolidation. No suspicious bony opacities. Heart size slightly enlarged. No pleural effusions. There is no evidence of pneumothorax. Degenerative changes of the thoracic spine. 1. No acute cardiopulmonary abnormality. 2. Mild cardiomegaly, stable.",
+      "entailed_claim": "There is no evidence of pneumothorax.",
+      "contradictory_claim": "There is evidence of pneumothorax.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR3057",
+      "evidence": "The cardiomediastinal silhouette is normal size and configuration. Atherosclerotic calcification of the thoracic aorta. Pulmonary vasculature within normal limits. The lungs are well-aerated. There is no pneumothorax, pleural effusion, or focal consolidation. No acute cardiopulmonary disease. .",
+      "entailed_claim": "There is no pneumothorax, pleural effusion, or focal consolidation.",
+      "contradictory_claim": "There is pneumothorax, pleural effusion, or focal consolidation.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR3057",
+      "evidence": "The cardiomediastinal silhouette is normal size and configuration. Atherosclerotic calcification of the thoracic aorta. Pulmonary vasculature within normal limits. The lungs are well-aerated. There is no pneumothorax, pleural effusion, or focal consolidation. No acute cardiopulmonary disease. .",
+      "entailed_claim": "No acute cardiopulmonary disease.",
+      "contradictory_claim": "Acute cardiopulmonary disease.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR3149",
+      "evidence": "The lungs are hyperexpanded. Cardiomediastinal silhouette is within normal limits. No pleural effusion, focal airspace opacities or pneumothorax. No free subdiaphragmatic air. Lung hyperexpansion. No focal air space disease.",
+      "entailed_claim": "No pleural effusion, focal airspace opacities or pneumothorax.",
+      "contradictory_claim": "Pleural effusion, focal airspace opacities or pneumothorax.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR3149",
+      "evidence": "The lungs are hyperexpanded. Cardiomediastinal silhouette is within normal limits. No pleural effusion, focal airspace opacities or pneumothorax. No free subdiaphragmatic air. Lung hyperexpansion. No focal air space disease.",
+      "entailed_claim": "No free subdiaphragmatic air.",
+      "contradictory_claim": "Free subdiaphragmatic air.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR3149",
+      "evidence": "The lungs are hyperexpanded. Cardiomediastinal silhouette is within normal limits. No pleural effusion, focal airspace opacities or pneumothorax. No free subdiaphragmatic air. Lung hyperexpansion. No focal air space disease.",
+      "entailed_claim": "No focal air space disease.",
+      "contradictory_claim": "Focal air space disease.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR3244",
+      "evidence": "Heart size within normal limits. Right paratracheal prominence XXXX represents tortuous XXXX. XXXX lung volumes. Mild streaky bibasilar opacities. No pleural effusion or pneumothorax. 1. No evidence of pulmonary tuberculosis. 2. Low lung volumes with minimal streaky basilar airspace disease, XXXX atelectasis. 3. Right paratracheal prominence XXXX represents tortuous XXXX. Comparison with prior imaging studies could confirm this if available. .",
+      "entailed_claim": "No pleural effusion or pneumothorax.",
+      "contradictory_claim": "Pleural effusion or pneumothorax.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR3246",
+      "evidence": "The cardiac contours are normal. Prominent pulmonary arteries. The lungs are clear. Thoracic spondylosis. No acute process.",
+      "entailed_claim": "No acute process.",
+      "contradictory_claim": "Acute process.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR3282",
+      "evidence": "Low lung volumes bilaterally, with lungs otherwise grossly clear. No focal consolidation, pneumothorax, or large pleural effusion. The cardiomediastinal silhouette is unremarkable. No acute osseous abnormalities identified. Low lung volumes without acute cardiopulmonary abnormality.",
+      "entailed_claim": "No focal consolidation, pneumothorax, or large pleural effusion.",
+      "contradictory_claim": "Focal consolidation, pneumothorax, or large pleural effusion.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR3282",
+      "evidence": "Low lung volumes bilaterally, with lungs otherwise grossly clear. No focal consolidation, pneumothorax, or large pleural effusion. The cardiomediastinal silhouette is unremarkable. No acute osseous abnormalities identified. Low lung volumes without acute cardiopulmonary abnormality.",
+      "entailed_claim": "No acute osseous abnormalities identified.",
+      "contradictory_claim": "Acute osseous abnormalities identified.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR3379",
+      "evidence": "No pneumothorax or large pleural effusion. Borderline cardiomegaly. Minimal retrocardiac airspace disease. Bony structures appear intact. Bony structures appear intact. Minimal retrocardiac airspace disease.",
+      "entailed_claim": "No pneumothorax or large pleural effusion.",
+      "contradictory_claim": "Pneumothorax or large pleural effusion.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR3517",
+      "evidence": "Normal heart size. Aortic atherosclerotic calcifications. Right IJ central venous catheter tip in region of mid SVC. There are 2 AICD leads, one tip in expected region of right atrium and one tip in expected region of right ventricle. There is no pulmonary edema. There is no focal consolidation. There are no XXXX of a large pleural effusion. There is no evidence of pneumothorax. There is no evidence of acute cardiopulmonary disease. .",
+      "entailed_claim": "There is no pulmonary edema.",
+      "contradictory_claim": "There is pulmonary edema.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR3517",
+      "evidence": "Normal heart size. Aortic atherosclerotic calcifications. Right IJ central venous catheter tip in region of mid SVC. There are 2 AICD leads, one tip in expected region of right atrium and one tip in expected region of right ventricle. There is no pulmonary edema. There is no focal consolidation. There are no XXXX of a large pleural effusion. There is no evidence of pneumothorax. There is no evidence of acute cardiopulmonary disease. .",
+      "entailed_claim": "There is no focal consolidation.",
+      "contradictory_claim": "There is focal consolidation.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR3517",
+      "evidence": "Normal heart size. Aortic atherosclerotic calcifications. Right IJ central venous catheter tip in region of mid SVC. There are 2 AICD leads, one tip in expected region of right atrium and one tip in expected region of right ventricle. There is no pulmonary edema. There is no focal consolidation. There are no XXXX of a large pleural effusion. There is no evidence of pneumothorax. There is no evidence of acute cardiopulmonary disease. .",
+      "entailed_claim": "There are no XXXX of a large pleural effusion.",
+      "contradictory_claim": "There are XXXX of a large pleural effusion.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR3517",
+      "evidence": "Normal heart size. Aortic atherosclerotic calcifications. Right IJ central venous catheter tip in region of mid SVC. There are 2 AICD leads, one tip in expected region of right atrium and one tip in expected region of right ventricle. There is no pulmonary edema. There is no focal consolidation. There are no XXXX of a large pleural effusion. There is no evidence of pneumothorax. There is no evidence of acute cardiopulmonary disease. .",
+      "entailed_claim": "There is no evidence of pneumothorax.",
+      "contradictory_claim": "There is evidence of pneumothorax.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR3517",
+      "evidence": "Normal heart size. Aortic atherosclerotic calcifications. Right IJ central venous catheter tip in region of mid SVC. There are 2 AICD leads, one tip in expected region of right atrium and one tip in expected region of right ventricle. There is no pulmonary edema. There is no focal consolidation. There are no XXXX of a large pleural effusion. There is no evidence of pneumothorax. There is no evidence of acute cardiopulmonary disease. .",
+      "entailed_claim": "There is no evidence of acute cardiopulmonary disease.",
+      "contradictory_claim": "There is evidence of acute cardiopulmonary disease.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR3564",
+      "evidence": "The heart is top normal in size. The mediastinum is stable. Surgical clips again seen overlying the superior mediastinum.There is an retrocardiac density compatible hiatal hernia. The lungs are mildly hypoinflated. No acute infiltrate or pleural effusion are seen. 1. Mild hypoinflation without acute disease. 2. Retrocardiac density compatible with hiatal hernia.",
+      "entailed_claim": "No acute infiltrate or pleural effusion are seen.",
+      "contradictory_claim": "Acute infiltrate or pleural effusion are seen.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR3599",
+      "evidence": "There are intact midline sternotomy XXXX and postsurgical changes of prior CABG. The aorta is unfolded. The heart size and cardiomediastinal silhouette are normal. There is no focal airspace opacity, pleural effusion, or pneumothorax. There are mild degenerative changes in the thoracic spine. No acute cardiopulmonary finding.",
+      "entailed_claim": "There is no focal airspace opacity, pleural effusion, or pneumothorax.",
+      "contradictory_claim": "There is focal airspace opacity, pleural effusion, or pneumothorax.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR3599",
+      "evidence": "There are intact midline sternotomy XXXX and postsurgical changes of prior CABG. The aorta is unfolded. The heart size and cardiomediastinal silhouette are normal. There is no focal airspace opacity, pleural effusion, or pneumothorax. There are mild degenerative changes in the thoracic spine. No acute cardiopulmonary finding.",
+      "entailed_claim": "No acute cardiopulmonary finding.",
+      "contradictory_claim": "Acute cardiopulmonary finding.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR3678",
+      "evidence": "The heart is normal in size. The mediastinum is unremarkable. The costophrenic XXXX are blunted. The interstitial markings are slightly accentuated suggesting underlying chronic disease/emphysema. No focal consolidation is seen. Mild costophrenic XXXX blunting suggesting XXXX bilateral pleural effusions and/or thickening. No acute infiltrate.",
+      "entailed_claim": "No focal consolidation is seen.",
+      "contradictory_claim": "Focal consolidation is seen.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR3678",
+      "evidence": "The heart is normal in size. The mediastinum is unremarkable. The costophrenic XXXX are blunted. The interstitial markings are slightly accentuated suggesting underlying chronic disease/emphysema. No focal consolidation is seen. Mild costophrenic XXXX blunting suggesting XXXX bilateral pleural effusions and/or thickening. No acute infiltrate.",
+      "entailed_claim": "No acute infiltrate.",
+      "contradictory_claim": "Acute infiltrate.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR3681",
+      "evidence": "There are lower lung volumes. There is central bronchovascular crowding. Volume loss in the medial right upper lobe seen on XXXX is not as well-demonstrated on radiography. No lobar consolidation. No pleural effusion or pneumothorax. No acute abnormality identified.",
+      "entailed_claim": "No lobar consolidation.",
+      "contradictory_claim": "Lobar consolidation.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR3681",
+      "evidence": "There are lower lung volumes. There is central bronchovascular crowding. Volume loss in the medial right upper lobe seen on XXXX is not as well-demonstrated on radiography. No lobar consolidation. No pleural effusion or pneumothorax. No acute abnormality identified.",
+      "entailed_claim": "No pleural effusion or pneumothorax.",
+      "contradictory_claim": "Pleural effusion or pneumothorax.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR3681",
+      "evidence": "There are lower lung volumes. There is central bronchovascular crowding. Volume loss in the medial right upper lobe seen on XXXX is not as well-demonstrated on radiography. No lobar consolidation. No pleural effusion or pneumothorax. No acute abnormality identified.",
+      "entailed_claim": "No acute abnormality identified.",
+      "contradictory_claim": "Acute abnormality identified.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR3702",
+      "evidence": "Lungs are overall hyperexpanded with flattening of the diaphragms. Lungs are clear without focal airspace disease. No pleural effusions or pneumothoraces. Heart and mediastinum of normal size and contour. degenerative changes within the spine. There are expansile changes within the right clavicle which were seen on the previous XXXX/CT. Findings are consistent with changes of multiple myeloma. Clear lungs.",
+      "entailed_claim": "No pleural effusions or pneumothoraces.",
+      "contradictory_claim": "Pleural effusions or pneumothoraces.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR3708",
+      "evidence": "Lung volumes are decreased from XXXX, and there is resultant bronchovascular crowding. No evidence of focal airspace disease. No definite pleural effusion or pneumothorax. Cardiomediastinal silhouette is within normal limits given the low lung volumes. No free subdiaphragmatic air. Grossly stable mild degenerative changes of the right lower thoracic spine. No acute pulmonary disease.",
+      "entailed_claim": "No evidence of focal airspace disease.",
+      "contradictory_claim": "Evidence of focal airspace disease.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR3708",
+      "evidence": "Lung volumes are decreased from XXXX, and there is resultant bronchovascular crowding. No evidence of focal airspace disease. No definite pleural effusion or pneumothorax. Cardiomediastinal silhouette is within normal limits given the low lung volumes. No free subdiaphragmatic air. Grossly stable mild degenerative changes of the right lower thoracic spine. No acute pulmonary disease.",
+      "entailed_claim": "No definite pleural effusion or pneumothorax.",
+      "contradictory_claim": "Definite pleural effusion or pneumothorax.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR3708",
+      "evidence": "Lung volumes are decreased from XXXX, and there is resultant bronchovascular crowding. No evidence of focal airspace disease. No definite pleural effusion or pneumothorax. Cardiomediastinal silhouette is within normal limits given the low lung volumes. No free subdiaphragmatic air. Grossly stable mild degenerative changes of the right lower thoracic spine. No acute pulmonary disease.",
+      "entailed_claim": "No free subdiaphragmatic air.",
+      "contradictory_claim": "Free subdiaphragmatic air.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR3708",
+      "evidence": "Lung volumes are decreased from XXXX, and there is resultant bronchovascular crowding. No evidence of focal airspace disease. No definite pleural effusion or pneumothorax. Cardiomediastinal silhouette is within normal limits given the low lung volumes. No free subdiaphragmatic air. Grossly stable mild degenerative changes of the right lower thoracic spine. No acute pulmonary disease.",
+      "entailed_claim": "No acute pulmonary disease.",
+      "contradictory_claim": "Acute pulmonary disease.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR3736",
+      "evidence": "Normal heart size and mediastinal contours. No focal airspace consolidation. No pleural effusion or pneumothorax. Mild degenerative disc disease of the thoracic spine. No acute cardiopulmonary abnormalities.",
+      "entailed_claim": "No focal airspace consolidation.",
+      "contradictory_claim": "Focal airspace consolidation.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR3736",
+      "evidence": "Normal heart size and mediastinal contours. No focal airspace consolidation. No pleural effusion or pneumothorax. Mild degenerative disc disease of the thoracic spine. No acute cardiopulmonary abnormalities.",
+      "entailed_claim": "No pleural effusion or pneumothorax.",
+      "contradictory_claim": "Pleural effusion or pneumothorax.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR3736",
+      "evidence": "Normal heart size and mediastinal contours. No focal airspace consolidation. No pleural effusion or pneumothorax. Mild degenerative disc disease of the thoracic spine. No acute cardiopulmonary abnormalities.",
+      "entailed_claim": "No acute cardiopulmonary abnormalities.",
+      "contradictory_claim": "Acute cardiopulmonary abnormalities.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR3750",
+      "evidence": "There is stable cardiomegaly. Right pleural effusion is slightly increased in size. Pulmonary vasculature is persistently enlarged. Prominent interstitium is stable. No XXXX focal infiltrate. No pneumothorax. Visualized osseous structures intact. Stable cardiomegaly and XXXX of interstitial edema with small but increasing right pleural effusion.",
+      "entailed_claim": "No XXXX focal infiltrate.",
+      "contradictory_claim": "XXXX focal infiltrate.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR3750",
+      "evidence": "There is stable cardiomegaly. Right pleural effusion is slightly increased in size. Pulmonary vasculature is persistently enlarged. Prominent interstitium is stable. No XXXX focal infiltrate. No pneumothorax. Visualized osseous structures intact. Stable cardiomegaly and XXXX of interstitial edema with small but increasing right pleural effusion.",
+      "entailed_claim": "No pneumothorax.",
+      "contradictory_claim": "Pneumothorax.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR3759",
+      "evidence": "There is hyperexpansion of lungs and flattening of the diaphragm consistent with COPD. No focal lung consolidation. No pneumothorax or pleural effusion. Heart size and pulmonary vascularity are within normal limits. There is a kyphosis and osteopenia of the thoracic spine. No displaced rib fractures. No focal lung consolidation. COPD. No displaced fractures.",
+      "entailed_claim": "No focal lung consolidation.",
+      "contradictory_claim": "Focal lung consolidation.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR3759",
+      "evidence": "There is hyperexpansion of lungs and flattening of the diaphragm consistent with COPD. No focal lung consolidation. No pneumothorax or pleural effusion. Heart size and pulmonary vascularity are within normal limits. There is a kyphosis and osteopenia of the thoracic spine. No displaced rib fractures. No focal lung consolidation. COPD. No displaced fractures.",
+      "entailed_claim": "No pneumothorax or pleural effusion.",
+      "contradictory_claim": "Pneumothorax or pleural effusion.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR3759",
+      "evidence": "There is hyperexpansion of lungs and flattening of the diaphragm consistent with COPD. No focal lung consolidation. No pneumothorax or pleural effusion. Heart size and pulmonary vascularity are within normal limits. There is a kyphosis and osteopenia of the thoracic spine. No displaced rib fractures. No focal lung consolidation. COPD. No displaced fractures.",
+      "entailed_claim": "No displaced rib fractures.",
+      "contradictory_claim": "Displaced rib fractures.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR3759",
+      "evidence": "There is hyperexpansion of lungs and flattening of the diaphragm consistent with COPD. No focal lung consolidation. No pneumothorax or pleural effusion. Heart size and pulmonary vascularity are within normal limits. There is a kyphosis and osteopenia of the thoracic spine. No displaced rib fractures. No focal lung consolidation. COPD. No displaced fractures.",
+      "entailed_claim": "No focal lung consolidation.",
+      "contradictory_claim": "Focal lung consolidation.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    },
+    {
+      "case_id": "CXR3759",
+      "evidence": "There is hyperexpansion of lungs and flattening of the diaphragm consistent with COPD. No focal lung consolidation. No pneumothorax or pleural effusion. Heart size and pulmonary vascularity are within normal limits. There is a kyphosis and osteopenia of the thoracic spine. No displaced rib fractures. No focal lung consolidation. COPD. No displaced fractures.",
+      "entailed_claim": "No displaced fractures.",
+      "contradictory_claim": "Displaced fractures.",
+      "rule_positive_accepted": true,
+      "rule_contradiction_rejected": true,
+      "semantic_positive_accepted": true,
+      "semantic_contradiction_rejected": true
+    }
+  ]
+}

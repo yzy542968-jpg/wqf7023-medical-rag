@@ -1,0 +1,5 @@
+uid,indication,comparison,findings,impression,MeSH,Problems
+1,chest pain,none,"The lungs are clear. The cardiomediastinal silhouette is normal.","No acute cardiopulmonary abnormality.","normal","normal"
+2,cough and fever,none,"There is right lower lobe airspace opacity. No pleural effusion is seen.","Right lower lobe pneumonia.","pneumonia","pneumonia"
+3,shortness of breath,prior study,"The heart is enlarged. Mild pulmonary vascular congestion is present.","Cardiomegaly with mild pulmonary vascular congestion.","cardiomegaly","cardiomegaly"
+

@@ -1,0 +1,16 @@
+# Core data, experiment, and dashboard runtime
+numpy>=1.26,<3
+pandas>=2.2,<4
+tqdm>=4.66,<5
+Pillow>=10,<13
+streamlit>=1.42,<2
+
+# Local Hugging Face retrieval, generation, and NLI
+torch>=2.3
+transformers>=4.45,<5
+accelerate>=0.33,<2
+
+# Reproducibility, manuscript build, and frozen clinical metric
+pytest>=8,<10
+python-docx>=1.1,<2
+radgraph==0.1.18

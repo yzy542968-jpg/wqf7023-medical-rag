@@ -1,0 +1,33 @@
+{
+  "version": "synthetic-schema-fixture",
+  "data": [
+    {
+      "title": "SYNTHETIC_PATIENT_DEV",
+      "paragraphs": [
+        {
+          "document_id": "SYNTHETIC_REPORT_DEV_O",
+          "context": "FINDINGS: There is focal opacity. No pneumothorax is seen.",
+          "qas": [
+            {
+              "id": "synthetic_dev_answerable",
+              "question": "What focal finding is present?",
+              "answers": [{"text": "focal opacity", "answer_start": 19}],
+              "is_impossible": false
+            },
+            {
+              "id": "synthetic_dev_impossible",
+              "question": "Is a pleural effusion present?",
+              "answers": [],
+              "is_impossible": true
+            }
+          ]
+        },
+        {
+          "document_id": "SYNTHETIC_REPORT_DEV_I",
+          "context": "IMPRESSION: Focal pulmonary opacity. Follow-up is recommended.",
+          "qas": []
+        }
+      ]
+    }
+  ]
+}

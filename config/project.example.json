@@ -1,0 +1,33 @@
+{
+  "project": {
+    "title": "Retrieval-Augmented Medical Question Answering over Paired Radiology Images and Reports",
+    "dataset": "IU X-Ray / OpenI",
+    "case_unit": "paired radiology report and associated image files"
+  },
+  "data": {
+    "reports_csv": "data/raw/indiana_reports.csv",
+    "projections_csv": "data/raw/indiana_projections.csv",
+    "image_dir": "data/raw/images",
+    "cases_jsonl": "data/processed/openi_cases.jsonl"
+  },
+  "retrieval": {
+    "top_k": 5,
+    "text_fields": ["indication", "findings", "impression"],
+    "baseline_retriever": "tfidf",
+    "planned_retriever": "MedCPT embeddings with ChromaDB"
+  },
+  "generation": {
+    "base_llm": "Qwen2.5-7B-Instruct",
+    "prompt_variants": [
+      "direct",
+      "evidence_guided",
+      "structured_reasoning"
+    ]
+  },
+  "evaluation": {
+    "retrieval_metrics": ["Hit@k", "Recall@k", "MRR"],
+    "answer_metrics": ["answer relevance", "faithfulness", "manual evidence support check"],
+    "risk_metrics": ["hallucination tendency"]
+  }
+}
+

@@ -1,0 +1,105 @@
+{
+  "project": "WQF7023 Medical RAG",
+  "generated_utc": "2026-08-16T05:56:42.034440+00:00",
+  "automated_ready": true,
+  "submission_ready": false,
+  "automated_gates": {
+    "required_files_present": true,
+    "locked_artifact_hashes_match": true,
+    "tracked_release_exclusions_pass": true,
+    "github_file_size_limit_pass": true,
+    "human_evaluation_claim_consistency_pass": true
+  },
+  "external_gates": {
+    "human_evaluation_disposition_resolved": true,
+    "remote_repository_configured": false,
+    "non_draft_submission_artifacts_present": true
+  },
+  "missing_required_files": [],
+  "locked_hash_mismatches": [],
+  "forbidden_tracked_files": [],
+  "oversized_tracked_files": [],
+  "human_evaluation": {
+    "policy": {
+      "status": "not_conducted",
+      "reason": "No suitable independent reviewer was available before the P2 submission deadline.",
+      "decision_date": "2026-08-16",
+      "required_by_course_documents": false,
+      "limitations_declared": true,
+      "scores_claimed": false,
+      "evaluation_packages_preserved": true
+    },
+    "complete": false,
+    "disposition_resolved": true,
+    "packages": {
+      "v1": {
+        "rows": 36,
+        "completed_rows": 0,
+        "completion_rate": 0.0,
+        "filled_required_cells": 0,
+        "required_cells": 468
+      },
+      "v2": {
+        "rows": 36,
+        "completed_rows": 0,
+        "completion_rate": 0.0,
+        "filled_required_cells": 0,
+        "required_cells": 468
+      }
+    }
+  },
+  "deliverables": {
+    "manuscript_docx": {
+      "path": "deliverables/22097191_ZHANG_YUE_P2_Research_Project.docx",
+      "bytes": 59173,
+      "sha256": "de7fe7b55fb6a31f6728cbb91db5d6b81f23ea911240b711913858e4fc952f74",
+      "draft": false
+    },
+    "manuscript_pdf": {
+      "path": "deliverables/22097191_ZHANG_YUE_P2_Research_Project.pdf",
+      "bytes": 303132,
+      "sha256": "311851efe4a436535bda9f4de71a5d36ff64a8be979ef6ccbc628c1460bf7452",
+      "draft": false
+    },
+    "defence_pptx": {
+      "path": "deliverables/22097191_ZHANG_YUE_P2_Defence.pptx",
+      "bytes": 736699,
+      "sha256": "fb903450d005ee6333359daba533a82d8ed79a9b942df4c6e80bb70358e6857d",
+      "draft": false
+    }
+  },
+  "v3_radqa": {
+    "framework_implemented": true,
+    "official_credentialed_files_available": false,
+    "thesis_result_status": "conditional_only"
+  },
+  "git": {
+    "branch": "main",
+    "head": null,
+    "remote_origin": null,
+    "tracked_file_count": 230,
+    "working_tree_clean": false
+  },
+  "environment": {
+    "python": "3.12.13",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "packages": {
+      "accelerate": "1.13.0",
+      "numpy": "2.4.6",
+      "pandas": "3.0.5",
+      "Pillow": "12.3.0",
+      "pytest": "9.1.1",
+      "python-docx": "1.2.0",
+      "radgraph": "0.1.18",
+      "streamlit": "1.61.1",
+      "torch": "2.11.0+cu128",
+      "transformers": "4.57.6"
+    },
+    "cuda": {
+      "available": true,
+      "torch_cuda_build": "12.8",
+      "device_count": 1,
+      "device_name": "NVIDIA GeForce RTX 5070 Laptop GPU"
+    }
+  }
+}

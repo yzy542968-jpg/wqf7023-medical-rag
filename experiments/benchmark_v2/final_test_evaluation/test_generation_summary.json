@@ -1,0 +1,68 @@
+{
+  "benchmark": "OpenI case-scoped evidence QA v2",
+  "split": "test",
+  "system": "v2_case_scoped_agent_routed_qwen15_semantic_agent",
+  "top_k": 6,
+  "n": 360,
+  "case_count": 120,
+  "draft_token_f1": 0.5663869754194818,
+  "verified_token_f1": 0.5663869754194818,
+  "evidence_support_rate": 0.8199206349206349,
+  "agent_abstention_rate": 0.0,
+  "revision_rate": 0.0,
+  "mean_retrieval_recall": 0.9871825396825397,
+  "draft_token_f1_case_bootstrap_95_ci": [
+    0.5514070390696801,
+    0.5813906978339594
+  ],
+  "verified_token_f1_case_bootstrap_95_ci": [
+    0.5514070390696801,
+    0.5813906978339594
+  ],
+  "by_question_type": {
+    "case_scoped_findings": {
+      "n": 120,
+      "case_count": 120,
+      "draft_token_f1": 0.6558736468672498,
+      "verified_token_f1": 0.6558736468672498,
+      "evidence_support_rate": 0.6958730158730159,
+      "agent_abstention_rate": 0.0,
+      "revision_rate": 0.0,
+      "mean_retrieval_recall": 0.9657142857142857
+    },
+    "case_scoped_impression": {
+      "n": 120,
+      "case_count": 120,
+      "draft_token_f1": 0.5993646403886169,
+      "verified_token_f1": 0.5993646403886169,
+      "evidence_support_rate": 0.8430555555555556,
+      "agent_abstention_rate": 0.0,
+      "revision_rate": 0.0,
+      "mean_retrieval_recall": 0.9979166666666667
+    },
+    "case_scoped_summary": {
+      "n": 120,
+      "case_count": 120,
+      "draft_token_f1": 0.44392263900257867,
+      "verified_token_f1": 0.44392263900257867,
+      "evidence_support_rate": 0.9208333333333333,
+      "agent_abstention_rate": 0.0,
+      "revision_rate": 0.0,
+      "mean_retrieval_recall": 0.9979166666666667
+    }
+  },
+  "semantic_agent_config": {
+    "lexical_weight": 1.0,
+    "support_threshold": 0.4,
+    "entailment_threshold": 0.75,
+    "contradiction_threshold": 0.5,
+    "action_policy": "audit_only",
+    "n": 360,
+    "draft_token_f1": 0.5381199139852302,
+    "final_token_f1": 0.5381199139852302,
+    "abstention_rate": 0.0,
+    "revision_rate": 0.0,
+    "evidence_support_rate": 1.0
+  },
+  "rows_path": "experiments\\benchmark_v2\\final_test_evaluation\\test_generation_rows.jsonl"
+}

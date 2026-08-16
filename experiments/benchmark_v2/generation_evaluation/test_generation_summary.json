@@ -1,0 +1,67 @@
+{
+  "benchmark": "OpenI case-scoped evidence QA v2",
+  "split": "test",
+  "system": "v2_case_scoped_agent_routed_qwen15_semantic_agent",
+  "top_k": 6,
+  "n": 360,
+  "case_count": 120,
+  "draft_token_f1": 0.5663869754194818,
+  "verified_token_f1": 0.4906432895671291,
+  "evidence_support_rate": 0.813968253968254,
+  "agent_abstention_rate": 0.13055555555555556,
+  "revision_rate": 0.4638888888888889,
+  "mean_retrieval_recall": 0.9871825396825397,
+  "draft_token_f1_case_bootstrap_95_ci": [
+    0.5514070390696801,
+    0.5813906978339594
+  ],
+  "verified_token_f1_case_bootstrap_95_ci": [
+    0.4623292711572213,
+    0.5179673685411421
+  ],
+  "by_question_type": {
+    "case_scoped_findings": {
+      "n": 120,
+      "case_count": 120,
+      "draft_token_f1": 0.6558736468672498,
+      "verified_token_f1": 0.5279483927407017,
+      "evidence_support_rate": 0.6946825396825397,
+      "agent_abstention_rate": 0.2,
+      "revision_rate": 0.95,
+      "mean_retrieval_recall": 0.9657142857142857
+    },
+    "case_scoped_impression": {
+      "n": 120,
+      "case_count": 120,
+      "draft_token_f1": 0.5993646403886169,
+      "verified_token_f1": 0.5360802877131124,
+      "evidence_support_rate": 0.8263888888888888,
+      "agent_abstention_rate": 0.11666666666666667,
+      "revision_rate": 0.35833333333333334,
+      "mean_retrieval_recall": 0.9979166666666667
+    },
+    "case_scoped_summary": {
+      "n": 120,
+      "case_count": 120,
+      "draft_token_f1": 0.44392263900257867,
+      "verified_token_f1": 0.40790118824757315,
+      "evidence_support_rate": 0.9208333333333333,
+      "agent_abstention_rate": 0.075,
+      "revision_rate": 0.08333333333333333,
+      "mean_retrieval_recall": 0.9979166666666667
+    }
+  },
+  "semantic_agent_config": {
+    "lexical_weight": 0.2,
+    "support_threshold": 0.6,
+    "entailment_threshold": 0.75,
+    "contradiction_threshold": 0.5,
+    "macro_draft_token_f1": 0.18472074313963927,
+    "macro_final_token_f1": 0.1783798132705381,
+    "macro_revision_rate": 0.705026455026455,
+    "macro_abstention_rate": 0.06216931216931217,
+    "macro_evidence_support_rate": 0.7378087512307867,
+    "contradiction_rejection_rate": 1.0
+  },
+  "rows_path": "C:\\Users\\yz542_dntjhas\\Documents\\New project\\wqf7023-medical-rag\\experiments\\benchmark_v2\\generation_evaluation\\test_generation_rows.jsonl"
+}

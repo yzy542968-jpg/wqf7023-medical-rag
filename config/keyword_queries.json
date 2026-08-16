@@ -1,0 +1,43 @@
+[
+  {
+    "qid": "q_normal",
+    "query": "normal chest no acute cardiopulmonary abnormality",
+    "problem_terms": ["normal"]
+  },
+  {
+    "qid": "q_cardiomegaly",
+    "query": "enlarged heart cardiomegaly",
+    "problem_terms": ["Cardiomegaly"]
+  },
+  {
+    "qid": "q_pleural_effusion",
+    "query": "pleural effusion blunting costophrenic angle",
+    "problem_terms": ["Pleural Effusion"]
+  },
+  {
+    "qid": "q_atelectasis",
+    "query": "pulmonary atelectasis collapsed lung",
+    "problem_terms": ["Pulmonary Atelectasis"]
+  },
+  {
+    "qid": "q_pneumonia",
+    "query": "pneumonia lower lobe airspace opacity consolidation",
+    "problem_terms": ["Pneumonia"]
+  },
+  {
+    "qid": "q_pneumothorax",
+    "query": "pneumothorax collapsed lung pleural air",
+    "problem_terms": ["Pneumothorax"]
+  },
+  {
+    "qid": "q_pulmonary_edema",
+    "query": "pulmonary edema vascular congestion",
+    "problem_terms": ["Pulmonary Edema", "Edema"]
+  },
+  {
+    "qid": "q_nodule",
+    "query": "pulmonary nodule lung nodule",
+    "problem_terms": ["Nodule"]
+  }
+]
+

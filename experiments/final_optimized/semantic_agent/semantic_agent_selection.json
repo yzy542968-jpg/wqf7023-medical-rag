@@ -1,0 +1,53 @@
+{
+  "nli_model": "cnut1648/biolinkbert-mednli",
+  "split_manifest": "C:\\Users\\yz542_dntjhas\\Documents\\New project\\wqf7023-medical-rag\\data\\splits\\openi_qa_grouped_case_seed7023.json",
+  "selection_rule": "maximize development macro final Token-F1 with abstention <= 0.50",
+  "selected_config": {
+    "lexical_weight": 0.2,
+    "support_threshold": 0.6,
+    "entailment_threshold": 0.75,
+    "contradiction_threshold": 0.5,
+    "macro_draft_token_f1": 0.18472074313963927,
+    "macro_final_token_f1": 0.1783798132705381,
+    "macro_revision_rate": 0.705026455026455,
+    "macro_abstention_rate": 0.06216931216931217,
+    "macro_evidence_support_rate": 0.7378087512307867,
+    "contradiction_rejection_rate": 1.0
+  },
+  "held_out_test": {
+    "report_bm25": {
+      "n": 108,
+      "draft_token_f1": 0.13772766065371847,
+      "final_token_f1": 0.15254744376535073,
+      "revision_rate": 0.9722222222222222,
+      "abstention_rate": 0.07407407407407407,
+      "evidence_support_rate": 0.5619110827444161,
+      "nli_contradiction_count": 150,
+      "nli_contradiction_rejection_rate": 1.0
+    },
+    "case_bm25_top1": {
+      "n": 108,
+      "draft_token_f1": 0.17674258144615557,
+      "final_token_f1": 0.17158119416849427,
+      "revision_rate": 0.6851851851851852,
+      "abstention_rate": 0.08333333333333333,
+      "evidence_support_rate": 0.756547619047619,
+      "nli_contradiction_count": 22,
+      "nli_contradiction_rejection_rate": 1.0
+    },
+    "case_hybrid_top1_a050": {
+      "n": 108,
+      "draft_token_f1": 0.2022195572145303,
+      "final_token_f1": 0.20391053275171064,
+      "revision_rate": 0.5833333333333334,
+      "abstention_rate": 0.046296296296296294,
+      "evidence_support_rate": 0.8192901234567901,
+      "nli_contradiction_count": 17,
+      "nli_contradiction_rejection_rate": 1.0
+    }
+  },
+  "score_rows": 1080,
+  "score_path": "C:\\Users\\yz542_dntjhas\\Documents\\New project\\wqf7023-medical-rag\\experiments\\final_optimized\\semantic_agent\\semantic_sentence_scores.jsonl",
+  "development_sweep_csv": "C:\\Users\\yz542_dntjhas\\Documents\\New project\\wqf7023-medical-rag\\experiments\\final_optimized\\semantic_agent\\semantic_agent_development_sweep.csv",
+  "selected_test_rows": "C:\\Users\\yz542_dntjhas\\Documents\\New project\\wqf7023-medical-rag\\experiments\\final_optimized\\semantic_agent\\semantic_agent_selected_test_rows.jsonl"
+}

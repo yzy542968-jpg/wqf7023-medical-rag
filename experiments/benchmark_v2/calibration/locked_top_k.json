@@ -1,0 +1,80 @@
+{
+  "selection_partition": "calibration",
+  "selection_case_count": 120,
+  "selection_question_count": 360,
+  "target_mean_recall": 0.95,
+  "selected_top_k": 6,
+  "selection_rule": "smallest k reaching target mean evidence recall",
+  "curve": [
+    {
+      "top_k": 1,
+      "mean_recall": 0.5241172639089305,
+      "complete_evidence_coverage_rate": 0.3527777777777778,
+      "mean_retrieved_chunks": 1,
+      "mean_context_characters": 44.26111111111111
+    },
+    {
+      "top_k": 2,
+      "mean_recall": 0.6954567500400833,
+      "complete_evidence_coverage_rate": 0.4861111111111111,
+      "mean_retrieved_chunks": 1.6472222222222221,
+      "mean_context_characters": 71.98055555555555
+    },
+    {
+      "top_k": 3,
+      "mean_recall": 0.8001295695045695,
+      "complete_evidence_coverage_rate": 0.5277777777777778,
+      "mean_retrieved_chunks": 2.161111111111111,
+      "mean_context_characters": 93.40277777777777
+    },
+    {
+      "top_k": 4,
+      "mean_recall": 0.8909135000801668,
+      "complete_evidence_coverage_rate": 0.6722222222222223,
+      "mean_retrieved_chunks": 2.6333333333333333,
+      "mean_context_characters": 113.2388888888889
+    },
+    {
+      "top_k": 5,
+      "mean_recall": 0.9455863195446529,
+      "complete_evidence_coverage_rate": 0.7888888888888889,
+      "mean_retrieved_chunks": 2.9611111111111112,
+      "mean_context_characters": 126.25555555555556
+    },
+    {
+      "top_k": 6,
+      "mean_recall": 0.9769258056758057,
+      "complete_evidence_coverage_rate": 0.9083333333333333,
+      "mean_retrieved_chunks": 3.172222222222222,
+      "mean_context_characters": 134.7111111111111
+    },
+    {
+      "top_k": 7,
+      "mean_recall": 0.9883578843995511,
+      "complete_evidence_coverage_rate": 0.9416666666666667,
+      "mean_retrieved_chunks": 3.263888888888889,
+      "mean_context_characters": 139.01388888888889
+    },
+    {
+      "top_k": 8,
+      "mean_recall": 0.9950280583613917,
+      "complete_evidence_coverage_rate": 0.9722222222222222,
+      "mean_retrieved_chunks": 3.3222222222222224,
+      "mean_context_characters": 141.0388888888889
+    },
+    {
+      "top_k": 9,
+      "mean_recall": 0.9978787878787879,
+      "complete_evidence_coverage_rate": 0.9833333333333333,
+      "mean_retrieved_chunks": 3.35,
+      "mean_context_characters": 141.94722222222222
+    },
+    {
+      "top_k": 10,
+      "mean_recall": 0.9994949494949495,
+      "complete_evidence_coverage_rate": 0.9944444444444445,
+      "mean_retrieved_chunks": 3.3666666666666667,
+      "mean_context_characters": 142.525
+    }
+  ]
+}

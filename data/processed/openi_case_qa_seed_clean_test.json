@@ -1,0 +1,2315 @@
+{
+  "source_cases": "data\\processed\\openi_cases.jsonl",
+  "seed": 7023,
+  "case_count": 36,
+  "question_count": 108,
+  "parent_qa": "C:\\Users\\yz542_dntjhas\\Documents\\New project\\wqf7023-medical-rag\\data\\processed\\openi_case_qa_seed_clean.json",
+  "split_manifest": "C:\\Users\\yz542_dntjhas\\Documents\\New project\\wqf7023-medical-rag\\data\\splits\\openi_qa_grouped_case_seed7023.json",
+  "split_name": "test",
+  "questions": [
+    {
+      "qid": "CXR1027_impression",
+      "case_id": "CXR1027",
+      "question_type": "impression_from_indication",
+      "question": "For a chest X-ray case with the indication 'XXXX-year-old female with a history of an elevated XXXX-XXXX.', what is the radiology impression?",
+      "reference_answer": "1. Limited chest radiograph examination without demonstration of an acute intrathoracic abnormality.",
+      "answer_source": "impression",
+      "relevant_case_ids": [
+        "CXR1027"
+      ],
+      "problems": "Costophrenic Angle;Technical Quality of Image Unsatisfactory",
+      "images": [
+        {
+          "filename": "1027_IM-0021-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "1027_IM-0021-2001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR1027_findings",
+      "case_id": "CXR1027",
+      "question_type": "findings_from_indication",
+      "question": "For a chest X-ray case with the indication 'XXXX-year-old female with a history of an elevated XXXX-XXXX.', what are the main report findings?",
+      "reference_answer": "This examination is somewhat limited secondary to obscuration of the bilateral posterior costophrenic sulci on the lateral view. The cardiomediastinal silhouette is within normal limits for appearance. No focal areas of pulmonary consolidation. No pneumothorax. No large pleural effusion. The thoracic spine appears intact.",
+      "answer_source": "findings",
+      "relevant_case_ids": [
+        "CXR1027"
+      ],
+      "problems": "Costophrenic Angle;Technical Quality of Image Unsatisfactory",
+      "images": [
+        {
+          "filename": "1027_IM-0021-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "1027_IM-0021-2001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR1027_summary",
+      "case_id": "CXR1027",
+      "question_type": "abnormality_summary",
+      "question": "What does the chest X-ray report say about Costophrenic Angle, Technical Quality of Image Unsatisfactory?",
+      "reference_answer": "1. Limited chest radiograph examination without demonstration of an acute intrathoracic abnormality.",
+      "answer_source": "impression_or_findings",
+      "relevant_case_ids": [
+        "CXR1027"
+      ],
+      "problems": "Costophrenic Angle;Technical Quality of Image Unsatisfactory",
+      "images": [
+        {
+          "filename": "1027_IM-0021-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "1027_IM-0021-2001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR1064_impression",
+      "case_id": "CXR1064",
+      "question_type": "impression_from_indication",
+      "question": "For a chest X-ray case with the indication 'XXXX-year-old female shortness of breath. History of fibrosing mediastinitis.', what is the radiology impression?",
+      "reference_answer": "Stable elevated right hemidiaphragm with questionable subtle increased right basilar airspace disease/atelectasis. Correlate clinically.",
+      "answer_source": "impression",
+      "relevant_case_ids": [
+        "CXR1064"
+      ],
+      "problems": "Diaphragm;Opacity;Airspace Disease;Pulmonary Atelectasis",
+      "images": [
+        {
+          "filename": "1064_IM-0045-1001.dcm.png",
+          "projection": "Frontal"
+        }
+      ]
+    },
+    {
+      "qid": "CXR1064_findings",
+      "case_id": "CXR1064",
+      "question_type": "findings_from_indication",
+      "question": "For a chest X-ray case with the indication 'XXXX-year-old female shortness of breath. History of fibrosing mediastinitis.', what are the main report findings?",
+      "reference_answer": "There is stable elevation of the right hemidiaphragm with questionable increased right basilar airspace opacities. The left lung is clear. Heart size normal. XXXX unremarkable.",
+      "answer_source": "findings",
+      "relevant_case_ids": [
+        "CXR1064"
+      ],
+      "problems": "Diaphragm;Opacity;Airspace Disease;Pulmonary Atelectasis",
+      "images": [
+        {
+          "filename": "1064_IM-0045-1001.dcm.png",
+          "projection": "Frontal"
+        }
+      ]
+    },
+    {
+      "qid": "CXR1064_summary",
+      "case_id": "CXR1064",
+      "question_type": "abnormality_summary",
+      "question": "What does the chest X-ray report say about Diaphragm, Opacity, Airspace Disease, Pulmonary Atelectasis?",
+      "reference_answer": "Stable elevated right hemidiaphragm with questionable subtle increased right basilar airspace disease/atelectasis. Correlate clinically.",
+      "answer_source": "impression_or_findings",
+      "relevant_case_ids": [
+        "CXR1064"
+      ],
+      "problems": "Diaphragm;Opacity;Airspace Disease;Pulmonary Atelectasis",
+      "images": [
+        {
+          "filename": "1064_IM-0045-1001.dcm.png",
+          "projection": "Frontal"
+        }
+      ]
+    },
+    {
+      "qid": "CXR1257_impression",
+      "case_id": "CXR1257",
+      "question_type": "impression_from_indication",
+      "question": "For a chest X-ray case with the indication 'XXXX-year-old woman with XXXX onset of chest pain.', what is the radiology impression?",
+      "reference_answer": "1. Right basilar opacities favored to represent atelectasis. 2. Stigmata of XXXX cell disease. 3. Cholelithiasis.",
+      "answer_source": "impression",
+      "relevant_case_ids": [
+        "CXR1257"
+      ],
+      "problems": "Cardiomegaly;Lung;Opacity;Sclerosis;Sclerosis;Calcinosis;Pulmonary Atelectasis;Cholelithiasis",
+      "images": [
+        {
+          "filename": "1257_IM-0174-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "1257_IM-0174-2001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR1257_findings",
+      "case_id": "CXR1257",
+      "question_type": "findings_from_indication",
+      "question": "For a chest X-ray case with the indication 'XXXX-year-old woman with XXXX onset of chest pain.', what are the main report findings?",
+      "reference_answer": "Mild cardiomegaly. Hypoinflation of the lungs. Right basilar XXXX opacity may represent atelectasis. Lungs are otherwise clear without focal consolidation, pleural effusion, or pneumothorax. Sclerosis of the humeral XXXX bilateral, XXXX from prior AVN. Sclerotic vertebral body endplates with central depression. Calcifications in the right hemiabdomen may represent calcified gallstones.",
+      "answer_source": "findings",
+      "relevant_case_ids": [
+        "CXR1257"
+      ],
+      "problems": "Cardiomegaly;Lung;Opacity;Sclerosis;Sclerosis;Calcinosis;Pulmonary Atelectasis;Cholelithiasis",
+      "images": [
+        {
+          "filename": "1257_IM-0174-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "1257_IM-0174-2001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR1257_summary",
+      "case_id": "CXR1257",
+      "question_type": "abnormality_summary",
+      "question": "What does the chest X-ray report say about Cardiomegaly, Lung, Opacity, Sclerosis, Sclerosis, Calcinosis, Pulmonary Atelectasis, Cholelithiasis?",
+      "reference_answer": "1. Right basilar opacities favored to represent atelectasis. 2. Stigmata of XXXX cell disease. 3. Cholelithiasis.",
+      "answer_source": "impression_or_findings",
+      "relevant_case_ids": [
+        "CXR1257"
+      ],
+      "problems": "Cardiomegaly;Lung;Opacity;Sclerosis;Sclerosis;Calcinosis;Pulmonary Atelectasis;Cholelithiasis",
+      "images": [
+        {
+          "filename": "1257_IM-0174-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "1257_IM-0174-2001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR1369_impression",
+      "case_id": "CXR1369",
+      "question_type": "impression_from_indication",
+      "question": "For a chest X-ray case with the indication 'Dyspnea', what is the radiology impression?",
+      "reference_answer": "Unremarkable examination of the chest.",
+      "answer_source": "impression",
+      "relevant_case_ids": [
+        "CXR1369"
+      ],
+      "problems": "Epicardial Fat",
+      "images": [
+        {
+          "filename": "1369_IM-0238-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "1369_IM-0238-2001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR1369_findings",
+      "case_id": "CXR1369",
+      "question_type": "findings_from_indication",
+      "question": "For a chest X-ray case with the indication 'Dyspnea', what are the main report findings?",
+      "reference_answer": "Heart size normal. Prominent epicardial fat. Lungs are clear. No pleural effusion or pneumothorax.",
+      "answer_source": "findings",
+      "relevant_case_ids": [
+        "CXR1369"
+      ],
+      "problems": "Epicardial Fat",
+      "images": [
+        {
+          "filename": "1369_IM-0238-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "1369_IM-0238-2001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR1369_summary",
+      "case_id": "CXR1369",
+      "question_type": "abnormality_summary",
+      "question": "What does the chest X-ray report say about Epicardial Fat?",
+      "reference_answer": "Unremarkable examination of the chest.",
+      "answer_source": "impression_or_findings",
+      "relevant_case_ids": [
+        "CXR1369"
+      ],
+      "problems": "Epicardial Fat",
+      "images": [
+        {
+          "filename": "1369_IM-0238-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "1369_IM-0238-2001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR1514_impression",
+      "case_id": "CXR1514",
+      "question_type": "impression_from_indication",
+      "question": "For a chest X-ray case with the indication 'Chest pain', what is the radiology impression?",
+      "reference_answer": "1. No acute cardiopulmonary abnormality. 2. Left midlung subsegmental atelectasis versus scar.",
+      "answer_source": "impression",
+      "relevant_case_ids": [
+        "CXR1514"
+      ],
+      "problems": "Opacity;Pulmonary Atelectasis;Cicatrix",
+      "images": [
+        {
+          "filename": "1514_IM-0333-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "1514_IM-0333-2001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR1514_findings",
+      "case_id": "CXR1514",
+      "question_type": "findings_from_indication",
+      "question": "For a chest X-ray case with the indication 'Chest pain', what are the main report findings?",
+      "reference_answer": "Cardiomediastinal silhouette is within normal limits of size and appearance. The pulmonary vascularity is unremarkable. There are XXXX opacities in the left XXXX, XXXX subsegmental atelectasis or scar. Otherwise, the lungs are expanded and clear of airspace disease. Negative for pneumothorax or pleural effusion. Limited bone evaluation reveals no acute abnormality.",
+      "answer_source": "findings",
+      "relevant_case_ids": [
+        "CXR1514"
+      ],
+      "problems": "Opacity;Pulmonary Atelectasis;Cicatrix",
+      "images": [
+        {
+          "filename": "1514_IM-0333-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "1514_IM-0333-2001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR1514_summary",
+      "case_id": "CXR1514",
+      "question_type": "abnormality_summary",
+      "question": "What does the chest X-ray report say about Opacity, Pulmonary Atelectasis, Cicatrix?",
+      "reference_answer": "1. No acute cardiopulmonary abnormality. 2. Left midlung subsegmental atelectasis versus scar.",
+      "answer_source": "impression_or_findings",
+      "relevant_case_ids": [
+        "CXR1514"
+      ],
+      "problems": "Opacity;Pulmonary Atelectasis;Cicatrix",
+      "images": [
+        {
+          "filename": "1514_IM-0333-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "1514_IM-0333-2001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR1531_impression",
+      "case_id": "CXR1531",
+      "question_type": "impression_from_indication",
+      "question": "For a chest X-ray case with the indication 'XXXX-year-old female, preop evaluation', what is the radiology impression?",
+      "reference_answer": "No acute findings",
+      "answer_source": "impression",
+      "relevant_case_ids": [
+        "CXR1531"
+      ],
+      "problems": "Aorta;Calcinosis;Calcinosis;Granulomatous Disease",
+      "images": [
+        {
+          "filename": "1531_IM-0344-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "1531_IM-0344-2001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR1531_findings",
+      "case_id": "CXR1531",
+      "question_type": "findings_from_indication",
+      "question": "For a chest X-ray case with the indication 'XXXX-year-old female, preop evaluation', what are the main report findings?",
+      "reference_answer": "Heart size within normal limits, stable mediastinal contours with aortic ectasia/tortuosity. Left hilar and left lower lobe calcifications XXXX indicate a previous granulomatous process. No alveolar consolidation, no findings of pleural effusion or pulmonary edema. No pneumothorax.",
+      "answer_source": "findings",
+      "relevant_case_ids": [
+        "CXR1531"
+      ],
+      "problems": "Aorta;Calcinosis;Calcinosis;Granulomatous Disease",
+      "images": [
+        {
+          "filename": "1531_IM-0344-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "1531_IM-0344-2001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR1531_summary",
+      "case_id": "CXR1531",
+      "question_type": "abnormality_summary",
+      "question": "What does the chest X-ray report say about Aorta, Calcinosis, Calcinosis, Granulomatous Disease?",
+      "reference_answer": "No acute findings",
+      "answer_source": "impression_or_findings",
+      "relevant_case_ids": [
+        "CXR1531"
+      ],
+      "problems": "Aorta;Calcinosis;Calcinosis;Granulomatous Disease",
+      "images": [
+        {
+          "filename": "1531_IM-0344-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "1531_IM-0344-2001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR1787_impression",
+      "case_id": "CXR1787",
+      "question_type": "impression_from_indication",
+      "question": "For a chest X-ray case with the indication 'Preop for cholecystectomy, history of XXXX apnea', what is the radiology impression?",
+      "reference_answer": "No acute disease.",
+      "answer_source": "impression",
+      "relevant_case_ids": [
+        "CXR1787"
+      ],
+      "problems": "Granulomatous Disease",
+      "images": [
+        {
+          "filename": "1787_IM-0513-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "1787_IM-0513-2001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR1787_findings",
+      "case_id": "CXR1787",
+      "question_type": "findings_from_indication",
+      "question": "For a chest X-ray case with the indication 'Preop for cholecystectomy, history of XXXX apnea', what are the main report findings?",
+      "reference_answer": "The heart is normal in size. The mediastinum is unremarkable. Mild granulomatous sequela are noted. The lungs are grossly clear.",
+      "answer_source": "findings",
+      "relevant_case_ids": [
+        "CXR1787"
+      ],
+      "problems": "Granulomatous Disease",
+      "images": [
+        {
+          "filename": "1787_IM-0513-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "1787_IM-0513-2001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR1787_summary",
+      "case_id": "CXR1787",
+      "question_type": "abnormality_summary",
+      "question": "What does the chest X-ray report say about Granulomatous Disease?",
+      "reference_answer": "No acute disease.",
+      "answer_source": "impression_or_findings",
+      "relevant_case_ids": [
+        "CXR1787"
+      ],
+      "problems": "Granulomatous Disease",
+      "images": [
+        {
+          "filename": "1787_IM-0513-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "1787_IM-0513-2001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR1801_impression",
+      "case_id": "CXR1801",
+      "question_type": "impression_from_indication",
+      "question": "For a chest X-ray case with the indication 'Chest pain', what is the radiology impression?",
+      "reference_answer": "Stable mild cardiomegaly. Clear lungs.",
+      "answer_source": "impression",
+      "relevant_case_ids": [
+        "CXR1801"
+      ],
+      "problems": "Cardiomegaly",
+      "images": [
+        {
+          "filename": "1801_IM-0520-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "1801_IM-0520-2001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR1801_findings",
+      "case_id": "CXR1801",
+      "question_type": "findings_from_indication",
+      "question": "For a chest X-ray case with the indication 'Chest pain', what are the main report findings?",
+      "reference_answer": "Stable mild cardiomegaly. Mediastinal contours are unchanged. Lungs are clear without focal consolidation. No visible pleural effusion or pneumothorax.",
+      "answer_source": "findings",
+      "relevant_case_ids": [
+        "CXR1801"
+      ],
+      "problems": "Cardiomegaly",
+      "images": [
+        {
+          "filename": "1801_IM-0520-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "1801_IM-0520-2001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR1801_summary",
+      "case_id": "CXR1801",
+      "question_type": "abnormality_summary",
+      "question": "What does the chest X-ray report say about Cardiomegaly?",
+      "reference_answer": "Stable mild cardiomegaly. Clear lungs.",
+      "answer_source": "impression_or_findings",
+      "relevant_case_ids": [
+        "CXR1801"
+      ],
+      "problems": "Cardiomegaly",
+      "images": [
+        {
+          "filename": "1801_IM-0520-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "1801_IM-0520-2001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR2047_impression",
+      "case_id": "CXR2047",
+      "question_type": "impression_from_indication",
+      "question": "For a chest X-ray case with the indication 'XXXX-year-old male, rule out tuberculosis', what is the radiology impression?",
+      "reference_answer": "No acute cardiopulmonary abnormalities.",
+      "answer_source": "impression",
+      "relevant_case_ids": [
+        "CXR2047"
+      ],
+      "problems": "Calcified Granuloma",
+      "images": [
+        {
+          "filename": "2047_IM-0688-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "2047_IM-0688-1002.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR2047_findings",
+      "case_id": "CXR2047",
+      "question_type": "findings_from_indication",
+      "question": "For a chest X-ray case with the indication 'XXXX-year-old male, rule out tuberculosis', what are the main report findings?",
+      "reference_answer": "Large calcified granuloma in the right lower lobe is unchanged. No pneumothorax. Heart size is normal. No large pleural effusions. No focal airspace opacification.",
+      "answer_source": "findings",
+      "relevant_case_ids": [
+        "CXR2047"
+      ],
+      "problems": "Calcified Granuloma",
+      "images": [
+        {
+          "filename": "2047_IM-0688-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "2047_IM-0688-1002.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR2047_summary",
+      "case_id": "CXR2047",
+      "question_type": "abnormality_summary",
+      "question": "What does the chest X-ray report say about Calcified Granuloma?",
+      "reference_answer": "No acute cardiopulmonary abnormalities.",
+      "answer_source": "impression_or_findings",
+      "relevant_case_ids": [
+        "CXR2047"
+      ],
+      "problems": "Calcified Granuloma",
+      "images": [
+        {
+          "filename": "2047_IM-0688-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "2047_IM-0688-1002.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR2155_impression",
+      "case_id": "CXR2155",
+      "question_type": "impression_from_indication",
+      "question": "For a chest X-ray case with the indication 'XXXX-year-old female with chest pain', what is the radiology impression?",
+      "reference_answer": "Low lung volumes without acute cardiopulmonary abnormality.",
+      "answer_source": "impression",
+      "relevant_case_ids": [
+        "CXR2155"
+      ],
+      "problems": "Lung",
+      "images": [
+        {
+          "filename": "2155_IM-0774-2001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR2155_findings",
+      "case_id": "CXR2155",
+      "question_type": "findings_from_indication",
+      "question": "For a chest X-ray case with the indication 'XXXX-year-old female with chest pain', what are the main report findings?",
+      "reference_answer": "Low lung volumes noted. The heart size is within normal limits. Pulmonary vasculature is unremarkable. No focal consolidations, effusions, or pneumothoraces.",
+      "answer_source": "findings",
+      "relevant_case_ids": [
+        "CXR2155"
+      ],
+      "problems": "Lung",
+      "images": [
+        {
+          "filename": "2155_IM-0774-2001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR2155_summary",
+      "case_id": "CXR2155",
+      "question_type": "abnormality_summary",
+      "question": "What does the chest X-ray report say about Lung?",
+      "reference_answer": "Low lung volumes without acute cardiopulmonary abnormality.",
+      "answer_source": "impression_or_findings",
+      "relevant_case_ids": [
+        "CXR2155"
+      ],
+      "problems": "Lung",
+      "images": [
+        {
+          "filename": "2155_IM-0774-2001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR2165_impression",
+      "case_id": "CXR2165",
+      "question_type": "impression_from_indication",
+      "question": "For a chest X-ray case with the indication 'Low oxygen saturation.', what is the radiology impression?",
+      "reference_answer": "1. Low lung volumes. 2. XXXX XXXX opacities. Right base appears to represent atelectasis. Left base could be atelectasis or pneumonia.",
+      "answer_source": "impression",
+      "relevant_case_ids": [
+        "CXR2165"
+      ],
+      "problems": "Lung;Opacity;Pulmonary Atelectasis",
+      "images": [
+        {
+          "filename": "2165_IM-0781-0001-0001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "2165_IM-0781-0001-0002.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR2165_findings",
+      "case_id": "CXR2165",
+      "question_type": "findings_from_indication",
+      "question": "For a chest X-ray case with the indication 'Low oxygen saturation.', what are the main report findings?",
+      "reference_answer": "Low lung volumes are present. The heart size and pulmonary vascularity appear within normal limits. There has been interval development of bibasilar opacities. The appearance of the right base opacity XXXX atelectasis. The left base opacities could represent early pneumonia or areas of atelectasis. No pneumothorax or pleural effusion is seen.",
+      "answer_source": "findings",
+      "relevant_case_ids": [
+        "CXR2165"
+      ],
+      "problems": "Lung;Opacity;Pulmonary Atelectasis",
+      "images": [
+        {
+          "filename": "2165_IM-0781-0001-0001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "2165_IM-0781-0001-0002.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR2165_summary",
+      "case_id": "CXR2165",
+      "question_type": "abnormality_summary",
+      "question": "What does the chest X-ray report say about Lung, Opacity, Pulmonary Atelectasis?",
+      "reference_answer": "1. Low lung volumes. 2. XXXX XXXX opacities. Right base appears to represent atelectasis. Left base could be atelectasis or pneumonia.",
+      "answer_source": "impression_or_findings",
+      "relevant_case_ids": [
+        "CXR2165"
+      ],
+      "problems": "Lung;Opacity;Pulmonary Atelectasis",
+      "images": [
+        {
+          "filename": "2165_IM-0781-0001-0001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "2165_IM-0781-0001-0002.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR2183_impression",
+      "case_id": "CXR2183",
+      "question_type": "impression_from_indication",
+      "question": "For a chest X-ray case with the indication 'XXXX-year-old male with shortness of breath.', what is the radiology impression?",
+      "reference_answer": "Cardiomegaly and mild interstitial pulmonary edema.",
+      "answer_source": "impression",
+      "relevant_case_ids": [
+        "CXR2183"
+      ],
+      "problems": "Cardiomegaly;Opacity;Opacity;Pulmonary Edema",
+      "images": [
+        {
+          "filename": "2183_IM-0794-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "2183_IM-0794-2001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR2183_findings",
+      "case_id": "CXR2183",
+      "question_type": "findings_from_indication",
+      "question": "For a chest X-ray case with the indication 'XXXX-year-old male with shortness of breath.', what are the main report findings?",
+      "reference_answer": "Moderate cardiomegaly. Bibasilar and perihilar interstitial opacities. No pneumothorax. No pleural effusions.",
+      "answer_source": "findings",
+      "relevant_case_ids": [
+        "CXR2183"
+      ],
+      "problems": "Cardiomegaly;Opacity;Opacity;Pulmonary Edema",
+      "images": [
+        {
+          "filename": "2183_IM-0794-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "2183_IM-0794-2001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR2183_summary",
+      "case_id": "CXR2183",
+      "question_type": "abnormality_summary",
+      "question": "What does the chest X-ray report say about Cardiomegaly, Opacity, Opacity, Pulmonary Edema?",
+      "reference_answer": "Cardiomegaly and mild interstitial pulmonary edema.",
+      "answer_source": "impression_or_findings",
+      "relevant_case_ids": [
+        "CXR2183"
+      ],
+      "problems": "Cardiomegaly;Opacity;Opacity;Pulmonary Edema",
+      "images": [
+        {
+          "filename": "2183_IM-0794-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "2183_IM-0794-2001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR2226_impression",
+      "case_id": "CXR2226",
+      "question_type": "impression_from_indication",
+      "question": "For a chest X-ray case with the indication 'MVA on the 14th', what is the radiology impression?",
+      "reference_answer": "1. No acute radiographic cardiopulmonary process.",
+      "answer_source": "impression",
+      "relevant_case_ids": [
+        "CXR2226"
+      ],
+      "problems": "Fractures, Bone",
+      "images": [
+        {
+          "filename": "2226_IM-0830-12001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "2226_IM-0830-13001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR2226_findings",
+      "case_id": "CXR2226",
+      "question_type": "findings_from_indication",
+      "question": "For a chest X-ray case with the indication 'MVA on the 14th', what are the main report findings?",
+      "reference_answer": "The cardiomediastinal silhouette and vasculature are within normal limits for size and contour. The lungs are normally inflated and clear. First rib fracture not well demonstrated on XXXX study..",
+      "answer_source": "findings",
+      "relevant_case_ids": [
+        "CXR2226"
+      ],
+      "problems": "Fractures, Bone",
+      "images": [
+        {
+          "filename": "2226_IM-0830-12001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "2226_IM-0830-13001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR2226_summary",
+      "case_id": "CXR2226",
+      "question_type": "abnormality_summary",
+      "question": "What does the chest X-ray report say about Fractures, Bone?",
+      "reference_answer": "1. No acute radiographic cardiopulmonary process.",
+      "answer_source": "impression_or_findings",
+      "relevant_case_ids": [
+        "CXR2226"
+      ],
+      "problems": "Fractures, Bone",
+      "images": [
+        {
+          "filename": "2226_IM-0830-12001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "2226_IM-0830-13001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR2322_impression",
+      "case_id": "CXR2322",
+      "question_type": "impression_from_indication",
+      "question": "For a chest X-ray case with the indication 'chronic XXXX', what is the radiology impression?",
+      "reference_answer": "Continued hypoinflation with right middle lobe focal atelectasis.",
+      "answer_source": "impression",
+      "relevant_case_ids": [
+        "CXR2322"
+      ],
+      "problems": "Opacity;Lung;Pulmonary Atelectasis",
+      "images": [
+        {
+          "filename": "2322_IM-0894-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "2322_IM-0894-1002.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR2322_findings",
+      "case_id": "CXR2322",
+      "question_type": "findings_from_indication",
+      "question": "For a chest X-ray case with the indication 'chronic XXXX', what are the main report findings?",
+      "reference_answer": "Lung volumes remain XXXX. XXXX opacity is present in the right middle lobe. No focal infiltrates. Heart size normal.",
+      "answer_source": "findings",
+      "relevant_case_ids": [
+        "CXR2322"
+      ],
+      "problems": "Opacity;Lung;Pulmonary Atelectasis",
+      "images": [
+        {
+          "filename": "2322_IM-0894-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "2322_IM-0894-1002.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR2322_summary",
+      "case_id": "CXR2322",
+      "question_type": "abnormality_summary",
+      "question": "What does the chest X-ray report say about Opacity, Lung, Pulmonary Atelectasis?",
+      "reference_answer": "Continued hypoinflation with right middle lobe focal atelectasis.",
+      "answer_source": "impression_or_findings",
+      "relevant_case_ids": [
+        "CXR2322"
+      ],
+      "problems": "Opacity;Lung;Pulmonary Atelectasis",
+      "images": [
+        {
+          "filename": "2322_IM-0894-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "2322_IM-0894-1002.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR2522_impression",
+      "case_id": "CXR2522",
+      "question_type": "impression_from_indication",
+      "question": "For a chest X-ray case with the indication 'XXXX-year-old female with XXXX, abdominal pain, nausea and vomiting.', what is the radiology impression?",
+      "reference_answer": "1. Chronic appearing bibasilar pleural abnormality with possible small effusions. 2. No evidence of pneumonia. TIPS shunt visualized. .",
+      "answer_source": "impression",
+      "relevant_case_ids": [
+        "CXR2522"
+      ],
+      "problems": "Cicatrix;Pleura;Stents",
+      "images": [
+        {
+          "filename": "2522_IM-1040-1001.dcm.png",
+          "projection": "Frontal"
+        }
+      ]
+    },
+    {
+      "qid": "CXR2522_findings",
+      "case_id": "CXR2522",
+      "question_type": "findings_from_indication",
+      "question": "For a chest X-ray case with the indication 'XXXX-year-old female with XXXX, abdominal pain, nausea and vomiting.', what are the main report findings?",
+      "reference_answer": "Normal heart size and mediastinal contours. No focal airspace consolidation. Chronic appearing left greater than right lung base scarring with possible small effusions. No pneumothorax. Visualized osseous structures are unremarkable in appearance.",
+      "answer_source": "findings",
+      "relevant_case_ids": [
+        "CXR2522"
+      ],
+      "problems": "Cicatrix;Pleura;Stents",
+      "images": [
+        {
+          "filename": "2522_IM-1040-1001.dcm.png",
+          "projection": "Frontal"
+        }
+      ]
+    },
+    {
+      "qid": "CXR2522_summary",
+      "case_id": "CXR2522",
+      "question_type": "abnormality_summary",
+      "question": "What does the chest X-ray report say about Cicatrix, Pleura, Stents?",
+      "reference_answer": "1. Chronic appearing bibasilar pleural abnormality with possible small effusions. 2. No evidence of pneumonia. TIPS shunt visualized. .",
+      "answer_source": "impression_or_findings",
+      "relevant_case_ids": [
+        "CXR2522"
+      ],
+      "problems": "Cicatrix;Pleura;Stents",
+      "images": [
+        {
+          "filename": "2522_IM-1040-1001.dcm.png",
+          "projection": "Frontal"
+        }
+      ]
+    },
+    {
+      "qid": "CXR2782_impression",
+      "case_id": "CXR2782",
+      "question_type": "impression_from_indication",
+      "question": "For a chest X-ray case with the indication 'Chest pain.', what is the radiology impression?",
+      "reference_answer": "No active disease.",
+      "answer_source": "impression",
+      "relevant_case_ids": [
+        "CXR2782"
+      ],
+      "problems": "No Indexing",
+      "images": [
+        {
+          "filename": "2782_IM-1220-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "2782_IM-1220-2001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR2782_findings",
+      "case_id": "CXR2782",
+      "question_type": "findings_from_indication",
+      "question": "For a chest X-ray case with the indication 'Chest pain.', what are the main report findings?",
+      "reference_answer": "The heart and lungs have XXXX XXXX in the interval. Both lungs are clear and expanded. Heart and mediastinum normal.",
+      "answer_source": "findings",
+      "relevant_case_ids": [
+        "CXR2782"
+      ],
+      "problems": "No Indexing",
+      "images": [
+        {
+          "filename": "2782_IM-1220-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "2782_IM-1220-2001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR2782_summary",
+      "case_id": "CXR2782",
+      "question_type": "abnormality_summary",
+      "question": "What does the chest X-ray report say about No Indexing?",
+      "reference_answer": "No active disease.",
+      "answer_source": "impression_or_findings",
+      "relevant_case_ids": [
+        "CXR2782"
+      ],
+      "problems": "No Indexing",
+      "images": [
+        {
+          "filename": "2782_IM-1220-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "2782_IM-1220-2001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR2808_impression",
+      "case_id": "CXR2808",
+      "question_type": "impression_from_indication",
+      "question": "For a chest X-ray case with the indication 'Bone marrow transplant XXXX, XXXX.', what is the radiology impression?",
+      "reference_answer": "Clear lungs.",
+      "answer_source": "impression",
+      "relevant_case_ids": [
+        "CXR2808"
+      ],
+      "problems": "Granulomatous Disease",
+      "images": [
+        {
+          "filename": "2808_IM-1238-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "2808_IM-1238-2001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR2808_findings",
+      "case_id": "CXR2808",
+      "question_type": "findings_from_indication",
+      "question": "For a chest X-ray case with the indication 'Bone marrow transplant XXXX, XXXX.', what are the main report findings?",
+      "reference_answer": "Sequelae of old granulomatous disease. Lungs are clear without focal consolidation. No pleural effusions or pneumothoraces. Heart and mediastinum of normal size and contour.",
+      "answer_source": "findings",
+      "relevant_case_ids": [
+        "CXR2808"
+      ],
+      "problems": "Granulomatous Disease",
+      "images": [
+        {
+          "filename": "2808_IM-1238-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "2808_IM-1238-2001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR2808_summary",
+      "case_id": "CXR2808",
+      "question_type": "abnormality_summary",
+      "question": "What does the chest X-ray report say about Granulomatous Disease?",
+      "reference_answer": "Clear lungs.",
+      "answer_source": "impression_or_findings",
+      "relevant_case_ids": [
+        "CXR2808"
+      ],
+      "problems": "Granulomatous Disease",
+      "images": [
+        {
+          "filename": "2808_IM-1238-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "2808_IM-1238-2001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR300_impression",
+      "case_id": "CXR300",
+      "question_type": "impression_from_indication",
+      "question": "For a chest X-ray case with the indication 'XXXX-year-old male with XXXX.', what is the radiology impression?",
+      "reference_answer": "Changes of chronic lung disease with no acute cardiopulmonary finding.",
+      "answer_source": "impression",
+      "relevant_case_ids": [
+        "CXR300"
+      ],
+      "problems": "Lung;Funnel Chest;Calcified Granuloma;Pulmonary Disease, Chronic Obstructive",
+      "images": [
+        {
+          "filename": "300_IM-1385-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "300_IM-1385-1002.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR300_findings",
+      "case_id": "CXR300",
+      "question_type": "findings_from_indication",
+      "question": "For a chest X-ray case with the indication 'XXXX-year-old male with XXXX.', what are the main report findings?",
+      "reference_answer": "Heart size within normal limits. Mild hyperinflation of the lungs. Mild pectus excavatum deformity. Stable left mid lung calcified granuloma. No focal airspace disease. No pneumothorax or effusions.",
+      "answer_source": "findings",
+      "relevant_case_ids": [
+        "CXR300"
+      ],
+      "problems": "Lung;Funnel Chest;Calcified Granuloma;Pulmonary Disease, Chronic Obstructive",
+      "images": [
+        {
+          "filename": "300_IM-1385-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "300_IM-1385-1002.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR300_summary",
+      "case_id": "CXR300",
+      "question_type": "abnormality_summary",
+      "question": "What does the chest X-ray report say about Lung, Funnel Chest, Calcified Granuloma, Pulmonary Disease, Chronic Obstructive?",
+      "reference_answer": "Changes of chronic lung disease with no acute cardiopulmonary finding.",
+      "answer_source": "impression_or_findings",
+      "relevant_case_ids": [
+        "CXR300"
+      ],
+      "problems": "Lung;Funnel Chest;Calcified Granuloma;Pulmonary Disease, Chronic Obstructive",
+      "images": [
+        {
+          "filename": "300_IM-1385-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "300_IM-1385-1002.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR3032_impression",
+      "case_id": "CXR3032",
+      "question_type": "impression_from_indication",
+      "question": "For a chest X-ray case with the indication 'Chest pain.', what is the radiology impression?",
+      "reference_answer": "No active disease.",
+      "answer_source": "impression",
+      "relevant_case_ids": [
+        "CXR3032"
+      ],
+      "problems": "Surgical Instruments",
+      "images": [
+        {
+          "filename": "3032_IM-1407-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "3032_IM-1407-2001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR3032_findings",
+      "case_id": "CXR3032",
+      "question_type": "findings_from_indication",
+      "question": "For a chest X-ray case with the indication 'Chest pain.', what are the main report findings?",
+      "reference_answer": "The heart and lungs have XXXX XXXX in the interval. Both lungs are clear and expanded. Heart and mediastinum normal. Sternotomy sutures and coronary bypass clips remain intact.",
+      "answer_source": "findings",
+      "relevant_case_ids": [
+        "CXR3032"
+      ],
+      "problems": "Surgical Instruments",
+      "images": [
+        {
+          "filename": "3032_IM-1407-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "3032_IM-1407-2001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR3032_summary",
+      "case_id": "CXR3032",
+      "question_type": "abnormality_summary",
+      "question": "What does the chest X-ray report say about Surgical Instruments?",
+      "reference_answer": "No active disease.",
+      "answer_source": "impression_or_findings",
+      "relevant_case_ids": [
+        "CXR3032"
+      ],
+      "problems": "Surgical Instruments",
+      "images": [
+        {
+          "filename": "3032_IM-1407-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "3032_IM-1407-2001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR3046_impression",
+      "case_id": "CXR3046",
+      "question_type": "impression_from_indication",
+      "question": "For a chest X-ray case with the indication 'The patient is a XXXX-year-old female with right upper quadrant pain, frequent XXXX, possible rib fracture..', what is the radiology impression?",
+      "reference_answer": "1. Left perihilar nodular opacity redemonstrated, appears dense, may be granulomatous, if desired one may consider CT for further characterization. 2. No acute cardiopulmonary abnormality. Redemonstrated azygos lobe. 3. No fracture visible. If clinical concern persists, consider dedicated rib series.",
+      "answer_source": "impression",
+      "relevant_case_ids": [
+        "CXR3046"
+      ],
+      "problems": "Opacity;Density;Technical Quality of Image Unsatisfactory ;Lung",
+      "images": [
+        {
+          "filename": "3046_IM-1418-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "3046_IM-1418-1002.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR3046_findings",
+      "case_id": "CXR3046",
+      "question_type": "findings_from_indication",
+      "question": "For a chest X-ray case with the indication 'The patient is a XXXX-year-old female with right upper quadrant pain, frequent XXXX, possible rib fracture..', what are the main report findings?",
+      "reference_answer": "Redemonstration of azygos lobe. Redemonstrated left perihilar nodular opacity, similar in size from previous examination. Dense appearing, may be granulomatous. The trachea is midline. Negative for pneumothorax, pleural effusion or focal airspace consolidation. The heart size is normal. XXXX. Limited exam, for evaluation of fractures. However, no evidence for displaced rib fracture.",
+      "answer_source": "findings",
+      "relevant_case_ids": [
+        "CXR3046"
+      ],
+      "problems": "Opacity;Density;Technical Quality of Image Unsatisfactory ;Lung",
+      "images": [
+        {
+          "filename": "3046_IM-1418-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "3046_IM-1418-1002.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR3046_summary",
+      "case_id": "CXR3046",
+      "question_type": "abnormality_summary",
+      "question": "What does the chest X-ray report say about Opacity, Density, Technical Quality of Image Unsatisfactory , Lung?",
+      "reference_answer": "1. Left perihilar nodular opacity redemonstrated, appears dense, may be granulomatous, if desired one may consider CT for further characterization. 2. No acute cardiopulmonary abnormality. Redemonstrated azygos lobe. 3. No fracture visible. If clinical concern persists, consider dedicated rib series.",
+      "answer_source": "impression_or_findings",
+      "relevant_case_ids": [
+        "CXR3046"
+      ],
+      "problems": "Opacity;Density;Technical Quality of Image Unsatisfactory ;Lung",
+      "images": [
+        {
+          "filename": "3046_IM-1418-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "3046_IM-1418-1002.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR3127_impression",
+      "case_id": "CXR3127",
+      "question_type": "impression_from_indication",
+      "question": "For a chest X-ray case with the indication 'XXXX-year-old female with chest pain.', what is the radiology impression?",
+      "reference_answer": "1. No acute radiographic cardiopulmonary process.",
+      "answer_source": "impression",
+      "relevant_case_ids": [
+        "CXR3127"
+      ],
+      "problems": "Epicardial Fat",
+      "images": [
+        {
+          "filename": "3127_IM-1470-1001.dcm.png",
+          "projection": "Frontal"
+        }
+      ]
+    },
+    {
+      "qid": "CXR3127_findings",
+      "case_id": "CXR3127",
+      "question_type": "findings_from_indication",
+      "question": "For a chest X-ray case with the indication 'XXXX-year-old female with chest pain.', what are the main report findings?",
+      "reference_answer": "The heart size is normal. There is prominent left epicardial fat. The mediastinal contour is within normal limits. The lungs are free of any focal infiltrates. There are no nodules or masses. No visible pneumothorax. No visible pleural fluid. The XXXX are grossly normal. There is no visible free intraperitoneal air under the diaphragm.",
+      "answer_source": "findings",
+      "relevant_case_ids": [
+        "CXR3127"
+      ],
+      "problems": "Epicardial Fat",
+      "images": [
+        {
+          "filename": "3127_IM-1470-1001.dcm.png",
+          "projection": "Frontal"
+        }
+      ]
+    },
+    {
+      "qid": "CXR3127_summary",
+      "case_id": "CXR3127",
+      "question_type": "abnormality_summary",
+      "question": "What does the chest X-ray report say about Epicardial Fat?",
+      "reference_answer": "1. No acute radiographic cardiopulmonary process.",
+      "answer_source": "impression_or_findings",
+      "relevant_case_ids": [
+        "CXR3127"
+      ],
+      "problems": "Epicardial Fat",
+      "images": [
+        {
+          "filename": "3127_IM-1470-1001.dcm.png",
+          "projection": "Frontal"
+        }
+      ]
+    },
+    {
+      "qid": "CXR3166_impression",
+      "case_id": "CXR3166",
+      "question_type": "impression_from_indication",
+      "question": "For a chest X-ray case with the indication 'XXXX-year-old male with seizures', what is the radiology impression?",
+      "reference_answer": "Negative for acute cardiopulmonary disease.",
+      "answer_source": "impression",
+      "relevant_case_ids": [
+        "CXR3166"
+      ],
+      "problems": "Density;Granulomatous Disease",
+      "images": [
+        {
+          "filename": "3166_IM-1491-2001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "3166_IM-1491-1001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR3166_findings",
+      "case_id": "CXR3166",
+      "question_type": "findings_from_indication",
+      "question": "For a chest X-ray case with the indication 'XXXX-year-old male with seizures', what are the main report findings?",
+      "reference_answer": "Heart size normal. No pneumothorax, pleural effusion, or focal airspace disease. Nodular densities consistent with chronic granulomatous disease. Bony structures appear intact.",
+      "answer_source": "findings",
+      "relevant_case_ids": [
+        "CXR3166"
+      ],
+      "problems": "Density;Granulomatous Disease",
+      "images": [
+        {
+          "filename": "3166_IM-1491-2001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "3166_IM-1491-1001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR3166_summary",
+      "case_id": "CXR3166",
+      "question_type": "abnormality_summary",
+      "question": "What does the chest X-ray report say about Density, Granulomatous Disease?",
+      "reference_answer": "Negative for acute cardiopulmonary disease.",
+      "answer_source": "impression_or_findings",
+      "relevant_case_ids": [
+        "CXR3166"
+      ],
+      "problems": "Density;Granulomatous Disease",
+      "images": [
+        {
+          "filename": "3166_IM-1491-2001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "3166_IM-1491-1001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR340_impression",
+      "case_id": "CXR340",
+      "question_type": "impression_from_indication",
+      "question": "For a chest X-ray case with the indication 'XXXX-year-old female, left arm pain and nausea', what is the radiology impression?",
+      "reference_answer": "Cardiomegaly, no acute pulmonary findings",
+      "answer_source": "impression",
+      "relevant_case_ids": [
+        "CXR340"
+      ],
+      "problems": "Cardiomegaly;Diaphragmatic Eventration;Density",
+      "images": [
+        {
+          "filename": "340_IM-1644-4004.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "340_IM-1644-1001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR340_findings",
+      "case_id": "CXR340",
+      "question_type": "findings_from_indication",
+      "question": "For a chest X-ray case with the indication 'XXXX-year-old female, left arm pain and nausea', what are the main report findings?",
+      "reference_answer": "Heart size moderately enlarged, stable mediastinal contours. Lateral view curvilinear densities over the heart suggestive of coronary artery stents. Diaphragm eventration. No focal alveolar consolidation, no definite pleural effusion seen. No typical findings of pulmonary edema.",
+      "answer_source": "findings",
+      "relevant_case_ids": [
+        "CXR340"
+      ],
+      "problems": "Cardiomegaly;Diaphragmatic Eventration;Density",
+      "images": [
+        {
+          "filename": "340_IM-1644-4004.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "340_IM-1644-1001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR340_summary",
+      "case_id": "CXR340",
+      "question_type": "abnormality_summary",
+      "question": "What does the chest X-ray report say about Cardiomegaly, Diaphragmatic Eventration, Density?",
+      "reference_answer": "Cardiomegaly, no acute pulmonary findings",
+      "answer_source": "impression_or_findings",
+      "relevant_case_ids": [
+        "CXR340"
+      ],
+      "problems": "Cardiomegaly;Diaphragmatic Eventration;Density",
+      "images": [
+        {
+          "filename": "340_IM-1644-4004.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "340_IM-1644-1001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR3424_impression",
+      "case_id": "CXR3424",
+      "question_type": "impression_from_indication",
+      "question": "For a chest X-ray case with the indication 'XXXX-year-old female with COPD and left pleuritic chest pain.', what is the radiology impression?",
+      "reference_answer": "No acute radiographic cardiopulmonary process.",
+      "answer_source": "impression",
+      "relevant_case_ids": [
+        "CXR3424"
+      ],
+      "problems": "Calcified Granuloma",
+      "images": [
+        {
+          "filename": "3424_IM-1656-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "3424_IM-1656-2001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR3424_findings",
+      "case_id": "CXR3424",
+      "question_type": "findings_from_indication",
+      "question": "For a chest X-ray case with the indication 'XXXX-year-old female with COPD and left pleuritic chest pain.', what are the main report findings?",
+      "reference_answer": "The heart size is normal. The mediastinal contour is within normal limits. There are multiple calcified granulomas within the left lower lobe. The lungs are free of any focal infiltrates. There are no nodules or masses. No visible pneumothorax. No visible pleural fluid. The XXXX are grossly normal. There is no visible free intraperitoneal air under the diaphragm.",
+      "answer_source": "findings",
+      "relevant_case_ids": [
+        "CXR3424"
+      ],
+      "problems": "Calcified Granuloma",
+      "images": [
+        {
+          "filename": "3424_IM-1656-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "3424_IM-1656-2001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR3424_summary",
+      "case_id": "CXR3424",
+      "question_type": "abnormality_summary",
+      "question": "What does the chest X-ray report say about Calcified Granuloma?",
+      "reference_answer": "No acute radiographic cardiopulmonary process.",
+      "answer_source": "impression_or_findings",
+      "relevant_case_ids": [
+        "CXR3424"
+      ],
+      "problems": "Calcified Granuloma",
+      "images": [
+        {
+          "filename": "3424_IM-1656-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "3424_IM-1656-2001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR3567_impression",
+      "case_id": "CXR3567",
+      "question_type": "impression_from_indication",
+      "question": "For a chest X-ray case with the indication 'Status post pacemaker implantation. XXXX.', what is the radiology impression?",
+      "reference_answer": "1. Right lower lobe airspace disease and small effusion probably representing pneumonia.",
+      "answer_source": "impression",
+      "relevant_case_ids": [
+        "CXR3567"
+      ],
+      "problems": "Implanted Medical Device;Airspace Disease;Pleural Effusion;Pneumonia",
+      "images": [
+        {
+          "filename": "3567_IM-1752-1001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR3567_findings",
+      "case_id": "CXR3567",
+      "question_type": "findings_from_indication",
+      "question": "For a chest X-ray case with the indication 'Status post pacemaker implantation. XXXX.', what are the main report findings?",
+      "reference_answer": "XXXX XXXX and lateral chest examination was obtained. The heart silhouette and mediastinal contours are not enlarged. Pacemaker leads are within the right atrium and ventricle. Lungs demonstrate there is right lower lobe airspace disease and small effusion suspicious for pneumonia. Left lung is clear. There is no pneumothorax.",
+      "answer_source": "findings",
+      "relevant_case_ids": [
+        "CXR3567"
+      ],
+      "problems": "Implanted Medical Device;Airspace Disease;Pleural Effusion;Pneumonia",
+      "images": [
+        {
+          "filename": "3567_IM-1752-1001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR3567_summary",
+      "case_id": "CXR3567",
+      "question_type": "abnormality_summary",
+      "question": "What does the chest X-ray report say about Implanted Medical Device, Airspace Disease, Pleural Effusion, Pneumonia?",
+      "reference_answer": "1. Right lower lobe airspace disease and small effusion probably representing pneumonia.",
+      "answer_source": "impression_or_findings",
+      "relevant_case_ids": [
+        "CXR3567"
+      ],
+      "problems": "Implanted Medical Device;Airspace Disease;Pleural Effusion;Pneumonia",
+      "images": [
+        {
+          "filename": "3567_IM-1752-1001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR3677_impression",
+      "case_id": "CXR3677",
+      "question_type": "impression_from_indication",
+      "question": "For a chest X-ray case with the indication 'XXXX SX', what is the radiology impression?",
+      "reference_answer": "No active disease.",
+      "answer_source": "impression",
+      "relevant_case_ids": [
+        "CXR3677"
+      ],
+      "problems": "Aorta",
+      "images": [
+        {
+          "filename": "3677_IM-1830-2001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "3677_IM-1830-1001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR3677_findings",
+      "case_id": "CXR3677",
+      "question_type": "findings_from_indication",
+      "question": "For a chest X-ray case with the indication 'XXXX SX', what are the main report findings?",
+      "reference_answer": "Heart size is within normal limits. Aorta is tortuous. Remainder of the cardiomediastinal silhouette is normal. Lungs are clear bilaterally without pleural effusion or pneumothorax. No bony abnormalities.",
+      "answer_source": "findings",
+      "relevant_case_ids": [
+        "CXR3677"
+      ],
+      "problems": "Aorta",
+      "images": [
+        {
+          "filename": "3677_IM-1830-2001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "3677_IM-1830-1001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR3677_summary",
+      "case_id": "CXR3677",
+      "question_type": "abnormality_summary",
+      "question": "What does the chest X-ray report say about Aorta?",
+      "reference_answer": "No active disease.",
+      "answer_source": "impression_or_findings",
+      "relevant_case_ids": [
+        "CXR3677"
+      ],
+      "problems": "Aorta",
+      "images": [
+        {
+          "filename": "3677_IM-1830-2001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "3677_IM-1830-1001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR3793_impression",
+      "case_id": "CXR3793",
+      "question_type": "impression_from_indication",
+      "question": "For a chest X-ray case with the indication 'XXXX-year-old XXXX with shortness of breath.', what is the radiology impression?",
+      "reference_answer": "Left basilar airspace disease.",
+      "answer_source": "impression",
+      "relevant_case_ids": [
+        "CXR3793"
+      ],
+      "problems": "Thoracic Vertebrae;Aorta;Markings;Opacity;Airspace Disease",
+      "images": [
+        {
+          "filename": "3793_IM-1907-1001.dcm.png",
+          "projection": "Frontal"
+        }
+      ]
+    },
+    {
+      "qid": "CXR3793_findings",
+      "case_id": "CXR3793",
+      "question_type": "findings_from_indication",
+      "question": "For a chest X-ray case with the indication 'XXXX-year-old XXXX with shortness of breath.', what are the main report findings?",
+      "reference_answer": "No acute osseous abnormality. Scattered degenerative changes throughout the thoracic spine. Normal heart size. Tortuous and dilated aorta. Chronic interstitial markings. Left base opacity. No pneumothorax or pleural effusion.",
+      "answer_source": "findings",
+      "relevant_case_ids": [
+        "CXR3793"
+      ],
+      "problems": "Thoracic Vertebrae;Aorta;Markings;Opacity;Airspace Disease",
+      "images": [
+        {
+          "filename": "3793_IM-1907-1001.dcm.png",
+          "projection": "Frontal"
+        }
+      ]
+    },
+    {
+      "qid": "CXR3793_summary",
+      "case_id": "CXR3793",
+      "question_type": "abnormality_summary",
+      "question": "What does the chest X-ray report say about Thoracic Vertebrae, Aorta, Markings, Opacity, Airspace Disease?",
+      "reference_answer": "Left basilar airspace disease.",
+      "answer_source": "impression_or_findings",
+      "relevant_case_ids": [
+        "CXR3793"
+      ],
+      "problems": "Thoracic Vertebrae;Aorta;Markings;Opacity;Airspace Disease",
+      "images": [
+        {
+          "filename": "3793_IM-1907-1001.dcm.png",
+          "projection": "Frontal"
+        }
+      ]
+    },
+    {
+      "qid": "CXR3935_impression",
+      "case_id": "CXR3935",
+      "question_type": "impression_from_indication",
+      "question": "For a chest X-ray case with the indication 'Hemorrhage, post-op change.', what is the radiology impression?",
+      "reference_answer": "1. Blunting of the right costophrenic XXXX. This may represent pleural effusion or pleural reaction. 2. Clearing of left base airspace disease. 3. Outward XXXX of PICC line. Tip now projects over upper SVC.",
+      "answer_source": "impression",
+      "relevant_case_ids": [
+        "CXR3935"
+      ],
+      "problems": "Catheters, Indwelling;Costophrenic Angle;Opacity;Cicatrix;Shoulder",
+      "images": [
+        {
+          "filename": "3935_IM-2006-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "3935_IM-2006-2001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR3935_findings",
+      "case_id": "CXR3935",
+      "question_type": "findings_from_indication",
+      "question": "For a chest X-ray case with the indication 'Hemorrhage, post-op change.', what are the main report findings?",
+      "reference_answer": "Left PICC line remains in XXXX. The tip projects over the upper SVC. It has moved outward since the previous study. The heart size and pulmonary vascularity appear within normal limits. Previously present left base airspace disease has cleared. There is blunting of the right costophrenic XXXX which may represent small amount of pleural effusion or pleural reaction. Some scattered bandlike opacities are present which appear to represent scars. Degenerative changes are present in the right shoulder.",
+      "answer_source": "findings",
+      "relevant_case_ids": [
+        "CXR3935"
+      ],
+      "problems": "Catheters, Indwelling;Costophrenic Angle;Opacity;Cicatrix;Shoulder",
+      "images": [
+        {
+          "filename": "3935_IM-2006-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "3935_IM-2006-2001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR3935_summary",
+      "case_id": "CXR3935",
+      "question_type": "abnormality_summary",
+      "question": "What does the chest X-ray report say about Catheters, Indwelling, Costophrenic Angle, Opacity, Cicatrix, Shoulder?",
+      "reference_answer": "1. Blunting of the right costophrenic XXXX. This may represent pleural effusion or pleural reaction. 2. Clearing of left base airspace disease. 3. Outward XXXX of PICC line. Tip now projects over upper SVC.",
+      "answer_source": "impression_or_findings",
+      "relevant_case_ids": [
+        "CXR3935"
+      ],
+      "problems": "Catheters, Indwelling;Costophrenic Angle;Opacity;Cicatrix;Shoulder",
+      "images": [
+        {
+          "filename": "3935_IM-2006-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "3935_IM-2006-2001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR3995_impression",
+      "case_id": "CXR3995",
+      "question_type": "impression_from_indication",
+      "question": "For a chest X-ray case with the indication 'Nausea, vomiting x2 weeks. Dialysis patient.', what is the radiology impression?",
+      "reference_answer": "1. Interval resolution of bibasilar airspace disease. 2. Hyperinflation with chronic changes of emphysema. .",
+      "answer_source": "impression",
+      "relevant_case_ids": [
+        "CXR3995"
+      ],
+      "problems": "Lung;Diaphragm;Cicatrix;Pulmonary Atelectasis;Pulmonary Emphysema",
+      "images": [
+        {
+          "filename": "3995_IM-2046-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "3995_IM-2046-2001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR3995_findings",
+      "case_id": "CXR3995",
+      "question_type": "findings_from_indication",
+      "question": "For a chest X-ray case with the indication 'Nausea, vomiting x2 weeks. Dialysis patient.', what are the main report findings?",
+      "reference_answer": "The cardiomediastinal silhouette and pulmonary vasculature are within normal limits in size. The lungs are mildly hyperinflated with flattening of the diaphragms and expansion of the retrosternal clear space. Compared with prior exam, there has been interval resolution of previously demonstrated bibasilar infiltrates. There is minimal XXXX scarring or atelectasis in the right midlung. There is no XXXX focal airspace disease. There is no pneumothorax or pleural effusion. There are no acute bony findings.",
+      "answer_source": "findings",
+      "relevant_case_ids": [
+        "CXR3995"
+      ],
+      "problems": "Lung;Diaphragm;Cicatrix;Pulmonary Atelectasis;Pulmonary Emphysema",
+      "images": [
+        {
+          "filename": "3995_IM-2046-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "3995_IM-2046-2001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR3995_summary",
+      "case_id": "CXR3995",
+      "question_type": "abnormality_summary",
+      "question": "What does the chest X-ray report say about Lung, Diaphragm, Cicatrix, Pulmonary Atelectasis, Pulmonary Emphysema?",
+      "reference_answer": "1. Interval resolution of bibasilar airspace disease. 2. Hyperinflation with chronic changes of emphysema. .",
+      "answer_source": "impression_or_findings",
+      "relevant_case_ids": [
+        "CXR3995"
+      ],
+      "problems": "Lung;Diaphragm;Cicatrix;Pulmonary Atelectasis;Pulmonary Emphysema",
+      "images": [
+        {
+          "filename": "3995_IM-2046-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "3995_IM-2046-2001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR540_impression",
+      "case_id": "CXR540",
+      "question_type": "impression_from_indication",
+      "question": "For a chest X-ray case with the indication 'XXXX-year-old XXXX at XXXX for aspiration.', what is the radiology impression?",
+      "reference_answer": "Mild streaky left basilar airspace disease, XXXX atelectasis. .",
+      "answer_source": "impression",
+      "relevant_case_ids": [
+        "CXR540"
+      ],
+      "problems": "Opacity;Airspace Disease;Pulmonary Atelectasis;Lung",
+      "images": [
+        {
+          "filename": "540_IM-2146-4004.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "540_IM-2146-2001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR540_findings",
+      "case_id": "CXR540",
+      "question_type": "findings_from_indication",
+      "question": "For a chest X-ray case with the indication 'XXXX-year-old XXXX at XXXX for aspiration.', what are the main report findings?",
+      "reference_answer": "The heart size is within normal limits. Mild streaky opacities are present in the left lung base. An accessory azygos fissure is noted. No pleural effusion or pneumothorax.",
+      "answer_source": "findings",
+      "relevant_case_ids": [
+        "CXR540"
+      ],
+      "problems": "Opacity;Airspace Disease;Pulmonary Atelectasis;Lung",
+      "images": [
+        {
+          "filename": "540_IM-2146-4004.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "540_IM-2146-2001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR540_summary",
+      "case_id": "CXR540",
+      "question_type": "abnormality_summary",
+      "question": "What does the chest X-ray report say about Opacity, Airspace Disease, Pulmonary Atelectasis, Lung?",
+      "reference_answer": "Mild streaky left basilar airspace disease, XXXX atelectasis. .",
+      "answer_source": "impression_or_findings",
+      "relevant_case_ids": [
+        "CXR540"
+      ],
+      "problems": "Opacity;Airspace Disease;Pulmonary Atelectasis;Lung",
+      "images": [
+        {
+          "filename": "540_IM-2146-4004.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "540_IM-2146-2001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR569_impression",
+      "case_id": "CXR569",
+      "question_type": "impression_from_indication",
+      "question": "For a chest X-ray case with the indication 'Rule out aspiration.', what is the radiology impression?",
+      "reference_answer": "1. Continued elevation of the left hemidiaphragm. 2. Extensive post-op changes. 3. Right pleural densities which may represent thickening or localized fluid. 4. Air-fluid level below the right hemidiaphragm medially. Although this could represent air-fluid within a XXXX of bowel, a subpulmonic process is a consideration. If clinically indicated, XXXX scan would better define this.",
+      "answer_source": "impression",
+      "relevant_case_ids": [
+        "CXR569"
+      ],
+      "problems": "Diaphragm;Density;Opacity;Surgical Instruments;Density;Sutures",
+      "images": [
+        {
+          "filename": "569_IM-2169-0001-0002.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "569_IM-2169-0001-0001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR569_findings",
+      "case_id": "CXR569",
+      "question_type": "findings_from_indication",
+      "question": "For a chest X-ray case with the indication 'Rule out aspiration.', what are the main report findings?",
+      "reference_answer": "The heart size and pulmonary vascularity appear within normal limits. The left hemidiaphragm remains elevated. Right base densities are again noted which appear improved. Previously seen left pleural effusion has resolved. There continues to be some left base opacities which may represent atelectasis. Surgical clips and suture lines are noted in the mediastinum. An air-fluid level is seen in the upper right abdomen immediately below the right hemidiaphragm. Extensive pleural densities are present on the right which may represent localized fluid or pleural thickening. No definite pneumothorax is seen.",
+      "answer_source": "findings",
+      "relevant_case_ids": [
+        "CXR569"
+      ],
+      "problems": "Diaphragm;Density;Opacity;Surgical Instruments;Density;Sutures",
+      "images": [
+        {
+          "filename": "569_IM-2169-0001-0002.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "569_IM-2169-0001-0001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR569_summary",
+      "case_id": "CXR569",
+      "question_type": "abnormality_summary",
+      "question": "What does the chest X-ray report say about Diaphragm, Density, Opacity, Surgical Instruments, Density, Sutures?",
+      "reference_answer": "1. Continued elevation of the left hemidiaphragm. 2. Extensive post-op changes. 3. Right pleural densities which may represent thickening or localized fluid. 4. Air-fluid level below the right hemidiaphragm medially. Although this could represent air-fluid within a XXXX of bowel, a subpulmonic process is a consideration. If clinically indicated, XXXX scan would better define this.",
+      "answer_source": "impression_or_findings",
+      "relevant_case_ids": [
+        "CXR569"
+      ],
+      "problems": "Diaphragm;Density;Opacity;Surgical Instruments;Density;Sutures",
+      "images": [
+        {
+          "filename": "569_IM-2169-0001-0002.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "569_IM-2169-0001-0001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR619_impression",
+      "case_id": "CXR619",
+      "question_type": "impression_from_indication",
+      "question": "For a chest X-ray case with the indication 'XXXX-year-old female with right-sided chest pain and recent XXXX.', what is the radiology impression?",
+      "reference_answer": "Cardiomegaly, however no acute cardiopulmonary findings.",
+      "answer_source": "impression",
+      "relevant_case_ids": [
+        "CXR619"
+      ],
+      "problems": "Aorta;Cardiomegaly",
+      "images": [
+        {
+          "filename": "619_IM-2202-1002.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "619_IM-2202-1003.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR619_findings",
+      "case_id": "CXR619",
+      "question_type": "findings_from_indication",
+      "question": "For a chest X-ray case with the indication 'XXXX-year-old female with right-sided chest pain and recent XXXX.', what are the main report findings?",
+      "reference_answer": "There has been interval sternotomy with intact midline sternotomy XXXX. The heart is near top normal in size with unfolding of the aorta. The lungs are grossly clear with no focal airspace opacity, pleural effusion, or pneumothorax. The osseous structures are grossly normal.",
+      "answer_source": "findings",
+      "relevant_case_ids": [
+        "CXR619"
+      ],
+      "problems": "Aorta;Cardiomegaly",
+      "images": [
+        {
+          "filename": "619_IM-2202-1002.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "619_IM-2202-1003.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR619_summary",
+      "case_id": "CXR619",
+      "question_type": "abnormality_summary",
+      "question": "What does the chest X-ray report say about Aorta, Cardiomegaly?",
+      "reference_answer": "Cardiomegaly, however no acute cardiopulmonary findings.",
+      "answer_source": "impression_or_findings",
+      "relevant_case_ids": [
+        "CXR619"
+      ],
+      "problems": "Aorta;Cardiomegaly",
+      "images": [
+        {
+          "filename": "619_IM-2202-1002.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "619_IM-2202-1003.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR666_impression",
+      "case_id": "CXR666",
+      "question_type": "impression_from_indication",
+      "question": "For a chest X-ray case with the indication 'XXXX loss and chest pain', what is the radiology impression?",
+      "reference_answer": "Borderline cardiomegaly and mild chronic changes. No acute infiltrate.",
+      "answer_source": "impression",
+      "relevant_case_ids": [
+        "CXR666"
+      ],
+      "problems": "Cardiomegaly;Atherosclerosis;Aorta;Cicatrix;Pulmonary Atelectasis;Costophrenic Angle",
+      "images": [
+        {
+          "filename": "666_IM-2241-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "666_IM-2241-1002.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR666_findings",
+      "case_id": "CXR666",
+      "question_type": "findings_from_indication",
+      "question": "For a chest X-ray case with the indication 'XXXX loss and chest pain', what are the main report findings?",
+      "reference_answer": "The heart is mildly enlarged. The aorta is atherosclerotic and ectatic. Chronic parenchymal changes are noted with mild scarring and/or subsegmental atelectasis in the right lung base. No focal consolidation or significant pleural effusion identified. Costophrenic XXXX are blunted.",
+      "answer_source": "findings",
+      "relevant_case_ids": [
+        "CXR666"
+      ],
+      "problems": "Cardiomegaly;Atherosclerosis;Aorta;Cicatrix;Pulmonary Atelectasis;Costophrenic Angle",
+      "images": [
+        {
+          "filename": "666_IM-2241-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "666_IM-2241-1002.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR666_summary",
+      "case_id": "CXR666",
+      "question_type": "abnormality_summary",
+      "question": "What does the chest X-ray report say about Cardiomegaly, Atherosclerosis, Aorta, Cicatrix, Pulmonary Atelectasis, Costophrenic Angle?",
+      "reference_answer": "Borderline cardiomegaly and mild chronic changes. No acute infiltrate.",
+      "answer_source": "impression_or_findings",
+      "relevant_case_ids": [
+        "CXR666"
+      ],
+      "problems": "Cardiomegaly;Atherosclerosis;Aorta;Cicatrix;Pulmonary Atelectasis;Costophrenic Angle",
+      "images": [
+        {
+          "filename": "666_IM-2241-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "666_IM-2241-1002.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR750_impression",
+      "case_id": "CXR750",
+      "question_type": "impression_from_indication",
+      "question": "For a chest X-ray case with the indication 'XXXX-year-old female with hemoptysis.', what is the radiology impression?",
+      "reference_answer": "1. No acute radiographic cardiopulmonary process.",
+      "answer_source": "impression",
+      "relevant_case_ids": [
+        "CXR750"
+      ],
+      "problems": "Thoracic Vertebrae",
+      "images": [
+        {
+          "filename": "750_IM-2304-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "750_IM-2304-1002.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR750_findings",
+      "case_id": "CXR750",
+      "question_type": "findings_from_indication",
+      "question": "For a chest X-ray case with the indication 'XXXX-year-old female with hemoptysis.', what are the main report findings?",
+      "reference_answer": "The heart size is normal. The mediastinal contour is within normal limits. The lungs are free of any focal infiltrates. There are no nodules or masses. No visible pneumothorax. No visible pleural fluid. Mild degenerative change is seen within the midthoracic spine. There is no visible free intraperitoneal air under the diaphragm.",
+      "answer_source": "findings",
+      "relevant_case_ids": [
+        "CXR750"
+      ],
+      "problems": "Thoracic Vertebrae",
+      "images": [
+        {
+          "filename": "750_IM-2304-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "750_IM-2304-1002.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR750_summary",
+      "case_id": "CXR750",
+      "question_type": "abnormality_summary",
+      "question": "What does the chest X-ray report say about Thoracic Vertebrae?",
+      "reference_answer": "1. No acute radiographic cardiopulmonary process.",
+      "answer_source": "impression_or_findings",
+      "relevant_case_ids": [
+        "CXR750"
+      ],
+      "problems": "Thoracic Vertebrae",
+      "images": [
+        {
+          "filename": "750_IM-2304-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "750_IM-2304-1002.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR813_impression",
+      "case_id": "CXR813",
+      "question_type": "impression_from_indication",
+      "question": "For a chest X-ray case with the indication 'Chest pain.', what is the radiology impression?",
+      "reference_answer": "Low lung volumes with minimal left basilar atelectasis versus scarring.",
+      "answer_source": "impression",
+      "relevant_case_ids": [
+        "CXR813"
+      ],
+      "problems": "Lung;Markings;Pulmonary Atelectasis;Thoracic Vertebrae;Cicatrix",
+      "images": [
+        {
+          "filename": "813_IM-2344-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "813_IM-2344-3001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR813_findings",
+      "case_id": "CXR813",
+      "question_type": "findings_from_indication",
+      "question": "For a chest X-ray case with the indication 'Chest pain.', what are the main report findings?",
+      "reference_answer": "The XXXX examination consists of frontal and lateral radiographs of the chest. The cardiomediastinal contours are unchanged. There are diminished lung volumes with central bronchovascular crowding. Minimal atelectasis versus scarring seen in the left lung base. Right lung is clear. No focal consolidation, pleural effusion, or pneumothorax identified. There are XXXX degenerative changes of the thoracic spine.",
+      "answer_source": "findings",
+      "relevant_case_ids": [
+        "CXR813"
+      ],
+      "problems": "Lung;Markings;Pulmonary Atelectasis;Thoracic Vertebrae;Cicatrix",
+      "images": [
+        {
+          "filename": "813_IM-2344-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "813_IM-2344-3001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR813_summary",
+      "case_id": "CXR813",
+      "question_type": "abnormality_summary",
+      "question": "What does the chest X-ray report say about Lung, Markings, Pulmonary Atelectasis, Thoracic Vertebrae, Cicatrix?",
+      "reference_answer": "Low lung volumes with minimal left basilar atelectasis versus scarring.",
+      "answer_source": "impression_or_findings",
+      "relevant_case_ids": [
+        "CXR813"
+      ],
+      "problems": "Lung;Markings;Pulmonary Atelectasis;Thoracic Vertebrae;Cicatrix",
+      "images": [
+        {
+          "filename": "813_IM-2344-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "813_IM-2344-3001.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR933_impression",
+      "case_id": "CXR933",
+      "question_type": "impression_from_indication",
+      "question": "For a chest X-ray case with the indication 'football injury yesterday', what is the radiology impression?",
+      "reference_answer": "No active disease.. No visible cardiopulmonary injuries.",
+      "answer_source": "impression",
+      "relevant_case_ids": [
+        "CXR933"
+      ],
+      "problems": "No Indexing",
+      "images": [
+        {
+          "filename": "933_IM-2431-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "933_IM-2431-1002.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR933_findings",
+      "case_id": "CXR933",
+      "question_type": "findings_from_indication",
+      "question": "For a chest X-ray case with the indication 'football injury yesterday', what are the main report findings?",
+      "reference_answer": "XXXX change. Both lungs are clear and expanded. Heart and mediastinum normal.",
+      "answer_source": "findings",
+      "relevant_case_ids": [
+        "CXR933"
+      ],
+      "problems": "No Indexing",
+      "images": [
+        {
+          "filename": "933_IM-2431-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "933_IM-2431-1002.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    },
+    {
+      "qid": "CXR933_summary",
+      "case_id": "CXR933",
+      "question_type": "abnormality_summary",
+      "question": "What does the chest X-ray report say about No Indexing?",
+      "reference_answer": "No active disease.. No visible cardiopulmonary injuries.",
+      "answer_source": "impression_or_findings",
+      "relevant_case_ids": [
+        "CXR933"
+      ],
+      "problems": "No Indexing",
+      "images": [
+        {
+          "filename": "933_IM-2431-1001.dcm.png",
+          "projection": "Frontal"
+        },
+        {
+          "filename": "933_IM-2431-1002.dcm.png",
+          "projection": "Lateral"
+        }
+      ]
+    }
+  ]
+}

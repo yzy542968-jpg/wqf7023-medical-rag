@@ -1,0 +1,13 @@
+{
+  "seed": 7023,
+  "max_cases": 120,
+  "require_images": true,
+  "min_findings_chars": 40,
+  "min_impression_chars": 8,
+  "templates": [
+    "impression_from_indication",
+    "findings_from_indication",
+    "abnormality_summary"
+  ]
+}
+

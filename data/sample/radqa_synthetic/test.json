@@ -1,0 +1,33 @@
+{
+  "version": "synthetic-schema-fixture",
+  "data": [
+    {
+      "title": "SYNTHETIC_PATIENT_TEST",
+      "paragraphs": [
+        {
+          "document_id": "SYNTHETIC_REPORT_TEST_O",
+          "context": "FINDINGS: Mild pulmonary edema is present. No pleural effusion.",
+          "qas": [
+            {
+              "id": "synthetic_test_answerable",
+              "question": "What pulmonary abnormality is present?",
+              "answers": [{"text": "pulmonary edema", "answer_start": 15}],
+              "is_impossible": false
+            },
+            {
+              "id": "synthetic_test_impossible",
+              "question": "Is focal pneumonia present?",
+              "answers": [],
+              "is_impossible": true
+            }
+          ]
+        },
+        {
+          "document_id": "SYNTHETIC_REPORT_TEST_I",
+          "context": "IMPRESSION: Mild pulmonary edema. No focal airspace disease.",
+          "qas": []
+        }
+      ]
+    }
+  ]
+}

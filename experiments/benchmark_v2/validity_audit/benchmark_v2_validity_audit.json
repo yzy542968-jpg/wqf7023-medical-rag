@@ -1,0 +1,72 @@
+{
+  "audit": "Benchmark V2 structural validity audit",
+  "version": "1.0",
+  "initial_test_status": "diagnostic after inspection; it was viewed before verifier action calibration",
+  "confirmation_status": "disjoint outcome-independent confirmation cohort and primary final automated evidence",
+  "test": {
+    "case_count": 120,
+    "question_count": 360,
+    "unique_question_string_count": 3,
+    "scope_case_matches_target_rate": 1,
+    "routed_candidate_pool_equals_qrels_rate": 1,
+    "routed_all_zero_score_query_rate": 0.5305555555555556,
+    "routed_zero_score_result_rate": 0.7395529640427599,
+    "routed_mean_top1_score": 1.2524875091329388,
+    "extractive_retrieved_context_token_f1": 0.9929891017725304,
+    "qwen_verified_token_f1": 0.5663869754194818,
+    "qwen_minus_extractive_token_f1": -0.4266021263530486,
+    "extractive_token_f1_by_question_type": {
+      "case_scoped_findings": 0.9802328353202346,
+      "case_scoped_impression": 0.9996794871794872,
+      "case_scoped_summary": 0.9990549828178694
+    },
+    "qwen_token_f1_by_question_type": {
+      "case_scoped_findings": 0.6558736468672498,
+      "case_scoped_impression": 0.5993646403886169,
+      "case_scoped_summary": 0.44392263900257867
+    }
+  },
+  "confirmation": {
+    "case_count": 120,
+    "question_count": 360,
+    "unique_question_string_count": 3,
+    "scope_case_matches_target_rate": 1,
+    "routed_candidate_pool_equals_qrels_rate": 1,
+    "routed_all_zero_score_query_rate": 0.5722222222222222,
+    "routed_zero_score_result_rate": 0.7763419483101391,
+    "routed_mean_top1_score": 1.2338550131133739,
+    "extractive_retrieved_context_token_f1": 0.9967737141522331,
+    "qwen_verified_token_f1": 0.5698144452001667,
+    "qwen_minus_extractive_token_f1": -0.4269592689520665,
+    "extractive_token_f1_by_question_type": {
+      "case_scoped_findings": 0.9903211424566994,
+      "case_scoped_impression": 1.0,
+      "case_scoped_summary": 1.0
+    },
+    "qwen_token_f1_by_question_type": {
+      "case_scoped_findings": 0.6797962784596823,
+      "case_scoped_impression": 0.6115837802997197,
+      "case_scoped_summary": 0.41806327684109806
+    }
+  },
+  "human_evaluation": {
+    "rows": 36,
+    "completed_rows": 0,
+    "completion_rate": 0.0,
+    "filled_required_cells": 0,
+    "required_cells": 468
+  },
+  "implemented_security_scope": "explicit case-ID metadata filtering only; no authentication or access-control layer",
+  "valid_claims": [
+    "Patient/case metadata filtering prevents cross-case retrieval in the V2 workflow.",
+    "The locked top-k usually covers the report section selected by the deterministic route.",
+    "Advisory verification preserves output when automatic rewriting is not calibration-safe."
+  ],
+  "invalid_or_unsupported_claims": [
+    "Routed Hit@1 does not demonstrate semantic retrieval because routed candidates equal qrels.",
+    "The generator does not improve this benchmark over returning retrieved evidence.",
+    "The deterministic type-to-section rule is not learned or autonomous planning.",
+    "Clinical correctness and safety remain unsupported until blinded human evaluation is complete."
+  ],
+  "priority_decision": "Retain V2 as a controlled workflow and safety benchmark. Use a new independently authored QA benchmark with hard negatives and unanswerable questions for the main thesis claim."
+}

@@ -1,0 +1,4 @@
+{
+  "question": "For a chest X-ray case with the indication 'XXXX-year-old female with a history of an elevated XXXX-XXXX.', what is the radiology impression?",
+  "question_type": "impression_from_indication"
+}

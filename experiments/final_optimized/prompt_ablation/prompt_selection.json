@@ -1,0 +1,68 @@
+{
+  "selection_rule": "maximize development verified Token-F1",
+  "semantic_agent_config": {
+    "lexical_weight": 0.2,
+    "support_threshold": 0.6,
+    "entailment_threshold": 0.75,
+    "contradiction_threshold": 0.5,
+    "macro_draft_token_f1": 0.18472074313963927,
+    "macro_final_token_f1": 0.1783798132705381,
+    "macro_revision_rate": 0.705026455026455,
+    "macro_abstention_rate": 0.06216931216931217,
+    "macro_evidence_support_rate": 0.7378087512307867,
+    "contradiction_rejection_rate": 1.0
+  },
+  "summaries": [
+    {
+      "prompt_mode": "direct",
+      "n": 252,
+      "draft_token_f1": 0.23312167682640383,
+      "verified_token_f1": 0.25466545025021786,
+      "evidence_support_rate": 0.7787374882612978,
+      "abstention_rate": 0.06746031746031746,
+      "revision_rate": 0.8412698412698413,
+      "mean_draft_words": 55.404761904761905,
+      "mean_final_words": 40.932539682539684,
+      "nli_contradiction_count": 54
+    },
+    {
+      "prompt_mode": "evidence_guided",
+      "n": 252,
+      "draft_token_f1": 0.21801145848032122,
+      "verified_token_f1": 0.2073759525799799,
+      "evidence_support_rate": 0.6779761904761904,
+      "abstention_rate": 0.11904761904761904,
+      "revision_rate": 0.6587301587301587,
+      "mean_draft_words": 47.74603174603175,
+      "mean_final_words": 33.138888888888886,
+      "nli_contradiction_count": 38
+    },
+    {
+      "prompt_mode": "structured_case_aware",
+      "n": 252,
+      "draft_token_f1": 0.19850958170939806,
+      "verified_token_f1": 0.18598796615966748,
+      "evidence_support_rate": 0.6972678886369362,
+      "abstention_rate": 0.08333333333333333,
+      "revision_rate": 0.6706349206349206,
+      "mean_draft_words": 62.57539682539682,
+      "mean_final_words": 43.23809523809524,
+      "nli_contradiction_count": 47
+    }
+  ],
+  "selected_prompt_mode": "direct",
+  "selected_development_summary": {
+    "prompt_mode": "direct",
+    "n": 252,
+    "draft_token_f1": 0.23312167682640383,
+    "verified_token_f1": 0.25466545025021786,
+    "evidence_support_rate": 0.7787374882612978,
+    "abstention_rate": 0.06746031746031746,
+    "revision_rate": 0.8412698412698413,
+    "mean_draft_words": 55.404761904761905,
+    "mean_final_words": 40.932539682539684,
+    "nli_contradiction_count": 54
+  },
+  "summary_csv": "C:\\Users\\yz542_dntjhas\\Documents\\New project\\wqf7023-medical-rag\\experiments\\final_optimized\\prompt_ablation\\development_prompt_ablation.csv",
+  "checked_rows": "C:\\Users\\yz542_dntjhas\\Documents\\New project\\wqf7023-medical-rag\\experiments\\final_optimized\\prompt_ablation\\development_prompt_checked_rows.jsonl"
+}

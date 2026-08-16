@@ -1,0 +1,24 @@
+{
+  "system": "oracle_direct_semantic_agent",
+  "n": 108,
+  "draft_token_f1": 0.36498110897799596,
+  "verified_token_f1": 0.4249959578052292,
+  "evidence_support_rate": 0.7639844209288654,
+  "retrieval_abstention_rate": 0.0,
+  "final_abstention_rate": 0.046296296296296294,
+  "revision_rate": 0.8425925925925926,
+  "nli_contradiction_count": 20,
+  "semantic_agent_config": {
+    "lexical_weight": 0.2,
+    "support_threshold": 0.6,
+    "entailment_threshold": 0.75,
+    "contradiction_threshold": 0.5,
+    "macro_draft_token_f1": 0.18472074313963927,
+    "macro_final_token_f1": 0.1783798132705381,
+    "macro_revision_rate": 0.705026455026455,
+    "macro_abstention_rate": 0.06216931216931217,
+    "macro_evidence_support_rate": 0.7378087512307867,
+    "contradiction_rejection_rate": 1.0
+  },
+  "rows_path": "experiments\\final_optimized\\oracle_test\\final_optimized_test_rows.jsonl"
+}

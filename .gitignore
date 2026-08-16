@@ -1,0 +1,54 @@
+# Python and test caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Local environments and model caches
+.venv/
+.hf_cache/
+.cache/
+
+# Secrets and machine-local settings
+.env
+.env.*
+!.env.example
+.streamlit/secrets.toml
+*.pem
+*.key
+
+# Raw/large source data and image pixels
+data/raw/
+data/processed/openi_cases.jsonl
+data/processed/*.npz
+data/processed/prompt_packs/
+
+# Large intermediate experiment rows and generations
+experiments/**/*.jsonl
+experiments/*.json
+experiments/*.csv
+experiments/*.jpg
+experiments/generations*.json
+experiments/*_eval.json
+experiments/*_answers.json
+experiments/**/*sentence_scores*.json
+experiments/**/*checked_rows*.json
+experiments/full360_analysis/*.csv
+
+# Local render and browser QA output
+outputs/
+deliverables/*/
+*.pptx.inspect.ndjson
+
+# Logs and temporary files
+*.log
+*.tmp
+*.bak
+~$*
+
+# OS and editor state
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

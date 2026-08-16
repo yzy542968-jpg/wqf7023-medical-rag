@@ -1,0 +1,1119 @@
+from __future__ import annotations
+
+import json
+import os
+import sys
+import time
+from dataclasses import asdict
+from pathlib import Path
+from typing import Any
+
+import numpy as np
+import pandas as pd
+import streamlit as st
+
+
+ROOT = Path(__file__).resolve().parent
+sys.path.insert(0, str(ROOT / "src"))
+os.environ.setdefault("HF_HOME", str(ROOT / ".hf_cache"))
+
+from medical_rag.agentic.evidence_checker import check_evidence_support
+from medical_rag.agentic.semantic_evidence_checker import (
+    MedicalNLIPredictor,
+    check_semantic_evidence_support,
+)
+from medical_rag.agentic.planner import plan_question
+from medical_rag.evaluation.case_scoped_benchmark import build_case_chunks, expected_section
+from medical_rag.evaluation.answer_metrics import extract_final_answer
+from medical_rag.retrieval.adaptive_retrieval import select_adaptive_top1
+from medical_rag.retrieval.bm25_retriever import BM25Retriever
+from medical_rag.retrieval.hybrid_retriever import HybridBM25MedCPTRetriever
+from medical_rag.retrieval.medcpt_reranker import MedCPTReranker
+from medical_rag.retrieval.medcpt_retriever import MedCPTRetriever
+from medical_rag.retrieval.scoped_chunk_retriever import ScopedBM25ChunkRetriever
+from medical_rag.retrieval.tfidf_retriever import load_cases_jsonl
+
+
+CASES_PATH = ROOT / "data" / "processed" / "openi_cases.jsonl"
+MEDCPT_INDEX_PATH = ROOT / "data" / "processed" / "openi_medcpt_full.npz"
+QA_PATH = ROOT / "data" / "processed" / "openi_case_qa_seed_clean.json"
+IMAGE_ROOT = ROOT / "data" / "raw" / "images" / "images_normalized"
+HYBRID_SELECTION_PATH = (
+    ROOT / "experiments" / "final_optimized" / "retrieval" / "hybrid_alpha_selection.json"
+)
+ADAPTIVE_SELECTION_PATH = (
+    ROOT
+    / "experiments"
+    / "final_optimized"
+    / "adaptive_retrieval"
+    / "adaptive_policy_selection.json"
+)
+SEMANTIC_SELECTION_PATH = (
+    ROOT
+    / "experiments"
+    / "final_optimized"
+    / "semantic_agent"
+    / "semantic_agent_selection.json"
+)
+V2_TEST_SUMMARY_PATH = (
+    ROOT / "experiments" / "benchmark_v2" / "final_test_evaluation" / "test_generation_summary.json"
+)
+V2_CONFIRMATION_SUMMARY_PATH = (
+    ROOT / "experiments" / "benchmark_v2" / "confirmation_evaluation" / "test_generation_summary.json"
+)
+V2_CONFIRMATION_RETRIEVAL_PATH = (
+    ROOT
+    / "experiments"
+    / "benchmark_v2"
+    / "confirmation_retrieval"
+    / "confirmation_retrieval_summary.json"
+)
+V2_VALIDITY_AUDIT_PATH = (
+    ROOT
+    / "experiments"
+    / "benchmark_v2"
+    / "validity_audit"
+    / "benchmark_v2_validity_audit.json"
+)
+V2_VERIFIER_SELECTION_PATH = (
+    ROOT
+    / "experiments"
+    / "benchmark_v2"
+    / "calibration"
+    / "semantic_verifier"
+    / "semantic_agent_selection.json"
+)
+V2_TOP_K_SELECTION_PATH = (
+    ROOT / "experiments" / "benchmark_v2" / "calibration" / "locked_top_k.json"
+)
+MODEL_OPTIONS = {
+    "Qwen2.5-1.5B (full experiment)": "Qwen/Qwen2.5-1.5B-Instruct",
+    "Qwen2.5-0.5B (faster demo)": "Qwen/Qwen2.5-0.5B-Instruct",
+}
+PROMPT_OPTIONS = {
+    "Direct": "direct",
+    "Evidence-guided": "evidence_guided",
+    "Structured case-aware": "structured_case_aware",
+}
+RETRIEVER_OPTIONS = {
+    "Adaptive Hybrid + reranker": "adaptive",
+    "Locked Hybrid (alpha=0.30)": "hybrid",
+    "BM25": "bm25",
+}
+AGENT_OPTIONS = {
+    "Hybrid Medical NLI": "semantic",
+    "Lexical + negation rules": "rule",
+    "Disabled": "off",
+}
+V2_TASKS = {
+    "Findings": (
+        "case_scoped_findings",
+        "What radiographic findings are documented for this examination?",
+    ),
+    "Impression": (
+        "case_scoped_impression",
+        "What is the final radiology impression for this examination?",
+    ),
+    "Report summary": (
+        "case_scoped_summary",
+        "Summarize the principal abnormality or conclusion in this report.",
+    ),
+}
+
+
+st.set_page_config(
+    page_title="Evidence-Checking Medical RAG",
+    page_icon=":material/radiology:",
+    layout="wide",
+    initial_sidebar_state="auto",
+)
+
+st.markdown(
+    """
+    <style>
+    .block-container {max-width: 1500px; padding-top: 1.4rem; padding-bottom: 3rem;}
+    h1 {font-size: 2rem !important; font-weight: 680 !important; letter-spacing: 0 !important;}
+    h2, h3 {letter-spacing: 0 !important;}
+    div[data-testid="stMetric"] {border-left: 3px solid #087E8B; padding-left: 0.8rem;}
+    div[data-testid="stMetricLabel"] {font-size: 0.78rem; color: #54636C;}
+    div[data-testid="stAlert"] {border-radius: 6px;}
+    .evidence-label {font-size: 0.75rem; font-weight: 700; color: #54636C; text-transform: uppercase;}
+    .answer-band {border-left: 4px solid #087E8B; background: #FFFFFF; padding: 1rem 1.1rem; margin: 0.4rem 0 1rem;}
+    .research-note {border-left: 4px solid #C65D34; background: #FFF8F4; padding: 0.8rem 1rem; color: #5A3324;}
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+
+@st.cache_resource(show_spinner=False)
+def load_bm25_resources() -> tuple[list[dict[str, Any]], BM25Retriever]:
+    cases = load_cases_jsonl(CASES_PATH)
+    return cases, BM25Retriever().fit(cases)
+
+
+@st.cache_resource(show_spinner=False)
+def load_hybrid_resources() -> tuple[HybridBM25MedCPTRetriever, Any, Any, str]:
+    import torch
+    from transformers import AutoModel, AutoTokenizer
+
+    cases, bm25 = load_bm25_resources()
+    medcpt = MedCPTRetriever.from_index(CASES_PATH, MEDCPT_INDEX_PATH)
+    selection = json.loads(HYBRID_SELECTION_PATH.read_text(encoding="utf-8"))
+    hybrid = HybridBM25MedCPTRetriever.from_components(
+        cases, bm25, medcpt, alpha=float(selection["selected_alpha"])
+    )
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    tokenizer = AutoTokenizer.from_pretrained("ncbi/MedCPT-Query-Encoder")
+    model = AutoModel.from_pretrained("ncbi/MedCPT-Query-Encoder").to(device)
+    model.eval()
+    return hybrid, tokenizer, model, device
+
+
+@st.cache_resource(show_spinner=False)
+def load_reranker() -> MedCPTReranker:
+    return MedCPTReranker(local_files_only=True, batch_size=8)
+
+
+@st.cache_resource(show_spinner=False)
+def load_semantic_predictor() -> MedicalNLIPredictor:
+    selection = json.loads(SEMANTIC_SELECTION_PATH.read_text(encoding="utf-8"))
+    return MedicalNLIPredictor(
+        selection["nli_model"], local_files_only=True, batch_size=16
+    )
+
+
+@st.cache_resource(show_spinner=False)
+def load_scoped_resources() -> tuple[dict[str, dict[str, Any]], ScopedBM25ChunkRetriever]:
+    cases, _ = load_bm25_resources()
+    case_by_id = {str(case["case_id"]): case for case in cases}
+    chunks = [chunk for case in cases for chunk in build_case_chunks(case)]
+    return case_by_id, ScopedBM25ChunkRetriever().fit(chunks)
+
+
+@st.cache_data(show_spinner=False)
+def load_v2_configs() -> tuple[int, dict[str, Any]]:
+    top_k = json.loads(V2_TOP_K_SELECTION_PATH.read_text(encoding="utf-8"))["selected_top_k"]
+    verifier = json.loads(V2_VERIFIER_SELECTION_PATH.read_text(encoding="utf-8"))["selected_config"]
+    return int(top_k), verifier
+
+
+@st.cache_data(show_spinner=False)
+def load_locked_configs() -> tuple[dict[str, Any], dict[str, Any]]:
+    adaptive = json.loads(ADAPTIVE_SELECTION_PATH.read_text(encoding="utf-8"))
+    semantic = json.loads(SEMANTIC_SELECTION_PATH.read_text(encoding="utf-8"))
+    return adaptive["selected_policy"], semantic["selected_config"]
+
+
+@st.cache_resource(show_spinner=False)
+def load_generator(model_name: str) -> tuple[Any, Any, str]:
+    import torch
+    from transformers import AutoModelForCausalLM, AutoTokenizer
+
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    tokenizer = AutoTokenizer.from_pretrained(model_name, local_files_only=True)
+    model = AutoModelForCausalLM.from_pretrained(
+        model_name,
+        dtype=torch.float16 if device == "cuda" else torch.float32,
+        local_files_only=True,
+    ).to(device)
+    model.eval()
+    return tokenizer, model, device
+
+
+@st.cache_data(show_spinner=False)
+def load_examples() -> list[dict[str, Any]]:
+    payload = json.loads(QA_PATH.read_text(encoding="utf-8"))
+    return payload["questions"]
+
+
+def encode_medcpt_query(query: str, tokenizer: Any, model: Any, device: str) -> np.ndarray:
+    import torch
+
+    encoded = tokenizer(
+        [query], truncation=True, padding=True, return_tensors="pt", max_length=64
+    )
+    encoded = {key: value.to(device) for key, value in encoded.items()}
+    with torch.inference_mode():
+        embedding = model(**encoded).last_hidden_state[:, 0, :]
+    embedding = embedding.detach().cpu().numpy().astype("float32")
+    norm = np.linalg.norm(embedding, axis=1, keepdims=True)
+    norm[norm == 0] = 1.0
+    return embedding[0] / norm[0]
+
+
+def retrieve(question: str, method: str, top_k: int) -> list[dict[str, Any]]:
+    if method == "bm25":
+        _, bm25 = load_bm25_resources()
+        return bm25.search(question, top_k=top_k)
+    hybrid, tokenizer, model, device = load_hybrid_resources()
+    embedding = encode_medcpt_query(question, tokenizer, model, device)
+    return hybrid.search_with_embedding(question, embedding, top_k=top_k)
+
+
+def retrieve_with_policy(
+    question: str, method: str, top_k: int
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]], dict[str, Any]]:
+    if method != "adaptive":
+        results = retrieve(question, method, top_k)
+        selected = results[:1]
+        return results, selected, {
+            "source": method,
+            "abstained": not selected,
+            "reason": "fixed_retriever",
+            "base_margin": None,
+            "reranker_margin": None,
+        }
+
+    candidate_depth = max(3, top_k)
+    base_results = retrieve(question, "hybrid", candidate_depth)
+    reranked = load_reranker().rerank(question, base_results[:3])
+    policy, _ = load_locked_configs()
+    decision = select_adaptive_top1(
+        base_case_ids=[str(item["case_id"]) for item in base_results[:3]],
+        base_scores=[float(item["score"]) for item in base_results[:3]],
+        reranked_case_ids=[str(item["case_id"]) for item in reranked],
+        reranker_scores=[float(item["reranker_score"]) for item in reranked],
+        reranker_margin_threshold=float(policy["reranker_margin_threshold"]),
+        base_margin_threshold=float(policy["base_margin_threshold"]),
+        minimum_base_score=float(policy["minimum_base_score"]),
+        minimum_selected_margin=float(policy["minimum_selected_margin"]),
+    )
+    reranker_scores = {
+        str(item["case_id"]): float(item["reranker_score"]) for item in reranked
+    }
+    display_results = []
+    for rank, item in enumerate(base_results[:top_k], start=1):
+        enriched = {
+            **item,
+            "rank": rank,
+            "reranker_score": reranker_scores.get(str(item["case_id"])),
+            "selected": str(item["case_id"]) == decision.selected_case_id,
+        }
+        display_results.append(enriched)
+    selected = [
+        item for item in display_results if str(item["case_id"]) == decision.selected_case_id
+    ]
+    return display_results, selected, asdict(decision)
+
+
+def evidence_context(results: list[dict[str, Any]]) -> str:
+    if not results:
+        return "No sufficiently confident case was retrieved."
+    return "\n\n".join(
+        "\n".join(
+            [
+                f"Case ID: {case['case_id']}",
+                f"Findings: {case.get('findings', '')}",
+                f"Impression: {case.get('impression', '')}",
+            ]
+        )
+        for case in results
+    )
+
+
+def build_prompt(question: str, context: str, mode: str) -> str:
+    common = [
+        "Question:",
+        question,
+        "",
+        "Selected radiology case:",
+        context,
+        "",
+    ]
+    if mode == "direct":
+        return "\n".join(
+            [
+                "Answer the medical question using the selected radiology case.",
+                *common,
+                "Answer clearly and concisely.",
+            ]
+        )
+    if mode == "structured_case_aware":
+        return "\n".join(
+            [
+                "Answer this case-grounded research question using only the selected evidence.",
+                "Do not combine facts from other patients or add outside clinical knowledge.",
+                "If the evidence is insufficient, state that it is insufficient.",
+                *common,
+                "Respond in this structure:",
+                "Evidence: one short statement with the selected Case ID.",
+                "Final answer: one concise paragraph supported by that case.",
+            ]
+        )
+    return "\n".join(
+        [
+            "Answer the medical question using only the selected radiology case evidence.",
+            "Do not add unsupported findings, diagnoses, locations, or severity.",
+            "If the evidence is insufficient, state that it is insufficient.",
+            *common,
+            "Return only one concise answer paragraph.",
+        ]
+    )
+
+
+def generate(prompt: str, model_name: str) -> tuple[str, str]:
+    import torch
+
+    tokenizer, model, device = load_generator(model_name)
+    messages = [
+        {
+            "role": "system",
+            "content": "You are a careful report-grounded medical QA assistant for a research prototype.",
+        },
+        {"role": "user", "content": prompt},
+    ]
+    chat_prompt = tokenizer.apply_chat_template(
+        messages, tokenize=False, add_generation_prompt=True
+    )
+    inputs = tokenizer(chat_prompt, return_tensors="pt").to(device)
+    with torch.inference_mode():
+        output_ids = model.generate(
+            **inputs,
+            max_new_tokens=180,
+            do_sample=False,
+            pad_token_id=tokenizer.eos_token_id,
+        )
+    generated_ids = output_ids[0][inputs["input_ids"].shape[-1] :]
+    raw = tokenizer.decode(generated_ids, skip_special_tokens=True).strip()
+    return raw, extract_final_answer(raw)
+
+
+def parse_uploaded_question(uploaded_file: Any) -> tuple[str, str | None]:
+    if uploaded_file is None:
+        return "", None
+    text = uploaded_file.getvalue().decode("utf-8-sig").strip()
+    if uploaded_file.name.lower().endswith(".json"):
+        payload = json.loads(text)
+        return str(payload.get("question", "")).strip(), payload.get("question_type")
+    return text, None
+
+
+def parse_uploaded_scoped_request(uploaded_file: Any) -> tuple[str, str | None, str | None]:
+    if uploaded_file is None:
+        return "", None, None
+    text = uploaded_file.getvalue().decode("utf-8-sig").strip()
+    if uploaded_file.name.lower().endswith(".json"):
+        payload = json.loads(text)
+        return (
+            str(payload.get("question", "")).strip(),
+            payload.get("question_type"),
+            str(payload.get("case_id", "")).strip() or None,
+        )
+    return text, None, None
+
+
+def retrieve_scoped_evidence(
+    case_id: str, question: str, question_type: str, top_k: int
+) -> list[dict[str, Any]]:
+    case_by_id, retriever = load_scoped_resources()
+    if case_id not in case_by_id:
+        raise ValueError(f"Unknown patient case ID: {case_id}")
+    return retriever.search(
+        question,
+        top_k=top_k,
+        case_id=case_id,
+        allowed_sections={expected_section(question_type)},
+    )
+
+
+def build_scoped_live_prompt(case_id: str, question: str, evidence: list[dict[str, Any]]) -> str:
+    evidence_text = "\n".join(
+        f"[{row['section']} {row['position']}] {row['text']}" for row in evidence
+    )
+    return "\n".join(
+        [
+            "Answer the question using only the retrieved evidence from the specified radiology case.",
+            "Do not add findings that are absent from the evidence.",
+            f"Case scope: {case_id}",
+            f"Question: {question}",
+            "",
+            "Retrieved evidence:",
+            evidence_text,
+            "",
+            "Answer clearly and concisely.",
+        ]
+    )
+
+
+def local_image_paths(case: dict[str, Any]) -> list[Path]:
+    paths = []
+    for image in case.get("images", []):
+        filename = Path(str(image.get("filename", ""))).name
+        path = IMAGE_ROOT / filename
+        if path.exists():
+            paths.append(path)
+    return paths
+
+
+def render_pipeline_result(result: dict[str, Any]) -> None:
+    checks = result["sentence_checks"]
+    retrieval = result["retrieval_decision"]
+    metric_columns = st.columns(5)
+    metric_columns[0].metric("Retrieved", len(result["retrieved_cases"]))
+    top_score = result["retrieved_cases"][0]["score"] if result["retrieved_cases"] else 0.0
+    metric_columns[1].metric("Top-1 score", f"{top_score:.3f}")
+    metric_columns[2].metric("Evidence support", f"{result['support_rate']:.1%}")
+    agent_state = (
+        "Advisory"
+        if result.get("agent_action_policy") == "audit_only"
+        else ("Abstained" if result["abstained"] else "Filtered")
+    )
+    metric_columns[3].metric("Agent", agent_state)
+    metric_columns[4].metric("Latency", f"{result['latency_seconds']:.1f}s")
+
+    source_labels = {
+        "agreement": "Hybrid and reranker agree",
+        "reranker": "Reranker selected",
+        "hybrid": "Hybrid retained",
+        "bm25": "BM25 fixed ranking",
+        "patient_scope": "Patient scope and section route",
+    }
+    retrieval_message = source_labels.get(retrieval["source"], retrieval["source"])
+    if retrieval["abstained"]:
+        st.warning(f"Retrieval abstained: {retrieval['reason']}")
+    else:
+        st.caption(f"Retrieval decision: {retrieval_message} · {retrieval['reason']}")
+
+    st.subheader("Grounded answer")
+    answer_class = "research-note" if result["abstained"] else "answer-band"
+    st.markdown(
+        f'<div class="{answer_class}">{result["final_answer"]}</div>',
+        unsafe_allow_html=True,
+    )
+
+    draft_col, trace_col = st.columns([1, 1], gap="large")
+    with draft_col:
+        st.subheader("Generation")
+        st.text_area("Draft answer", result["draft_answer"], height=180, disabled=True)
+        with st.expander("Prompt", icon=":material/article:"):
+            st.code(result["prompt"], language="text")
+    with trace_col:
+        st.subheader("Agent trace")
+        if checks:
+            trace_rows = [
+                {
+                    "Decision": (
+                        ("Supported" if check["supported"] else "Review")
+                        if result.get("agent_action_policy") == "audit_only"
+                        else ("Keep" if check["supported"] else "Remove")
+                    ),
+                    "Score": round(
+                        check.get("combined_support_score", check.get("support_score", 0.0)),
+                        3,
+                    ),
+                    "Entailment": (
+                        round(check["entailment_probability"], 3)
+                        if "entailment_probability" in check
+                        else None
+                    ),
+                    "Contradiction": (
+                        round(check["contradiction_probability"], 3)
+                        if "contradiction_probability" in check
+                        else None
+                    ),
+                    "Polarity": "Aligned" if check["negation_consistent"] else "Conflict",
+                    "Reason": check.get("decision_reason", "lexical_rule"),
+                    "Answer sentence": check["sentence"],
+                    "Matched evidence": check["matched_evidence"],
+                }
+                for check in checks
+            ]
+            st.dataframe(
+                pd.DataFrame(trace_rows),
+                width="stretch",
+                hide_index=True,
+                column_config={"Score": st.column_config.ProgressColumn(min_value=0, max_value=1)},
+            )
+        else:
+            st.info("No answer sentence was available for checking.")
+
+    if result.get("workflow") == "v2_patient_scoped":
+        st.subheader("Retrieved evidence")
+        st.dataframe(
+            pd.DataFrame(
+                [
+                    {
+                        "Rank": row["rank"],
+                        "Case": row["case_id"],
+                        "Section": row["section"],
+                        "Score": row["score"],
+                        "Evidence": row["text"],
+                    }
+                    for row in result["retrieved_cases"]
+                ]
+            ),
+            width="stretch",
+            hide_index=True,
+            column_config={"Score": st.column_config.NumberColumn(format="%.3f")},
+        )
+        case = result.get("scoped_case", {})
+        with st.expander("Patient-scoped source report", icon=":material/description:"):
+            st.markdown('<div class="evidence-label">Findings</div>', unsafe_allow_html=True)
+            st.write(case.get("findings") or "Not reported")
+            st.markdown('<div class="evidence-label">Impression</div>', unsafe_allow_html=True)
+            st.write(case.get("impression") or "Not reported")
+        export = {key: value for key, value in result.items() if key != "prompt"}
+        st.download_button(
+            "Export run",
+            data=json.dumps(export, indent=2, ensure_ascii=False),
+            file_name="medical_rag_v2_run.json",
+            mime="application/json",
+            icon=":material/download:",
+        )
+        return
+
+    st.subheader("Retrieved cases")
+    for case in result["retrieved_cases"]:
+        score_parts = [f"score {case['score']:.3f}"]
+        if "bm25_score" in case:
+            score_parts.append(f"BM25 {case['bm25_score']:.3f}")
+            score_parts.append(f"MedCPT {case['medcpt_score']:.3f}")
+        if case.get("reranker_score") is not None:
+            score_parts.append(f"reranker {case['reranker_score']:.3f}")
+        selected_marker = "SELECTED · " if case.get("selected") else ""
+        with st.expander(
+            f"{selected_marker}#{case['rank']}  {case['case_id']}  |  {' · '.join(score_parts)}",
+            expanded=bool(case.get("selected", case["rank"] == 1)),
+            icon=":material/description:",
+        ):
+            report_col, image_col = st.columns([3, 2])
+            with report_col:
+                st.markdown('<div class="evidence-label">Findings</div>', unsafe_allow_html=True)
+                st.write(case.get("findings") or "Not reported")
+                st.markdown('<div class="evidence-label">Impression</div>', unsafe_allow_html=True)
+                st.write(case.get("impression") or "Not reported")
+            with image_col:
+                image_paths = local_image_paths(case)
+                if image_paths:
+                    st.image([str(path) for path in image_paths], width=250)
+                else:
+                    image_names = [image.get("filename", "") for image in case.get("images", [])]
+                    st.caption("Linked images: " + ", ".join(image_names))
+
+    export = {key: value for key, value in result.items() if key != "prompt"}
+    st.download_button(
+        "Export run",
+        data=json.dumps(export, indent=2, ensure_ascii=False),
+        file_name="medical_rag_run.json",
+        mime="application/json",
+        icon=":material/download:",
+    )
+
+
+def render_results() -> None:
+    final_summary = json.loads(
+        (
+            ROOT
+            / "experiments"
+            / "final_optimized"
+            / "final_test"
+            / "final_optimized_test_summary.json"
+        ).read_text(encoding="utf-8")
+    )
+    alpha_selection = json.loads(HYBRID_SELECTION_PATH.read_text(encoding="utf-8"))
+    adaptive_selection = json.loads(ADAPTIVE_SELECTION_PATH.read_text(encoding="utf-8"))
+    contamination = json.loads(
+        (
+            ROOT
+            / "experiments"
+            / "final_optimized"
+            / "contamination"
+            / "report_rag_cross_case_contamination.json"
+        ).read_text(encoding="utf-8")
+    )
+    validity = json.loads(
+        (
+            ROOT
+            / "experiments"
+            / "final_optimized"
+            / "validity_audit"
+            / "research_validity_audit.json"
+        ).read_text(encoding="utf-8")
+    )
+    v2_test = json.loads(V2_TEST_SUMMARY_PATH.read_text(encoding="utf-8"))
+    v2_confirmation = json.loads(V2_CONFIRMATION_SUMMARY_PATH.read_text(encoding="utf-8"))
+    v2_retrieval = json.loads(V2_CONFIRMATION_RETRIEVAL_PATH.read_text(encoding="utf-8"))
+    v2_verifier = json.loads(V2_VERIFIER_SELECTION_PATH.read_text(encoding="utf-8"))
+    v2_validity = json.loads(V2_VALIDITY_AUDIT_PATH.read_text(encoding="utf-8"))
+
+    st.subheader("Locked held-out test")
+    metrics = st.columns(5)
+    metrics[0].metric("Cases", "36")
+    metrics[1].metric("Questions", str(final_summary["n"]))
+    metrics[2].metric("Verified Token-F1", f"{final_summary['verified_token_f1']:.3f}")
+    metrics[3].metric("Evidence support", f"{final_summary['evidence_support_rate']:.1%}")
+    metrics[4].metric("Final abstention", f"{final_summary['final_abstention_rate']:.1%}")
+    st.caption(
+        "All configuration choices were made on 84 development cases; these 36 cases were "
+        "kept disjoint and evaluated once."
+    )
+
+    statistics = json.loads(
+        (
+            ROOT
+            / "experiments"
+            / "final_optimized"
+            / "statistics"
+            / "held_out_test_grouped_bootstrap.json"
+        ).read_text(encoding="utf-8")
+    )
+    labels = {
+        "llm_only": "LLM only",
+        "report_bm25_semantic_agent": "Report-RAG + semantic checker",
+        "case_bm25_top1_semantic_agent": "Case BM25 + semantic checker",
+        "case_hybrid_top1_a050_semantic_agent": "Previous Hybrid + semantic checker",
+        "final_adaptive_direct_semantic_agent": "Final adaptive system",
+    }
+    summary_by_system = {item["system"]: item for item in statistics["summary"]}
+    rows = []
+    for system, label in labels.items():
+        item = summary_by_system[system]
+        rows.append(
+            {
+                "System": label,
+                "Token-F1": item["mean_token_f1"],
+                "Grouped 95% CI": (
+                    f"[{item['ci_low_95']:.3f}, {item['ci_high_95']:.3f}]"
+                ),
+            }
+        )
+    result_frame = pd.DataFrame(rows)
+    st.dataframe(
+        result_frame,
+        width="stretch",
+        hide_index=True,
+        column_config={"Token-F1": st.column_config.NumberColumn(format="%.3f")},
+    )
+    st.bar_chart(
+        result_frame.set_index("System")[["Token-F1"]],
+        horizontal=True,
+        color="#087E8B",
+    )
+
+    pairwise = next(
+        item
+        for item in statistics["pairwise"]
+        if item["system_a"] == "final_adaptive_direct_semantic_agent"
+        and item["system_b"] == "case_bm25_top1_semantic_agent"
+    )
+    st.info(
+        "Final vs Case BM25: "
+        f"Δ Token-F1 {pairwise['mean_difference']:+.3f}, "
+        f"95% CI [{pairwise['ci_low']:.3f}, {pairwise['ci_high']:.3f}], "
+        f"paired randomization p={pairwise['paired_randomization_p']:.4f}, "
+        f"Holm-adjusted p={pairwise['holm_adjusted_randomization_p']:.4f}."
+    )
+
+    st.subheader("Retrieval safety")
+    retrieval_metrics = st.columns(4)
+    retrieval_metrics[0].metric("Locked hybrid alpha", f"{alpha_selection['selected_alpha']:.2f}")
+    retrieval_metrics[1].metric(
+        "Hybrid test Hit@1", f"{alpha_selection['held_out_test_metrics']['hit@1']:.1%}"
+    )
+    retrieval_metrics[2].metric(
+        "Adaptive selective accuracy",
+        f"{adaptive_selection['held_out_test']['selective_accuracy']:.1%}",
+    )
+    retrieval_metrics[3].metric(
+        "Retrieval abstention", f"{adaptive_selection['held_out_test']['abstention_rate']:.1%}"
+    )
+    st.warning(
+        "Automated detector estimate for Report-RAG top-5 cross-case support: "
+        f"{contamination['lexically_anchored_cross_case_contaminated_sentence_rate']:.1%}-"
+        f"{contamination['cross_case_contaminated_sentence_rate']:.1%} of answer sentences and "
+        f"{contamination['lexically_anchored_answer_cross_case_contamination_rate']:.1%}-"
+        f"{contamination['answer_cross_case_contamination_rate']:.1%} of answers. "
+        "Human confirmation remains required; the final system structurally exposes one case."
+    )
+
+    st.subheader("Validity and headroom audit")
+    audit_metrics = st.columns(4)
+    audit_metrics[0].metric(
+        "Oracle verified F1",
+        f"{validity['oracle_retrieval_headroom']['oracle_verified_token_f1']:.3f}",
+    )
+    audit_metrics[1].metric(
+        "Actual-to-oracle gap",
+        f"{validity['oracle_retrieval_headroom']['absolute_gap']:.3f}",
+    )
+    audit_metrics[2].metric(
+        "Ambiguous test queries",
+        f"{validity['benchmark_ambiguity']['held_out_test']['ambiguous_question_rate']:.1%}",
+    )
+    audit_metrics[3].metric(
+        "Wrong-case support",
+        f"{validity['verification_conditioned_on_retrieval']['wrong_retrieval']['evidence_support_rate']:.1%}",
+    )
+    st.caption(
+        "The verifier measures faithfulness to retrieved evidence, not whether the correct patient was "
+        "retrieved. Images are linked for display; the modeled pipeline is text-only."
+    )
+
+    st.subheader("Benchmark V2: patient-known evidence QA")
+    v2_metrics = st.columns(5)
+    v2_metrics[0].metric("Confirmation cases", str(v2_confirmation["case_count"]))
+    v2_metrics[1].metric("Locked top-k", str(v2_confirmation["top_k"]))
+    v2_metrics[2].metric(
+        "Extractive Token-F1",
+        f"{v2_validity['confirmation']['extractive_retrieved_context_token_f1']:.3f}",
+    )
+    v2_metrics[3].metric("Qwen Token-F1", f"{v2_confirmation['verified_token_f1']:.3f}")
+    v2_metrics[4].metric("Evidence recall", f"{v2_confirmation['mean_retrieval_recall']:.1%}")
+
+    retrieval_labels = {
+        "global_bm25": "Global BM25",
+        "case_scoped_bm25": "Patient-scoped BM25",
+        "case_scoped_agent_routed_bm25": "Patient scope + planner route",
+    }
+    v2_retrieval_frame = pd.DataFrame(
+        [
+            {
+                "Retrieval condition": retrieval_labels[system],
+                "Hit@1": values["hit@1"],
+                "Recall@5": values["recall@5"],
+                "MRR": values["mrr"],
+            }
+            for system, values in v2_retrieval["systems"].items()
+        ]
+    )
+    st.dataframe(
+        v2_retrieval_frame,
+        width="stretch",
+        hide_index=True,
+        column_config={
+            "Hit@1": st.column_config.NumberColumn(format="%.3f"),
+            "Recall@5": st.column_config.NumberColumn(format="%.3f"),
+            "MRR": st.column_config.NumberColumn(format="%.3f"),
+        },
+    )
+    st.warning(
+        "Controlled-workflow boundary: routed candidates equal the relevance set for "
+        f"{v2_validity['confirmation']['routed_candidate_pool_equals_qrels_rate']:.0%} of confirmation "
+        "queries, so routed Hit@1 is not a semantic-retrieval result. Returning retrieved context "
+        f"scores {v2_validity['confirmation']['extractive_retrieved_context_token_f1']:.3f}, "
+        f"versus {v2_confirmation['verified_token_f1']:.3f} for Qwen."
+    )
+    st.info(
+        f"Diagnostic V2 test Qwen F1 {v2_test['verified_token_f1']:.3f}; primary confirmation "
+        f"Qwen F1 {v2_confirmation['verified_token_f1']:.3f}, case-bootstrap 95% CI "
+        f"[{v2_confirmation['verified_token_f1_case_bootstrap_95_ci'][0]:.3f}, "
+        f"{v2_confirmation['verified_token_f1_case_bootstrap_95_ci'][1]:.3f}]. Calibration selected "
+        f"{v2_verifier['selected_config']['action_policy'].replace('_', ' ')} verification: "
+        "NLI reports grounding risk but does not automatically delete answer sentences."
+    )
+    st.caption(
+        "V1 is an open-corpus stress test; V2 uses an explicit case-ID metadata filter. "
+        "No authentication or clinical access-control layer is implemented. Their Token-F1 "
+        "values are not a paired comparison, and section routing is deterministic."
+    )
+
+    st.subheader("Development-only prompt ablation")
+    prompt_ablation = pd.read_csv(
+        ROOT
+        / "experiments"
+        / "final_optimized"
+        / "prompt_ablation"
+        / "development_prompt_ablation.csv"
+    )
+    st.dataframe(
+        prompt_ablation[
+            [
+                "prompt_mode",
+                "draft_token_f1",
+                "verified_token_f1",
+                "evidence_support_rate",
+                "abstention_rate",
+                "nli_contradiction_count",
+            ]
+        ],
+        width="stretch",
+        hide_index=True,
+    )
+
+    with st.expander("RadGraph clinical entity results"):
+        radgraph = pd.read_csv(
+            ROOT
+            / "experiments"
+            / "final_optimized"
+            / "radgraph"
+            / "held_out_radgraph_summary.csv"
+        )
+        st.dataframe(radgraph, width="stretch", hide_index=True)
+
+    st.markdown(
+        '<div class="research-note">Research prototype only. Results measure report-grounded QA behavior and do not establish clinical diagnostic performance.</div>',
+        unsafe_allow_html=True,
+    )
+
+
+st.title("Evidence-Checking Medical RAG")
+st.caption("IU X-Ray / OpenI · 3,851 linked radiology cases · case-disjoint grouped evaluation")
+
+live_tab, results_tab = st.tabs(["Live pipeline", "Experiment results"])
+
+with live_tab:
+    with st.sidebar:
+        st.header("Run settings")
+        workflow = st.segmented_control(
+            "Workflow",
+            options=["V2 patient-scoped", "V1 open-corpus stress test"],
+            default="V2 patient-scoped",
+        )
+        threshold = 0.40
+        if workflow == "V2 patient-scoped":
+            model_label = st.selectbox("Generator", list(MODEL_OPTIONS))
+            retriever_label = next(iter(RETRIEVER_OPTIONS))
+            prompt_label = next(iter(PROMPT_OPTIONS))
+            top_k = 6
+            evidence_scope = "Patient-scoped evidence"
+            agent_label = next(iter(AGENT_OPTIONS))
+            st.info(
+                "Locked V2 policy: explicit case-ID scope, deterministic section route, "
+                "top-6 evidence, and advisory NLI audit."
+            )
+        else:
+            retriever_label = st.selectbox("Retriever", list(RETRIEVER_OPTIONS))
+            prompt_label = st.selectbox("Prompt", list(PROMPT_OPTIONS))
+            model_label = st.selectbox("Generator", list(MODEL_OPTIONS))
+            top_k = st.number_input("Top-K", min_value=1, max_value=10, value=5, step=1)
+            evidence_scope = st.segmented_control(
+                "Generation evidence",
+                options=["Selected case", "All candidates (ablation)"],
+                default="Selected case",
+            )
+            agent_label = st.selectbox("Evidence checker", list(AGENT_OPTIONS))
+            if AGENT_OPTIONS[agent_label] == "rule":
+                threshold = st.slider(
+                    "Rule support threshold",
+                    min_value=0.30,
+                    max_value=0.80,
+                    value=0.40,
+                    step=0.05,
+                )
+        st.divider()
+        st.caption("CUDA is used automatically when available.")
+
+    selected_case_id = None
+    selected_v2_type = None
+    selected_v2_question = None
+    if workflow == "V2 patient-scoped":
+        cases, _ = load_bm25_resources()
+        case_labels = {
+            f"{case['case_id']} | {(case.get('indication') or 'No indication')[:80]}": str(
+                case["case_id"]
+            )
+            for case in cases
+        }
+        default_label = next(
+            (label for label, case_id in case_labels.items() if case_id == "CXR1004"),
+            next(iter(case_labels)),
+        )
+        scope_col, task_col = st.columns([3, 2], gap="large")
+        with scope_col:
+            case_label = st.selectbox(
+                "Patient case scope",
+                list(case_labels),
+                index=list(case_labels).index(default_label),
+            )
+            selected_case_id = case_labels[case_label]
+        with task_col:
+            task_label = st.selectbox("Planner task", list(V2_TASKS))
+            selected_v2_type, selected_v2_question = V2_TASKS[task_label]
+
+    examples = load_examples()
+    example_by_label = {
+        f"{item['qid']} · {item['question'][:90]}": item for item in examples[:60]
+    }
+    input_col, upload_col = st.columns([3, 2], gap="large")
+    with input_col:
+        if workflow == "V2 patient-scoped":
+            initial_question = str(selected_v2_question)
+        else:
+            example_label = st.selectbox(
+                "Example question", ["Custom question", *example_by_label]
+            )
+            initial_question = (
+                ""
+                if example_label == "Custom question"
+                else example_by_label[example_label]["question"]
+            )
+        question = st.text_area(
+            "Question",
+            value=initial_question,
+            height=120,
+            placeholder="Enter a radiology report-grounded question",
+            key=f"question_{workflow}_{selected_v2_type or 'v1'}",
+        )
+    with upload_col:
+        uploaded = st.file_uploader("Question file", type=["txt", "json"])
+        if workflow == "V2 patient-scoped":
+            st.caption("JSON fields: case_id, question, and question_type. TXT overrides the question only.")
+        else:
+            st.caption("TXT: plain question. JSON: question and optional question_type.")
+
+    run_clicked = st.button(
+        "Run pipeline", type="primary", icon=":material/play_arrow:", width="content"
+    )
+    if run_clicked and workflow == "V2 patient-scoped":
+        try:
+            uploaded_question, uploaded_type, uploaded_case_id = parse_uploaded_scoped_request(
+                uploaded
+            )
+            active_case_id = uploaded_case_id or str(selected_case_id)
+            active_type = uploaded_type or str(selected_v2_type)
+            if active_type not in {
+                "case_scoped_findings",
+                "case_scoped_impression",
+                "case_scoped_summary",
+            }:
+                raise ValueError(f"Unsupported V2 question_type: {active_type}")
+            active_question = uploaded_question or question.strip() or str(selected_v2_question)
+            start = time.perf_counter()
+            with st.status("Running patient-scoped pipeline", expanded=True) as status:
+                locked_top_k, verifier_config = load_v2_configs()
+                st.write(f"Applying explicit case-ID metadata filter: {active_case_id}")
+                st.write(f"Planner route: {expected_section(active_type)}")
+                retrieved = retrieve_scoped_evidence(
+                    active_case_id, active_question, active_type, locked_top_k
+                )
+                context = "\n".join(row["text"] for row in retrieved)
+                prompt = build_scoped_live_prompt(active_case_id, active_question, retrieved)
+                st.write("Generating evidence-only answer")
+                raw_answer, draft_answer = generate(prompt, MODEL_OPTIONS[model_label])
+                st.write("Auditing sentence-level grounding")
+                checked = check_semantic_evidence_support(
+                    draft_answer,
+                    context,
+                    load_semantic_predictor(),
+                    min_combined_support=float(verifier_config["support_threshold"]),
+                    entailment_threshold=float(verifier_config["entailment_threshold"]),
+                    contradiction_threshold=float(verifier_config["contradiction_threshold"]),
+                    lexical_weight=float(verifier_config["lexical_weight"]),
+                )
+                status.update(label="Patient-scoped pipeline complete", state="complete", expanded=False)
+            case_by_id, _ = load_scoped_resources()
+            result = {
+                "workflow": "v2_patient_scoped",
+                "question": active_question,
+                "question_plan": {"question_type": active_type, "section": expected_section(active_type)},
+                "retriever": "case_scoped_agent_routed_bm25",
+                "prompt_mode": "direct_evidence_only",
+                "model": MODEL_OPTIONS[model_label],
+                "top_k": locked_top_k,
+                "evidence_scope": active_case_id,
+                "threshold": float(verifier_config["support_threshold"]),
+                "agent_mode": "semantic_advisory",
+                "agent_action_policy": "audit_only",
+                "retrieval_decision": {
+                    "source": "patient_scope",
+                    "abstained": False,
+                    "reason": f"locked {expected_section(active_type)} route, top-{locked_top_k}",
+                },
+                "raw_generation": raw_answer,
+                "draft_answer": draft_answer,
+                "final_answer": draft_answer,
+                "support_rate": checked.support_rate,
+                "abstained": False,
+                "sentence_checks": [asdict(check) for check in checked.sentence_checks],
+                "retrieved_cases": retrieved,
+                "scoped_case": case_by_id[active_case_id],
+                "latency_seconds": time.perf_counter() - start,
+                "prompt": prompt,
+            }
+            st.session_state["pipeline_result"] = result
+        except Exception as exc:
+            st.exception(exc)
+        run_clicked = False
+    if run_clicked:
+        try:
+            uploaded_question, uploaded_type = parse_uploaded_question(uploaded)
+            active_question = uploaded_question or question.strip()
+            if not active_question:
+                st.warning("Enter a question or upload a question file.")
+            else:
+                start = time.perf_counter()
+                with st.status("Running pipeline", expanded=True) as status:
+                    st.write("Planning query")
+                    plan = plan_question(active_question, uploaded_type)
+                    st.write("Retrieving linked cases")
+                    retrieved, selected_evidence, retrieval_decision = retrieve_with_policy(
+                        plan.retrieval_query, RETRIEVER_OPTIONS[retriever_label], int(top_k)
+                    )
+                    generation_evidence = (
+                        selected_evidence
+                        if evidence_scope == "Selected case"
+                        else retrieved
+                    )
+                    context = evidence_context(generation_evidence)
+                    prompt = build_prompt(active_question, context, PROMPT_OPTIONS[prompt_label])
+                    st.write("Generating draft answer")
+                    raw_answer, draft_answer = generate(prompt, MODEL_OPTIONS[model_label])
+                    st.write("Checking sentence-level evidence")
+                    agent_mode = AGENT_OPTIONS[agent_label]
+                    if agent_mode == "semantic":
+                        _, semantic_config = load_locked_configs()
+                        checked = check_semantic_evidence_support(
+                            draft_answer,
+                            "" if not selected_evidence else evidence_context(selected_evidence),
+                            load_semantic_predictor(),
+                            min_combined_support=float(semantic_config["support_threshold"]),
+                            entailment_threshold=float(
+                                semantic_config["entailment_threshold"]
+                            ),
+                            contradiction_threshold=float(
+                                semantic_config["contradiction_threshold"]
+                            ),
+                            lexical_weight=float(semantic_config["lexical_weight"]),
+                        )
+                        final_answer = checked.revised_answer
+                        checks = [asdict(check) for check in checked.sentence_checks]
+                        support_rate = checked.support_rate
+                        abstained = checked.abstained
+                    elif agent_mode == "rule":
+                        checked = check_evidence_support(
+                            draft_answer,
+                            "" if not selected_evidence else evidence_context(selected_evidence),
+                            min_sentence_support=float(threshold),
+                        )
+                        final_answer = checked.revised_answer
+                        checks = [asdict(check) for check in checked.sentence_checks]
+                        support_rate = checked.support_rate
+                        abstained = checked.abstained
+                    else:
+                        final_answer = draft_answer
+                        checks = []
+                        support_rate = 0.0
+                        abstained = False
+                    status.update(label="Pipeline complete", state="complete", expanded=False)
+                result = {
+                    "question": active_question,
+                    "question_plan": asdict(plan),
+                    "retriever": RETRIEVER_OPTIONS[retriever_label],
+                    "prompt_mode": PROMPT_OPTIONS[prompt_label],
+                    "model": MODEL_OPTIONS[model_label],
+                    "top_k": int(top_k),
+                    "evidence_scope": evidence_scope,
+                    "threshold": float(threshold),
+                    "agent_mode": agent_mode,
+                    "retrieval_decision": retrieval_decision,
+                    "raw_generation": raw_answer,
+                    "draft_answer": draft_answer,
+                    "final_answer": final_answer,
+                    "support_rate": support_rate,
+                    "abstained": abstained,
+                    "sentence_checks": checks,
+                    "retrieved_cases": retrieved,
+                    "latency_seconds": time.perf_counter() - start,
+                    "prompt": prompt,
+                }
+                st.session_state["pipeline_result"] = result
+        except Exception as exc:
+            st.exception(exc)
+
+    if "pipeline_result" in st.session_state:
+        st.divider()
+        render_pipeline_result(st.session_state["pipeline_result"])
+
+with results_tab:
+    render_results()

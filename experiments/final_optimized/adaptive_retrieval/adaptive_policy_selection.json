@@ -1,0 +1,40 @@
+{
+  "selection_rule": "maximize development overall accuracy with minimum coverage 0.80",
+  "selected_policy": {
+    "reranker_margin_threshold": 0.25,
+    "base_margin_threshold": 0.15,
+    "minimum_base_score": 0.9,
+    "minimum_selected_margin": 0.1,
+    "n": 252,
+    "coverage": 0.9563492063492064,
+    "overall_accuracy": 0.2896825396825397,
+    "selective_accuracy": 0.3029045643153527,
+    "abstention_rate": 0.04365079365079361,
+    "reranker_selection_rate": 0.1984126984126984,
+    "hybrid_selection_rate": 0.373015873015873,
+    "agreement_rate": 0.42857142857142855
+  },
+  "selected_development": {
+    "n": 252,
+    "coverage": 0.9563492063492064,
+    "overall_accuracy": 0.2896825396825397,
+    "selective_accuracy": 0.3029045643153527,
+    "abstention_rate": 0.04365079365079361,
+    "reranker_selection_rate": 0.1984126984126984,
+    "hybrid_selection_rate": 0.373015873015873,
+    "agreement_rate": 0.42857142857142855
+  },
+  "held_out_test": {
+    "n": 108,
+    "coverage": 0.9259259259259259,
+    "overall_accuracy": 0.28703703703703703,
+    "selective_accuracy": 0.31,
+    "abstention_rate": 0.07407407407407407,
+    "reranker_selection_rate": 0.1574074074074074,
+    "hybrid_selection_rate": 0.37037037037037035,
+    "agreement_rate": 0.4722222222222222
+  },
+  "split_manifest": "C:\\Users\\yz542_dntjhas\\Documents\\New project\\wqf7023-medical-rag\\data\\splits\\openi_qa_grouped_case_seed7023.json",
+  "test_decisions": "C:\\Users\\yz542_dntjhas\\Documents\\New project\\wqf7023-medical-rag\\experiments\\final_optimized\\adaptive_retrieval\\adaptive_policy_test_decisions.jsonl",
+  "development_decisions": "C:\\Users\\yz542_dntjhas\\Documents\\New project\\wqf7023-medical-rag\\experiments\\final_optimized\\adaptive_retrieval\\adaptive_policy_development_decisions.jsonl"
+}

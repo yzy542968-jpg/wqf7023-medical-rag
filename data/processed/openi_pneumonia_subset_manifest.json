@@ -1,0 +1,129 @@
+{
+  "source_dataset": "IU X-Ray / OpenI via Hugging Face mirror sasi2004/chest-xrays-indiana-university",
+  "cases_path": "data\\processed\\openi_cases.jsonl",
+  "image_output_dir": "data\\raw\\images\\images_normalized",
+  "case_count": 5,
+  "image_count": 10,
+  "cases": [
+    {
+      "case_id": "CXR3078",
+      "indication": "Chills XXXX XXXX",
+      "findings": "The cardiomediastinal silhouette is normal size and configuration. Pulmonary vasculature within normal limits. There is a right lower lobe pneumonia. No pleural effusion. No pneumothorax.",
+      "impression": "Right lower lobe pneumonia. Consider followup radiograph to document resolution. .",
+      "images": [
+        {
+          "filename": "3078_IM-1438-1001.dcm.png",
+          "projection": "Frontal",
+          "url": "https://huggingface.co/datasets/sasi2004/chest-xrays-indiana-university/resolve/main/images/images_normalized/3078_IM-1438-1001.dcm.png",
+          "local_path": "data\\raw\\images\\images_normalized\\3078_IM-1438-1001.dcm.png",
+          "valid": true,
+          "size_bytes": 1879274
+        },
+        {
+          "filename": "3078_IM-1438-2001.dcm.png",
+          "projection": "Lateral",
+          "url": "https://huggingface.co/datasets/sasi2004/chest-xrays-indiana-university/resolve/main/images/images_normalized/3078_IM-1438-2001.dcm.png",
+          "local_path": "data\\raw\\images\\images_normalized\\3078_IM-1438-2001.dcm.png",
+          "valid": true,
+          "size_bytes": 1605551
+        }
+      ]
+    },
+    {
+      "case_id": "CXR2370",
+      "indication": "XXXX",
+      "findings": "In the interval, consolidation and atelectasis have developed in the right lower lobe. Costophrenic XXXX blunted on the right. Left lung clear. Heart size normal.",
+      "impression": "Left lower lobe airspace disease consistent with pneumonia. Associated right pleural effusion.",
+      "images": [
+        {
+          "filename": "2370_IM-0931-1001.dcm.png",
+          "projection": "Frontal",
+          "url": "https://huggingface.co/datasets/sasi2004/chest-xrays-indiana-university/resolve/main/images/images_normalized/2370_IM-0931-1001.dcm.png",
+          "local_path": "data\\raw\\images\\images_normalized\\2370_IM-0931-1001.dcm.png",
+          "valid": true,
+          "size_bytes": 2030857
+        },
+        {
+          "filename": "2370_IM-0931-2001.dcm.png",
+          "projection": "Lateral",
+          "url": "https://huggingface.co/datasets/sasi2004/chest-xrays-indiana-university/resolve/main/images/images_normalized/2370_IM-0931-2001.dcm.png",
+          "local_path": "data\\raw\\images\\images_normalized\\2370_IM-0931-2001.dcm.png",
+          "valid": true,
+          "size_bytes": 1750789
+        }
+      ]
+    },
+    {
+      "case_id": "CXR2812",
+      "indication": "dyspnea",
+      "findings": "Lung volumes are low. In the interval, a patchy infiltrate has developed in the right lower lobe. Heart and pulmonary XXXX are normal.",
+      "impression": "XXXX. XXXX patchy right lower lobe infiltrate consistent with pneumonia.",
+      "images": [
+        {
+          "filename": "2812_IM-1239-2001.dcm.png",
+          "projection": "Frontal",
+          "url": "https://huggingface.co/datasets/sasi2004/chest-xrays-indiana-university/resolve/main/images/images_normalized/2812_IM-1239-2001.dcm.png",
+          "local_path": "data\\raw\\images\\images_normalized\\2812_IM-1239-2001.dcm.png",
+          "valid": true,
+          "size_bytes": 1904660
+        },
+        {
+          "filename": "2812_IM-1239-1001.dcm.png",
+          "projection": "Lateral",
+          "url": "https://huggingface.co/datasets/sasi2004/chest-xrays-indiana-university/resolve/main/images/images_normalized/2812_IM-1239-1001.dcm.png",
+          "local_path": "data\\raw\\images\\images_normalized\\2812_IM-1239-1001.dcm.png",
+          "valid": true,
+          "size_bytes": 1843874
+        }
+      ]
+    },
+    {
+      "case_id": "CXR3740",
+      "indication": "XXXX for 3 weeks history colon cancer",
+      "findings": "XXXX diffuse right lower lobe airspace opacity is present. There is no pleural effusion or pneumothorax. The heart and mediastinum are normal. The skeletal structures are normal.",
+      "impression": "Probable right lower lobe pneumonia.",
+      "images": [
+        {
+          "filename": "3740_IM-1868-1001.dcm.png",
+          "projection": "Frontal",
+          "url": "https://huggingface.co/datasets/sasi2004/chest-xrays-indiana-university/resolve/main/images/images_normalized/3740_IM-1868-1001.dcm.png",
+          "local_path": "data\\raw\\images\\images_normalized\\3740_IM-1868-1001.dcm.png",
+          "valid": true,
+          "size_bytes": 1904390
+        },
+        {
+          "filename": "3740_IM-1868-2001.dcm.png",
+          "projection": "Lateral",
+          "url": "https://huggingface.co/datasets/sasi2004/chest-xrays-indiana-university/resolve/main/images/images_normalized/3740_IM-1868-2001.dcm.png",
+          "local_path": "data\\raw\\images\\images_normalized\\3740_IM-1868-2001.dcm.png",
+          "valid": true,
+          "size_bytes": 1400996
+        }
+      ]
+    },
+    {
+      "case_id": "CXR1226",
+      "indication": "XXXX, XXXX.",
+      "findings": "The heart size is within normal limits. Trachea is midline. No pleural effusions or pneumothorax. Cardiomediastinal contours are normal. There is focal consolidation in the posterior segment of the right lower lobe. No bony or soft tissue abnormalities.",
+      "impression": "Right lower lobe pneumonia.",
+      "images": [
+        {
+          "filename": "1226_IM-0150-1001.dcm.png",
+          "projection": "Frontal",
+          "url": "https://huggingface.co/datasets/sasi2004/chest-xrays-indiana-university/resolve/main/images/images_normalized/1226_IM-0150-1001.dcm.png",
+          "local_path": "data\\raw\\images\\images_normalized\\1226_IM-0150-1001.dcm.png",
+          "valid": true,
+          "size_bytes": 2115929
+        },
+        {
+          "filename": "1226_IM-0150-1002.dcm.png",
+          "projection": "Lateral",
+          "url": "https://huggingface.co/datasets/sasi2004/chest-xrays-indiana-university/resolve/main/images/images_normalized/1226_IM-0150-1002.dcm.png",
+          "local_path": "data\\raw\\images\\images_normalized\\1226_IM-0150-1002.dcm.png",
+          "valid": true,
+          "size_bytes": 2701636
+        }
+      ]
+    }
+  ]
+}

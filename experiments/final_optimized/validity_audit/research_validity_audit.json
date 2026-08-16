@@ -1,0 +1,127 @@
+{
+  "benchmark_ambiguity": {
+    "all": {
+      "question_count": 360,
+      "unique_query_count": 316,
+      "ambiguous_question_rows": 68,
+      "ambiguous_question_rate": 0.18888888888888888,
+      "by_question_type": {
+        "abnormality_summary": {
+          "n": 120,
+          "ambiguous_n": 36
+        },
+        "findings_from_indication": {
+          "n": 120,
+          "ambiguous_n": 16
+        },
+        "impression_from_indication": {
+          "n": 120,
+          "ambiguous_n": 16
+        }
+      }
+    },
+    "held_out_test": {
+      "question_count": 108,
+      "unique_query_count": 98,
+      "ambiguous_question_rows": 25,
+      "ambiguous_question_rate": 0.23148148148148148,
+      "by_question_type": {
+        "abnormality_summary": {
+          "n": 36,
+          "ambiguous_n": 11
+        },
+        "findings_from_indication": {
+          "n": 36,
+          "ambiguous_n": 7
+        },
+        "impression_from_indication": {
+          "n": 36,
+          "ambiguous_n": 7
+        }
+      }
+    }
+  },
+  "query_document_shortcuts": {
+    "abnormality_summary": {
+      "n": 120,
+      "source_exact_in_bm25_document_rate": 0.21666666666666667,
+      "source_exact_in_medcpt_title_rate": 1.0
+    },
+    "findings_from_indication": {
+      "n": 120,
+      "source_exact_in_bm25_document_rate": 1.0,
+      "source_exact_in_medcpt_title_rate": 1.0
+    },
+    "impression_from_indication": {
+      "n": 120,
+      "source_exact_in_bm25_document_rate": 1.0,
+      "source_exact_in_medcpt_title_rate": 1.0
+    }
+  },
+  "performance_by_question_type": {
+    "abnormality_summary": {
+      "n": 36,
+      "strict_hit_at_1": 0.1388888888888889,
+      "coverage": 0.9166666666666666,
+      "selective_accuracy": 0.15151515151515152,
+      "verified_token_f1": 0.10262284959064501
+    },
+    "findings_from_indication": {
+      "n": 36,
+      "strict_hit_at_1": 0.3611111111111111,
+      "coverage": 0.8611111111111112,
+      "selective_accuracy": 0.41935483870967744,
+      "verified_token_f1": 0.3109411299838156
+    },
+    "impression_from_indication": {
+      "n": 36,
+      "strict_hit_at_1": 0.3611111111111111,
+      "coverage": 1.0,
+      "selective_accuracy": 0.3611111111111111,
+      "verified_token_f1": 0.20538883967501045
+    }
+  },
+  "verification_conditioned_on_retrieval": {
+    "correct_retrieval": {
+      "n": 31,
+      "draft_token_f1": 0.4088499876316093,
+      "verified_token_f1": 0.4505298037736298,
+      "evidence_support_rate": 0.8776369687660011,
+      "agent_abstention_rate": 0.0
+    },
+    "wrong_retrieval": {
+      "n": 69,
+      "draft_token_f1": 0.11639057398687996,
+      "verified_token_f1": 0.11697542126601859,
+      "evidence_support_rate": 0.8344030365769496,
+      "agent_abstention_rate": 0.014492753623188406
+    },
+    "retrieval_abstained": {
+      "n": 8,
+      "draft_token_f1": 0.09960008880208221,
+      "verified_token_f1": 0.030571688580393972,
+      "evidence_support_rate": 0.0,
+      "agent_abstention_rate": 1.0
+    }
+  },
+  "oracle_retrieval_headroom": {
+    "actual_verified_token_f1": 0.20631760641649036,
+    "oracle_verified_token_f1": 0.4249959578052292,
+    "absolute_gap": 0.21867835138873884,
+    "oracle_to_actual_ratio": 2.059911246485169
+  },
+  "multiple_comparison_check": {
+    "comparison": "final_vs_case_bm25_semantic_agent",
+    "mean_difference": 0.03473641224799609,
+    "paired_randomization_p": 0.014498550144985502,
+    "holm_adjusted_randomization_p": 0.08699130086991301
+  },
+  "image_usage": {
+    "local_image_file_count": 10,
+    "images_used_by_retrieval": false,
+    "images_used_by_generator": false,
+    "images_used_by_verifier": false,
+    "classification": "linked-image case metadata; text-only modeled pipeline"
+  },
+  "priority_conclusion": "Improve benchmark identifiability and retrieval before scaling the generator."
+}

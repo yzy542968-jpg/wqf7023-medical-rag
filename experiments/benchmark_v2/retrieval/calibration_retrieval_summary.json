@@ -1,0 +1,42 @@
+{
+  "benchmark": "OpenI case-scoped evidence QA v2",
+  "split": "calibration",
+  "case_count": 120,
+  "question_count": 360,
+  "top_k": 5,
+  "systems": {
+    "global_bm25": {
+      "hit@1": 0.0,
+      "recall@1": 0.0,
+      "hit@3": 0.0,
+      "recall@3": 0.0,
+      "hit@5": 0.002777777777777778,
+      "recall@5": 0.0002777777777777778,
+      "mrr": 0.0005555555555555556,
+      "case_scope_accuracy@1": 0.002777777777777778,
+      "n": 360
+    },
+    "case_scoped_bm25": {
+      "hit@1": 0.3333333333333333,
+      "recall@1": 0.11158199054032387,
+      "hit@3": 0.5083333333333333,
+      "recall@3": 0.22752575356742025,
+      "hit@5": 0.6083333333333333,
+      "recall@5": 0.40958293249959915,
+      "mrr": 0.4349074074074074,
+      "case_scope_accuracy@1": 1,
+      "n": 360
+    },
+    "case_scoped_agent_routed_bm25": {
+      "hit@1": 1.0,
+      "recall@1": 0.5241172639089305,
+      "hit@3": 1.0,
+      "recall@3": 0.8001295695045695,
+      "hit@5": 1.0,
+      "recall@5": 0.9455863195446529,
+      "mrr": 1.0,
+      "case_scope_accuracy@1": 1,
+      "n": 360
+    }
+  }
+}

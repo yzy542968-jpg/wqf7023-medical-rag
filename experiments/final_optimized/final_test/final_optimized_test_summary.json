@@ -1,0 +1,24 @@
+{
+  "system": "final_adaptive_direct_semantic_agent",
+  "n": 108,
+  "draft_token_f1": 0.19909351788973395,
+  "verified_token_f1": 0.20631760641649036,
+  "evidence_support_rate": 0.7850051440329218,
+  "retrieval_abstention_rate": 0.07407407407407407,
+  "final_abstention_rate": 0.08333333333333333,
+  "revision_rate": 0.7962962962962963,
+  "nli_contradiction_count": 14,
+  "semantic_agent_config": {
+    "lexical_weight": 0.2,
+    "support_threshold": 0.6,
+    "entailment_threshold": 0.75,
+    "contradiction_threshold": 0.5,
+    "macro_draft_token_f1": 0.18472074313963927,
+    "macro_final_token_f1": 0.1783798132705381,
+    "macro_revision_rate": 0.705026455026455,
+    "macro_abstention_rate": 0.06216931216931217,
+    "macro_evidence_support_rate": 0.7378087512307867,
+    "contradiction_rejection_rate": 1.0
+  },
+  "rows_path": "C:\\Users\\yz542_dntjhas\\Documents\\New project\\wqf7023-medical-rag\\experiments\\final_optimized\\final_test\\final_optimized_test_rows.jsonl"
+}

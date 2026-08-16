@@ -1,0 +1,107 @@
+# WQF7023 Medical RAG Project
+
+**Research title:** Case-Scoped Evidence-Checking RAG for Radiology Report-Grounded Question Answering
+
+This repository contains the reproducible implementation and frozen evidence for Zhang Yue's WQF7023 Artificial Intelligence Research Project. The system is a text-only research prototype built on de-identified OpenI / IU X-Ray radiology reports. It is not a diagnostic model, a clinically validated tool, or an authenticated clinical deployment.
+
+## Study Structure
+
+The final study deliberately separates two different tasks instead of treating their scores as directly comparable:
+
+1. **V1 open-corpus stress test:** measures patient-identification ambiguity, cross-case evidence contamination, retrieval headroom, abstention, and verifier limitations on 120 real OpenI cases and 360 report-derived questions.
+2. **V2 controlled case-scoped workflow:** evaluates deterministic section routing, patient isolation, evidence coverage, answer generation, and advisory verification on 720 previously unused OpenI cases, including a once-only 120-case confirmation cohort.
+3. **V3 RadQA extension:** implements a natural-question, answerable/unanswerable benchmark and evidence-sufficiency Agent. Official results remain conditional because credentialed PhysioNet files are not present. Synthetic fixtures test software only and are never reported as research results.
+
+The demonstrated Agent follows explicit `scope`, `retrieve`, `generate`, `audit`, and `review/abstain` states. Routing rules are deterministic, and the verifier is a risk signal rather than a clinical correctness label.
+
+## Frozen Results
+
+### V1 Open-Corpus Stress Test
+
+- Real OpenI cases/questions: 120 / 360; grouped development/test split: 84 / 36 cases.
+- Held-out final verified Token-F1: `0.206` with case-bootstrap 95% CI `[0.167, 0.246]`.
+- Final versus Case-BM25: `+0.035`; unadjusted paired randomization `p=0.0145`, Holm-adjusted `p=0.0870` across exploratory comparisons.
+- Held-out hybrid retrieval: Hit@1 `0.287`, Hit@20 `0.509`, MRR `0.331`.
+- Oracle target-case retrieval raises verified Token-F1 to `0.425`, identifying retrieval as the main bottleneck.
+- The automated contamination detector estimates cross-case support in `19.4%-28.9%` of sentences and `57.4%-65.7%` of answers. These are detector estimates, not human-confirmed labels.
+
+### V2 Controlled Workflow
+
+- Main/confirmation cases: 600 / 120, all disjoint from V1.
+- Development-selected `top-k=6`; confirmation evidence recall `0.994`.
+- Confirmation Qwen Token-F1: `0.570`, 95% CI `[0.556, 0.584]`.
+- Extractive retrieved-context baseline Token-F1: `0.997`; Qwen minus extractive: `-0.427`.
+- Routed candidate pools equal qrels by construction, so routed Hit@1 is a routing sanity check rather than semantic retrieval evidence.
+- Automatic verifier rewriting reduced calibration Token-F1; the frozen action is therefore `audit_only`.
+
+All headline values are generated from locked artifacts in `experiments/final_submission/final_results_registry.json`.
+
+## Submission Status
+
+Automated V1/V2 experiments, validity audits, the Dashboard, V3 framework, final manuscript, and defence deck are complete. A blinded human-evaluation protocol was prepared but not conducted because no suitable independent reviewer was available before submission. Both 36-case files therefore remain at zero completed rows, no human score is reported, and no human or clinical validation is claimed.
+
+The final P2 artifacts are:
+
+```text
+deliverables/22097191_ZHANG_YUE_P2_Research_Project.docx
+deliverables/22097191_ZHANG_YUE_P2_Research_Project.pdf
+deliverables/22097191_ZHANG_YUE_P2_Defence.pptx
+```
+
+The decision is recorded in `config/submission_decisions.json` and propagated into the result registry, manuscript, deck, and release audit. The blinded packages and rating interface are preserved for a future extension; they are not evidence for the submitted study.
+
+## Repository Layout
+
+```text
+config/           Versioned experiment configuration examples
+data/raw/         Original datasets; excluded from Git
+data/processed/   Small normalized benchmarks and split manifests
+data/sample/      Public software-only fixtures
+deliverables/     Rendered report and presentation artifacts
+docs/             Methods, results, runbooks, and submission controls
+experiments/      Frozen metrics, audits, and evaluation packages
+scripts/          Reproducible command-line entry points
+src/medical_rag/  Data, retrieval, Agent, and evaluation modules
+tests/            Automated regression and validity tests
+```
+
+## Reproduce the Audited Package
+
+From PowerShell in the repository root:
+
+```powershell
+python -m venv .venv
+& ".\.venv\Scripts\python.exe" -m pip install --upgrade pip
+& ".\.venv\Scripts\python.exe" -m pip install -r requirements.txt
+& ".\.venv\Scripts\python.exe" -m pytest -q
+& ".\.venv\Scripts\python.exe" -m compileall -q app.py human_evaluation_app.py scripts src
+& ".\.venv\Scripts\python.exe" scripts\build_submission_manifest.py
+```
+
+The manifest command verifies required files, locked SHA-256 values, tracked-file exclusions, file-size limits, the declared human-evaluation disposition, repository publication, and conditional V3 status. Use `--strict` only for the final submission gate; it exits unsuccessfully while external requirements such as the remote repository remain pending.
+
+Raw OpenI files are not redistributed. Data acquisition, expected filenames, and processing commands are documented in `docs/DATA.md`. Exact selected configurations, seeds, split fingerprints, and locked outputs are versioned in `config/`, `data/splits/`, and `experiments/`.
+
+## Interactive Dashboard
+
+Launch the research dashboard:
+
+```powershell
+& ".\.venv\Scripts\python.exe" -m streamlit run app.py --server.port 8501
+```
+
+Launch the system-blinded rating interface separately:
+
+```powershell
+& ".\.venv\Scripts\python.exe" -m streamlit run human_evaluation_app.py --server.port 8502
+```
+
+The main Dashboard exposes frozen result tables and auditable state traces. Images are optional case previews only; the model consumes report text. The rating application does not load the system-identity keys.
+
+## V3 RadQA
+
+Official RadQA files, when legally obtained, belong at `data/raw/radqa/train.json`, `dev.json`, and `test.json`. Run `docs/BENCHMARK_V3_RADQA_RUNBOOK.md` exactly as written. Until the complete official baseline table is produced, V3 is reported only as implemented future validation, not as a completed experiment.
+
+## Release Boundary
+
+Do not commit raw radiology files, image pixels, model weights, caches, generated prompt packs, secrets, or virtual environments. See `docs/REPOSITORY_RELEASE_POLICY.md` and the generated `experiments/final_submission/submission_manifest.json` before publishing.

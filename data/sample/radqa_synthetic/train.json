@@ -1,0 +1,33 @@
+{
+  "version": "synthetic-schema-fixture",
+  "data": [
+    {
+      "title": "SYNTHETIC_PATIENT_TRAIN",
+      "paragraphs": [
+        {
+          "document_id": "SYNTHETIC_REPORT_TRAIN_O",
+          "context": "FINDINGS: The heart is enlarged. No pleural effusion is present.",
+          "qas": [
+            {
+              "id": "synthetic_train_answerable",
+              "question": "Is the heart enlarged?",
+              "answers": [{"text": "heart is enlarged", "answer_start": 14}],
+              "is_impossible": false
+            },
+            {
+              "id": "synthetic_train_impossible",
+              "question": "Is a pneumothorax present?",
+              "answers": [],
+              "is_impossible": true
+            }
+          ]
+        },
+        {
+          "document_id": "SYNTHETIC_REPORT_TRAIN_I",
+          "context": "IMPRESSION: Cardiomegaly. No acute pulmonary process.",
+          "qas": []
+        }
+      ]
+    }
+  ]
+}

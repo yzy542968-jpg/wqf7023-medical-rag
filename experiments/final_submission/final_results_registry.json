@@ -1,0 +1,96 @@
+{
+  "registry": "WQF7023 final results registry",
+  "updated": "2026-08-16",
+  "dataset": {
+    "openi_report_cases": 3851,
+    "openi_image_mapping_rows": 7466,
+    "modeled_input": "radiology report text only"
+  },
+  "v1_open_corpus_stress_test": {
+    "case_count": 36,
+    "question_count": 108,
+    "verified_token_f1": 0.20631760641649036,
+    "case_bootstrap_95_ci": [
+      0.1673550163504701,
+      0.24604485275296178
+    ],
+    "evidence_support_rate": 0.7850051440329218,
+    "final_abstention_rate": 0.08333333333333333,
+    "selected_hybrid_alpha": 0.3,
+    "retrieval_test_selective_accuracy": 0.31,
+    "retrieval_test_abstention_rate": 0.07407407407407407,
+    "oracle_verified_token_f1": 0.4249959578052292,
+    "ambiguous_query_rate": 0.23148148148148148,
+    "final_minus_case_bm25": {
+      "difference": 0.03473641224799609,
+      "ci_95": [
+        0.00715668124976945,
+        0.06205587720807588
+      ],
+      "paired_randomization_p": 0.014498550144985502,
+      "holm_adjusted_p": 0.08699130086991301
+    },
+    "development_polarity_stress_rejection_rate": 1.0,
+    "interpretation": "retrieval-limited open-corpus failure analysis"
+  },
+  "v2_controlled_case_scoped_workflow": {
+    "main_case_count": 600,
+    "confirmation_case_count": 120,
+    "confirmation_question_count": 360,
+    "locked_top_k": 6,
+    "qwen_token_f1": 0.5698144452001667,
+    "qwen_case_bootstrap_95_ci": [
+      0.5560205215137681,
+      0.583566305748463
+    ],
+    "extractive_context_token_f1": 0.9967737141522331,
+    "qwen_minus_extractive": -0.4269592689520665,
+    "mean_evidence_recall": 0.9943783068783069,
+    "routed_candidate_pool_equals_qrels_rate": 1,
+    "verifier_action": "audit_only",
+    "content_fingerprint_main": "b21d0aec8618fdfd25fdf793e5e8628158a4d45eef99ada37d1d0ee1bbd545d3",
+    "content_fingerprint_confirmation": "a6c019847beca77e10a8a07b98e67d08da8bcc846cbd0e4017d03b3c73a364b4",
+    "interpretation": "controlled case-isolation and workflow-safety benchmark"
+  },
+  "human_evaluation": {
+    "v1": {
+      "rows": 36,
+      "completed_rows": 0,
+      "completion_rate": 0.0,
+      "filled_required_cells": 0,
+      "required_cells": 468
+    },
+    "v2": {
+      "rows": 36,
+      "completed_rows": 0,
+      "completion_rate": 0.0,
+      "filled_required_cells": 0,
+      "required_cells": 468
+    }
+  },
+  "human_evaluation_policy": {
+    "status": "not_conducted",
+    "reason": "No suitable independent reviewer was available before the P2 submission deadline.",
+    "decision_date": "2026-08-16",
+    "required_by_course_documents": false,
+    "limitations_declared": true,
+    "scores_claimed": false,
+    "evaluation_packages_preserved": true
+  },
+  "claim_controls": {
+    "v1_v2_are_paired": false,
+    "image_pixels_are_model_inputs": false,
+    "authentication_is_implemented": false,
+    "routing_is_learned_or_autonomous": false,
+    "clinical_validation_is_complete": false
+  },
+  "locked_artifact_sha256": {
+    "experiments/final_optimized/final_test/final_optimized_test_summary.json": "a330c443a5aab9f600c005d452d7db6ee88daa5153e0afc26ce0cd7055ed4d55",
+    "experiments/final_optimized/statistics/held_out_test_grouped_bootstrap.json": "52bcbb63c3b18225bef77f5fa18844659e9f4d8e6d884e50f0e6666fc6947b26",
+    "experiments/final_optimized/validity_audit/research_validity_audit.json": "5922a6ba20c853194fba7dd84f4ec45ed3ca56f8897e9c18724c910303b4cd22",
+    "experiments/benchmark_v2/confirmation_evaluation/test_generation_summary.json": "2a92d12176594e7e8f49620a682db0e63da07f28fa66b64e030c9802913438dd",
+    "experiments/benchmark_v2/validity_audit/benchmark_v2_validity_audit.json": "a4876ef375b0a172ba0b97d0a2856061debb76af286b2b02b1054816b4b0da2d",
+    "data/processed/openi_case_scoped_benchmark_v2.json": "df3de6c82e90a525b6d81247436d8f6d656f364da607555aad5b181c9cc62b14",
+    "data/processed/openi_case_scoped_confirmation_v2.json": "389bdc375c5c77d72835aefcb6ccf3ee0e0aefc702b17a4cc206ebfb7c386502"
+  }
+}

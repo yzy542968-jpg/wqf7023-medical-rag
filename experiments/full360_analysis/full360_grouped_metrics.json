@@ -1,0 +1,182 @@
+{
+  "by_system": {
+    "llm_only": {
+      "n": 360,
+      "token_f1": 0.09121178947905445,
+      "median_token_f1": 0.07619738751814224,
+      "top1_case_accuracy": 0.0,
+      "retrieved_case_hit_rate": 0.0,
+      "avg_words": 65.54444444444445
+    },
+    "report_bm25": {
+      "n": 360,
+      "token_f1": 0.09326209878163064,
+      "median_token_f1": 0.044466403162055336,
+      "top1_case_accuracy": 0.23055555555555557,
+      "retrieved_case_hit_rate": 0.38333333333333336,
+      "avg_words": 14.380555555555556,
+      "evidence_support_rate": 0.11799387341054007,
+      "revision_rate": 0.9916666666666667,
+      "abstention_rate": 0.6805555555555556,
+      "unsupported_sentence_rate": 0.8187874750166556
+    },
+    "case_bm25_top1": {
+      "n": 360,
+      "token_f1": 0.13922070155022456,
+      "median_token_f1": 0.08081632653061224,
+      "top1_case_accuracy": 0.23055555555555557,
+      "retrieved_case_hit_rate": 0.38333333333333336,
+      "avg_words": 18.211111111111112,
+      "evidence_support_rate": 0.3738756613756614,
+      "revision_rate": 0.8333333333333334,
+      "abstention_rate": 0.325,
+      "unsupported_sentence_rate": 0.6736641221374046
+    },
+    "case_hybrid_top1": {
+      "n": 360,
+      "token_f1": 0.14485685324119812,
+      "median_token_f1": 0.07692307692307693,
+      "top1_case_accuracy": 0.24166666666666667,
+      "retrieved_case_hit_rate": 0.4222222222222222,
+      "avg_words": 15.883333333333333,
+      "evidence_support_rate": 0.30462962962962964,
+      "revision_rate": 0.8861111111111111,
+      "abstention_rate": 0.41944444444444445,
+      "unsupported_sentence_rate": 0.7108778625954199
+    }
+  },
+  "by_question_type": {
+    "llm_only|impression_from_indication": {
+      "n": 120,
+      "token_f1": 0.057477022019845586,
+      "median_token_f1": 0.045454545454545456,
+      "top1_case_accuracy": 0.0,
+      "retrieved_case_hit_rate": 0.0,
+      "avg_words": 44.175
+    },
+    "llm_only|findings_from_indication": {
+      "n": 120,
+      "token_f1": 0.14501918670290287,
+      "median_token_f1": 0.14784456587735278,
+      "top1_case_accuracy": 0.0,
+      "retrieved_case_hit_rate": 0.0,
+      "avg_words": 92.34166666666667
+    },
+    "llm_only|abnormality_summary": {
+      "n": 120,
+      "token_f1": 0.07113915971441492,
+      "median_token_f1": 0.0536936936936937,
+      "top1_case_accuracy": 0.0,
+      "retrieved_case_hit_rate": 0.0,
+      "avg_words": 60.11666666666667
+    },
+    "report_bm25|impression_from_indication": {
+      "n": 120,
+      "token_f1": 0.050096965759823434,
+      "median_token_f1": 0.0,
+      "top1_case_accuracy": 0.325,
+      "retrieved_case_hit_rate": 0.5083333333333333,
+      "avg_words": 13.408333333333333,
+      "evidence_support_rate": 0.08107732545232545,
+      "revision_rate": 0.975,
+      "abstention_rate": 0.8166666666666667,
+      "unsupported_sentence_rate": 0.8881789137380192
+    },
+    "report_bm25|findings_from_indication": {
+      "n": 120,
+      "token_f1": 0.18590208943110126,
+      "median_token_f1": 0.10668563300142248,
+      "top1_case_accuracy": 0.31666666666666665,
+      "retrieved_case_hit_rate": 0.5083333333333333,
+      "avg_words": 17.775,
+      "evidence_support_rate": 0.2075778157028157,
+      "revision_rate": 1.0,
+      "abstention_rate": 0.45,
+      "unsupported_sentence_rate": 0.7166416791604198
+    },
+    "report_bm25|abnormality_summary": {
+      "n": 120,
+      "token_f1": 0.043787241153967246,
+      "median_token_f1": 0.0,
+      "top1_case_accuracy": 0.05,
+      "retrieved_case_hit_rate": 0.13333333333333333,
+      "avg_words": 11.958333333333334,
+      "evidence_support_rate": 0.06532647907647908,
+      "revision_rate": 1.0,
+      "abstention_rate": 0.775,
+      "unsupported_sentence_rate": 0.9078694817658349
+    },
+    "case_bm25_top1|impression_from_indication": {
+      "n": 120,
+      "token_f1": 0.18126273969313766,
+      "median_token_f1": 0.07275132275132275,
+      "top1_case_accuracy": 0.325,
+      "retrieved_case_hit_rate": 0.5083333333333333,
+      "avg_words": 13.508333333333333,
+      "evidence_support_rate": 0.4419642857142857,
+      "revision_rate": 0.7083333333333334,
+      "abstention_rate": 0.2833333333333333,
+      "unsupported_sentence_rate": 0.6366782006920415
+    },
+    "case_bm25_top1|findings_from_indication": {
+      "n": 120,
+      "token_f1": 0.16461738547619997,
+      "median_token_f1": 0.11396103896103896,
+      "top1_case_accuracy": 0.31666666666666665,
+      "retrieved_case_hit_rate": 0.5083333333333333,
+      "avg_words": 19.391666666666666,
+      "evidence_support_rate": 0.3459126984126984,
+      "revision_rate": 0.8,
+      "abstention_rate": 0.43333333333333335,
+      "unsupported_sentence_rate": 0.7320261437908496
+    },
+    "case_bm25_top1|abnormality_summary": {
+      "n": 120,
+      "token_f1": 0.07178197948133606,
+      "median_token_f1": 0.0625,
+      "top1_case_accuracy": 0.05,
+      "retrieved_case_hit_rate": 0.13333333333333333,
+      "avg_words": 21.733333333333334,
+      "evidence_support_rate": 0.33375,
+      "revision_rate": 0.9916666666666667,
+      "abstention_rate": 0.25833333333333336,
+      "unsupported_sentence_rate": 0.6578366445916115
+    },
+    "case_hybrid_top1|impression_from_indication": {
+      "n": 120,
+      "token_f1": 0.1881752804274206,
+      "median_token_f1": 0.07417582417582418,
+      "top1_case_accuracy": 0.325,
+      "retrieved_case_hit_rate": 0.5,
+      "avg_words": 13.258333333333333,
+      "evidence_support_rate": 0.4255555555555555,
+      "revision_rate": 0.7,
+      "abstention_rate": 0.375,
+      "unsupported_sentence_rate": 0.6342412451361867
+    },
+    "case_hybrid_top1|findings_from_indication": {
+      "n": 120,
+      "token_f1": 0.1743870758748196,
+      "median_token_f1": 0.10810810810810811,
+      "top1_case_accuracy": 0.3,
+      "retrieved_case_hit_rate": 0.5166666666666667,
+      "avg_words": 14.808333333333334,
+      "evidence_support_rate": 0.1783531746031746,
+      "revision_rate": 0.975,
+      "abstention_rate": 0.5916666666666667,
+      "unsupported_sentence_rate": 0.811046511627907
+    },
+    "case_hybrid_top1|abnormality_summary": {
+      "n": 120,
+      "token_f1": 0.07200820342135415,
+      "median_token_f1": 0.061553030303030304,
+      "top1_case_accuracy": 0.1,
+      "retrieved_case_hit_rate": 0.25,
+      "avg_words": 19.583333333333332,
+      "evidence_support_rate": 0.3099801587301588,
+      "revision_rate": 0.9833333333333333,
+      "abstention_rate": 0.2916666666666667,
+      "unsupported_sentence_rate": 0.6778523489932886
+    }
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "benchmark": "OpenI case-scoped evidence QA v2",
+  "split": "confirmation",
+  "system": "v2_case_scoped_agent_routed_qwen15_semantic_agent",
+  "top_k": 6,
+  "n": 360,
+  "case_count": 120,
+  "draft_token_f1": 0.5698144452001667,
+  "verified_token_f1": 0.5698144452001667,
+  "evidence_support_rate": 0.8301388888888889,
+  "agent_abstention_rate": 0.0,
+  "revision_rate": 0.0,
+  "mean_retrieval_recall": 0.9943783068783069,
+  "draft_token_f1_case_bootstrap_95_ci": [
+    0.5560205215137681,
+    0.583566305748463
+  ],
+  "verified_token_f1_case_bootstrap_95_ci": [
+    0.5560205215137681,
+    0.583566305748463
+  ],
+  "by_question_type": {
+    "case_scoped_findings": {
+      "n": 120,
+      "case_count": 120,
+      "draft_token_f1": 0.6797962784596823,
+      "verified_token_f1": 0.6797962784596823,
+      "evidence_support_rate": 0.7293055555555555,
+      "agent_abstention_rate": 0.0,
+      "revision_rate": 0.0,
+      "mean_retrieval_recall": 0.9831349206349206
+    },
+    "case_scoped_impression": {
+      "n": 120,
+      "case_count": 120,
+      "draft_token_f1": 0.6115837802997197,
+      "verified_token_f1": 0.6115837802997197,
+      "evidence_support_rate": 0.8791666666666667,
+      "agent_abstention_rate": 0.0,
+      "revision_rate": 0.0,
+      "mean_retrieval_recall": 1.0
+    },
+    "case_scoped_summary": {
+      "n": 120,
+      "case_count": 120,
+      "draft_token_f1": 0.41806327684109806,
+      "verified_token_f1": 0.41806327684109806,
+      "evidence_support_rate": 0.8819444444444444,
+      "agent_abstention_rate": 0.0,
+      "revision_rate": 0.0,
+      "mean_retrieval_recall": 1.0
+    }
+  },
+  "semantic_agent_config": {
+    "lexical_weight": 1.0,
+    "support_threshold": 0.4,
+    "entailment_threshold": 0.75,
+    "contradiction_threshold": 0.5,
+    "action_policy": "audit_only",
+    "n": 360,
+    "draft_token_f1": 0.5381199139852302,
+    "final_token_f1": 0.5381199139852302,
+    "abstention_rate": 0.0,
+    "revision_rate": 0.0,
+    "evidence_support_rate": 0.8460515873015872
+  },
+  "rows_path": "experiments\\benchmark_v2\\confirmation_evaluation\\test_generation_rows.jsonl"
+}

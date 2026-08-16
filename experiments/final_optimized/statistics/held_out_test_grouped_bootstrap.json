@@ -1,0 +1,191 @@
+{
+  "split_manifest": "C:\\Users\\yz542_dntjhas\\Documents\\New project\\wqf7023-medical-rag\\data\\splits\\openi_qa_grouped_case_seed7023.json",
+  "iterations": 10000,
+  "seed": 7023,
+  "summary": [
+    {
+      "system": "case_bm25_draft",
+      "mean_token_f1": 0.17674258144615557,
+      "ci_low_95": 0.1436761634544043,
+      "ci_high_95": 0.21195839953659806,
+      "case_count": 36,
+      "question_count": 108
+    },
+    {
+      "system": "case_bm25_top1_semantic_agent",
+      "mean_token_f1": 0.17158119416849427,
+      "ci_low_95": 0.135500485563969,
+      "ci_high_95": 0.21060670762928302,
+      "case_count": 36,
+      "question_count": 108
+    },
+    {
+      "system": "case_hybrid_a050_draft",
+      "mean_token_f1": 0.2022195572145303,
+      "ci_low_95": 0.17380419167630518,
+      "ci_high_95": 0.2341148797759209,
+      "case_count": 36,
+      "question_count": 108
+    },
+    {
+      "system": "case_hybrid_top1_a050_semantic_agent",
+      "mean_token_f1": 0.20391053275171064,
+      "ci_low_95": 0.17363802442687673,
+      "ci_high_95": 0.2375127405986872,
+      "case_count": 36,
+      "question_count": 108
+    },
+    {
+      "system": "final_adaptive_direct_draft",
+      "mean_token_f1": 0.19909351788973395,
+      "ci_low_95": 0.16608540041093767,
+      "ci_high_95": 0.2326065536189237,
+      "case_count": 36,
+      "question_count": 108
+    },
+    {
+      "system": "final_adaptive_direct_semantic_agent",
+      "mean_token_f1": 0.20631760641649036,
+      "ci_low_95": 0.1673550163504701,
+      "ci_high_95": 0.24604485275296178,
+      "case_count": 36,
+      "question_count": 108
+    },
+    {
+      "system": "llm_only",
+      "mean_token_f1": 0.07870876632991575,
+      "ci_low_95": 0.06881843130998802,
+      "ci_high_95": 0.08944090863428344,
+      "case_count": 36,
+      "question_count": 108
+    },
+    {
+      "system": "report_bm25_draft",
+      "mean_token_f1": 0.13772766065371847,
+      "ci_low_95": 0.11636257492125375,
+      "ci_high_95": 0.16021087067508072,
+      "case_count": 36,
+      "question_count": 108
+    },
+    {
+      "system": "report_bm25_semantic_agent",
+      "mean_token_f1": 0.15254744376535073,
+      "ci_low_95": 0.13136834407112158,
+      "ci_high_95": 0.175162206721984,
+      "case_count": 36,
+      "question_count": 108
+    }
+  ],
+  "pairwise": [
+    {
+      "system_a": "report_bm25_semantic_agent",
+      "system_b": "report_bm25_draft",
+      "mean_difference": 0.014819783111632281,
+      "ci_low": 0.00031875122690202493,
+      "ci_high": 0.02883896853049415,
+      "two_sided_bootstrap_p": 0.0472,
+      "paired_randomization_p": 0.05369463053694631,
+      "case_count": 36,
+      "holm_adjusted_randomization_p": 0.26847315268473154
+    },
+    {
+      "system_a": "case_bm25_top1_semantic_agent",
+      "system_b": "case_bm25_draft",
+      "mean_difference": -0.0051613872776613105,
+      "ci_low": -0.01565595317548794,
+      "ci_high": 0.005920807669784658,
+      "two_sided_bootstrap_p": 0.3574,
+      "paired_randomization_p": 0.37066293370662934,
+      "case_count": 36,
+      "holm_adjusted_randomization_p": 1.0
+    },
+    {
+      "system_a": "case_hybrid_top1_a050_semantic_agent",
+      "system_b": "case_hybrid_a050_draft",
+      "mean_difference": 0.001690975537180379,
+      "ci_low": -0.007227851210394995,
+      "ci_high": 0.01082304577421402,
+      "two_sided_bootstrap_p": 0.7162,
+      "paired_randomization_p": 0.7212278772122788,
+      "case_count": 36,
+      "holm_adjusted_randomization_p": 1.0
+    },
+    {
+      "system_a": "case_hybrid_a050_draft",
+      "system_b": "case_bm25_draft",
+      "mean_difference": 0.025476975768374707,
+      "ci_low": 0.015556776238252272,
+      "ci_high": 0.035914240803524296,
+      "two_sided_bootstrap_p": 0.0,
+      "paired_randomization_p": 9.999000099990002e-05,
+      "case_count": 36,
+      "holm_adjusted_randomization_p": 0.000999900009999
+    },
+    {
+      "system_a": "case_hybrid_top1_a050_semantic_agent",
+      "system_b": "case_bm25_top1_semantic_agent",
+      "mean_difference": 0.0323293385832164,
+      "ci_low": 0.017282272721967605,
+      "ci_high": 0.0485014585686062,
+      "two_sided_bootstrap_p": 0.0,
+      "paired_randomization_p": 0.0004999500049995,
+      "case_count": 36,
+      "holm_adjusted_randomization_p": 0.0034996500349965005
+    },
+    {
+      "system_a": "case_hybrid_top1_a050_semantic_agent",
+      "system_b": "llm_only",
+      "mean_difference": 0.12520176642179492,
+      "ci_low": 0.09525100324133068,
+      "ci_high": 0.15770829235534753,
+      "two_sided_bootstrap_p": 0.0,
+      "paired_randomization_p": 9.999000099990002e-05,
+      "case_count": 36,
+      "holm_adjusted_randomization_p": 0.000999900009999
+    },
+    {
+      "system_a": "final_adaptive_direct_semantic_agent",
+      "system_b": "final_adaptive_direct_draft",
+      "mean_difference": 0.007224088526756424,
+      "ci_low": -0.004898649590028397,
+      "ci_high": 0.021986803049070074,
+      "two_sided_bootstrap_p": 0.2798,
+      "paired_randomization_p": 0.3243675632436756,
+      "case_count": 36,
+      "holm_adjusted_randomization_p": 1.0
+    },
+    {
+      "system_a": "final_adaptive_direct_semantic_agent",
+      "system_b": "case_hybrid_top1_a050_semantic_agent",
+      "mean_difference": 0.002407073664779693,
+      "ci_low": -0.02843948000077626,
+      "ci_high": 0.03163355125452295,
+      "two_sided_bootstrap_p": 0.8756,
+      "paired_randomization_p": 0.8787121287871212,
+      "case_count": 36,
+      "holm_adjusted_randomization_p": 1.0
+    },
+    {
+      "system_a": "final_adaptive_direct_semantic_agent",
+      "system_b": "case_bm25_top1_semantic_agent",
+      "mean_difference": 0.03473641224799609,
+      "ci_low": 0.00715668124976945,
+      "ci_high": 0.06205587720807588,
+      "two_sided_bootstrap_p": 0.0128,
+      "paired_randomization_p": 0.014498550144985502,
+      "case_count": 36,
+      "holm_adjusted_randomization_p": 0.08699130086991301
+    },
+    {
+      "system_a": "final_adaptive_direct_semantic_agent",
+      "system_b": "llm_only",
+      "mean_difference": 0.12760884008657458,
+      "ci_low": 0.08997833441496689,
+      "ci_high": 0.16734145789948301,
+      "two_sided_bootstrap_p": 0.0,
+      "paired_randomization_p": 9.999000099990002e-05,
+      "case_count": 36,
+      "holm_adjusted_randomization_p": 0.000999900009999
+    }
+  ]
+}

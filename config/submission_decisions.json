@@ -1,0 +1,16 @@
+{
+  "human_evaluation": {
+    "status": "not_conducted",
+    "reason": "No suitable independent reviewer was available before the P2 submission deadline.",
+    "decision_date": "2026-08-16",
+    "required_by_course_documents": false,
+    "limitations_declared": true,
+    "scores_claimed": false,
+    "evaluation_packages_preserved": true
+  },
+  "radqa_v3": {
+    "status": "conditional_only",
+    "reason": "Official credentialed RadQA files are not available locally.",
+    "synthetic_fixture_is_research_evidence": false
+  }
+}
