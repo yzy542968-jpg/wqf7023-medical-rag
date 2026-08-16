@@ -24,6 +24,8 @@ models = [
   "radgraph==0.1.18",
   "torch>=2.3",
   "transformers>=4.45,<5",
+  "open_clip_torch>=2.23,<4",
+  "qwen-vl-utils>=0.0.8,<1",
 ]
 documents = ["python-docx>=1.1,<2"]
 test = ["pytest>=8,<10"]
@@ -34,6 +36,8 @@ all = [
   "radgraph==0.1.18",
   "torch>=2.3",
   "transformers>=4.45,<5",
+  "open_clip_torch>=2.23,<4",
+  "qwen-vl-utils>=0.0.8,<1",
 ]
 
 [tool.setuptools.packages.find]

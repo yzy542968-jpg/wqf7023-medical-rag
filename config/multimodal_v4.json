@@ -1,0 +1,92 @@
+{
+  "experiment": "v4_paired_image_report_rag",
+  "status": "preregistered_before_multimodal_outcomes",
+  "research_scope": "Paired chest X-ray image and report retrieval plus report-grounded question answering",
+  "source": {
+    "dataset": "Indiana University Chest X-ray / OpenI",
+    "official_image_archive_url": "https://openi.nlm.nih.gov/imgs/collections/NLMCXR_png.tgz",
+    "reports_path": "data/raw/indiana_reports.csv",
+    "projections_path": "data/raw/indiana_projections.csv",
+    "cases_path": "data/processed/openi_cases.jsonl"
+  },
+  "cohorts": {
+    "development": {
+      "benchmark_path": "data/processed/openi_case_scoped_benchmark_v2.json",
+      "case_count": 600,
+      "question_count": 1800,
+      "case_id_fingerprint_sha256": "b3bad81969605fa11979322256bc62b2142e9c80242a2ad1f2583d863b7bd971",
+      "content_fingerprint_sha256": "b21d0aec8618fdfd25fdf793e5e8628158a4d45eef99ada37d1d0ee1bbd545d3"
+    },
+    "confirmation": {
+      "benchmark_path": "data/processed/openi_case_scoped_confirmation_v2.json",
+      "case_count": 120,
+      "question_count": 360,
+      "case_id_fingerprint_sha256": "fecdc4c674f98990bfd46857caf6995e6214348dc231606b04c47d1acd777971",
+      "content_fingerprint_sha256": "a6c019847beca77e10a8a07b98e67d08da8bcc846cbd0e4017d03b3c73a364b4"
+    }
+  },
+  "input_protocol": {
+    "text_query_template": "Clinical indication: {indication}\nQuestion: {question}",
+    "report_embedding_template": "Findings: {findings}\nImpression: {impression}",
+    "image_policy": "Mean the L2-normalized embeddings of every available view for a case, then L2-normalize again",
+    "candidate_pool": "Union of the 600 development and 120 confirmation cases",
+    "missing_image_policy": "Exclude a case before encoding only when no declared image can be matched by basename; report exclusions before outcomes"
+  },
+  "systems": [
+    "report_only_bm25",
+    "image_only_biomedclip",
+    "paired_rrf_fusion",
+    "paired_agent_with_evidence_checking"
+  ],
+  "retrieval": {
+    "text_retriever": "BM25(k1=1.5,b=0.75)",
+    "image_report_encoder": "microsoft/BiomedCLIP-PubMedBERT_256-vit_base_patch16_224",
+    "image_report_encoder_revision": "main",
+    "fusion": "weighted reciprocal-rank fusion",
+    "rrf_constant": 60,
+    "text_weight_grid": [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
+    "selection_metric": "development_mrr",
+    "tie_break": "smallest absolute distance to 0.5, then smaller text weight",
+    "top_k_values": [1, 5, 10]
+  },
+  "downstream_qa": {
+    "primary_answer_builder": "deterministic routed extraction from the top-1 retrieved report",
+    "secondary_vlm": "Qwen/Qwen2-VL-2B-Instruct",
+    "vlm_decoding": {
+      "do_sample": false,
+      "max_new_tokens": 192
+    },
+    "vlm_prompt": "Answer the question using the chest X-ray image and the retrieved radiology report. Treat the report as the primary textual evidence. Do not add unsupported clinical claims. If the available evidence is insufficient, answer exactly INSUFFICIENT EVIDENCE. Return only the concise answer."
+  },
+  "primary_metrics": [
+    "hit@1",
+    "hit@5",
+    "hit@10",
+    "mrr",
+    "token_f1"
+  ],
+  "secondary_metrics": [
+    "false_answer_rate",
+    "abstention_rate",
+    "mean_latency_seconds",
+    "peak_cuda_memory_mib"
+  ],
+  "statistical_protocol": {
+    "unit": "case_id",
+    "bootstrap_resamples": 5000,
+    "confidence_level": 0.95,
+    "seed": 7023,
+    "confirmation_tuning": false
+  },
+  "hypotheses": [
+    "Paired RRF fusion improves confirmation MRR over report-only BM25 and image-only BiomedCLIP.",
+    "Using image pixels improves open-corpus case identification for generic case-scoped questions.",
+    "Evidence checking lowers unsupported answering at the cost of additional abstention."
+  ],
+  "claim_limits": [
+    "The task evaluates cross-modal matching to an existing paired report, not diagnosis of a new patient image.",
+    "IU-Xray is the same source corpus as earlier report-only experiments, so this is a modality extension rather than external validation.",
+    "Automatic report-derived answers and metrics do not constitute radiologist validation.",
+    "The confirmation cohort will be evaluated once after the selected development policy is committed."
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "experiment": "v4_paired_image_report_rag",
+  "policy_frozen_before_multimodal_outcomes": true,
+  "config_sha256": "93d2f0f59ece4319096feb20de76a0f60c5fb453ed3a64498273c3952fbfb8c6",
+  "vlm_prompt_sha256": "6ed11ba130e65910855ea5b001f569988c4161991f603d6d70ca87e4db429898",
+  "source_files": [
+    {
+      "path": "data/processed/openi_cases.jsonl",
+      "sha256": "56e367190396011d4d67f43e7e733389a8346890bf8729e82fb4326d063bbd68"
+    },
+    {
+      "path": "data/processed/openi_case_scoped_benchmark_v2.json",
+      "sha256": "df3de6c82e90a525b6d81247436d8f6d656f364da607555aad5b181c9cc62b14"
+    },
+    {
+      "path": "data/processed/openi_case_scoped_confirmation_v2.json",
+      "sha256": "389bdc375c5c77d72835aefcb6ccf3ee0e0aefc702b17a4cc206ebfb7c386502"
+    }
+  ],
+  "development_selection_only": true,
+  "confirmation_tuning": false,
+  "confirmation_run_limit": 1,
+  "protected_submission_artifacts_unchanged": true
+}
