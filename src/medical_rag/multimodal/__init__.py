@@ -11,6 +11,7 @@ from medical_rag.multimodal.evaluation import (
     build_report_embedding_text,
     build_text_query,
     cosine_ranking,
+    evaluate_confirmation_gate,
     evaluate_rankings_and_answers,
 )
 from medical_rag.multimodal.openi_images import official_filename_candidates, resolve_official_image
@@ -24,6 +25,7 @@ __all__ = [
     "build_report_embedding_text",
     "build_text_query",
     "cosine_ranking",
+    "evaluate_confirmation_gate",
     "evaluate_rankings_and_answers",
     "official_filename_candidates",
     "resolve_official_image",

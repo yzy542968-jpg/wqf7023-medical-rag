@@ -4,6 +4,8 @@ import hashlib
 import json
 from pathlib import Path
 
+from medical_rag.multimodal.evaluation import evaluate_confirmation_gate
+
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -33,3 +35,27 @@ def test_v41_confirmation_gate_rejects_text_only_selection() -> None:
     assert gate["selected_text_weight_must_be_less_than"] == 1.0
     assert gate["fusion_mrr_must_exceed_report_only_mrr"] is True
     assert gate["on_failure"].startswith("Do not evaluate confirmation")
+
+    metrics = {
+        "image_only_biovil_t": {"mrr": 0.05},
+        "report_only_bm25": {"mrr": 0.55},
+        "paired_biovil_t_rrf": {"mrr": 0.55},
+    }
+    result = evaluate_confirmation_gate(config, metrics, selected_text_weight=1.0)
+    assert result["passed"] is False
+    assert result["checks"] == {
+        "image_mrr_exceeds_v4": True,
+        "fusion_mrr_exceeds_report_only": False,
+        "selected_text_weight_below_limit": False,
+    }
+
+
+def test_v41_confirmation_gate_accepts_strict_improvement() -> None:
+    config = json.loads((ROOT / "config" / "multimodal_v41.json").read_text(encoding="utf-8"))
+    metrics = {
+        "image_only_biovil_t": {"mrr": 0.05},
+        "report_only_bm25": {"mrr": 0.55},
+        "paired_biovil_t_rrf": {"mrr": 0.56},
+    }
+    result = evaluate_confirmation_gate(config, metrics, selected_text_weight=0.9)
+    assert result["passed"] is True

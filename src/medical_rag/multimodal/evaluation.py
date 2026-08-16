@@ -87,3 +87,22 @@ def evaluate_rankings_and_answers(
         )
     retrieval["token_f1"] = float(np.mean([row["token_f1"] for row in rows])) if rows else 0.0
     return retrieval, rows
+
+
+def evaluate_confirmation_gate(
+    config: Mapping[str, Any],
+    metrics: Mapping[str, Mapping[str, float]],
+    selected_text_weight: float,
+) -> dict[str, Any]:
+    gate = config["confirmation_gate"]
+    image_mrr = metrics["image_only_biovil_t"]["mrr"]
+    fusion_mrr = metrics["paired_biovil_t_rrf"]["mrr"]
+    report_mrr = metrics["report_only_bm25"]["mrr"]
+    checks = {
+        "image_mrr_exceeds_v4": image_mrr
+        > float(gate["biovil_t_image_mrr_must_exceed_v4_biomedclip_mrr"]),
+        "fusion_mrr_exceeds_report_only": fusion_mrr > report_mrr,
+        "selected_text_weight_below_limit": selected_text_weight
+        < float(gate["selected_text_weight_must_be_less_than"]),
+    }
+    return {"passed": all(checks.values()), "checks": checks}

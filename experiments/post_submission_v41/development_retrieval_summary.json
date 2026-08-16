@@ -1,0 +1,110 @@
+{
+  "experiment": "v4_1_biovil_t_paired_retrieval",
+  "split": "development",
+  "preregistration_commit": "a8cd6d1",
+  "selection_commit": null,
+  "config_sha256": "f9b022a3aa5b92fabcf76a2764bef0f83480b07014881a09bb49dab65c9deac5",
+  "candidate_case_count": 720,
+  "split_case_count": 600,
+  "question_count": 1800,
+  "excluded_cases": [],
+  "development_selection": {
+    "selected_text_weight": 1.0,
+    "selected_mrr": 0.5583068644882582,
+    "sweep": [
+      {
+        "text_weight": 0.0,
+        "mrr": 0.05610141926518944
+      },
+      {
+        "text_weight": 0.1,
+        "mrr": 0.09178648188312305
+      },
+      {
+        "text_weight": 0.2,
+        "mrr": 0.1302904215975773
+      },
+      {
+        "text_weight": 0.3,
+        "mrr": 0.17173011352812795
+      },
+      {
+        "text_weight": 0.4,
+        "mrr": 0.22305835454965364
+      },
+      {
+        "text_weight": 0.5,
+        "mrr": 0.295810259268309
+      },
+      {
+        "text_weight": 0.6,
+        "mrr": 0.3694099416091163
+      },
+      {
+        "text_weight": 0.7,
+        "mrr": 0.4376460640997584
+      },
+      {
+        "text_weight": 0.8,
+        "mrr": 0.498902400887055
+      },
+      {
+        "text_weight": 0.9,
+        "mrr": 0.5495736164269905
+      },
+      {
+        "text_weight": 1.0,
+        "mrr": 0.5583068644882582
+      }
+    ]
+  },
+  "selected_text_weight": 1.0,
+  "metrics": {
+    "report_only_bm25": {
+      "hit@1": 0.48388888888888887,
+      "recall@1": 0.48388888888888887,
+      "hit@5": 0.6333333333333333,
+      "recall@5": 0.6333333333333333,
+      "hit@10": 0.6877777777777778,
+      "recall@10": 0.6877777777777778,
+      "mrr": 0.5583068644882582,
+      "token_f1": 0.5797767397790734
+    },
+    "image_only_biovil_t": {
+      "hit@1": 0.021666666666666667,
+      "recall@1": 0.021666666666666667,
+      "hit@5": 0.07166666666666667,
+      "recall@5": 0.07166666666666667,
+      "hit@10": 0.12166666666666667,
+      "recall@10": 0.12166666666666667,
+      "mrr": 0.05610141926518944,
+      "token_f1": 0.2883401299184205
+    },
+    "paired_biovil_t_rrf": {
+      "hit@1": 0.48388888888888887,
+      "recall@1": 0.48388888888888887,
+      "hit@5": 0.6333333333333333,
+      "recall@5": 0.6333333333333333,
+      "hit@10": 0.6877777777777778,
+      "recall@10": 0.6877777777777778,
+      "mrr": 0.5583068644882582,
+      "token_f1": 0.5797767397790734
+    }
+  },
+  "confirmation_gate": {
+    "passed": false,
+    "checks": {
+      "image_mrr_exceeds_v4": true,
+      "fusion_mrr_exceeds_report_only": false,
+      "selected_text_weight_below_limit": false
+    }
+  },
+  "runtime": {
+    "cache_hit": false,
+    "encoding_seconds": 31.15387810021639,
+    "case_count": 720,
+    "view_count": 1399,
+    "embedding_dimension": 128,
+    "peak_cuda_memory_mib": 2543.68896484375
+  }
+}
