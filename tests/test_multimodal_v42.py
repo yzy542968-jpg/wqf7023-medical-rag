@@ -4,6 +4,10 @@ import hashlib
 import json
 from pathlib import Path
 
+import pytest
+
+from medical_rag.multimodal.fusion import minmax_normalize, shortlist_score_fusion
+
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -33,3 +37,25 @@ def test_v42_source_hashes_are_current() -> None:
     )
     for source in manifest["source_files"]:
         assert source["sha256"] == sha256(ROOT / source["path"])
+
+
+def test_minmax_normalize_uses_registered_zero_range_policy() -> None:
+    assert minmax_normalize([2.0, 4.0, 6.0]).tolist() == pytest.approx([0.0, 0.5, 1.0])
+    assert minmax_normalize([3.0, 3.0]).tolist() == [0.0, 0.0]
+
+
+def test_shortlist_fusion_reranks_only_fixed_candidate_prefix() -> None:
+    ranking = ["A", "B", "C", "D"]
+    fused = shortlist_score_fusion(
+        ranking,
+        text_scores=[4.0, 3.0, 2.0, 1.0],
+        image_scores={"A": 0.0, "B": 0.9, "C": 1.0, "D": 2.0},
+        shortlist_size=3,
+        text_weight=0.5,
+    )
+    assert fused == ["B", "A", "C", "D"]
+
+
+def test_shortlist_fusion_rejects_candidate_mismatch() -> None:
+    with pytest.raises(ValueError, match="same case IDs"):
+        shortlist_score_fusion(["A", "B"], [2.0, 1.0], {"A": 0.1}, 1, 0.5)

@@ -96,3 +96,39 @@ def select_text_weight(
         key=lambda row: (-float(row["mrr"]), abs(float(row["text_weight"]) - 0.5), float(row["text_weight"])),
     )[0]
     return {"selected_text_weight": selected["text_weight"], "selected_mrr": selected["mrr"], "sweep": sweep}
+
+
+def minmax_normalize(scores: Sequence[float], epsilon: float = 1e-12) -> np.ndarray:
+    values = np.asarray(scores, dtype=np.float64)
+    if values.ndim != 1:
+        raise ValueError("Scores must be one-dimensional.")
+    if values.size == 0:
+        return values
+    score_range = float(values.max() - values.min())
+    if score_range <= epsilon:
+        return np.zeros_like(values)
+    return (values - values.min()) / score_range
+
+
+def shortlist_score_fusion(
+    text_ranking: Sequence[str],
+    text_scores: Sequence[float],
+    image_scores: Mapping[str, float],
+    shortlist_size: int,
+    text_weight: float,
+) -> list[str]:
+    if len(text_ranking) != len(text_scores):
+        raise ValueError("Text ranking and scores must have equal length.")
+    if set(text_ranking) != set(image_scores):
+        raise ValueError("Text and image scores must cover the same case IDs.")
+    if not 0.0 <= text_weight <= 1.0:
+        raise ValueError("text_weight must be between 0 and 1.")
+    if not 1 <= shortlist_size <= len(text_ranking):
+        raise ValueError("shortlist_size must be within the candidate pool.")
+
+    shortlist = list(text_ranking[:shortlist_size])
+    normalized_text = minmax_normalize(text_scores[:shortlist_size])
+    normalized_image = minmax_normalize([image_scores[case_id] for case_id in shortlist])
+    fused = text_weight * normalized_text + (1.0 - text_weight) * normalized_image
+    reranked = rank_scores(shortlist, fused.tolist())
+    return reranked + list(text_ranking[shortlist_size:])

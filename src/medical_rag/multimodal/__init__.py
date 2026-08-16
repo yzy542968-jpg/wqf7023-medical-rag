@@ -5,6 +5,7 @@ from medical_rag.multimodal.fusion import (
     rank_scores,
     reciprocal_rank_fusion,
     select_text_weight,
+    shortlist_score_fusion,
 )
 from medical_rag.multimodal.evaluation import (
     aggregate_case_images,
@@ -21,6 +22,7 @@ __all__ = [
     "rank_scores",
     "reciprocal_rank_fusion",
     "select_text_weight",
+    "shortlist_score_fusion",
     "aggregate_case_images",
     "build_report_embedding_text",
     "build_text_query",
