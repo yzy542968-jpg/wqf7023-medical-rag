@@ -1,0 +1,64 @@
+{
+  "experiment": "v4_2_biovil_t_shortlist_reranking",
+  "split": "confirmation",
+  "confirmation_result_commit": "9bb6bf7",
+  "unit": "case_id",
+  "case_count": 120,
+  "question_count": 360,
+  "resamples": 5000,
+  "seed": 7023,
+  "difference_direction": "paired_biovil_t_shortlist_reranker minus report_only_bm25",
+  "primary_metric": "mrr",
+  "comparisons": {
+    "mrr": {
+      "mean_difference": 0.04038296833711298,
+      "ci_low": 0.013966659362389125,
+      "ci_high": 0.0680670236891152,
+      "two_sided_bootstrap_p": 0.0044,
+      "paired_randomization_p": 0.005398920215956809,
+      "case_count": 120,
+      "holm_adjusted_p": 0.010797840431913617,
+      "bootstrap_probability_positive": 0.9978
+    },
+    "hit@1": {
+      "mean_difference": 0.025,
+      "ci_low": -0.013888888888888892,
+      "ci_high": 0.0638888888888889,
+      "two_sided_bootstrap_p": 0.2392,
+      "paired_randomization_p": 0.28774245150969807,
+      "case_count": 120,
+      "holm_adjusted_p": 0.28774245150969807,
+      "bootstrap_probability_positive": 0.8804
+    },
+    "hit@5": {
+      "mean_difference": 0.06666666666666667,
+      "ci_low": 0.030555555555555558,
+      "ci_high": 0.10555555555555556,
+      "two_sided_bootstrap_p": 0.0,
+      "paired_randomization_p": 0.0003999200159968006,
+      "case_count": 120,
+      "holm_adjusted_p": 0.001999600079984003,
+      "bootstrap_probability_positive": 1.0
+    },
+    "hit@10": {
+      "mean_difference": 0.07222222222222222,
+      "ci_low": 0.027777777777777783,
+      "ci_high": 0.11944444444444445,
+      "two_sided_bootstrap_p": 0.0012,
+      "paired_randomization_p": 0.001999600079984003,
+      "case_count": 120,
+      "holm_adjusted_p": 0.00599880023995201,
+      "bootstrap_probability_positive": 0.9994
+    },
+    "token_f1": {
+      "mean_difference": 0.05130154356143614,
+      "ci_low": 0.021382641826120347,
+      "ci_high": 0.08351110918379634,
+      "two_sided_bootstrap_p": 0.0008,
+      "paired_randomization_p": 0.0013997200559888023,
+      "case_count": 120,
+      "holm_adjusted_p": 0.005598880223955209,
+      "bootstrap_probability_positive": 0.9996
+    }
+  }
+}

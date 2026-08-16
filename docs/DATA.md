@@ -72,6 +72,27 @@ Current subset:
 
 The image subset is intentionally small so P1 can show real paired image-report cases without requiring the full image download.
 
+## Official Full Image Archive
+
+The multimodal V4 experiments use the official NLM archive rather than the earlier mirror subset:
+
+```text
+https://openi.nlm.nih.gov/imgs/collections/NLMCXR_png.tgz
+data/raw/openi_official_images/
+data/processed/openi_multimodal_source_manifest.json
+```
+
+Verified source facts:
+
+- Archive bytes: `1,360,814,128`
+- Archive SHA-256: `baf3abfe19ba5d58efe69002aed1e71aa2e6d5efb3238db9adcac210ad44bdf2`
+- PNG files in archive: 7,470
+- Declared normalized image references: 7,466
+- Matched references: 7,466
+- Missing references: 0
+
+OpenI metadata names such as `1000_IM-0003-1001.dcm.png` differ from official archive names such as `CXR1000_IM-0003-1001.png`. The versioned adapter in `src/medical_rag/multimodal/openi_images.py` performs this mapping. Raw image pixels and the archive remain local and are excluded from Git.
+
 ## Source Notes
 
 The original dataset is the OpenI / Indiana University Chest X-ray collection. The current project copy uses a Hugging Face mirror for convenient metadata and PNG image access:

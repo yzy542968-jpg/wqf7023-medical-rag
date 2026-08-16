@@ -240,6 +240,94 @@ def main() -> None:
     if not replication_summary.get("no_replication_tuning"):
         failures.append("replication no-tuning declaration is missing")
 
+    multimodal_config_path = ROOT / "config" / "multimodal_v42.json"
+    multimodal_config = _read(multimodal_config_path)
+    multimodal_manifest = _read(
+        ROOT / "experiments" / "post_submission_v42" / "preregistration_manifest.json"
+    )
+    multimodal_development = _read(
+        ROOT / "experiments" / "post_submission_v42" / "development_retrieval_summary.json"
+    )
+    multimodal_confirmation = _read(
+        ROOT / "experiments" / "post_submission_v42" / "confirmation_retrieval_summary.json"
+    )
+    multimodal_statistics = _read(
+        ROOT / "experiments" / "post_submission_v42" / "confirmation_statistics.json"
+    )
+    multimodal_runtime = _read(
+        ROOT / "experiments" / "post_submission_v42" / "runtime_profile.json"
+    )
+    multimodal_source = _read(
+        ROOT / "data" / "processed" / "openi_multimodal_source_manifest.json"
+    )
+    v42_prereg_commit = "5846649"
+    v42_development_commit = "a0358c4"
+    v42_confirmation_commit = "9bb6bf7"
+    committed_v42_manifest = _read_git_json(
+        v42_prereg_commit,
+        "experiments/post_submission_v42/preregistration_manifest.json",
+    )
+    committed_v42_development = _read_git_json(
+        v42_development_commit,
+        "experiments/post_submission_v42/development_retrieval_summary.json",
+    )
+    committed_v42_confirmation = _read_git_json(
+        v42_confirmation_commit,
+        "experiments/post_submission_v42/confirmation_retrieval_summary.json",
+    )
+    if committed_v42_manifest != multimodal_manifest:
+        failures.append("v4.2 manifest does not match preregistration commit")
+    if committed_v42_development != multimodal_development:
+        failures.append("v4.2 development policy does not match locked commit")
+    if committed_v42_confirmation != multimodal_confirmation:
+        failures.append("v4.2 confirmation result does not match one-shot commit")
+    if multimodal_manifest.get("config_sha256") != _sha256(multimodal_config_path):
+        failures.append("v4.2 config hash differs from preregistration manifest")
+    if multimodal_manifest.get("confirmation_tuning") is not False:
+        failures.append("v4.2 no-confirmation-tuning declaration is missing")
+    if multimodal_manifest.get("confirmation_run_limit") != 1:
+        failures.append("v4.2 confirmation run limit is not one")
+    if not multimodal_development.get("development_gate", {}).get("passed"):
+        failures.append("v4.2 locked development gate did not pass")
+    if multimodal_confirmation.get("development_commit") != v42_development_commit:
+        failures.append("v4.2 confirmation does not reference locked development commit")
+    if multimodal_confirmation.get("split_case_count") != 120:
+        failures.append("v4.2 confirmation case count is not 120")
+    if multimodal_source.get("pairing", {}).get("matched_image_count") != 7466:
+        failures.append("v4.2 official image manifest is incomplete")
+    if multimodal_source.get("pairing", {}).get("missing_image_count") != 0:
+        failures.append("v4.2 official image manifest has missing references")
+    v42_report_mrr = multimodal_confirmation.get("metrics", {}).get(
+        "report_only_bm25", {}
+    ).get("mrr")
+    v42_paired_mrr = multimodal_confirmation.get("metrics", {}).get(
+        "paired_biovil_t_shortlist_reranker", {}
+    ).get("mrr")
+    v42_mrr_stats = multimodal_statistics.get("comparisons", {}).get("mrr", {})
+    if not isinstance(v42_report_mrr, (int, float)) or not isinstance(
+        v42_paired_mrr, (int, float)
+    ):
+        failures.append("v4.2 confirmation MRR values are missing")
+    elif abs(
+        (v42_paired_mrr - v42_report_mrr)
+        - float(v42_mrr_stats.get("mean_difference", float("nan")))
+    ) > 1e-12:
+        failures.append("v4.2 MRR difference does not match paired statistics")
+    if v42_mrr_stats.get("ci_low", 0.0) <= 0.0:
+        failures.append("v4.2 primary MRR interval does not exclude zero")
+    if multimodal_statistics.get("confirmation_result_commit") != v42_confirmation_commit:
+        failures.append("v4.2 statistics do not reference locked confirmation result")
+    if multimodal_statistics.get("resamples") != 5000:
+        failures.append("v4.2 paired bootstrap does not use 5000 resamples")
+    if multimodal_runtime.get("confirmation_result_commit") != v42_confirmation_commit:
+        failures.append("v4.2 runtime profile does not reference locked confirmation result")
+    if multimodal_runtime.get("latency", {}).get(
+        "warm_paired_request_estimated_mean_ms", 0.0
+    ) <= 0.0:
+        failures.append("v4.2 warm request latency is missing")
+    if multimodal_runtime.get("peak_cuda_memory_mib", 0.0) <= 0.0:
+        failures.append("v4.2 CUDA memory profile is missing")
+
     output = {
         "audit": "post_submission_release",
         "passed": not failures,
@@ -311,6 +399,35 @@ def main() -> None:
                 "peak_allocated_mib": cuda_profile.get("peak_allocated_mib"),
                 "peak_reserved_mib": cuda_profile.get("peak_reserved_mib"),
             },
+        },
+        "multimodal_v42": {
+            "preregistration_commit": v42_prereg_commit,
+            "development_commit": v42_development_commit,
+            "confirmation_commit": v42_confirmation_commit,
+            "manifest_matches_preregistration_commit": committed_v42_manifest
+            == multimodal_manifest,
+            "development_matches_locked_commit": committed_v42_development
+            == multimodal_development,
+            "confirmation_matches_one_shot_commit": committed_v42_confirmation
+            == multimodal_confirmation,
+            "matched_image_count": multimodal_source.get("pairing", {}).get(
+                "matched_image_count"
+            ),
+            "confirmation_case_count": multimodal_confirmation.get(
+                "split_case_count"
+            ),
+            "report_only_mrr": v42_report_mrr,
+            "paired_mrr": v42_paired_mrr,
+            "mrr_difference_ci95": [
+                v42_mrr_stats.get("ci_low"),
+                v42_mrr_stats.get("ci_high"),
+            ],
+            "warm_request_mean_ms": multimodal_runtime.get("latency", {}).get(
+                "warm_paired_request_estimated_mean_ms"
+            ),
+            "peak_cuda_memory_mib": multimodal_runtime.get(
+                "peak_cuda_memory_mib"
+            ),
         },
         "human_evaluation_disposition": "future_work_not_conducted",
         "failures": failures,

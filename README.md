@@ -1,8 +1,8 @@
 # WQF7023 Medical RAG Project
 
-**Research title:** Case-Scoped Evidence-Checking RAG for Radiology Report-Grounded Question Answering
+**Research title:** Retrieval-Augmented Medical Question Answering over Paired Radiology Images and Reports
 
-This repository contains the reproducible implementation and frozen evidence for Zhang Yue's WQF7023 Artificial Intelligence Research Project. The system is a text-only research prototype built on de-identified OpenI / IU X-Ray radiology reports. It is not a diagnostic model, a clinically validated tool, or an authenticated clinical deployment.
+This repository contains the reproducible implementation and frozen evidence for Zhang Yue's WQF7023 Artificial Intelligence Research Project. It includes report-only baselines, an evidence-checking Agent, and a paired image-report retrieval extension that consumes real OpenI / IU X-Ray chest X-ray pixels with BioViL-T. It is not a diagnostic model, a clinically validated tool, or an authenticated clinical deployment.
 
 **Repository:** https://github.com/yzy542968-jpg/wqf7023-medical-rag  
 **Submission release:** `p2-submission`
@@ -14,6 +14,7 @@ The final study deliberately separates two different tasks instead of treating t
 1. **V1 open-corpus stress test:** measures patient-identification ambiguity, cross-case evidence contamination, retrieval headroom, abstention, and verifier limitations on 120 real OpenI cases and 360 report-derived questions.
 2. **V2 controlled case-scoped workflow:** evaluates deterministic section routing, patient isolation, evidence coverage, answer generation, and advisory verification on 720 previously unused OpenI cases, including a once-only 120-case confirmation cohort.
 3. **V3 RadQA extension:** implements a natural-question, answerable/unanswerable benchmark and evidence-sufficiency Agent. Official results remain conditional because credentialed PhysioNet files are not present. Synthetic fixtures test software only and are never reported as research results.
+4. **V4.2 paired image-report retrieval:** uses BM25 to retrieve 100 report candidates and BioViL-T image-report similarity to rerank them. The fixed policy is evaluated once on a disjoint 120-case confirmation cohort.
 
 The demonstrated Agent follows explicit `scope`, `retrieve`, `generate`, `audit`, and `review/abstain` states. Routing rules are deterministic, and the verifier is a risk signal rather than a clinical correctness label.
 
@@ -38,6 +39,18 @@ The demonstrated Agent follows explicit `scope`, `retrieve`, `generate`, `audit`
 - Automatic verifier rewriting reduced calibration Token-F1; the frozen action is therefore `audit_only`.
 
 All headline values are generated from locked artifacts in `experiments/final_submission/final_results_registry.json`.
+
+### V4.2 Paired Image-Report Extension
+
+- Official NLM image archive: 7,470 PNG files; all 7,466 normalized image references matched.
+- Fixed candidate pool: 720 cases; development/confirmation: 600 / 120 cases.
+- Confirmation report-only BM25 MRR: `0.556`; paired shortlist-reranker MRR: `0.596`.
+- Paired MRR difference: `+0.040`, case-bootstrap 95% CI `[+0.014, +0.068]`.
+- Confirmation Hit@10: `0.664 → 0.736`; Token-F1: `0.594 → 0.645`.
+- Hit@1 improved numerically from `0.497` to `0.522`, but its 95% interval crosses zero.
+- Warm paired request estimate on the local RTX 5070 Laptop GPU: `16.9 ms`; loaded model memory: approximately `526 MiB`.
+
+V4.2 demonstrates that pixels can improve paired evidence retrieval when used for constrained reranking. Image-only retrieval remains weak, and the experiment does not establish diagnostic performance on new patients.
 
 ## Submission Status
 
@@ -75,6 +88,7 @@ From PowerShell in the repository root:
 ```powershell
 python -m venv .venv
 & ".\.venv\Scripts\python.exe" -m pip install --upgrade pip
+& ".\.venv\Scripts\python.exe" -m pip install torch torchvision --index-url https://download.pytorch.org/whl/cu128
 & ".\.venv\Scripts\python.exe" -m pip install -r requirements.txt
 & ".\.venv\Scripts\python.exe" -m pytest -q
 & ".\.venv\Scripts\python.exe" -m compileall -q app.py human_evaluation_app.py scripts src
@@ -103,7 +117,7 @@ Launch the system-blinded rating interface separately:
 & ".\.venv\Scripts\python.exe" -m streamlit run human_evaluation_app.py --server.port 8502
 ```
 
-The main Dashboard exposes frozen result tables and auditable state traces. Images are optional case previews only; the model consumes report text. The rating application does not load the system-identity keys.
+The main Dashboard exposes report workflows, frozen result tables, and a paired image demo. In Full Mode, the paired tab accepts a chest X-ray upload, computes a BioViL-T image embedding, reranks the locked BM25 top-100 reports, returns report-grounded evidence, and runs a sentence-level support check. The rating application does not load the system-identity keys.
 
 For an editable install, use `python -m pip install -e ".[all]"`. Exact direct versions from the audited machine are recorded in `requirements-lock.txt`. GitHub Actions runs compilation, all unit tests, and the fresh-clone Dashboard smoke test without downloading model weights.
 

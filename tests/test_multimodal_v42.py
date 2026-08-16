@@ -8,6 +8,7 @@ import pytest
 
 from medical_rag.multimodal.fusion import minmax_normalize, shortlist_score_fusion
 from medical_rag.multimodal.reproducibility import json_content_equal
+from scripts.analyze_multimodal_v42_statistics import question_metric_values
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -68,3 +69,20 @@ def test_git_json_verification_ignores_windows_line_endings_only() -> None:
     changed = b'{\r\n  "passed": false,\r\n  "score": 0.6\r\n}\r\n'
     assert json_content_equal(committed, working) is True
     assert json_content_equal(committed, changed) is False
+
+
+def test_v42_question_metrics_use_full_rank_and_selected_report() -> None:
+    question = {
+        "case_id": "B",
+        "answer_source": "impression",
+        "reference_answer": "Target answer.",
+    }
+    cases = {
+        "A": {"impression": "Wrong answer."},
+        "B": {"impression": "Target answer."},
+    }
+    values = question_metric_values(question, ["A", "B"], cases)
+    assert values["mrr"] == 0.5
+    assert values["hit@1"] == 0.0
+    assert values["hit@5"] == 1.0
+    assert values["token_f1"] < 1.0

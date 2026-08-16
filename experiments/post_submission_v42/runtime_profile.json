@@ -1,0 +1,81 @@
+{
+  "experiment": "v4_2_biovil_t_shortlist_reranking",
+  "confirmation_result_commit": "9bb6bf7",
+  "machine": {
+    "cuda_device": "NVIDIA GeForce RTX 5070 Laptop GPU",
+    "torch_version": "2.11.0+cu128",
+    "cuda_runtime": "12.8"
+  },
+  "sample_counts": {
+    "image_encodes": 30,
+    "confirmation_queries": 360,
+    "candidate_reports_per_query": 720
+  },
+  "cold_model_load_seconds": 6.508323000045493,
+  "loaded_model_cuda_memory_mib": 525.5517578125,
+  "peak_cuda_memory_mib": 571.146484375,
+  "latency": {
+    "single_image_encoding": {
+      "mean_ms": 14.9107366722698,
+      "median_ms": 13.161899987608194,
+      "p95_ms": 22.23419980145991
+    },
+    "report_only_bm25": {
+      "mean_ms": 1.733449729444045,
+      "median_ms": 1.653200015425682,
+      "p95_ms": 2.8252999763935804
+    },
+    "cached_image_similarity_plus_shortlist_rerank": {
+      "mean_ms": 0.28482861170131296,
+      "median_ms": 0.23505010176450014,
+      "p95_ms": 0.4835999570786953
+    },
+    "warm_paired_request_estimated_mean_ms": 16.92901501341516
+  },
+  "logical_calls_per_request": {
+    "report_only_bm25": {
+      "image_encoder": 0,
+      "text_retrieval": 1,
+      "image_report_similarity": 0,
+      "shortlist_rerank": 0
+    },
+    "paired_biovil_t_shortlist_reranker": {
+      "image_encoder": 1,
+      "text_retrieval": 1,
+      "image_report_similarity": 1,
+      "shortlist_rerank": 1
+    }
+  },
+  "locked_confirmation_performance": {
+    "report_only_bm25": {
+      "hit@1": 0.49722222222222223,
+      "recall@1": 0.49722222222222223,
+      "hit@5": 0.6055555555555555,
+      "recall@5": 0.6055555555555555,
+      "hit@10": 0.6638888888888889,
+      "recall@10": 0.6638888888888889,
+      "mrr": 0.5557790504926996,
+      "token_f1": 0.5941175024154343
+    },
+    "image_only_biovil_t": {
+      "hit@1": 0.016666666666666666,
+      "recall@1": 0.016666666666666666,
+      "hit@5": 0.06666666666666667,
+      "recall@5": 0.06666666666666667,
+      "hit@10": 0.1,
+      "recall@10": 0.1,
+      "mrr": 0.05054756579721371,
+      "token_f1": 0.3179838675035101
+    },
+    "paired_biovil_t_shortlist_reranker": {
+      "hit@1": 0.5222222222222223,
+      "recall@1": 0.5222222222222223,
+      "hit@5": 0.6722222222222223,
+      "recall@5": 0.6722222222222223,
+      "hit@10": 0.7361111111111112,
+      "recall@10": 0.7361111111111112,
+      "mrr": 0.5961620188298125,
+      "token_f1": 0.6454190459768705
+    }
+  }
+}

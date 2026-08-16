@@ -133,3 +133,29 @@ python scripts/finalize_locked_replication.py
 ```
 
 The large generation and per-question JSONL files remain local by repository policy. Versioned cohort manifests and summaries contain fingerprints, configuration hashes, aggregate metrics, and confidence intervals.
+
+## V4 paired image-report retrieval
+
+V4 closes the modality gap between the registered title and the earlier report-only implementation. The official NLM archive supplies 7,466 matched image references across 3,851 IU-Xray cases. The experimental candidate pool is the fixed union of the 600-case development and 120-case confirmation cohorts.
+
+### Model correction and negative results
+
+V4 used generic BiomedCLIP for global image-to-report matching. Development image-only MRR was `0.0168`, and weighted RRF selected text weight `1.0`. V4.1 replaced the encoder with chest-X-ray-specific BioViL-T. Image-only MRR improved to `0.0561`, but unrestricted fusion still selected text weight `1.0`. Both negative outcomes are preserved rather than overwritten; neither spent the confirmation cohort.
+
+### V4.2 fixed shortlist reranker
+
+Development analysis selected a two-stage policy before confirmation: BM25 retrieves 100 reports, BM25 and BioViL-T cosine scores are independently min-max normalized within that shortlist, and equal weights rerank it. The policy was preregistered in commit `5846649`, reproduced on development, committed in `a0358c4`, and evaluated once on confirmation. The one-shot confirmation summary was locked in `9bb6bf7`.
+
+| Confirmation metric | Report-only BM25 | Paired reranker | Difference |
+|---|---:|---:|---:|
+| Hit@1 | 0.4972 | 0.5222 | +0.0250 |
+| Hit@5 | 0.6056 | 0.6722 | +0.0667 |
+| Hit@10 | 0.6639 | 0.7361 | +0.0722 |
+| MRR | 0.5558 | 0.5962 | +0.0404 |
+| Token-F1 | 0.5941 | 0.6454 | +0.0513 |
+
+The primary MRR case-bootstrap 95% CI is `[+0.0140, +0.0681]`. Hit@5, Hit@10, and Token-F1 intervals also exclude zero. Hit@1 has interval `[-0.0139, +0.0639]` and is not treated as a reliable gain.
+
+On the local RTX 5070 Laptop GPU, model cold load took `6.51 s`, loaded memory was approximately `526 MiB`, mean single-image encoding was `14.91 ms`, BM25 was `1.73 ms`, and cached similarity plus reranking was `0.28 ms`. The warm paired request estimate is `16.93 ms`. These timings are machine-specific.
+
+The result supports image-assisted retrieval of paired report evidence. It does not show autonomous diagnosis, external-dataset generalization, or clinical effectiveness. Independent human evaluation and authorized RadQA validation remain future work.

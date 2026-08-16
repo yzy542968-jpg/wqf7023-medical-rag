@@ -25,6 +25,11 @@ from medical_rag.agentic.semantic_evidence_checker import (
 )
 from medical_rag.agentic.planner import plan_question
 from medical_rag.dashboard.demo_generation import extractive_demo_answer
+from medical_rag.dashboard.multimodal_runtime import (
+    answer_with_evidence_agent,
+    encode_uploaded_image,
+    paired_shortlist_retrieve,
+)
 from medical_rag.dashboard.runtime import resolve_dashboard_runtime
 from medical_rag.evaluation.case_scoped_benchmark import build_case_chunks, expected_section
 from medical_rag.evaluation.answer_metrics import extract_final_answer
@@ -103,6 +108,19 @@ LOCKED_REPLICATION_SUMMARY_PATH = (
 )
 V22_SUMMARY_PATH = ROOT / "experiments" / "post_submission_v22" / "summary.json"
 V23_SUMMARY_PATH = ROOT / "experiments" / "post_submission_v23" / "summary.json"
+MULTIMODAL_V42_CONFIG_PATH = ROOT / "config" / "multimodal_v42.json"
+MULTIMODAL_V42_CACHE_PATH = (
+    ROOT / "data" / "processed" / "multimodal_v41_biovil_t_embeddings.npz"
+)
+MULTIMODAL_V42_SUMMARY_PATH = (
+    ROOT / "experiments" / "post_submission_v42" / "confirmation_retrieval_summary.json"
+)
+MULTIMODAL_V42_STATISTICS_PATH = (
+    ROOT / "experiments" / "post_submission_v42" / "confirmation_statistics.json"
+)
+MULTIMODAL_V42_RUNTIME_PATH = (
+    ROOT / "experiments" / "post_submission_v42" / "runtime_profile.json"
+)
 MODEL_OPTIONS = {
     "Qwen2.5-1.5B (full experiment)": "Qwen/Qwen2.5-1.5B-Instruct",
     "Qwen2.5-0.5B (faster demo)": "Qwen/Qwen2.5-0.5B-Instruct",
@@ -247,6 +265,43 @@ def load_generator(model_name: str) -> tuple[Any, Any, str]:
     ).to(device)
     model.eval()
     return tokenizer, model, device
+
+
+@st.cache_resource(show_spinner=False)
+def load_multimodal_resources() -> tuple[
+    dict[str, Any],
+    dict[str, dict[str, Any]],
+    list[str],
+    BM25Retriever,
+    np.ndarray,
+    Any,
+]:
+    if RUNTIME.is_demo:
+        raise RuntimeError("The paired image workflow requires the local full OpenI artifacts.")
+    from medical_rag.multimodal.biovilt import BioVilTEncoder
+
+    config = json.loads(MULTIMODAL_V42_CONFIG_PATH.read_text(encoding="utf-8"))
+    all_cases = {str(case["case_id"]): case for case in load_cases_jsonl(CASES_PATH)}
+    candidate_ids = set()
+    for split in ("development", "confirmation"):
+        benchmark = json.loads(
+            (ROOT / config["cohorts"][split]["benchmark_path"]).read_text(encoding="utf-8")
+        )
+        candidate_ids.update(str(row["case_id"]) for row in benchmark["questions"])
+    ordered_ids = sorted(candidate_ids)
+    cases = {case_id: all_cases[case_id] for case_id in ordered_ids}
+    cache = np.load(MULTIMODAL_V42_CACHE_PATH, allow_pickle=False)
+    if cache["case_ids"].tolist() != ordered_ids:
+        raise RuntimeError("Multimodal embedding cache does not match the locked candidate pool.")
+    report_embeddings = np.asarray(cache["report_embeddings"], dtype=np.float32)
+    bm25 = BM25Retriever().fit([cases[case_id] for case_id in ordered_ids])
+    encoder = BioVilTEncoder(
+        model_name=config["encoder"]["joint_encoder"],
+        text_revision=config["encoder"]["text_model_revision"],
+        device="cuda",
+        text_max_length=int(config["encoder"]["text_max_length"]),
+    )
+    return config, cases, ordered_ids, bm25, report_embeddings, encoder
 
 
 @st.cache_data(show_spinner=False)
@@ -1044,6 +1099,37 @@ def render_results() -> None:
         "retrieval, generation, and verifier settings were locked before these 900 questions."
     )
 
+    st.subheader("V4.2 paired image-report confirmation")
+    multimodal = json.loads(MULTIMODAL_V42_SUMMARY_PATH.read_text(encoding="utf-8"))
+    multimodal_stats = json.loads(MULTIMODAL_V42_STATISTICS_PATH.read_text(encoding="utf-8"))
+    multimodal_runtime = json.loads(MULTIMODAL_V42_RUNTIME_PATH.read_text(encoding="utf-8"))
+    report_metrics = multimodal["metrics"]["report_only_bm25"]
+    paired_metrics = multimodal["metrics"]["paired_biovil_t_shortlist_reranker"]
+    mrr_stats = multimodal_stats["comparisons"]["mrr"]
+    multimodal_columns = st.columns(5)
+    multimodal_columns[0].metric("Confirmation cases", multimodal["split_case_count"])
+    multimodal_columns[1].metric("Report MRR", f"{report_metrics['mrr']:.3f}")
+    multimodal_columns[2].metric(
+        "Paired MRR",
+        f"{paired_metrics['mrr']:.3f}",
+        delta=f"{mrr_stats['mean_difference']:+.3f}",
+    )
+    multimodal_columns[3].metric("Paired Hit@10", f"{paired_metrics['hit@10']:.1%}")
+    multimodal_columns[4].metric(
+        "Warm request",
+        f"{multimodal_runtime['latency']['warm_paired_request_estimated_mean_ms']:.1f} ms",
+    )
+    st.success(
+        "Primary MRR difference case-bootstrap 95% CI "
+        f"[{mrr_stats['ci_low']:+.3f}, {mrr_stats['ci_high']:+.3f}]; "
+        f"paired randomization p={mrr_stats['paired_randomization_p']:.4f}."
+    )
+    st.caption(
+        "The fixed BioViL-T reranker uses image pixels only after BM25 creates a top-100 "
+        "report shortlist. Hit@1 improved numerically but its interval crossed zero. This is "
+        "paired evidence retrieval on IU-Xray, not autonomous image diagnosis."
+    )
+
     st.subheader("Development-only prompt ablation")
     prompt_ablation = pd.read_csv(
         ROOT
@@ -1095,7 +1181,9 @@ if RUNTIME.is_demo:
         "available in the Experiment results tab."
     )
 
-live_tab, results_tab = st.tabs(["Live pipeline", "Experiment results"])
+live_tab, multimodal_tab, results_tab = st.tabs(
+    ["Report workflows", "Paired image demo", "Experiment results"]
+)
 
 with live_tab:
     with st.sidebar:
@@ -1465,6 +1553,182 @@ with live_tab:
     if "pipeline_result" in st.session_state:
         st.divider()
         render_pipeline_result(st.session_state["pipeline_result"])
+
+with multimodal_tab:
+    st.subheader("Paired chest X-ray and report retrieval")
+    st.caption(
+        "Upload a chest X-ray, retrieve a report with the locked V4.2 two-stage policy, "
+        "then answer from the selected report and audit sentence-level support."
+    )
+    if RUNTIME.is_demo:
+        st.info(
+            "This tab needs the local official OpenI images, the 720-case BioViL-T index, "
+            "and cached model weights. It remains disabled in lightweight Demo Mode."
+        )
+    else:
+        upload_col, request_col = st.columns([2, 3], gap="large")
+        with upload_col:
+            multimodal_image = st.file_uploader(
+                "Chest X-ray image",
+                type=["png", "jpg", "jpeg"],
+                key="multimodal_image",
+            )
+            if multimodal_image is not None:
+                st.image(multimodal_image.getvalue(), width=360)
+        with request_col:
+            multimodal_indication = st.text_input(
+                "Clinical indication",
+                value="Chest pain",
+                key="multimodal_indication",
+            )
+            multimodal_question = st.text_area(
+                "Question",
+                value="What is the final radiology impression for this examination?",
+                height=110,
+                key="multimodal_question",
+            )
+            multimodal_run = st.button(
+                "Run paired retrieval",
+                type="primary",
+                icon=":material/radiology:",
+                key="run_multimodal",
+            )
+
+        if multimodal_run:
+            if multimodal_image is None:
+                st.warning("Upload a chest X-ray image before running paired retrieval.")
+            elif not multimodal_question.strip():
+                st.warning("Enter a report-grounded question.")
+            else:
+                try:
+                    started = time.perf_counter()
+                    with st.status("Running paired image-report pipeline", expanded=True) as status:
+                        st.write("Loading locked BioViL-T image-report index")
+                        config, cases, candidate_ids, bm25, report_embeddings, encoder = (
+                            load_multimodal_resources()
+                        )
+                        st.write("Encoding uploaded chest X-ray pixels")
+                        image_embedding = encode_uploaded_image(multimodal_image.getvalue(), encoder)
+                        st.write("Generating BM25 top-100 candidate set")
+                        retrieved = paired_shortlist_retrieve(
+                            question=multimodal_question.strip(),
+                            indication=multimodal_indication.strip(),
+                            candidate_ids=candidate_ids,
+                            cases=cases,
+                            bm25=bm25,
+                            image_embedding=image_embedding,
+                            report_embeddings=report_embeddings,
+                            shortlist_size=int(config["reranking"]["shortlist_size"]),
+                            text_weight=float(config["reranking"]["text_weight"]),
+                            top_k=10,
+                        )
+                        st.write("Planning answer field and checking report support")
+                        selected_case = cases[retrieved[0]["case_id"]]
+                        agent = answer_with_evidence_agent(
+                            multimodal_question.strip(), selected_case
+                        )
+                        status.update(
+                            label="Paired image-report pipeline complete",
+                            state="complete",
+                            expanded=False,
+                        )
+                    st.session_state["multimodal_result"] = {
+                        "workflow": "v4_2_paired_image_report",
+                        "question": multimodal_question.strip(),
+                        "indication": multimodal_indication.strip(),
+                        "image_name": multimodal_image.name,
+                        "image_bytes": multimodal_image.getvalue(),
+                        "candidate_count": len(candidate_ids),
+                        "shortlist_size": int(config["reranking"]["shortlist_size"]),
+                        "text_weight": float(config["reranking"]["text_weight"]),
+                        "retrieved_cases": retrieved,
+                        **agent,
+                        "latency_seconds": time.perf_counter() - started,
+                    }
+                except Exception as exc:
+                    st.exception(exc)
+
+        if "multimodal_result" in st.session_state:
+            result = st.session_state["multimodal_result"]
+            st.divider()
+            metrics = st.columns(5)
+            metrics[0].metric("Candidates", result["candidate_count"])
+            metrics[1].metric("Shortlist", result["shortlist_size"])
+            metrics[2].metric("Text / image", "0.5 / 0.5")
+            metrics[3].metric("Evidence support", f"{result['support_rate']:.1%}")
+            metrics[4].metric("Latency", f"{result['latency_seconds'] * 1000:.0f} ms")
+
+            st.subheader("Grounded answer")
+            answer_class = "research-note" if result["abstained"] else "answer-band"
+            st.markdown(
+                f'<div class="{answer_class}">{result["final_answer"]}</div>',
+                unsafe_allow_html=True,
+            )
+
+            image_view, evidence_view = st.columns([2, 3], gap="large")
+            selected = result["retrieved_cases"][0]
+            with image_view:
+                st.image(result["image_bytes"], width=360)
+                st.caption(result["image_name"])
+            with evidence_view:
+                st.markdown('<div class="evidence-label">Selected paired evidence</div>', unsafe_allow_html=True)
+                st.write(f"Case {selected['case_id']}")
+                st.markdown('<div class="evidence-label">Findings</div>', unsafe_allow_html=True)
+                st.write(selected["findings"] or "Not reported")
+                st.markdown('<div class="evidence-label">Impression</div>', unsafe_allow_html=True)
+                st.write(selected["impression"] or "Not reported")
+
+            st.subheader("Multimodal retrieval trace")
+            st.dataframe(
+                pd.DataFrame(
+                    [
+                        {
+                            "Rank": row["rank"],
+                            "Case": row["case_id"],
+                            "Fused": row["fused_score"],
+                            "BM25": row["bm25_score"],
+                            "Image similarity": row["image_similarity"],
+                        }
+                        for row in result["retrieved_cases"]
+                    ]
+                ),
+                width="stretch",
+                hide_index=True,
+                column_config={
+                    "Fused": st.column_config.NumberColumn(format="%.3f"),
+                    "BM25": st.column_config.NumberColumn(format="%.3f"),
+                    "Image similarity": st.column_config.NumberColumn(format="%.3f"),
+                },
+            )
+
+            trace_rows = [
+                {"Step": 1, "Action": "Encode image", "Output": "128-d BioViL-T embedding"},
+                {"Step": 2, "Action": "Retrieve reports", "Output": "BM25 top 100"},
+                {"Step": 3, "Action": "Rerank", "Output": "0.5 text + 0.5 image"},
+                {
+                    "Step": 4,
+                    "Action": "Plan answer",
+                    "Output": result["plan"]["answer_field"],
+                },
+                {
+                    "Step": 5,
+                    "Action": "Check evidence",
+                    "Output": f"{result['support_rate']:.1%} supported",
+                },
+            ]
+            st.dataframe(pd.DataFrame(trace_rows), width="stretch", hide_index=True)
+            export = {key: value for key, value in result.items() if key != "image_bytes"}
+            st.download_button(
+                "Export paired run",
+                data=json.dumps(export, indent=2, ensure_ascii=False),
+                file_name="paired_image_report_run.json",
+                mime="application/json",
+                icon=":material/download:",
+            )
+            st.markdown(
+                '<div class="research-note">Research retrieval prototype only. The image helps locate paired report evidence; the system is not an autonomous diagnostic device.</div>',
+                unsafe_allow_html=True,
+            )
 
 with results_tab:
     render_results()
