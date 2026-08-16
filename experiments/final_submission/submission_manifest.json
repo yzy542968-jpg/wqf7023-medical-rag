@@ -1,8 +1,8 @@
 {
   "project": "WQF7023 Medical RAG",
-  "generated_utc": "2026-08-16T05:56:42.034440+00:00",
+  "generated_utc": "2026-08-16T06:08:42.119645+00:00",
   "automated_ready": true,
-  "submission_ready": false,
+  "submission_ready": true,
   "automated_gates": {
     "required_files_present": true,
     "locked_artifact_hashes_match": true,
@@ -12,7 +12,7 @@
   },
   "external_gates": {
     "human_evaluation_disposition_resolved": true,
-    "remote_repository_configured": false,
+    "remote_repository_configured": true,
     "non_draft_submission_artifacts_present": true
   },
   "missing_required_files": [],
@@ -51,14 +51,14 @@
   "deliverables": {
     "manuscript_docx": {
       "path": "deliverables/22097191_ZHANG_YUE_P2_Research_Project.docx",
-      "bytes": 59173,
-      "sha256": "de7fe7b55fb6a31f6728cbb91db5d6b81f23ea911240b711913858e4fc952f74",
+      "bytes": 59256,
+      "sha256": "9037bab258c0d2a81cc6b57f9356fa7f1112ffcc7107f263317156c355e69c36",
       "draft": false
     },
     "manuscript_pdf": {
       "path": "deliverables/22097191_ZHANG_YUE_P2_Research_Project.pdf",
-      "bytes": 303132,
-      "sha256": "311851efe4a436535bda9f4de71a5d36ff64a8be979ef6ccbc628c1460bf7452",
+      "bytes": 303880,
+      "sha256": "ac7a23ae40415237a0f64fe3e03301122baa8fad57250b5ed81bd210a2bfaba8",
       "draft": false
     },
     "defence_pptx": {
@@ -75,8 +75,8 @@
   },
   "git": {
     "branch": "main",
-    "head": null,
-    "remote_origin": null,
+    "head": "5042b2dc761f0df0221f8f62da50ca79c6667489",
+    "remote_origin": "https://github.com/yzy542968-jpg/wqf7023-medical-rag.git",
     "tracked_file_count": 230,
     "working_tree_clean": false
   },

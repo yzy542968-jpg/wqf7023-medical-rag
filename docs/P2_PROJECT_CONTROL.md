@@ -110,14 +110,13 @@ The final contribution is the experimentally supported progression from open-cor
 - Final P2 manuscript: five chapters assembled; final DOCX and 23-page PDF produced and visually verified.
 - P2 defence deck: final 15-slide PPTX completed from the P1 template; overflow and source-note audits pass, with all slides visually checked.
 - RadQA V3: parser, patient-disjoint builder, evidence-sufficiency Agent, prompt-pack generation, answer metrics, runbook, and tests complete; official credentialed files remain unavailable.
-- Git repository: initialized on `main`; release exclusions and tracked-content audit pass. Remote GitHub publication still requires user identity/authentication.
+- Git repository: published on `main` at `https://github.com/yzy542968-jpg/wqf7023-medical-rag`; release exclusions and tracked-content audit pass.
 - Submission audit: machine-readable manifest builder accepts either completed ratings or the explicit non-conducted disposition. Final readiness still requires the remote repository and a final clean release state.
 
 ## Immediate Work Order
 
-1. Configure Git identity and GitHub authentication, create the remote repository, and insert its URL into the appendix.
-2. Run the strict submission audit after the remote URL and final commit are available.
-3. Rehearse the live dashboard demonstration and retain screenshots or a recording as fallback.
-4. Complete supervisor, Turnitin, Google Form, and institutional submission steps.
+1. Run the strict submission audit and publish the immutable `p2-submission` tag.
+2. Rehearse the live dashboard demonstration and retain screenshots or a recording as fallback.
+3. Complete supervisor, Turnitin, Google Form, and institutional submission steps.
 
 The exact handoff commands and final filenames are frozen in `docs/FINAL_HANDOFF_CHECKLIST.md`.

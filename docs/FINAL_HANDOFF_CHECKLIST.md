@@ -35,17 +35,15 @@ The DOCX/PDF must contain five chapters, references, appendices, the frozen auto
 
 ## 3. GitHub Publication
 
-Configure the real author identity, make the initial commit, create a GitHub repository, and push `main`. Do not invent an email address or publish raw data.
+The public repository is `https://github.com/yzy542968-jpg/wqf7023-medical-rag`. The verified author identity is configured and `main` is published. Do not publish raw data.
 
 ```powershell
-git config user.name "Zhang Yue"
-git config user.email "YOUR_VERIFIED_GITHUB_EMAIL"
-git commit -m "Release WQF7023 medical RAG project"
-git remote add origin "YOUR_GITHUB_REPOSITORY_URL"
-git push -u origin main
+git remote -v
+git push origin main
+git push origin p2-submission
 ```
 
-Insert the working repository URL and final commit identifier into the manuscript appendix before the institutional upload.
+The manuscript appendix must contain the working repository URL and the immutable `p2-submission` release reference before institutional upload.
 
 ## 4. Final Audit
 

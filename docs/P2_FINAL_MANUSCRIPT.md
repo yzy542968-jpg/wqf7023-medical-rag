@@ -430,6 +430,9 @@ Qwen Team. (2025). Qwen2.5 technical report. *arXiv:2412.15115*.
 
 ## Appendix B: Reproduction Entry Points
 
+**Repository:** https://github.com/yzy542968-jpg/wqf7023-medical-rag  
+**Submission release:** `p2-submission`
+
 ```powershell
 & ".\.venv\Scripts\python.exe" -m pytest -q
 & ".\.venv\Scripts\python.exe" -m compileall -q app.py human_evaluation_app.py scripts src

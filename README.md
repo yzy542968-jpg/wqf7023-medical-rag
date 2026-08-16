@@ -4,6 +4,9 @@
 
 This repository contains the reproducible implementation and frozen evidence for Zhang Yue's WQF7023 Artificial Intelligence Research Project. The system is a text-only research prototype built on de-identified OpenI / IU X-Ray radiology reports. It is not a diagnostic model, a clinically validated tool, or an authenticated clinical deployment.
 
+**Repository:** https://github.com/yzy542968-jpg/wqf7023-medical-rag  
+**Submission release:** `p2-submission`
+
 ## Study Structure
 
 The final study deliberately separates two different tasks instead of treating their scores as directly comparable:
