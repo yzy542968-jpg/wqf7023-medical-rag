@@ -51,6 +51,7 @@ The dashboard remains a research demonstrator and must not be used for diagnosis
 
 ## Other future validation
 
+- Evaluate a rule-first/semantic-fallback planner cascade on a second reserved paraphrase set; do not select the cascade using the already observed first transfer test.
 - External replication on a separately licensed institution or benchmark rather than another split of OpenI.
 - Prospective evaluation of abstention and escalation under distribution shift.
 - Multimodal image-and-report retrieval once image licensing and image-level ground truth are available.

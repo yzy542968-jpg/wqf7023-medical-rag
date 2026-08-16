@@ -40,3 +40,14 @@ def test_agent_retries_ambiguous_summary_within_fixed_budget() -> None:
     assert result.final_intent == "impression"
     assert result.retrieval_calls == 2
     assert result.retrieved_chunk_count <= 6
+
+
+def test_external_semantic_plan_can_override_lexical_unknown() -> None:
+    result = _agent().run(
+        "State the reporting clinician's overall interpretation.",
+        "CXR1",
+        planned_intent="impression",
+    )
+    assert result.planned_intent == "impression"
+    assert result.final_intent == "impression"
+    assert set(result.retrieved_sections) == {"impression"}

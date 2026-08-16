@@ -91,6 +91,17 @@ V2_TOP_K_SELECTION_PATH = (
     ROOT / "experiments" / "benchmark_v2" / "calibration" / "locked_top_k.json"
 )
 V21_SUMMARY_PATH = ROOT / "experiments" / "post_submission_v21" / "summary.json"
+V21_TRANSFER_SUMMARY_PATH = (
+    ROOT
+    / "experiments"
+    / "post_submission_v21"
+    / "template_transfer"
+    / "summary.json"
+)
+LOCKED_REPLICATION_SUMMARY_PATH = (
+    ROOT / "experiments" / "locked_replication" / "summary.json"
+)
+V22_SUMMARY_PATH = ROOT / "experiments" / "post_submission_v22" / "summary.json"
 MODEL_OPTIONS = {
     "Qwen2.5-1.5B (full experiment)": "Qwen/Qwen2.5-1.5B-Instruct",
     "Qwen2.5-0.5B (faster demo)": "Qwen/Qwen2.5-0.5B-Instruct",
@@ -682,6 +693,14 @@ def render_results() -> None:
     v2_retrieval = json.loads(V2_CONFIRMATION_RETRIEVAL_PATH.read_text(encoding="utf-8"))
     v2_verifier = json.loads(V2_VERIFIER_SELECTION_PATH.read_text(encoding="utf-8"))
     v2_validity = json.loads(V2_VALIDITY_AUDIT_PATH.read_text(encoding="utf-8"))
+    v21 = json.loads(V21_SUMMARY_PATH.read_text(encoding="utf-8"))
+    v21_transfer = json.loads(
+        V21_TRANSFER_SUMMARY_PATH.read_text(encoding="utf-8")
+    )
+    replication = json.loads(
+        LOCKED_REPLICATION_SUMMARY_PATH.read_text(encoding="utf-8")
+    )
+    v22 = json.loads(V22_SUMMARY_PATH.read_text(encoding="utf-8"))
 
     st.subheader("Locked held-out test")
     metrics = st.columns(5)
@@ -852,6 +871,101 @@ def render_results() -> None:
         "V1 is an open-corpus stress test; V2 uses an explicit case-ID metadata filter. "
         "No authentication or clinical access-control layer is implemented. Their Token-F1 "
         "values are not a paired comparison, and section routing is deterministic."
+    )
+
+    st.subheader("Post-submission V2.1: closed-loop evidence Agent")
+    v21_labels = {
+        "fixed_report_bm25": "Fixed report BM25",
+        "route_only_agent": "Route-only ablation",
+        "closed_loop_agent_v2": "Closed-loop Agent",
+    }
+    v21_frame = pd.DataFrame(
+        [
+            {
+                "System": label,
+                "Macro F1": v21["systems"][system]["test"]["macro_f1"],
+                "False-answer rate": v21["systems"][system]["test"][
+                    "false_answer_rate"
+                ],
+                "Evidence hit rate": v21["systems"][system]["test"][
+                    "retrieval_hit_rate_answerable"
+                ],
+                "Mean chunks": v21["systems"][system]["test"][
+                    "mean_retrieved_chunks"
+                ],
+            }
+            for system, label in v21_labels.items()
+        ]
+    )
+    st.dataframe(
+        v21_frame,
+        width="stretch",
+        hide_index=True,
+        column_config={
+            "Macro F1": st.column_config.NumberColumn(format="%.3f"),
+            "False-answer rate": st.column_config.NumberColumn(format="%.1%%"),
+            "Evidence hit rate": st.column_config.NumberColumn(format="%.1%%"),
+            "Mean chunks": st.column_config.NumberColumn(format="%.2f"),
+        },
+    )
+    closed_test = v21["systems"]["closed_loop_agent_v2"]["test"]
+    route_test = v21["systems"]["route_only_agent"]["test"]
+    calibrated_test = v21["posthoc_probability_calibration"][
+        "closed_loop_agent_v2"
+    ]["splits"]["test"]
+    transfer_test = v21_transfer["transfer_wording_test"]
+    v21_metrics = st.columns(5)
+    v21_metrics[0].metric("Cases", str(v21["case_count"]))
+    v21_metrics[1].metric("Questions", str(v21["question_count"]))
+    v21_metrics[2].metric(
+        "Loop gain vs route-only",
+        f"{closed_test['macro_f1'] - route_test['macro_f1']:+.3f}",
+    )
+    v21_metrics[3].metric(
+        "Calibrated ECE",
+        f"{calibrated_test['answerability_calibration']['ece']:.3f}",
+    )
+    v21_metrics[4].metric(
+        "Transfer Macro F1", f"{transfer_test['macro_f1']:.3f}"
+    )
+    st.warning(
+        "Wording-transfer stress test: Macro F1 falls from "
+        f"{closed_test['macro_f1']:.3f} to {transfer_test['macro_f1']:.3f}. "
+        "The deterministic planner is auditable but lexically brittle; this is a measured "
+        "limitation, not a general clinical-language claim."
+    )
+    semantic_original = v22["original_test"]["raw"]
+    semantic_transfer = v22["transfer_test"]["raw"]
+    st.info(
+        "Exploratory V2.2 constrained Qwen planner: original-wording Macro F1 "
+        f"{semantic_original['macro_f1']:.3f}, transfer-wording Macro F1 "
+        f"{semantic_transfer['macro_f1']:.3f}. It improves paraphrase transfer but "
+        "weakens rejection of missing near-domain facts, so it is reported as a trade-off "
+        "rather than replacing the frozen rule planner."
+    )
+
+    st.subheader("Locked 300-case replication")
+    replication_metrics = st.columns(5)
+    replication_metrics[0].metric(
+        "Cases", str(replication["cohort"]["case_count"])
+    )
+    replication_metrics[1].metric(
+        "Questions", str(replication["cohort"]["question_count"])
+    )
+    replication_metrics[2].metric(
+        "Adaptive Top-1", f"{replication['retrieval']['adaptive']['hit@1']:.1%}"
+    )
+    replication_metrics[3].metric(
+        "Verified Token-F1",
+        f"{replication['semantic_evaluation']['verified_token_f1']:.3f}",
+    )
+    replication_metrics[4].metric(
+        "Evidence support",
+        f"{replication['semantic_evaluation']['evidence_support_rate']:.1%}",
+    )
+    st.caption(
+        "The replication excludes every V1, V2, V2-confirmation, and V2.1 case. All "
+        "retrieval, generation, and verifier settings were locked before these 900 questions."
     )
 
     st.subheader("Development-only prompt ablation")

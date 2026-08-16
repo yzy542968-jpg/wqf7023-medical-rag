@@ -1,0 +1,12 @@
+{
+  "experiment": "v22_constrained_semantic_planner",
+  "planner_prompt_sha256": "2aabe25d68252bcd5a10c00fb23bfdc7f0ea49506a93f36ef4ba639c8d37d074",
+  "prompt_frozen_before_generation": true,
+  "record_count": 1872,
+  "original_record_count": 1440,
+  "transfer_record_count": 432,
+  "development_use": "answerability threshold selection only",
+  "calibration_use": "Platt probability calibration only",
+  "test_use": "evaluation only",
+  "post_test_prompt_changes_permitted": false
+}

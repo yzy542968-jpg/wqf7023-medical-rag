@@ -111,8 +111,16 @@ class ClosedLoopEvidenceAgent:
         self.retry_k = retry_k
         self.retry_threshold = retry_threshold
 
-    def run(self, question: str, scope_case_id: str) -> ClosedLoopResult:
-        planned_intent = infer_report_intent(question)
+    def run(
+        self,
+        question: str,
+        scope_case_id: str,
+        planned_intent: str | None = None,
+    ) -> ClosedLoopResult:
+        external_plan = planned_intent is not None
+        planned_intent = planned_intent or infer_report_intent(question)
+        if planned_intent not in {"findings", "impression", "unavailable", "unknown"}:
+            raise ValueError(f"Unsupported planned intent: {planned_intent}")
         if planned_intent == "unavailable":
             step = AgentStep(
                 step=1,
@@ -161,7 +169,11 @@ class ClosedLoopEvidenceAgent:
                 allowed_sections=sorted(allowed or []),
                 retrieved_chunk_ids=[str(row["chunk_id"]) for row in first_rows],
                 evidence_score=first_score,
-                reason="Initial plan from question wording.",
+                reason=(
+                    "Initial plan supplied by the constrained semantic planner."
+                    if external_plan
+                    else "Initial plan from question wording."
+                ),
             )
         ]
         rows = list(first_rows)

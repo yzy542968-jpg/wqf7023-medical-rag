@@ -24,7 +24,9 @@ from medical_rag.evaluation.radqa_agent import (
     select_answerability_threshold,
 )
 from medical_rag.evaluation.selective_prediction import (
+    apply_platt_scaler,
     calibration_metrics,
+    fit_platt_scaler,
     risk_coverage_curve,
 )
 from medical_rag.retrieval.scoped_chunk_retriever import ScopedBM25ChunkRetriever
@@ -77,10 +79,10 @@ def _baseline_row(
 
 
 def _agent_row(
-    question: dict[str, Any], agent: ClosedLoopEvidenceAgent
+    question: dict[str, Any], agent: ClosedLoopEvidenceAgent, system: str
 ) -> dict[str, Any]:
     result = asdict(agent.run(question["question"], question["scope_case_id"]))
-    return {**question, **result, "system": "closed_loop_agent_v2"}
+    return {**question, **result, "system": system}
 
 
 def _threshold_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -110,7 +112,11 @@ def _system_metrics(rows: list[dict[str, Any]], threshold: float) -> dict[str, A
                 " ".join(row["retrieved_texts"]) if predicts_answer else "NOT ANSWERABLE"
             )
             answer_f1s.append(token_f1(answer, row["reference_answer"]))
-            if row["system"] == "closed_loop_agent_v2":
+            if row["system"] in {
+                "route_only_agent",
+                "closed_loop_agent_v2",
+                "semantic_planner_agent_v22",
+            }:
                 route_hits.append(row["final_intent"] == row["expected_intent"])
         else:
             correct = not predicts_answer
@@ -125,9 +131,9 @@ def _system_metrics(rows: list[dict[str, Any]], threshold: float) -> dict[str, A
     ]
     binary.update(
         {
-            "retrieval_hit_rate_answerable": mean(retrieval_hits),
+            "retrieval_hit_rate_answerable": mean(retrieval_hits) if retrieval_hits else None,
             "end_to_end_action_accuracy": mean(correctness),
-            "answerable_token_f1": mean(answer_f1s),
+            "answerable_token_f1": mean(answer_f1s) if answer_f1s else None,
             "route_accuracy_answerable": mean(route_hits) if route_hits else None,
             "mean_retrieval_calls": mean(float(row["retrieval_calls"]) for row in rows),
             "mean_retrieved_chunks": mean(
@@ -190,26 +196,39 @@ def main() -> None:
         first_pass_k=args.max_chunks // 2,
         retry_k=args.max_chunks - args.max_chunks // 2,
     )
+    route_only_agent = ClosedLoopEvidenceAgent(
+        retriever,
+        first_pass_k=args.max_chunks,
+        retry_k=0,
+        retry_threshold=0.0,
+    )
     baseline_rows = [
         _baseline_row(question, retriever, args.max_chunks)
         for question in benchmark["questions"]
     ]
-    agent_rows = [_agent_row(question, agent) for question in benchmark["questions"]]
-
-    development_baseline = [row for row in baseline_rows if row["split"] == "development"]
-    development_agent = [row for row in agent_rows if row["split"] == "development"]
-    baseline_selection = select_answerability_threshold(
-        _threshold_rows(development_baseline)
-    )
-    agent_selection = select_answerability_threshold(_threshold_rows(development_agent))
-    thresholds = {
-        "fixed_report_bm25": baseline_selection["selected"]["threshold"],
-        "closed_loop_agent_v2": agent_selection["selected"]["threshold"],
-    }
+    route_only_rows = [
+        _agent_row(question, route_only_agent, "route_only_agent")
+        for question in benchmark["questions"]
+    ]
+    agent_rows = [
+        _agent_row(question, agent, "closed_loop_agent_v2")
+        for question in benchmark["questions"]
+    ]
 
     systems = {
         "fixed_report_bm25": baseline_rows,
+        "route_only_agent": route_only_rows,
         "closed_loop_agent_v2": agent_rows,
+    }
+    selections = {
+        system: select_answerability_threshold(
+            _threshold_rows([row for row in rows if row["split"] == "development"])
+        )
+        for system, rows in systems.items()
+    }
+    thresholds = {
+        system: selection["selected"]["threshold"]
+        for system, selection in selections.items()
     }
     summaries: dict[str, Any] = {}
     for system, rows in systems.items():
@@ -219,6 +238,32 @@ def main() -> None:
                 [row for row in rows if row["split"] == split], threshold
             )
             for split in ("development", "calibration", "test")
+        }
+
+    posthoc_calibration: dict[str, Any] = {}
+    for system, rows in systems.items():
+        calibration_rows = [row for row in rows if row["split"] == "calibration"]
+        model = fit_platt_scaler(
+            [float(row["answer_probability"]) for row in calibration_rows],
+            [bool(row["is_answerable"]) for row in calibration_rows],
+        )
+        split_results: dict[str, Any] = {}
+        for split in ("calibration", "test"):
+            split_rows = [row for row in rows if row["split"] == split]
+            calibrated = apply_platt_scaler(
+                [float(row["answer_probability"]) for row in split_rows], model
+            )
+            calibrated_rows = [
+                {**row, "answer_probability": probability}
+                for row, probability in zip(split_rows, calibrated, strict=True)
+            ]
+            split_results[split] = _system_metrics(calibrated_rows, threshold=0.5)
+        posthoc_calibration[system] = {
+            "fit_split": "calibration",
+            "test_was_not_used_for_fitting": True,
+            "model": model,
+            "fixed_decision_threshold": 0.5,
+            "splits": split_results,
         }
 
     summary = {
@@ -237,10 +282,13 @@ def main() -> None:
         },
         "threshold_selection": {
             "data": "development only",
-            "fixed_report_bm25": baseline_selection["selected"],
-            "closed_loop_agent_v2": agent_selection["selected"],
+            **{
+                system: selection["selected"]
+                for system, selection in selections.items()
+            },
         },
         "systems": summaries,
+        "posthoc_probability_calibration": posthoc_calibration,
     }
     args.output_dir.mkdir(parents=True, exist_ok=True)
     for system, rows in systems.items():

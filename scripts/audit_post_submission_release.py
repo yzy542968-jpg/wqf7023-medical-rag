@@ -92,11 +92,55 @@ def main() -> None:
         failures.append("replication content fingerprint mismatch")
 
     hard_summary = _read(ROOT / "experiments" / "post_submission_v21" / "summary.json")
+    transfer_summary = _read(
+        ROOT
+        / "experiments"
+        / "post_submission_v21"
+        / "template_transfer"
+        / "summary.json"
+    )
+    planner_manifest = _read(
+        ROOT
+        / "experiments"
+        / "post_submission_v22"
+        / "planner_pack_manifest.json"
+    )
+    semantic_summary = _read(
+        ROOT / "experiments" / "post_submission_v22" / "summary.json"
+    )
     replication_summary = _read(
         ROOT / "experiments" / "locked_replication" / "summary.json"
     )
     if hard_summary["benchmark_content_fingerprint_sha256"] != hard_fingerprint:
         failures.append("v2.1 result summary points to different benchmark content")
+    transfer_protocol = transfer_summary.get("protocol", {})
+    if transfer_protocol.get("parameter_tuning_after_evaluation") is not False:
+        failures.append("template-transfer no-retuning declaration is missing")
+    expected_transfer_count = hard["split"]["test"]["question_count"]
+    if transfer_protocol.get("question_count") != expected_transfer_count:
+        failures.append("template-transfer question count does not match v2.1 test")
+    expected_threshold = hard_summary["threshold_selection"][
+        "closed_loop_agent_v2"
+    ]["threshold"]
+    if transfer_protocol.get("answerability_threshold") != expected_threshold:
+        failures.append("template-transfer threshold differs from frozen development threshold")
+    semantic_protocol = semantic_summary.get("protocol", {})
+    if semantic_protocol.get("planner_prompt_sha256") != planner_manifest.get(
+        "planner_prompt_sha256"
+    ):
+        failures.append("v2.2 semantic-planner prompt hash mismatch")
+    if semantic_protocol.get("prompt_frozen_before_generation") is not True:
+        failures.append("v2.2 prompt-freeze declaration is missing")
+    if semantic_protocol.get("post_test_prompt_changes_permitted") is not False:
+        failures.append("v2.2 post-test prompt-change policy is invalid")
+    if semantic_protocol.get("test_or_transfer_tuning") is not False:
+        failures.append("v2.2 no-test-tuning declaration is missing")
+    if semantic_summary.get("planner", {}).get("n") != planner_manifest.get(
+        "record_count"
+    ):
+        failures.append("v2.2 planner output count does not match manifest")
+    if semantic_summary.get("planner", {}).get("parse_failure_count") != 0:
+        failures.append("v2.2 planner contains parse failures")
     if replication_summary.get("status") != "complete":
         failures.append("locked replication is not complete")
     if replication_summary.get("generation", {}).get("unique_qid_count") != replication[
@@ -122,6 +166,31 @@ def main() -> None:
             "replication": replication_fingerprint,
         },
         "replication_complete": replication_summary.get("status") == "complete",
+        "template_transfer": {
+            "question_count": transfer_protocol.get("question_count"),
+            "template_fingerprint_sha256": transfer_protocol.get(
+                "template_fingerprint_sha256"
+            ),
+            "retuned_after_evaluation": transfer_protocol.get(
+                "parameter_tuning_after_evaluation"
+            ),
+        },
+        "semantic_planner": {
+            "prompt_sha256": semantic_protocol.get("planner_prompt_sha256"),
+            "record_count": semantic_summary.get("planner", {}).get("n"),
+            "parse_failure_count": semantic_summary.get("planner", {}).get(
+                "parse_failure_count"
+            ),
+            "test_or_transfer_tuning": semantic_protocol.get(
+                "test_or_transfer_tuning"
+            ),
+            "original_macro_f1": semantic_summary.get("original_test", {})
+            .get("raw", {})
+            .get("macro_f1"),
+            "transfer_macro_f1": semantic_summary.get("transfer_test", {})
+            .get("raw", {})
+            .get("macro_f1"),
+        },
         "human_evaluation_disposition": "future_work_not_conducted",
         "failures": failures,
     }

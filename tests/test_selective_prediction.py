@@ -3,7 +3,9 @@ from __future__ import annotations
 import pytest
 
 from medical_rag.evaluation.selective_prediction import (
+    apply_platt_scaler,
     calibration_metrics,
+    fit_platt_scaler,
     risk_coverage_curve,
 )
 
@@ -24,3 +26,12 @@ def test_calibration_reports_brier_and_reliability_bins() -> None:
 def test_probability_range_is_validated() -> None:
     with pytest.raises(ValueError):
         calibration_metrics([1.2], [True])
+
+
+def test_platt_scaler_learns_monotonic_probability_mapping() -> None:
+    probabilities = [0.1, 0.2, 0.8, 0.9]
+    labels = [False, False, True, True]
+    model = fit_platt_scaler(probabilities, labels)
+    calibrated = apply_platt_scaler(probabilities, model)
+    assert calibrated == sorted(calibrated)
+    assert calibrated[0] < 0.5 < calibrated[-1]
