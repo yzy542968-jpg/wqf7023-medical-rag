@@ -1,0 +1,41 @@
+{
+  "experiment": "v4_2_biovil_t_shortlist_reranking",
+  "policy_frozen_before_v4_2_formal_outcomes": true,
+  "config_sha256": "bfa065cdf63748766a849468c4aa5f5a7f28fadb60bfebbcdc2c951c5c388f4d",
+  "source_files": [
+    {
+      "path": "data/processed/openi_cases.jsonl",
+      "sha256": "56e367190396011d4d67f43e7e733389a8346890bf8729e82fb4326d063bbd68"
+    },
+    {
+      "path": "data/processed/openi_case_scoped_benchmark_v2.json",
+      "sha256": "df3de6c82e90a525b6d81247436d8f6d656f364da607555aad5b181c9cc62b14"
+    },
+    {
+      "path": "data/processed/openi_case_scoped_confirmation_v2.json",
+      "sha256": "389bdc375c5c77d72835aefcb6ccf3ee0e0aefc702b17a4cc206ebfb7c386502"
+    },
+    {
+      "path": "data/processed/openi_multimodal_source_manifest.json",
+      "sha256": "b54db024233989f8cdf7604383987226b298c1584e3a7ca0b9d8ddb69020eb75"
+    }
+  ],
+  "fixed_reranking_policy": {
+    "candidate_generator": "BM25(k1=1.5,b=0.75)",
+    "shortlist_size": 100,
+    "text_weight": 0.5,
+    "image_weight": 0.5,
+    "score_normalization": "Independent min-max normalization of BM25 and image cosine scores within each query shortlist",
+    "zero_range_policy": "Return zeros for a modality whose shortlist scores have range <= 1e-12",
+    "outside_shortlist_policy": "Append candidates 101-720 in their original BM25 order",
+    "tie_break": "Descending fused score then ascending case_id",
+    "parameter_tuning_after_preregistration": false
+  },
+  "development_gate": {
+    "paired_mrr_must_exceed_report_only_mrr": true,
+    "on_failure": "Do not evaluate confirmation"
+  },
+  "confirmation_tuning": false,
+  "confirmation_run_limit": 1,
+  "protected_submission_artifacts_unchanged": true
+}

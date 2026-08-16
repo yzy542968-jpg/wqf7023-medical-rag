@@ -1,0 +1,100 @@
+{
+  "experiment": "v4_2_biovil_t_shortlist_reranking",
+  "status": "preregistered_before_v4_2_formal_outcomes",
+  "parent_experiment": {
+    "name": "v4_1_biovil_t_paired_retrieval",
+    "development_result_commit": "22b884c",
+    "development_only_selection": {
+      "shortlist_size": 100,
+      "text_weight": 0.5,
+      "observed_exploratory_mrr": 0.608660355
+    }
+  },
+  "research_scope": "Two-stage multimodal retrieval over paired chest X-rays and reports",
+  "source": {
+    "dataset": "Indiana University Chest X-ray / OpenI",
+    "official_image_archive_url": "https://openi.nlm.nih.gov/imgs/collections/NLMCXR_png.tgz",
+    "official_image_archive_sha256": "baf3abfe19ba5d58efe69002aed1e71aa2e6d5efb3238db9adcac210ad44bdf2",
+    "cases_path": "data/processed/openi_cases.jsonl"
+  },
+  "cohorts": {
+    "development": {
+      "benchmark_path": "data/processed/openi_case_scoped_benchmark_v2.json",
+      "case_count": 600,
+      "question_count": 1800,
+      "case_id_fingerprint_sha256": "b3bad81969605fa11979322256bc62b2142e9c80242a2ad1f2583d863b7bd971",
+      "content_fingerprint_sha256": "b21d0aec8618fdfd25fdf793e5e8628158a4d45eef99ada37d1d0ee1bbd545d3"
+    },
+    "confirmation": {
+      "benchmark_path": "data/processed/openi_case_scoped_confirmation_v2.json",
+      "case_count": 120,
+      "question_count": 360,
+      "case_id_fingerprint_sha256": "fecdc4c674f98990bfd46857caf6995e6214348dc231606b04c47d1acd777971",
+      "content_fingerprint_sha256": "a6c019847beca77e10a8a07b98e67d08da8bcc846cbd0e4017d03b3c73a364b4"
+    }
+  },
+  "input_protocol": {
+    "text_query_template": "Clinical indication: {indication}\nQuestion: {question}",
+    "report_embedding_template": "Findings: {findings}\nImpression: {impression}",
+    "candidate_pool": "Union of the 600 development and 120 confirmation cases",
+    "view_policy": "Encode each available projection independently, average normalized embeddings per case, then L2-normalize",
+    "missing_image_policy": "Exclude before encoding only if no declared image matches the verified official archive"
+  },
+  "systems": [
+    "report_only_bm25",
+    "image_only_biovil_t",
+    "paired_biovil_t_shortlist_reranker"
+  ],
+  "encoder": {
+    "joint_encoder": "microsoft/BiomedVLP-BioViL-T",
+    "text_model_revision": "692f09e",
+    "image_model_revision": "v1.0",
+    "image_weights_md5": "a83080e2f23aa584a4f2b24c39b1bb64",
+    "joint_embedding_dimension": 128,
+    "text_max_length": 256,
+    "image_resize": 512,
+    "image_center_crop": 448
+  },
+  "reranking": {
+    "candidate_generator": "BM25(k1=1.5,b=0.75)",
+    "shortlist_size": 100,
+    "text_weight": 0.5,
+    "image_weight": 0.5,
+    "score_normalization": "Independent min-max normalization of BM25 and image cosine scores within each query shortlist",
+    "zero_range_policy": "Return zeros for a modality whose shortlist scores have range <= 1e-12",
+    "outside_shortlist_policy": "Append candidates 101-720 in their original BM25 order",
+    "tie_break": "Descending fused score then ascending case_id",
+    "parameter_tuning_after_preregistration": false
+  },
+  "primary_metrics": [
+    "hit@1",
+    "hit@5",
+    "hit@10",
+    "mrr",
+    "token_f1"
+  ],
+  "development_gate": {
+    "paired_mrr_must_exceed_report_only_mrr": true,
+    "on_failure": "Do not evaluate confirmation"
+  },
+  "statistical_protocol": {
+    "unit": "case_id",
+    "primary_comparison": "paired_biovil_t_shortlist_reranker minus report_only_bm25",
+    "bootstrap_resamples": 5000,
+    "confidence_level": 0.95,
+    "seed": 7023,
+    "confirmation_tuning": false,
+    "confirmation_run_limit": 1
+  },
+  "hypotheses": [
+    "The paired shortlist reranker improves confirmation MRR over report-only BM25.",
+    "The paired shortlist reranker improves confirmation Hit@1 and downstream Token-F1 over report-only BM25.",
+    "Constrained image reranking is more effective than unrestricted global rank fusion."
+  ],
+  "claim_limits": [
+    "This is paired evidence retrieval, not diagnosis of a new patient image.",
+    "The confirmation cohort is from IU-Xray and is not an external dataset.",
+    "Automatic report-derived QA is not radiologist validation.",
+    "Clinical deployment and medical-device use are out of scope."
+  ]
+}
