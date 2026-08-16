@@ -1,12 +1,21 @@
 from __future__ import annotations
 
 import argparse
+import concurrent.futures
 import hashlib
 import json
 import shutil
 import tarfile
 import urllib.request
 from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+import sys
+
+sys.path.insert(0, str(ROOT / "src"))
+
+from medical_rag.multimodal.openi_images import resolve_official_image
 
 
 DEFAULT_URL = "https://openi.nlm.nih.gov/imgs/collections/NLMCXR_png.tgz"
@@ -26,7 +35,34 @@ def remote_size(url: str) -> int:
         return int(response.headers["Content-Length"])
 
 
-def download_with_resume(url: str, destination: Path) -> int:
+def _download_range(url: str, destination: Path, start: int, end: int) -> Path:
+    existing = destination.stat().st_size if destination.exists() else 0
+    next_byte = start + existing
+    expected_size = end - start + 1
+    if existing > expected_size:
+        raise RuntimeError(f"Range part is too large: {destination}")
+    if existing == expected_size:
+        return destination
+
+    request = urllib.request.Request(
+        url,
+        headers={
+            "User-Agent": "wqf7023-medical-rag/0.2",
+            "Range": f"bytes={next_byte}-{end}",
+        },
+    )
+    with urllib.request.urlopen(request, timeout=120) as response:
+        if response.status != 206:
+            raise RuntimeError(f"Server ignored byte range {next_byte}-{end}: HTTP {response.status}")
+        with destination.open("ab") as output:
+            shutil.copyfileobj(response, output, length=1024 * 1024)
+
+    if destination.stat().st_size != expected_size:
+        raise RuntimeError(f"Incomplete byte range in {destination}")
+    return destination
+
+
+def download_with_resume(url: str, destination: Path, connections: int = 4) -> int:
     destination.parent.mkdir(parents=True, exist_ok=True)
     expected = remote_size(url)
     existing = destination.stat().st_size if destination.exists() else 0
@@ -35,13 +71,42 @@ def download_with_resume(url: str, destination: Path) -> int:
     if existing == expected:
         return expected
 
-    headers = {"User-Agent": "wqf7023-medical-rag/0.2"}
-    if existing:
-        headers["Range"] = f"bytes={existing}-"
-    request = urllib.request.Request(url, headers=headers)
-    mode = "ab" if existing else "wb"
-    with urllib.request.urlopen(request, timeout=120) as response, destination.open(mode) as output:
-        shutil.copyfileobj(response, output, length=1024 * 1024)
+    remaining = expected - existing
+    connections = max(1, min(connections, remaining))
+    chunk_size = (remaining + connections - 1) // connections
+    ranges = []
+    for index in range(connections):
+        start = existing + index * chunk_size
+        if start >= expected:
+            break
+        end = min(expected - 1, start + chunk_size - 1)
+        part = destination.with_name(f"{destination.name}.part{index}")
+        ranges.append((part, start, end))
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=len(ranges)) as executor:
+        futures = [executor.submit(_download_range, url, part, start, end) for part, start, end in ranges]
+        for future in futures:
+            future.result()
+
+    assembling = destination.with_name(f"{destination.name}.assembling")
+    with assembling.open("wb") as output:
+        if existing:
+            remaining_prefix = existing
+            with destination.open("rb") as prefix:
+                while remaining_prefix:
+                    block = prefix.read(min(1024 * 1024, remaining_prefix))
+                    if not block:
+                        raise RuntimeError("Local prefix changed while the archive was assembled.")
+                    output.write(block)
+                    remaining_prefix -= len(block)
+        for part, _, _ in ranges:
+            with part.open("rb") as source:
+                shutil.copyfileobj(source, output, length=1024 * 1024)
+            part.unlink()
+
+    if assembling.stat().st_size != expected:
+        raise RuntimeError("Assembled archive length does not match the official file.")
+    assembling.replace(destination)
 
     actual = destination.stat().st_size
     if actual != expected:
@@ -86,10 +151,11 @@ def build_pairing_manifest(cases_path: Path, image_root: Path) -> dict[str, obje
                 continue
             case = json.loads(line)
             case_count += 1
+            case_id = str(case["case_id"])
             for image in case.get("images", []):
                 filename = image["filename"]
                 declared_images += 1
-                if filename in by_name:
+                if resolve_official_image(case_id, filename, by_name) is not None:
                     matched_images += 1
                 else:
                     missing_names.append(filename)
@@ -113,11 +179,12 @@ def main() -> None:
     parser.add_argument("--manifest", type=Path, default=Path("data/processed/openi_multimodal_source_manifest.json"))
     parser.add_argument("--skip-download", action="store_true")
     parser.add_argument("--skip-extract", action="store_true")
+    parser.add_argument("--connections", type=int, default=4)
     args = parser.parse_args()
 
     expected_size = remote_size(args.url)
     if not args.skip_download:
-        download_with_resume(args.url, args.archive)
+        download_with_resume(args.url, args.archive, connections=args.connections)
     if not args.archive.exists() or args.archive.stat().st_size != expected_size:
         raise RuntimeError("The local archive is absent or incomplete.")
 

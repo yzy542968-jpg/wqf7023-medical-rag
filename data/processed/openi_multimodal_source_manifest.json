@@ -1,0 +1,15 @@
+{
+  "source_dataset": "Indiana University Chest X-ray / OpenI",
+  "official_url": "https://openi.nlm.nih.gov/imgs/collections/NLMCXR_png.tgz",
+  "archive_size_bytes": 1360814128,
+  "archive_sha256": "baf3abfe19ba5d58efe69002aed1e71aa2e6d5efb3238db9adcac210ad44bdf2",
+  "archive_png_count": 7470,
+  "pairing": {
+    "case_count": 3851,
+    "archive_png_count": 7470,
+    "declared_image_count": 7466,
+    "matched_image_count": 7466,
+    "missing_image_count": 0,
+    "missing_image_examples": []
+  }
+}

@@ -1,0 +1,101 @@
+{
+  "experiment": "v4_paired_image_report_rag",
+  "split": "development",
+  "preregistration_commit": "795b1c9",
+  "selection_commit": null,
+  "config_sha256": "93d2f0f59ece4319096feb20de76a0f60c5fb453ed3a64498273c3952fbfb8c6",
+  "candidate_case_count": 720,
+  "split_case_count": 600,
+  "question_count": 1800,
+  "excluded_cases": [],
+  "development_selection": {
+    "selected_text_weight": 1.0,
+    "selected_mrr": 0.5583068644882582,
+    "sweep": [
+      {
+        "text_weight": 0.0,
+        "mrr": 0.016839106114308357
+      },
+      {
+        "text_weight": 0.1,
+        "mrr": 0.027705690731958624
+      },
+      {
+        "text_weight": 0.2,
+        "mrr": 0.04317746741167467
+      },
+      {
+        "text_weight": 0.3,
+        "mrr": 0.06450512603940756
+      },
+      {
+        "text_weight": 0.4,
+        "mrr": 0.09732522132807543
+      },
+      {
+        "text_weight": 0.5,
+        "mrr": 0.1602051122121351
+      },
+      {
+        "text_weight": 0.6,
+        "mrr": 0.24623428072739242
+      },
+      {
+        "text_weight": 0.7,
+        "mrr": 0.333248584910196
+      },
+      {
+        "text_weight": 0.8,
+        "mrr": 0.42340974059390124
+      },
+      {
+        "text_weight": 0.9,
+        "mrr": 0.5106486291574277
+      },
+      {
+        "text_weight": 1.0,
+        "mrr": 0.5583068644882582
+      }
+    ]
+  },
+  "selected_text_weight": 1.0,
+  "metrics": {
+    "report_only_bm25": {
+      "hit@1": 0.48388888888888887,
+      "recall@1": 0.48388888888888887,
+      "hit@5": 0.6333333333333333,
+      "recall@5": 0.6333333333333333,
+      "hit@10": 0.6877777777777778,
+      "recall@10": 0.6877777777777778,
+      "mrr": 0.5583068644882582,
+      "token_f1": 0.5797767397790734
+    },
+    "image_only_biomedclip": {
+      "hit@1": 0.005,
+      "recall@1": 0.005,
+      "hit@5": 0.015,
+      "recall@5": 0.015,
+      "hit@10": 0.025,
+      "recall@10": 0.025,
+      "mrr": 0.016839106114308357,
+      "token_f1": 0.21814989797563092
+    },
+    "paired_rrf_fusion": {
+      "hit@1": 0.48388888888888887,
+      "recall@1": 0.48388888888888887,
+      "hit@5": 0.6333333333333333,
+      "recall@5": 0.6333333333333333,
+      "hit@10": 0.6877777777777778,
+      "recall@10": 0.6877777777777778,
+      "mrr": 0.5583068644882582,
+      "token_f1": 0.5797767397790734
+    }
+  },
+  "runtime": {
+    "cache_hit": false,
+    "encoding_seconds": 25.940106800058857,
+    "case_count": 720,
+    "view_count": 1399,
+    "embedding_dimension": 512
+  }
+}
