@@ -1,0 +1,61 @@
+{
+  "experiment": "v4_2_biovil_t_shortlist_reranking",
+  "split": "confirmation",
+  "preregistration_commit": "5846649",
+  "development_commit": "a0358c4",
+  "config_sha256": "bfa065cdf63748766a849468c4aa5f5a7f28fadb60bfebbcdc2c951c5c388f4d",
+  "candidate_case_count": 720,
+  "split_case_count": 120,
+  "question_count": 360,
+  "excluded_cases": [],
+  "fixed_reranking_policy": {
+    "candidate_generator": "BM25(k1=1.5,b=0.75)",
+    "shortlist_size": 100,
+    "text_weight": 0.5,
+    "image_weight": 0.5,
+    "score_normalization": "Independent min-max normalization of BM25 and image cosine scores within each query shortlist",
+    "zero_range_policy": "Return zeros for a modality whose shortlist scores have range <= 1e-12",
+    "outside_shortlist_policy": "Append candidates 101-720 in their original BM25 order",
+    "tie_break": "Descending fused score then ascending case_id",
+    "parameter_tuning_after_preregistration": false
+  },
+  "metrics": {
+    "report_only_bm25": {
+      "hit@1": 0.49722222222222223,
+      "recall@1": 0.49722222222222223,
+      "hit@5": 0.6055555555555555,
+      "recall@5": 0.6055555555555555,
+      "hit@10": 0.6638888888888889,
+      "recall@10": 0.6638888888888889,
+      "mrr": 0.5557790504926996,
+      "token_f1": 0.5941175024154343
+    },
+    "image_only_biovil_t": {
+      "hit@1": 0.016666666666666666,
+      "recall@1": 0.016666666666666666,
+      "hit@5": 0.06666666666666667,
+      "recall@5": 0.06666666666666667,
+      "hit@10": 0.1,
+      "recall@10": 0.1,
+      "mrr": 0.05054756579721371,
+      "token_f1": 0.3179838675035101
+    },
+    "paired_biovil_t_shortlist_reranker": {
+      "hit@1": 0.5222222222222223,
+      "recall@1": 0.5222222222222223,
+      "hit@5": 0.6722222222222223,
+      "recall@5": 0.6722222222222223,
+      "hit@10": 0.7361111111111112,
+      "recall@10": 0.7361111111111112,
+      "mrr": 0.5961620188298125,
+      "token_f1": 0.6454190459768705
+    }
+  },
+  "development_gate": {
+    "passed": true,
+    "paired_mrr_exceeds_report_only": true
+  },
+  "runtime": {
+    "cache_hit": true
+  }
+}
