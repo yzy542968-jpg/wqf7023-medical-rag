@@ -1,0 +1,26 @@
+name: quality
+
+on:
+  push:
+    branches: [main, post-submission-improvements]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  lightweight-tests:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install package and test dependencies
+        run: python -m pip install --upgrade pip && python -m pip install -e ".[test]"
+      - name: Compile
+        run: python -m compileall -q app.py human_evaluation_app.py scripts src
+      - name: Test, including fresh-clone Demo Mode
+        run: python -m pytest -q

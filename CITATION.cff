@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "If you use this software or its evaluation artifacts, please cite this project and the original dataset paper."
+title: "Case-Scoped Evidence-Checking RAG for Radiology Report-Grounded Question Answering"
+type: software
+authors:
+  - family-names: "Zhang"
+    given-names: "Yue"
+repository-code: "https://github.com/yzy542968-jpg/wqf7023-medical-rag"
+version: "0.2.0"
+date-released: "2026-08-16"
+license: MIT
+keywords:
+  - retrieval-augmented generation
+  - radiology reports
+  - evidence checking
+  - medical question answering
+  - abstention

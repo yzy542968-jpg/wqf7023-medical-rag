@@ -18,11 +18,14 @@ sys.path.insert(0, str(ROOT / "src"))
 os.environ.setdefault("HF_HOME", str(ROOT / ".hf_cache"))
 
 from medical_rag.agentic.evidence_checker import check_evidence_support
+from medical_rag.agentic.closed_loop_agent import ClosedLoopEvidenceAgent
 from medical_rag.agentic.semantic_evidence_checker import (
     MedicalNLIPredictor,
     check_semantic_evidence_support,
 )
 from medical_rag.agentic.planner import plan_question
+from medical_rag.dashboard.demo_generation import extractive_demo_answer
+from medical_rag.dashboard.runtime import resolve_dashboard_runtime
 from medical_rag.evaluation.case_scoped_benchmark import build_case_chunks, expected_section
 from medical_rag.evaluation.answer_metrics import extract_final_answer
 from medical_rag.retrieval.adaptive_retrieval import select_adaptive_top1
@@ -34,8 +37,9 @@ from medical_rag.retrieval.scoped_chunk_retriever import ScopedBM25ChunkRetrieve
 from medical_rag.retrieval.tfidf_retriever import load_cases_jsonl
 
 
-CASES_PATH = ROOT / "data" / "processed" / "openi_cases.jsonl"
-MEDCPT_INDEX_PATH = ROOT / "data" / "processed" / "openi_medcpt_full.npz"
+RUNTIME = resolve_dashboard_runtime(ROOT)
+CASES_PATH = RUNTIME.cases_path
+MEDCPT_INDEX_PATH = RUNTIME.dense_index_path
 QA_PATH = ROOT / "data" / "processed" / "openi_case_qa_seed_clean.json"
 IMAGE_ROOT = ROOT / "data" / "raw" / "images" / "images_normalized"
 HYBRID_SELECTION_PATH = (
@@ -86,10 +90,12 @@ V2_VERIFIER_SELECTION_PATH = (
 V2_TOP_K_SELECTION_PATH = (
     ROOT / "experiments" / "benchmark_v2" / "calibration" / "locked_top_k.json"
 )
+V21_SUMMARY_PATH = ROOT / "experiments" / "post_submission_v21" / "summary.json"
 MODEL_OPTIONS = {
     "Qwen2.5-1.5B (full experiment)": "Qwen/Qwen2.5-1.5B-Instruct",
     "Qwen2.5-0.5B (faster demo)": "Qwen/Qwen2.5-0.5B-Instruct",
 }
+DEMO_MODEL_OPTIONS = {"Extractive demo (no model download)": "__extractive_demo__"}
 PROMPT_OPTIONS = {
     "Direct": "direct",
     "Evidence-guided": "evidence_guided",
@@ -158,6 +164,8 @@ def load_hybrid_resources() -> tuple[HybridBM25MedCPTRetriever, Any, Any, str]:
     from transformers import AutoModel, AutoTokenizer
 
     cases, bm25 = load_bm25_resources()
+    if MEDCPT_INDEX_PATH is None:
+        raise RuntimeError("Dense retrieval is unavailable in Demo Mode.")
     medcpt = MedCPTRetriever.from_index(CASES_PATH, MEDCPT_INDEX_PATH)
     selection = json.loads(HYBRID_SELECTION_PATH.read_text(encoding="utf-8"))
     hybrid = HybridBM25MedCPTRetriever.from_components(
@@ -196,6 +204,14 @@ def load_v2_configs() -> tuple[int, dict[str, Any]]:
     top_k = json.loads(V2_TOP_K_SELECTION_PATH.read_text(encoding="utf-8"))["selected_top_k"]
     verifier = json.loads(V2_VERIFIER_SELECTION_PATH.read_text(encoding="utf-8"))["selected_config"]
     return int(top_k), verifier
+
+
+@st.cache_data(show_spinner=False)
+def load_v21_answerability_threshold() -> float:
+    payload = json.loads(V21_SUMMARY_PATH.read_text(encoding="utf-8"))
+    return float(
+        payload["threshold_selection"]["closed_loop_agent_v2"]["threshold"]
+    )
 
 
 @st.cache_data(show_spinner=False)
@@ -353,6 +369,9 @@ def build_prompt(question: str, context: str, mode: str) -> str:
 
 
 def generate(prompt: str, model_name: str) -> tuple[str, str]:
+    if model_name == "__extractive_demo__":
+        answer = extractive_demo_answer(prompt)
+        return answer, answer
     import torch
 
     tokenizer, model, device = load_generator(model_name)
@@ -457,7 +476,11 @@ def render_pipeline_result(result: dict[str, Any]) -> None:
     agent_state = (
         "Advisory"
         if result.get("agent_action_policy") == "audit_only"
-        else ("Abstained" if result["abstained"] else "Filtered")
+        else (
+            "Abstained"
+            if result["abstained"]
+            else ("Answered" if result.get("planning_trace") else "Filtered")
+        )
     )
     metric_columns[3].metric("Agent", agent_state)
     metric_columns[4].metric("Latency", f"{result['latency_seconds']:.1f}s")
@@ -468,6 +491,7 @@ def render_pipeline_result(result: dict[str, Any]) -> None:
         "hybrid": "Hybrid retained",
         "bm25": "BM25 fixed ranking",
         "patient_scope": "Patient scope and section route",
+        "closed_loop_agent": "Closed-loop inferred route",
     }
     retrieval_message = source_labels.get(retrieval["source"], retrieval["source"])
     if retrieval["abstained"]:
@@ -490,6 +514,28 @@ def render_pipeline_result(result: dict[str, Any]) -> None:
             st.code(result["prompt"], language="text")
     with trace_col:
         st.subheader("Agent trace")
+        if result.get("planning_trace"):
+            st.dataframe(
+                pd.DataFrame(
+                    [
+                        {
+                            "Step": row["step"],
+                            "Action": row["action"],
+                            "Intent": row["intent"],
+                            "Evidence score": row["evidence_score"],
+                            "Reason": row["reason"],
+                        }
+                        for row in result["planning_trace"]
+                    ]
+                ),
+                width="stretch",
+                hide_index=True,
+                column_config={
+                    "Evidence score": st.column_config.ProgressColumn(
+                        min_value=0, max_value=1
+                    )
+                },
+            )
         if checks:
             trace_rows = [
                 {
@@ -525,7 +571,7 @@ def render_pipeline_result(result: dict[str, Any]) -> None:
                 hide_index=True,
                 column_config={"Score": st.column_config.ProgressColumn(min_value=0, max_value=1)},
             )
-        else:
+        elif not result.get("planning_trace"):
             st.info("No answer sentence was available for checking.")
 
     if result.get("workflow") == "v2_patient_scoped":
@@ -848,42 +894,70 @@ def render_results() -> None:
 
 
 st.title("Evidence-Checking Medical RAG")
-st.caption("IU X-Ray / OpenI · 3,851 linked radiology cases · case-disjoint grouped evaluation")
+st.caption(
+    f"IU X-Ray / OpenI | {RUNTIME.full_case_count:,} available cases | "
+    f"{RUNTIME.mode.title()} Mode"
+)
+if RUNTIME.is_demo:
+    st.info(
+        "Demo Mode uses three tracked software-demo cases, BM25 retrieval, deterministic "
+        "extractive answers, and rule-based evidence checks. Frozen research results remain "
+        "available in the Experiment results tab."
+    )
 
 live_tab, results_tab = st.tabs(["Live pipeline", "Experiment results"])
 
 with live_tab:
     with st.sidebar:
         st.header("Run settings")
+        active_models = DEMO_MODEL_OPTIONS if RUNTIME.is_demo else MODEL_OPTIONS
+        active_retrievers = {"BM25": "bm25"} if RUNTIME.is_demo else RETRIEVER_OPTIONS
+        active_agents = (
+            {"Lexical + negation rules": "rule", "Disabled": "off"}
+            if RUNTIME.is_demo
+            else AGENT_OPTIONS
+        )
         workflow = st.segmented_control(
             "Workflow",
             options=["V2 patient-scoped", "V1 open-corpus stress test"],
             default="V2 patient-scoped",
         )
         threshold = 0.40
+        route_policy = "locked_v2"
         if workflow == "V2 patient-scoped":
-            model_label = st.selectbox("Generator", list(MODEL_OPTIONS))
-            retriever_label = next(iter(RETRIEVER_OPTIONS))
+            route_policy = st.segmented_control(
+                "Route policy",
+                options=["Closed-loop V2.1", "Frozen V2 route"],
+                default="Closed-loop V2.1",
+            )
+            model_label = st.selectbox("Generator", list(active_models))
+            retriever_label = next(iter(active_retrievers))
             prompt_label = next(iter(PROMPT_OPTIONS))
             top_k = 6
             evidence_scope = "Patient-scoped evidence"
-            agent_label = next(iter(AGENT_OPTIONS))
-            st.info(
-                "Locked V2 policy: explicit case-ID scope, deterministic section route, "
-                "top-6 evidence, and advisory NLI audit."
-            )
+            agent_label = next(iter(active_agents))
+            if route_policy == "Closed-loop V2.1":
+                st.info(
+                    "Post-submission V2.1: infer the report section, assess evidence, "
+                    "retry once when needed, and abstain using a development-only threshold."
+                )
+            else:
+                st.info(
+                    "Frozen V2 policy: explicit case-ID scope, deterministic section route, "
+                    "top-6 evidence, and advisory NLI audit."
+                )
         else:
-            retriever_label = st.selectbox("Retriever", list(RETRIEVER_OPTIONS))
+            retriever_label = st.selectbox("Retriever", list(active_retrievers))
             prompt_label = st.selectbox("Prompt", list(PROMPT_OPTIONS))
-            model_label = st.selectbox("Generator", list(MODEL_OPTIONS))
+            model_label = st.selectbox("Generator", list(active_models))
             top_k = st.number_input("Top-K", min_value=1, max_value=10, value=5, step=1)
             evidence_scope = st.segmented_control(
                 "Generation evidence",
                 options=["Selected case", "All candidates (ablation)"],
                 default="Selected case",
             )
-            agent_label = st.selectbox("Evidence checker", list(AGENT_OPTIONS))
-            if AGENT_OPTIONS[agent_label] == "rule":
+            agent_label = st.selectbox("Evidence checker", list(active_agents))
+            if active_agents[agent_label] == "rule":
                 threshold = st.slider(
                     "Rule support threshold",
                     min_value=0.30,
@@ -962,7 +1036,8 @@ with live_tab:
             )
             active_case_id = uploaded_case_id or str(selected_case_id)
             active_type = uploaded_type or str(selected_v2_type)
-            if active_type not in {
+            closed_loop_enabled = route_policy == "Closed-loop V2.1"
+            if not closed_loop_enabled and active_type not in {
                 "case_scoped_findings",
                 "case_scoped_impression",
                 "case_scoped_summary",
@@ -973,49 +1048,135 @@ with live_tab:
             with st.status("Running patient-scoped pipeline", expanded=True) as status:
                 locked_top_k, verifier_config = load_v2_configs()
                 st.write(f"Applying explicit case-ID metadata filter: {active_case_id}")
-                st.write(f"Planner route: {expected_section(active_type)}")
-                retrieved = retrieve_scoped_evidence(
-                    active_case_id, active_question, active_type, locked_top_k
-                )
+                planning_trace: list[dict[str, Any]] = []
+                answerability_threshold: float | None = None
+                if closed_loop_enabled:
+                    case_by_id, scoped_retriever = load_scoped_resources()
+                    agent_result = ClosedLoopEvidenceAgent(scoped_retriever).run(
+                        active_question, active_case_id
+                    )
+                    planning_trace = agent_result.trace
+                    answerability_threshold = load_v21_answerability_threshold()
+                    route_abstained = (
+                        agent_result.answer_probability < answerability_threshold
+                    )
+                    retrieved = [
+                        {
+                            "rank": rank,
+                            "case_id": active_case_id,
+                            "chunk_id": chunk_id,
+                            "section": section,
+                            "position": rank,
+                            "text": text,
+                            "score": score,
+                        }
+                        for rank, (chunk_id, section, text, score) in enumerate(
+                            zip(
+                                agent_result.retrieved_chunk_ids,
+                                agent_result.retrieved_sections,
+                                agent_result.retrieved_texts,
+                                agent_result.retrieved_scores,
+                                strict=True,
+                            ),
+                            start=1,
+                        )
+                    ]
+                    st.write(
+                        f"Inferred route: {agent_result.final_intent}; "
+                        f"answer probability: {agent_result.answer_probability:.3f}"
+                    )
+                    question_plan = {
+                        "planned_intent": agent_result.planned_intent,
+                        "final_intent": agent_result.final_intent,
+                        "retried": agent_result.retried,
+                    }
+                else:
+                    case_by_id, _ = load_scoped_resources()
+                    route_abstained = False
+                    st.write(f"Planner route: {expected_section(active_type)}")
+                    retrieved = retrieve_scoped_evidence(
+                        active_case_id, active_question, active_type, locked_top_k
+                    )
+                    question_plan = {
+                        "question_type": active_type,
+                        "section": expected_section(active_type),
+                    }
                 context = "\n".join(row["text"] for row in retrieved)
                 prompt = build_scoped_live_prompt(active_case_id, active_question, retrieved)
-                st.write("Generating evidence-only answer")
-                raw_answer, draft_answer = generate(prompt, MODEL_OPTIONS[model_label])
-                st.write("Auditing sentence-level grounding")
-                checked = check_semantic_evidence_support(
-                    draft_answer,
-                    context,
-                    load_semantic_predictor(),
-                    min_combined_support=float(verifier_config["support_threshold"]),
-                    entailment_threshold=float(verifier_config["entailment_threshold"]),
-                    contradiction_threshold=float(verifier_config["contradiction_threshold"]),
-                    lexical_weight=float(verifier_config["lexical_weight"]),
-                )
+                active_agent_mode = active_agents[agent_label]
+                if route_abstained:
+                    raw_answer = draft_answer = "NOT ANSWERABLE"
+                    sentence_checks = []
+                    support_rate = 0.0
+                    st.write("Abstaining before generation because evidence is insufficient")
+                else:
+                    st.write("Generating evidence-only answer")
+                    raw_answer, draft_answer = generate(prompt, active_models[model_label])
+                    st.write("Auditing sentence-level grounding")
+                if not route_abstained and active_agent_mode == "semantic":
+                    checked = check_semantic_evidence_support(
+                        draft_answer,
+                        context,
+                        load_semantic_predictor(),
+                        min_combined_support=float(verifier_config["support_threshold"]),
+                        entailment_threshold=float(verifier_config["entailment_threshold"]),
+                        contradiction_threshold=float(verifier_config["contradiction_threshold"]),
+                        lexical_weight=float(verifier_config["lexical_weight"]),
+                    )
+                    sentence_checks = [asdict(check) for check in checked.sentence_checks]
+                    support_rate = checked.support_rate
+                elif not route_abstained and active_agent_mode == "rule":
+                    checked = check_evidence_support(
+                        draft_answer,
+                        context,
+                        min_sentence_support=float(threshold),
+                    )
+                    sentence_checks = [asdict(check) for check in checked.sentence_checks]
+                    support_rate = checked.support_rate
+                elif not route_abstained:
+                    sentence_checks = []
+                    support_rate = 0.0
                 status.update(label="Patient-scoped pipeline complete", state="complete", expanded=False)
-            case_by_id, _ = load_scoped_resources()
             result = {
                 "workflow": "v2_patient_scoped",
                 "question": active_question,
-                "question_plan": {"question_type": active_type, "section": expected_section(active_type)},
-                "retriever": "case_scoped_agent_routed_bm25",
+                "question_plan": question_plan,
+                "retriever": (
+                    "closed_loop_agent_v2"
+                    if closed_loop_enabled
+                    else "case_scoped_agent_routed_bm25"
+                ),
                 "prompt_mode": "direct_evidence_only",
-                "model": MODEL_OPTIONS[model_label],
+                "model": active_models[model_label],
                 "top_k": locked_top_k,
                 "evidence_scope": active_case_id,
-                "threshold": float(verifier_config["support_threshold"]),
-                "agent_mode": "semantic_advisory",
-                "agent_action_policy": "audit_only",
+                "threshold": (
+                    answerability_threshold
+                    if closed_loop_enabled
+                    else float(verifier_config["support_threshold"])
+                ),
+                "agent_mode": active_agent_mode,
+                "agent_action_policy": (
+                    "closed_loop_answer_or_abstain"
+                    if closed_loop_enabled
+                    else ("audit_only" if active_agent_mode == "semantic" else active_agent_mode)
+                ),
                 "retrieval_decision": {
-                    "source": "patient_scope",
-                    "abstained": False,
-                    "reason": f"locked {expected_section(active_type)} route, top-{locked_top_k}",
+                    "source": "closed_loop_agent" if closed_loop_enabled else "patient_scope",
+                    "abstained": route_abstained,
+                    "reason": (
+                        f"development threshold {answerability_threshold:.3f}"
+                        if closed_loop_enabled and answerability_threshold is not None
+                        else f"locked {expected_section(active_type)} route, top-{locked_top_k}"
+                    ),
                 },
                 "raw_generation": raw_answer,
                 "draft_answer": draft_answer,
-                "final_answer": draft_answer,
-                "support_rate": checked.support_rate,
-                "abstained": False,
-                "sentence_checks": [asdict(check) for check in checked.sentence_checks],
+                "final_answer": "NOT ANSWERABLE" if route_abstained else draft_answer,
+                "support_rate": support_rate,
+                "abstained": route_abstained,
+                "sentence_checks": sentence_checks,
+                "planning_trace": planning_trace,
                 "retrieved_cases": retrieved,
                 "scoped_case": case_by_id[active_case_id],
                 "latency_seconds": time.perf_counter() - start,
@@ -1038,7 +1199,7 @@ with live_tab:
                     plan = plan_question(active_question, uploaded_type)
                     st.write("Retrieving linked cases")
                     retrieved, selected_evidence, retrieval_decision = retrieve_with_policy(
-                        plan.retrieval_query, RETRIEVER_OPTIONS[retriever_label], int(top_k)
+                        plan.retrieval_query, active_retrievers[retriever_label], int(top_k)
                     )
                     generation_evidence = (
                         selected_evidence
@@ -1048,9 +1209,9 @@ with live_tab:
                     context = evidence_context(generation_evidence)
                     prompt = build_prompt(active_question, context, PROMPT_OPTIONS[prompt_label])
                     st.write("Generating draft answer")
-                    raw_answer, draft_answer = generate(prompt, MODEL_OPTIONS[model_label])
+                    raw_answer, draft_answer = generate(prompt, active_models[model_label])
                     st.write("Checking sentence-level evidence")
-                    agent_mode = AGENT_OPTIONS[agent_label]
+                    agent_mode = active_agents[agent_label]
                     if agent_mode == "semantic":
                         _, semantic_config = load_locked_configs()
                         checked = check_semantic_evidence_support(
@@ -1089,9 +1250,9 @@ with live_tab:
                 result = {
                     "question": active_question,
                     "question_plan": asdict(plan),
-                    "retriever": RETRIEVER_OPTIONS[retriever_label],
+                    "retriever": active_retrievers[retriever_label],
                     "prompt_mode": PROMPT_OPTIONS[prompt_label],
-                    "model": MODEL_OPTIONS[model_label],
+                    "model": active_models[model_label],
                     "top_k": int(top_k),
                     "evidence_scope": evidence_scope,
                     "threshold": float(threshold),

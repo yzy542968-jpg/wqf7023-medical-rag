@@ -87,11 +87,15 @@ Raw OpenI files are not redistributed. Data acquisition, expected filenames, and
 
 ## Interactive Dashboard
 
+The repository now starts in **Demo Mode** after a fresh clone. Demo Mode uses three tracked software-only cases, BM25 retrieval, deterministic extractive answers, and rule-based evidence checking; it does not require raw data, model weights, or a GPU. When the full local OpenI case file is present, the application automatically enables Full Mode. Set `MEDICAL_RAG_DEMO_MODE=1` to force the lightweight path.
+
 Launch the research dashboard:
 
 ```powershell
 & ".\.venv\Scripts\python.exe" -m streamlit run app.py --server.port 8501
 ```
+
+Check runtime data readiness with `python scripts/preflight_runtime.py`; add `--require-full` when the full OpenI case file and dense index are mandatory.
 
 Launch the system-blinded rating interface separately:
 
@@ -101,10 +105,16 @@ Launch the system-blinded rating interface separately:
 
 The main Dashboard exposes frozen result tables and auditable state traces. Images are optional case previews only; the model consumes report text. The rating application does not load the system-identity keys.
 
+For an editable install, use `python -m pip install -e ".[all]"`. Exact direct versions from the audited machine are recorded in `requirements-lock.txt`. GitHub Actions runs compilation, all unit tests, and the fresh-clone Dashboard smoke test without downloading model weights.
+
 ## V3 RadQA
 
 Official RadQA files, when legally obtained, belong at `data/raw/radqa/train.json`, `dev.json`, and `test.json`. Run `docs/BENCHMARK_V3_RADQA_RUNBOOK.md` exactly as written. Until the complete official baseline table is produced, V3 is reported only as implemented future validation, not as a completed experiment.
 
 ## Release Boundary
 
-Do not commit raw radiology files, image pixels, model weights, caches, generated prompt packs, secrets, or virtual environments. See `docs/REPOSITORY_RELEASE_POLICY.md` and the generated `experiments/final_submission/submission_manifest.json` before publishing.
+Do not commit raw radiology files, image pixels, model weights, caches, generated prompt packs, secrets, or virtual environments. The MIT license covers project-authored code, not third-party datasets or model weights. See `docs/DATA_USE_AND_LICENSING.md`, `docs/REPOSITORY_RELEASE_POLICY.md`, and the generated `experiments/final_submission/submission_manifest.json` before publishing.
+
+Post-submission improvements and explicitly deferred independent human evaluation are documented in `docs/POST_SUBMISSION_RESEARCH_ROADMAP.md`. These additions do not modify the frozen P2 submission artifacts.
+
+Methods and results for the v2.1 hard benchmark and 300-case locked replication are in `docs/POST_SUBMISSION_EXPERIMENTS.md`.

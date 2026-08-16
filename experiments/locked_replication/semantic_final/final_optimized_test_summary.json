@@ -1,0 +1,24 @@
+{
+  "system": "locked_replication_adaptive_direct_semantic_agent",
+  "n": 900,
+  "draft_token_f1": 0.21808173781654067,
+  "verified_token_f1": 0.2282337658619269,
+  "evidence_support_rate": 0.7581149991983326,
+  "retrieval_abstention_rate": 0.034444444444444444,
+  "final_abstention_rate": 0.08,
+  "revision_rate": 0.7733333333333333,
+  "nli_contradiction_count": 206,
+  "semantic_agent_config": {
+    "lexical_weight": 0.2,
+    "support_threshold": 0.6,
+    "entailment_threshold": 0.75,
+    "contradiction_threshold": 0.5,
+    "macro_draft_token_f1": 0.18472074313963927,
+    "macro_final_token_f1": 0.1783798132705381,
+    "macro_revision_rate": 0.705026455026455,
+    "macro_abstention_rate": 0.06216931216931217,
+    "macro_evidence_support_rate": 0.7378087512307867,
+    "contradiction_rejection_rate": 1.0
+  },
+  "rows_path": "experiments\\locked_replication\\semantic_final\\final_optimized_test_rows.jsonl"
+}
