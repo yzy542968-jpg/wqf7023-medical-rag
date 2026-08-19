@@ -4,6 +4,7 @@
 *.md text eol=lf
 *.py text eol=lf
 *.toml text eol=lf
+data/splits/** text eol=lf
 *.docx binary
 *.pdf binary
 *.pptx binary

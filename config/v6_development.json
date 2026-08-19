@@ -1,0 +1,123 @@
+{
+  "experiment": "v6_model_modernized_confirmation_development",
+  "status": "development_protocol_frozen_before_v6_model_selection",
+  "protocol": "docs/V6_DEVELOPMENT_PROTOCOL.md",
+  "seed": 7026,
+  "development": {
+    "source_cohort": "data/processed/openi_multimodal_v5_cohort.json",
+    "case_ids": "data/splits/v6/v6_development_case_ids.txt",
+    "case_count": 120,
+    "candidate_pool_case_count": 240,
+    "question_count": 360,
+    "case_id_sha256": "a7f381262f4f9ae29a4a68f5bdca884686d97b1de2f95e3e22b3491be9aebfa5",
+    "report_index_spectrum": {
+      "report_indexed_normal": 0,
+      "report_indexed_abnormal": 114,
+      "report_index_indeterminate": 6
+    }
+  },
+  "confirmation_frame_audit": {
+    "path": "data/splits/v6/v6_development_confirmation_overlap_audit.json",
+    "eligible_case_count": 1479,
+    "stratifiable_case_count": 1462,
+    "development_eligible_overlap_count": 0,
+    "development_stratifiable_overlap_count": 0,
+    "patient_level_independence_verified": false,
+    "confirmation_case_ids_instantiated": false
+  },
+  "text_retrieval": {
+    "candidates": [
+      "bm25_k1_1.5_b_0.75",
+      "Qwen/Qwen3-Embedding-0.6B"
+    ],
+    "query_condition": "clinical_indication_plus_question",
+    "document_representation": "full_source_report_text",
+    "dense_query_instruction": "Given a radiology question and clinical indication, retrieve the chest X-ray report containing the evidence needed to answer the question.",
+    "selection_metric": "development_case_grouped_mrr",
+    "tie_tolerance": 0.005,
+    "tie_preference": "bm25",
+    "hit_at_1_role": "mandatory_diagnostic_not_selection_veto"
+  },
+  "multimodal_retrieval": {
+    "historical_encoder": "microsoft/BiomedVLP-BioViL-T",
+    "modern_encoder": "google/medsiglip-448",
+    "model_revisions": "record_exact_resolved_commits_in_development_decision_record",
+    "medsiglip_max_text_tokens": 64,
+    "report_sections": [
+      "findings",
+      "impression"
+    ],
+    "chunk_policy_candidates": [
+      "normalized_mean_chunk_embedding",
+      "maximum_image_chunk_cosine"
+    ],
+    "chunk_policy_selection_metric": "development_case_grouped_mrr",
+    "chunk_policy_tie_tolerance": 0.005,
+    "chunk_policy_tie_preference": "normalized_mean_chunk_embedding",
+    "image_view_aggregation": "l2_normalize_each_view_then_mean_then_l2_normalize",
+    "shortlist_size": 100,
+    "text_weight": 0.5,
+    "image_weight": 0.5,
+    "score_normalization": "independent_minmax_within_text_shortlist",
+    "tie_break": "descending_score_then_ascending_case_id"
+  },
+  "generation": {
+    "historical_generator": "Qwen/Qwen2.5-1.5B-Instruct",
+    "modern_generator": "google/medgemma-1.5-4b-it",
+    "primary_factorial_generator_input": "question_indication_and_top1_retrieved_report_text_without_image_pixels",
+    "exploratory_medgemma_input": "correctly_aligned_image_plus_question_indication_and_top1_retrieved_report",
+    "decoding": "greedy",
+    "temperature": 0.0,
+    "max_new_tokens": 256,
+    "precision_policy": "bf16_if_preflight_fits_else_4bit_nf4_under_unchanged_inputs",
+    "prompt_policy": "same_semantic_prompt_and_output_schema_with_model_specific_chat_template_only"
+  },
+  "verification": {
+    "primary_pipeline": "frozen_v5_verifier_unchanged",
+    "new_verifier": "exploratory_only_not_used_for_primary_v6_claims"
+  },
+  "confirmation_design_not_yet_instantiated": {
+    "candidate_pool_case_count": 240,
+    "report_indexed_normal": 172,
+    "report_indexed_abnormal": 68,
+    "target": {
+      "case_count": 120,
+      "report_indexed_normal": 86,
+      "report_indexed_abnormal": 34
+    },
+    "distractor": {
+      "case_count": 120,
+      "report_indexed_normal": 86,
+      "report_indexed_abnormal": 34
+    },
+    "selection_domain": "v6-selection",
+    "assignment_domain": "v6-assignment",
+    "selection_seed": 7026,
+    "case_ids_generated": false
+  },
+  "statistics": {
+    "unit": "case_id",
+    "bootstrap_resamples": 5000,
+    "bootstrap_seed": 7026,
+    "shuffled_image_derangements": 100,
+    "primary_retrieval_metric": "mrr",
+    "secondary_retrieval_metrics": [
+      "hit_at_1",
+      "hit_at_5",
+      "hit_at_10"
+    ],
+    "primary_qa_metric": "verified_token_f1",
+    "secondary_qa_metrics": [
+      "raw_token_f1",
+      "exact_match",
+      "evidence_support_rate",
+      "abstention_rate"
+    ]
+  },
+  "hardware_snapshot": {
+    "gpu": "NVIDIA GeForce RTX 5070 Laptop GPU",
+    "gpu_memory_mib": 8151,
+    "torch": "2.11.0+cu128",
+    "cuda_runtime": "12.8"
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "audit": "V6 development-confirmation case-ID separation",
+  "version": "1.0",
+  "status": "selection_frame_audit_only_no_confirmation_case_ids_instantiated",
+  "canonicalization": {
+    "case_id": "str(value).strip()",
+    "ordering": "ascending Unicode code-point order of unique canonical case IDs",
+    "serialization": "newline joined UTF-8 with no trailing newline",
+    "fingerprint": "SHA-256 lowercase hexadecimal digest"
+  },
+  "development_source": {
+    "definition": "development split of the frozen V5 multimodal cohort",
+    "case_count": 120,
+    "case_ids_sha256": "a7f381262f4f9ae29a4a68f5bdca884686d97b1de2f95e3e22b3491be9aebfa5",
+    "report_index_spectrum": {
+      "report_indexed_normal": 0,
+      "report_indexed_abnormal": 114,
+      "report_index_indeterminate": 6
+    }
+  },
+  "confirmation_selection_frame": {
+    "source_case_count": 3851,
+    "source_case_ids_sha256": "186461bd6ab1e611c92fc128be93ff762c089ab4965e5f9e72a9eb8b8478f5fc",
+    "prior_excluded_case_count": 1260,
+    "prior_excluded_case_ids_sha256": "7df0cd9833378e99e8f18f555c695933b45c774b3942c3f20c2aea40dc8c36fc",
+    "v5_excluded_case_count": 240,
+    "v5_excluded_case_ids_sha256": "59668ddc887565bca62d791e484a6adf06e59aba058661060e4ef5f5f65e66e4",
+    "all_excluded_case_count": 1500,
+    "all_excluded_case_ids_sha256": "cf418c5873dc16dcf1a32c7af1477d29497743b9a49e0289fefcec293b437c28",
+    "v6_eligible_case_count": 1479,
+    "v6_eligible_case_ids_sha256": "cd7b59c7d890846055ad43b8b108cec28b475ecf810f14966a538a3c6c7e98eb",
+    "v6_stratifiable_case_count": 1462,
+    "v6_stratifiable_case_ids_sha256": "e0b03681591d48d4d83babca2d72b80872d2cb64dd01a170911d78d1b3ee5186",
+    "report_indexed_normal_case_count": 1045,
+    "report_indexed_normal_case_ids_sha256": "53e6acca324bb416a88f3132240cc02176d6284f3de593e29f58168e57a6a7c3",
+    "report_indexed_abnormal_case_count": 417,
+    "report_indexed_abnormal_case_ids_sha256": "bd25ee97a821d18620ac346f9e60ea5720ef56d437dea665f388041b557a2f70",
+    "report_index_indeterminate_case_count": 17,
+    "report_index_indeterminate_case_ids_sha256": "3a51b0809b46becafd3fe9786e12acadc9af60e4b255b9fc73568793bd7f1211",
+    "problems_field_audit": {
+      "normalized_unique_value_count": 322,
+      "known_indeterminate_values": [
+        "no indexing"
+      ],
+      "known_indeterminate_value_counts": {
+        "no indexing": 17
+      },
+      "unexpected_administrative_values": []
+    }
+  },
+  "separation_check": {
+    "development_confirmation_eligible_overlap_count": 0,
+    "development_confirmation_eligible_overlap_case_ids": [],
+    "development_confirmation_stratifiable_overlap_count": 0,
+    "development_confirmation_stratifiable_overlap_case_ids": [],
+    "case_id_disjointness_verified": true,
+    "patient_level_independence_verified": false,
+    "patient_level_boundary": "Reliable patient or subject identifiers are unavailable in the processed source data; this audit establishes case-ID disjointness only."
+  },
+  "predefined_confirmation_composition": {
+    "selected_case_count": 240,
+    "report_indexed_normal": 172,
+    "report_indexed_abnormal": 68,
+    "target": {
+      "case_count": 120,
+      "report_indexed_normal": 86,
+      "report_indexed_abnormal": 34
+    },
+    "distractor": {
+      "case_count": 120,
+      "report_indexed_normal": 86,
+      "report_indexed_abnormal": 34
+    },
+    "instantiated_case_ids_present": false
+  },
+  "inputs": {
+    "source_cases": "data/processed/openi_cases.jsonl",
+    "source_jsonl_sha256": "56e367190396011d4d67f43e7e733389a8346890bf8729e82fb4326d063bbd68",
+    "v5_config": "config/multimodal_v5.json",
+    "v5_config_sha256": "579525a0d3e70b4cba92d74c44576c3ccee2dcb0ff7c21285621bc5d1249ce9a",
+    "v5_cohort": "data/processed/openi_multimodal_v5_cohort.json",
+    "v5_cohort_sha256": "f480f534291ff3081e06bf5c587596fdaa81e266534c2e9fb61215cd4b469e8b",
+    "prior_source_manifest_sha256": {
+      "data/processed/openi_case_qa_seed_clean.json": "aff9b5adaa0ef13a957ad37b946b06106e3b2e05bd7bd89550be3e226e505c6f",
+      "data/processed/openi_case_scoped_benchmark_v2.json": "df3de6c82e90a525b6d81247436d8f6d656f364da607555aad5b181c9cc62b14",
+      "data/processed/openi_case_scoped_hard_v21.json": "a45f9424b74c5aa408d749f39e077c4cada890e447e5132577959090fd47419b",
+      "data/processed/openi_locked_replication_cohort.json": "e254b9b309504a02a59d7e2bfcde13d348c42bad991f8c6def5307b6426ec76c"
+    },
+    "audit_script": "scripts/audit_v6_development_confirmation_separation.py",
+    "audit_script_sha256": "4bc3f0813778502088058b93885d11a1f6dcaeda2c29784cecb79fc38fddf75b"
+  },
+  "outputs": {
+    "development_manifest": "data/splits/v6/v6_development_case_ids.txt",
+    "development_manifest_sha256": "a7f381262f4f9ae29a4a68f5bdca884686d97b1de2f95e3e22b3491be9aebfa5",
+    "audit_output": "data/splits/v6/v6_development_confirmation_overlap_audit.json"
+  }
+}
