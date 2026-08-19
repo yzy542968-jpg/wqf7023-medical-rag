@@ -1,0 +1,103 @@
+{
+  "experiment": "V6 development QA with frozen V5 semantic verifier",
+  "protocol": "docs/V6_DEVELOPMENT_PROTOCOL.md",
+  "complete": true,
+  "input_integrity": {
+    "row_count": 1440,
+    "system_count": 4,
+    "qids_per_system": 360,
+    "unique_case_count": 120,
+    "duplicate_system_qid_count": 0,
+    "identical_qid_sets": true
+  },
+  "output_integrity": {
+    "row_count": 1440,
+    "system_count": 4,
+    "qids_per_system": 360,
+    "unique_case_count": 120,
+    "duplicate_system_qid_count": 0,
+    "identical_qid_sets": true
+  },
+  "verifier": {
+    "model": "cnut1648/biolinkbert-mednli",
+    "config": {
+      "lexical_weight": 0.2,
+      "support_threshold": 0.6,
+      "entailment_threshold": 0.75,
+      "contradiction_threshold": 0.5,
+      "macro_draft_token_f1": 0.18472074313963927,
+      "macro_final_token_f1": 0.1783798132705381,
+      "macro_revision_rate": 0.705026455026455,
+      "macro_abstention_rate": 0.06216931216931217,
+      "macro_evidence_support_rate": 0.7378087512307867,
+      "contradiction_rejection_rate": 1.0
+    },
+    "config_sha256": "302e8ce368351af087259e53f63e134b4514fa4b9e1fd3a209e5e041a101fe9f",
+    "semantic_checker_sha256": "bbfaf92e5a40bd1f9d331b8a89ef928225410a791f507392a7a2d0b79f7bbbdb",
+    "lexical_checker_sha256": "5f38d5588197e891ecd8428f307d31517f42bdbf4c485ae5626f3e21d2e5e627",
+    "evidence_scope": "top1_selected_case_findings_and_impression",
+    "changed_from_v5": false,
+    "human_validated_clinical_correctness": false
+  },
+  "metrics": {
+    "bm25_medgemma_1_5": {
+      "row_count": 360,
+      "case_count": 120,
+      "draft_token_f1": 0.4775326394111143,
+      "verified_token_f1": 0.47126052268909313,
+      "evidence_support_rate": 0.9764668510501844,
+      "final_abstention_rate": 0.011111111111111112,
+      "revision_rate": 0.31666666666666665,
+      "retrieval_top1_accuracy": 0.5972222222222222,
+      "nli_contradiction_count": 7
+    },
+    "bm25_qwen2_5": {
+      "row_count": 360,
+      "case_count": 120,
+      "draft_token_f1": 0.1261353289362134,
+      "verified_token_f1": 0.13729524614834032,
+      "evidence_support_rate": 0.23333333333333334,
+      "final_abstention_rate": 0.7666666666666667,
+      "revision_rate": 0.7694444444444445,
+      "retrieval_top1_accuracy": 0.5972222222222222,
+      "nli_contradiction_count": 256
+    },
+    "medsiglip_medgemma_1_5": {
+      "row_count": 360,
+      "case_count": 120,
+      "draft_token_f1": 0.5613486769079103,
+      "verified_token_f1": 0.5546555888313978,
+      "evidence_support_rate": 0.9722307399390733,
+      "final_abstention_rate": 0.011111111111111112,
+      "revision_rate": 0.26666666666666666,
+      "retrieval_top1_accuracy": 0.6777777777777778,
+      "nli_contradiction_count": 10
+    },
+    "medsiglip_qwen2_5": {
+      "row_count": 360,
+      "case_count": 120,
+      "draft_token_f1": 0.15163592293115835,
+      "verified_token_f1": 0.16241748062069264,
+      "evidence_support_rate": 0.25763888888888886,
+      "final_abstention_rate": 0.7416666666666667,
+      "revision_rate": 0.7472222222222222,
+      "retrieval_top1_accuracy": 0.6777777777777778,
+      "nli_contradiction_count": 249
+    }
+  },
+  "runtime": {
+    "device": "cuda",
+    "batch_size": 64,
+    "pending_at_start": 1440,
+    "verified_this_run": 1440,
+    "verification_seconds": 60.65104430005886,
+    "records_per_second": 23.74237767244187
+  },
+  "outputs": {
+    "input_rows_sha256": "ce0b5852a384a30e61d7015fd322aa767139b02d9360b143eeda73478c605087",
+    "verified_rows_sha256": "9071598aa3633cb20a11c4c1bd67525b49988adce49d8d65771bcd8542725505",
+    "verified_rows": "experiments/post_submission_v6/development_qa_factorial_verified_rows.jsonl",
+    "summary": "experiments/post_submission_v6/development_qa_factorial_verified_summary.json"
+  },
+  "claim_boundary": "Automated semantic verification is not human clinical adjudication; development outcomes do not establish confirmation performance."
+}

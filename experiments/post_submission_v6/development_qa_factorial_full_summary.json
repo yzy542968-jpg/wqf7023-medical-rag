@@ -1,0 +1,103 @@
+{
+  "experiment": "V6 development QA factorial full",
+  "protocol": "docs/V6_DEVELOPMENT_PROTOCOL.md",
+  "complete": true,
+  "config_sha256": "4142f2796d3f6af52c7375fafeb36ad0a4dce6ecfd9e19abe9148167a1ed3606",
+  "implementation_sha256": "9e7488adbc4b87e1fcf958b326bbaeb1335b2d6e2d8f92d981ad5dc91f5194d6",
+  "prompt_implementation_sha256": "6588c7a89a413a38d711b44f183a0e761d58057590d9f7a02a40e7a2026ae079",
+  "input_artifacts": {
+    "cohort_sha256": "f480f534291ff3081e06bf5c587596fdaa81e266534c2e9fb61215cd4b469e8b",
+    "retrieval_rows_sha256": "f477e58d76bdf7c040c328093de12bf700e4eacc34429f12bdbb8623f00c6776",
+    "retrieval_summary_sha256": "c1fb4389bb0339f5ea33e19c4c79c7527ce5d8bcad87a0ac8ec5cd2d22bb24ef",
+    "text_summary_sha256": "58c550bc9ec1daafcabd230666d369120697ab5cf3e841962146ee6352db4d53"
+  },
+  "development": {
+    "question_count": 360,
+    "retrieval_conditions": [
+      "bm25",
+      "medsiglip"
+    ],
+    "generator_conditions": [
+      "medgemma_1_5",
+      "qwen2_5"
+    ],
+    "expected_factorial_row_count": 1440,
+    "observed_row_count": 1440
+  },
+  "generation_policy": {
+    "semantic_prompt_identical_across_models": true,
+    "model_specific_chat_templates_only": true,
+    "image_pixels_in_primary_factorial": false,
+    "do_sample": false,
+    "temperature": 0.0,
+    "max_new_tokens": 256
+  },
+  "metrics": {
+    "bm25_medgemma_1_5": {
+      "row_count": 360,
+      "case_count": 120,
+      "raw_token_f1": 0.4775326394111143,
+      "exact_match": 0.0,
+      "retrieval_top1_accuracy": 0.5972222222222222,
+      "mean_input_tokens": 183.28333333333333,
+      "mean_output_tokens": 36.266666666666666
+    },
+    "bm25_qwen2_5": {
+      "row_count": 360,
+      "case_count": 120,
+      "raw_token_f1": 0.1261353289362134,
+      "exact_match": 0.044444444444444446,
+      "retrieval_top1_accuracy": 0.5972222222222222,
+      "mean_input_tokens": 205.32777777777778,
+      "mean_output_tokens": 8.694444444444445
+    },
+    "medsiglip_medgemma_1_5": {
+      "row_count": 360,
+      "case_count": 120,
+      "raw_token_f1": 0.5613486769079103,
+      "exact_match": 0.0,
+      "retrieval_top1_accuracy": 0.6777777777777778,
+      "mean_input_tokens": 181.1888888888889,
+      "mean_output_tokens": 30.852777777777778
+    },
+    "medsiglip_qwen2_5": {
+      "row_count": 360,
+      "case_count": 120,
+      "raw_token_f1": 0.15163592293115835,
+      "exact_match": 0.05277777777777778,
+      "retrieval_top1_accuracy": 0.6777777777777778,
+      "mean_input_tokens": 204.0222222222222,
+      "mean_output_tokens": 8.919444444444444
+    }
+  },
+  "runtime": {
+    "qwen2_5": {
+      "model": "Qwen/Qwen2.5-1.5B-Instruct",
+      "revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+      "precision": "float16",
+      "load_seconds": 10.124437399907038,
+      "peak_gpu_memory_allocated_mib": 2987.21728515625,
+      "pending_at_start": 720,
+      "generated_this_run": 720,
+      "generation_seconds": 259.74349760008045,
+      "records_per_second": 2.7719654453431715
+    },
+    "medgemma_1_5": {
+      "model": "google/medgemma-1.5-4b-it",
+      "revision": "91850547d9f0b2fdd21aa7c5f4f3d1a8a52c243b",
+      "precision": "4-bit NF4, double quantization, bfloat16 compute",
+      "load_seconds": 18.68292840011418,
+      "peak_gpu_memory_allocated_mib": 3204.109375,
+      "pending_at_start": 720,
+      "generated_this_run": 720,
+      "generation_seconds": 1998.8644598999526,
+      "records_per_second": 0.3602045133345547
+    }
+  },
+  "outputs": {
+    "rows": "experiments/post_submission_v6/development_qa_factorial_full_rows.jsonl",
+    "rows_sha256": "ce0b5852a384a30e61d7015fd322aa767139b02d9360b143eeda73478c605087",
+    "summary": "experiments/post_submission_v6/development_qa_factorial_full_summary.json"
+  },
+  "claim_boundary": "Development data only; no V6 confirmation case IDs were generated or inspected."
+}
