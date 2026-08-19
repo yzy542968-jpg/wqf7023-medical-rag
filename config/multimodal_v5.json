@@ -1,0 +1,69 @@
+{
+  "experiment": "v5_end_to_end_multimodal_qa",
+  "status": "prospectively_specified_locally_before_execution_not_externally_timestamped",
+  "research_scope": "Fresh-cohort indication ablation, shuffled-image control, and non-oracle multimodal QA",
+  "cohort": {
+    "path": "data/processed/openi_multimodal_v5_cohort.json",
+    "selected_case_count": 240,
+    "development_case_count": 120,
+    "confirmation_case_count": 120,
+    "seed": 7023,
+    "excluded_source_manifests": [
+      "data/processed/openi_case_qa_seed_clean.json",
+      "data/processed/openi_case_scoped_benchmark_v2.json",
+      "data/processed/openi_case_scoped_hard_v21.json",
+      "data/processed/openi_locked_replication_cohort.json"
+    ]
+  },
+  "input_conditions": [
+    "question_only_bm25",
+    "indication_question_bm25",
+    "question_only_correct_image",
+    "indication_question_correct_image",
+    "indication_question_shuffled_image"
+  ],
+  "encoder": {
+    "joint_encoder": "microsoft/BiomedVLP-BioViL-T",
+    "text_model_revision": "692f09e",
+    "embedding_dimension": 128,
+    "view_policy": "Normalize each view, average views per case, then normalize"
+  },
+  "reranking": {
+    "candidate_pool": "all fresh-cohort cases",
+    "shortlist_size": 100,
+    "text_weight": 0.5,
+    "image_weight": 0.5,
+    "score_normalization": "Independent min-max normalization within the text shortlist",
+    "tie_break": "Descending fused score then ascending case_id"
+  },
+  "random_image_control": {
+    "permutations": 100,
+    "seed": 7023,
+    "assignment": "A deterministic random derangement of source-case image embeddings; no source keeps its own image"
+  },
+  "generation": {
+    "model": "Qwen/Qwen2.5-1.5B-Instruct",
+    "prompt_mode": "direct_non_oracle_planner",
+    "temperature": 0.0,
+    "max_new_tokens": 256
+  },
+  "verification": {
+    "model": "pritamdeka/PubMedBERT-MNLI-MedNLI",
+    "action": "audit_and_sentence_filter_using_locked_semantic_config",
+    "evidence_scope": "top1_selected_case"
+  },
+  "statistics": {
+    "unit": "case_id",
+    "bootstrap_resamples": 5000,
+    "seed": 7023,
+    "primary_retrieval_comparison": "indication_question_correct_image minus indication_question_bm25",
+    "primary_qa_comparison": "multimodal verified Token-F1 minus report-only verified Token-F1"
+  },
+  "claim_limits": [
+    "This experiment was specified locally before execution but was not formally preregistered or externally timestamped before outcomes were observed.",
+    "The confirmation cohort is fresh and disjoint from prior project cohorts but comes from the same OpenI/IU-Xray source, so it is not external validation.",
+    "The fresh benchmark is still closed-set paired-report retrieval, not new-patient diagnosis.",
+    "The questions are report-derived and are not radiologist-authored clinical questions.",
+    "Automatic answer metrics and semantic verification are not a substitute for independent clinical rating."
+  ]
+}

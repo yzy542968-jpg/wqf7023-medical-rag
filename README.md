@@ -6,6 +6,7 @@ This repository contains the reproducible implementation and frozen evidence for
 
 **Repository:** https://github.com/yzy542968-jpg/wqf7023-medical-rag  
 **Submission release:** `p2-submission`
+**Post-submission technical freeze:** `v5-technical-freeze`
 
 ## Study Structure
 
@@ -15,6 +16,7 @@ The final study deliberately separates two different tasks instead of treating t
 2. **V2 controlled case-scoped workflow:** evaluates deterministic section routing, patient isolation, evidence coverage, answer generation, and advisory verification on 720 previously unused OpenI cases, including a once-only 120-case confirmation cohort.
 3. **V3 RadQA extension:** implements a natural-question, answerable/unanswerable benchmark and evidence-sufficiency Agent. Official results remain conditional because credentialed PhysioNet files are not present. Synthetic fixtures test software only and are never reported as research results.
 4. **V4.2 paired image-report retrieval:** uses BM25 to retrieve 100 report candidates and BioViL-T image-report similarity to rerank them. The fixed policy is evaluated once on a disjoint 120-case confirmation cohort.
+5. **V5 fresh-cohort multimodal QA:** adds indication ablations, a 100-permutation shuffled-image control, and non-oracle Qwen generation plus semantic evidence checking on a new 120-case confirmation cohort. V5 is a post-submission extension and does not modify the frozen P2 artifacts.
 
 The demonstrated Agent follows explicit `scope`, `retrieve`, `generate`, `audit`, and `review/abstain` states. Routing rules are deterministic, and the verifier is a risk signal rather than a clinical correctness label.
 
@@ -51,6 +53,15 @@ All headline values are generated from locked artifacts in `experiments/final_su
 - Warm paired request estimate on the local RTX 5070 Laptop GPU: `16.9 ms`; loaded model memory: approximately `526 MiB`.
 
 V4.2 demonstrates that pixels can improve paired evidence retrieval when used for constrained reranking. Image-only retrieval remains weak, and the experiment does not establish diagnostic performance on new patients.
+
+### V5 Fresh-Cohort End-to-End QA Extension
+
+- Fresh OpenI cohort: 240 cases, split into 120 development and 120 confirmation cases; 360 confirmation questions.
+- Indication + question BM25 confirmation MRR: `0.6590`; correct-image reranking MRR: `0.6971`.
+- Correct-image minus BM25 MRR difference: `+0.0381`, case-bootstrap 95% CI `[+0.0159, +0.0614]`.
+- Across 100 shuffled-image permutations, mean MRR was `0.5659`; no shuffled permutation reached the correct-image MRR (plus-one Monte Carlo `p=0.0099`).
+- Non-oracle Qwen verified Token-F1 improved from `0.3563` to `0.3865`, difference `+0.0302`, case-bootstrap 95% CI `[+0.0101, +0.0511]`.
+- V5 remains a closed-set paired-report retrieval and report-grounded QA study, not new-patient diagnosis or clinical validation.
 
 ## Submission Status
 

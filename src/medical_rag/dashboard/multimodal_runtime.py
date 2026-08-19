@@ -88,23 +88,65 @@ def answer_with_evidence_agent(
     question: str,
     selected_case: Mapping[str, Any],
     support_threshold: float = 0.65,
+    generator: Any | None = None,
+    model_name: str | None = None,
+    semantic_checker: Any | None = None,
 ) -> dict[str, Any]:
     plan = plan_question(question)
+    evidence = "\n".join(
+        [
+            f"Case ID: {selected_case.get('case_id', '')}",
+            f"Findings: {selected_case.get('findings', '')}",
+            f"Impression: {selected_case.get('impression', '')}",
+        ]
+    )
+    if generator is not None and model_name:
+        prompt = "\n".join(
+            [
+                "Answer the medical question using only the selected radiology report evidence.",
+                "Do not add unsupported findings, diagnoses, locations, or severity.",
+                "If the evidence is insufficient, state that it is insufficient.",
+                "Question:",
+                question,
+                "",
+                "Selected report evidence:",
+                evidence,
+                "",
+                "Answer clearly and concisely.",
+            ]
+        )
+        raw_answer, draft = generator(prompt, model_name)
+        if semantic_checker is not None:
+            checked = semantic_checker(draft, evidence)
+        else:
+            checked = check_evidence_support(
+                draft,
+                evidence,
+                min_sentence_support=support_threshold,
+            )
+        return {
+            "plan": asdict(plan),
+            "prompt": prompt,
+            "generation_mode": "qwen_non_oracle",
+            "raw_answer": raw_answer,
+            "draft_answer": draft,
+            "final_answer": checked.revised_answer,
+            "support_rate": checked.support_rate,
+            "abstained": checked.abstained,
+            "sentence_checks": [asdict(row) for row in checked.sentence_checks],
+        }
+
     if plan.answer_field == "findings":
         draft = str(selected_case.get("findings", ""))
     elif plan.answer_field == "impression":
         draft = str(selected_case.get("impression", ""))
     else:
         draft = str(selected_case.get("impression") or selected_case.get("findings", ""))
-    evidence = "\n".join(
-        [
-            f"Findings: {selected_case.get('findings', '')}",
-            f"Impression: {selected_case.get('impression', '')}",
-        ]
-    )
     checked = check_evidence_support(draft, evidence, min_sentence_support=support_threshold)
     return {
         "plan": asdict(plan),
+        "generation_mode": "extractive_lexical",
+        "raw_answer": draft,
         "draft_answer": draft,
         "final_answer": checked.revised_answer,
         "support_rate": checked.support_rate,

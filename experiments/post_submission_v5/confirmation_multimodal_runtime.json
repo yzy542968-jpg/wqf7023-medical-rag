@@ -1,0 +1,39 @@
+{
+  "measurement": "hugging_face_generation_runtime",
+  "prompt_pack": "data\\processed\\prompt_packs\\multimodal_v5\\confirmation_v5_multimodal.jsonl",
+  "prompt_pack_sha256": "7c39f0475f9ece75ae41ccaf8a97217e9d6737bfa0dc4557b21df6ed23383443",
+  "output": "experiments\\post_submission_v5\\confirmation_multimodal_generations.jsonl",
+  "model": "Qwen/Qwen2.5-1.5B-Instruct",
+  "device": "cuda",
+  "dtype": "float16",
+  "parameter_count": 1543714304,
+  "batch_size": 16,
+  "max_new_tokens": 256,
+  "temperature": 0.0,
+  "records_loaded": 360,
+  "records_skipped": 0,
+  "records_generated": 360,
+  "timing_seconds": {
+    "model_and_tokenizer_load": 4.049044699873775,
+    "generation": 89.31320850015618,
+    "total_process": 98.70344870002009
+  },
+  "throughput_records_per_second": {
+    "generation_only": 4.030758787479575,
+    "including_model_load": 3.647288972588115
+  },
+  "cuda": {
+    "device_index": 0,
+    "name": "NVIDIA GeForce RTX 5070 Laptop GPU",
+    "total_memory_bytes": 8546484224,
+    "total_memory_mib": 8150.5625,
+    "peak_allocated_bytes": 3603968512,
+    "peak_allocated_mib": 3437.01220703125,
+    "peak_reserved_bytes": 4255121408,
+    "peak_reserved_mib": 4058.0
+  },
+  "notes": [
+    "Single local run; timings are machine- and cache-dependent.",
+    "Peak allocated/reserved values are reported by PyTorch for this process."
+  ]
+}

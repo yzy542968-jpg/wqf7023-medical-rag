@@ -1,0 +1,101 @@
+{
+  "experiment": "v5_end_to_end_multimodal_qa",
+  "freeze_version": "5.0",
+  "provenance_status": "prospectively_specified_locally_before_execution_not_externally_timestamped",
+  "cohort": {
+    "case_count": 240,
+    "question_count": 720,
+    "case_id_fingerprint_sha256": "59668ddc887565bca62d791e484a6adf06e59aba058661060e4ef5f5f65e66e4",
+    "development_case_count": 120,
+    "confirmation_case_count": 120
+  },
+  "artifacts": [
+    {
+      "path": "config/multimodal_v5.json",
+      "bytes": 2940,
+      "sha256_lf_normalized": "579525a0d3e70b4cba92d74c44576c3ccee2dcb0ff7c21285621bc5d1249ce9a"
+    },
+    {
+      "path": "data/processed/openi_multimodal_v5_cohort.json",
+      "bytes": 1138831,
+      "sha256_lf_normalized": "501af7411f3f066c76a308e97f0e96c09c3230d5631250bd247508ec9e555489"
+    },
+    {
+      "path": "experiments/post_submission_v5/confirmation_multimodal_runtime.json",
+      "bytes": 1399,
+      "sha256_lf_normalized": "d2e7a242e0f95825c2b6ec8d34e599124a55c6dc49558f6339dd34225859f300"
+    },
+    {
+      "path": "experiments/post_submission_v5/confirmation_report_only_runtime.json",
+      "bytes": 1397,
+      "sha256_lf_normalized": "4f634b9762a52d4a026890a55ff2cf9896a6bcd7b79a0c0b37f1d3060b7f5280"
+    },
+    {
+      "path": "experiments/post_submission_v5/confirmation_retrieval_summary.json",
+      "bytes": 35219,
+      "sha256_lf_normalized": "58c600613513bac888e19364990c184b6a8c4f590045f0cb9c5fcc1d15896ecc"
+    },
+    {
+      "path": "experiments/post_submission_v5/qa_multimodal/final_optimized_test_summary.json",
+      "bytes": 886,
+      "sha256_lf_normalized": "c4acd16395ee2af4d245c3fbc31f3c57994ef920431e43c4c8d83bf40bd960b4"
+    },
+    {
+      "path": "experiments/post_submission_v5/qa_report_only/final_optimized_test_summary.json",
+      "bytes": 900,
+      "sha256_lf_normalized": "4db90ca2b460dfb7fd69b3e30bf81083c58b27cfd6841b65a9153866cef1bcc0"
+    },
+    {
+      "path": "experiments/post_submission_v5/v5_statistics.json",
+      "bytes": 4920,
+      "sha256_lf_normalized": "c8299585757bda9b77fcdc7af5228724896ff3d54c14827db4f71667892c7df8"
+    },
+    {
+      "path": "scripts/analyze_multimodal_v5_statistics.py",
+      "bytes": 5817,
+      "sha256_lf_normalized": "53cfd0c7128615072eccece01bc10fdf197c533668f480d8370f796b43b2e2b2"
+    },
+    {
+      "path": "scripts/build_multimodal_v5_cohort.py",
+      "bytes": 4961,
+      "sha256_lf_normalized": "eb89119d358c4f0296558fdecea0b0533cecac12b224c63a81bcfa189a489683"
+    },
+    {
+      "path": "scripts/build_multimodal_v5_prompt_packs.py",
+      "bytes": 4696,
+      "sha256_lf_normalized": "3978d407c681d6346781b5df753b1e12f88b77dd1e558b399acd1a3cbcb3a171"
+    },
+    {
+      "path": "scripts/run_multimodal_v5_retrieval.py",
+      "bytes": 10902,
+      "sha256_lf_normalized": "b2abec6b6c25b022f426f0a2840411d827cc78f02643afdcc43a180af6293e1f"
+    },
+    {
+      "path": "src/medical_rag/dashboard/multimodal_runtime.py",
+      "bytes": 5871,
+      "sha256_lf_normalized": "a2616f6937542c4f914b457e2b01c253d2dd654ad03cc688c1550dc123179492"
+    },
+    {
+      "path": "tests/test_multimodal_dashboard.py",
+      "bytes": 2355,
+      "sha256_lf_normalized": "bdd52ecfa7335022bd99090a43c1d61908952bdc5e6f4d9c857db6c1fba6fecc"
+    },
+    {
+      "path": "tests/test_multimodal_v5.py",
+      "bytes": 904,
+      "sha256_lf_normalized": "bae4a3957a7f0446ad0311f17d1a4b49dfe32d71d188568368554eb0e8de5dc3"
+    }
+  ],
+  "local_only_artifacts": [
+    "experiments/post_submission_v5/**/*.jsonl",
+    "experiments/post_submission_v5/**/*.log",
+    "data/processed/prompt_packs/**"
+  ],
+  "claim_limits": [
+    "This experiment was specified locally before execution but was not formally preregistered or externally timestamped before outcomes were observed.",
+    "The confirmation cohort is fresh and disjoint from prior project cohorts but comes from the same OpenI/IU-Xray source, so it is not external validation.",
+    "The fresh benchmark is still closed-set paired-report retrieval, not new-patient diagnosis.",
+    "The questions are report-derived and are not radiologist-authored clinical questions.",
+    "Automatic answer metrics and semantic verification are not a substitute for independent clinical rating."
+  ]
+}

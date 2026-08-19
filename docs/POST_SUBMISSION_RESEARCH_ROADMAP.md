@@ -13,6 +13,7 @@ This document describes work added after the frozen P2 submission and work that 
 - A locked-system replication cohort that cannot alter previously selected hyperparameters.
 - A result-blind second wording-transfer set and preregistered lexical-first semantic-fallback V2.3 policy.
 - Paired case-bootstrap intervals, transfer failure taxonomy, and semantic-planner compute-budget reporting.
+- A fresh-cohort V5 indication ablation, shuffled-image control, and non-oracle end-to-end multimodal QA evaluation.
 
 ## Future work: independent human evaluation
 

@@ -251,6 +251,19 @@ def load_locked_configs() -> tuple[dict[str, Any], dict[str, Any]]:
     return adaptive["selected_policy"], semantic["selected_config"]
 
 
+def run_multimodal_semantic_check(answer: str, evidence: str) -> Any:
+    _, semantic_config = load_locked_configs()
+    return check_semantic_evidence_support(
+        answer,
+        evidence,
+        load_semantic_predictor(),
+        min_combined_support=float(semantic_config["support_threshold"]),
+        entailment_threshold=float(semantic_config["entailment_threshold"]),
+        contradiction_threshold=float(semantic_config["contradiction_threshold"]),
+        lexical_weight=float(semantic_config["lexical_weight"]),
+    )
+
+
 @st.cache_resource(show_spinner=False)
 def load_generator(model_name: str) -> tuple[Any, Any, str]:
     import torch
@@ -1587,6 +1600,14 @@ with multimodal_tab:
                 height=110,
                 key="multimodal_question",
             )
+            multimodal_answer_mode = st.selectbox(
+                "Answer mode",
+                [
+                    "Qwen2.5-1.5B + semantic evidence audit",
+                    "Extractive answer + lexical evidence audit",
+                ],
+                key="multimodal_answer_mode",
+            )
             multimodal_run = st.button(
                 "Run paired retrieval",
                 type="primary",
@@ -1622,10 +1643,21 @@ with multimodal_tab:
                             text_weight=float(config["reranking"]["text_weight"]),
                             top_k=10,
                         )
-                        st.write("Planning answer field and checking report support")
+                        st.write("Planning, generating, and checking report support")
                         selected_case = cases[retrieved[0]["case_id"]]
+                        use_multimodal_qwen = multimodal_answer_mode.startswith("Qwen")
                         agent = answer_with_evidence_agent(
-                            multimodal_question.strip(), selected_case
+                            multimodal_question.strip(),
+                            selected_case,
+                            generator=generate if use_multimodal_qwen else None,
+                            model_name=(
+                                MODEL_OPTIONS["Qwen2.5-1.5B (full experiment)"]
+                                if use_multimodal_qwen
+                                else None
+                            ),
+                            semantic_checker=(
+                                run_multimodal_semantic_check if use_multimodal_qwen else None
+                            ),
                         )
                         status.update(
                             label="Paired image-report pipeline complete",
@@ -1641,6 +1673,7 @@ with multimodal_tab:
                         "candidate_count": len(candidate_ids),
                         "shortlist_size": int(config["reranking"]["shortlist_size"]),
                         "text_weight": float(config["reranking"]["text_weight"]),
+                        "answer_mode": multimodal_answer_mode,
                         "retrieved_cases": retrieved,
                         **agent,
                         "latency_seconds": time.perf_counter() - started,
@@ -1651,12 +1684,13 @@ with multimodal_tab:
         if "multimodal_result" in st.session_state:
             result = st.session_state["multimodal_result"]
             st.divider()
-            metrics = st.columns(5)
+            metrics = st.columns(6)
             metrics[0].metric("Candidates", result["candidate_count"])
             metrics[1].metric("Shortlist", result["shortlist_size"])
             metrics[2].metric("Text / image", "0.5 / 0.5")
             metrics[3].metric("Evidence support", f"{result['support_rate']:.1%}")
             metrics[4].metric("Latency", f"{result['latency_seconds'] * 1000:.0f} ms")
+            metrics[5].metric("Answer mode", "Qwen" if result.get("generation_mode") == "qwen_non_oracle" else "Extractive")
 
             st.subheader("Grounded answer")
             answer_class = "research-note" if result["abstained"] else "answer-band"
@@ -1664,6 +1698,8 @@ with multimodal_tab:
                 f'<div class="{answer_class}">{result["final_answer"]}</div>',
                 unsafe_allow_html=True,
             )
+            if result.get("generation_mode") == "qwen_non_oracle":
+                st.caption("The answer was generated from the selected report and filtered by the locked semantic evidence checker.")
 
             image_view, evidence_view = st.columns([2, 3], gap="large")
             selected = result["retrieved_cases"][0]

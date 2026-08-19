@@ -42,3 +42,20 @@ def test_dashboard_agent_extracts_requested_field_and_checks_support() -> None:
     assert result["final_answer"] == "Small right pleural effusion."
     assert result["support_rate"] == 1.0
     assert result["abstained"] is False
+
+
+def test_dashboard_agent_supports_non_oracle_generator_callback() -> None:
+    def fake_generator(prompt: str, model_name: str) -> tuple[str, str]:
+        assert "Selected report evidence:" in prompt
+        assert model_name == "local-test-model"
+        return "raw model output", "The lungs are clear."
+
+    result = answer_with_evidence_agent(
+        "What is the impression?",
+        {"case_id": "A", "findings": "The lungs are clear.", "impression": "Clear lungs."},
+        generator=fake_generator,
+        model_name="local-test-model",
+    )
+    assert result["generation_mode"] == "qwen_non_oracle"
+    assert result["raw_answer"] == "raw model output"
+    assert result["draft_answer"] == "The lungs are clear."

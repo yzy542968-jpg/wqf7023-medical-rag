@@ -159,3 +159,33 @@ The primary MRR case-bootstrap 95% CI is `[+0.0140, +0.0681]`. Hit@5, Hit@10, an
 On the local RTX 5070 Laptop GPU, model cold load took `6.51 s`, loaded memory was approximately `526 MiB`, mean single-image encoding was `14.91 ms`, BM25 was `1.73 ms`, and cached similarity plus reranking was `0.28 ms`. The warm paired request estimate is `16.93 ms`. These timings are machine-specific.
 
 The result supports image-assisted retrieval of paired report evidence. It does not show autonomous diagnosis, external-dataset generalization, or clinical effectiveness. Independent human evaluation and authorized RadQA validation remain future work.
+
+## V5 fresh-cohort end-to-end multimodal QA
+
+V5 was prospectively specified and frozen locally before execution in `config/multimodal_v5.json`, but it was not formally preregistered or externally timestamped before outcomes were observed. It uses 240 eligible OpenI cases that are disjoint from the prior V1, V2, V2.1, and locked-replication cohorts. The candidate pool contains 240 cases; development and confirmation each contain 120 cases. The confirmation cohort contains 360 report-derived questions. The cohort fingerprint is `59668ddc887565bca62d791e484a6adf06e59aba058661060e4ef5f5f65e66e4`.
+
+The fixed V4.2 reranking policy is retained: BM25 creates the text ranking, the top 100 candidates are independently min-max normalized, and BioViL-T image-report similarity is fused with equal text/image weights. V5 adds an indication ablation, a 100-permutation fixed-point-free shuffled-image control, and a non-oracle answer path using the same frozen planner, Qwen2.5-1.5B generator, and semantic evidence checker for both systems.
+
+On the untouched confirmation cohort, the retrieval results were:
+
+| System | Hit@1 | Hit@5 | Hit@10 | MRR | Extractive proxy Token-F1 |
+|---|---:|---:|---:|---:|---:|
+| Question-only BM25 | 0.006 | 0.022 | 0.047 | 0.028 | 0.198 |
+| Indication + question BM25 | 0.589 | 0.722 | 0.775 | 0.659 | 0.660 |
+| Question-only + correct image | 0.014 | 0.072 | 0.114 | 0.051 | 0.233 |
+| Indication + question + correct image | 0.622 | 0.778 | 0.839 | 0.697 | 0.724 |
+
+The correct-image minus indication-BM25 MRR difference is `+0.0381`, with a case-bootstrap 95% CI of `[+0.0159, +0.0614]`. Hit@5, Hit@10, and the extractive proxy also have positive intervals. Hit@1 improves numerically but its interval touches zero and is not treated as a reliable primary gain.
+
+Across the 100 shuffled-image permutations, mean MRR was `0.5659` (range `0.5158-0.6084`), below the correct-image MRR of `0.6971` in every permutation. Mean shuffled-image Token-F1 was `0.5950`, below the correct-image value of `0.7245` in every permutation. The plus-one Monte Carlo value is `p=0.0099` for both comparisons; the result is interpreted as an image-report alignment control, not proof of clinical causality.
+
+For non-oracle end-to-end QA, the same Qwen generator and semantic checker were used for both systems. The multimodal minus report-only differences were:
+
+| Metric | Difference | Case-bootstrap 95% CI |
+|---|---:|---:|
+| Draft Token-F1 | `+0.0265` | `[+0.0094, +0.0441]` |
+| Verified Token-F1 | `+0.0302` | `[+0.0101, +0.0511]` |
+| Evidence support rate | `-0.0340` | `[-0.0566, -0.0122]` |
+| Final abstention rate | `+0.0056` | `[-0.0083, +0.0194]` |
+
+The result supports the intended chain within this closed-set benchmark: correct image reranking improves paired-report retrieval, and the retrieval improvement transfers to generated answer Token-F1. The lower automated evidence-support rate for the multimodal system is retained as a performance-grounding trade-off, not evidence that the verifier establishes clinical safety. V5 remains a paired-report retrieval study, not new-patient diagnosis or external generalization. Its questions are automatically derived from three report-section templates, and independent clinical rating remains future work.
