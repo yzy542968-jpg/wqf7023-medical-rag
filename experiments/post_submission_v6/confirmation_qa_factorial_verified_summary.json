@@ -1,0 +1,109 @@
+{
+  "experiment": "V6 confirmation QA with frozen V5 semantic verifier",
+  "status": "formal_confirmation_verified_qa_outcomes_frozen",
+  "protocol_commit": "eee7405",
+  "cohort_commit": "43fe1a0",
+  "raw_qa_outcome_commit": "5aa8a6b",
+  "config_sha256": "2e56bd1b08a5190ebee873e5e0346b74f15cddc3df5448de958f58fbfd0a6b26",
+  "input_integrity": {
+    "row_count": 1440,
+    "system_count": 4,
+    "qids_per_system": 360,
+    "unique_case_count": 120,
+    "duplicate_system_qid_count": 0,
+    "identical_qid_sets": true
+  },
+  "output_integrity": {
+    "row_count": 1440,
+    "system_count": 4,
+    "qids_per_system": 360,
+    "unique_case_count": 120,
+    "duplicate_system_qid_count": 0,
+    "identical_qid_sets": true
+  },
+  "verifier": {
+    "model": "cnut1648/biolinkbert-mednli",
+    "config": {
+      "lexical_weight": 0.2,
+      "support_threshold": 0.6,
+      "entailment_threshold": 0.75,
+      "contradiction_threshold": 0.5,
+      "macro_draft_token_f1": 0.18472074313963927,
+      "macro_final_token_f1": 0.1783798132705381,
+      "macro_revision_rate": 0.705026455026455,
+      "macro_abstention_rate": 0.06216931216931217,
+      "macro_evidence_support_rate": 0.7378087512307867,
+      "contradiction_rejection_rate": 1.0
+    },
+    "config_sha256": "302e8ce368351af087259e53f63e134b4514fa4b9e1fd3a209e5e041a101fe9f",
+    "semantic_checker_sha256": "bbfaf92e5a40bd1f9d331b8a89ef928225410a791f507392a7a2d0b79f7bbbdb",
+    "lexical_checker_sha256": "5f38d5588197e891ecd8428f307d31517f42bdbf4c485ae5626f3e21d2e5e627",
+    "evidence_scope": "top1_selected_case_findings_and_impression",
+    "changed_from_v5": false,
+    "human_validated_clinical_correctness": false
+  },
+  "metrics": {
+    "bm25_medgemma_1_5": {
+      "row_count": 360,
+      "case_count": 120,
+      "draft_token_f1": 0.49232731442823596,
+      "verified_token_f1": 0.4840029436618096,
+      "evidence_support_rate": 0.9416666666666667,
+      "final_abstention_rate": 0.05277777777777778,
+      "revision_rate": 0.28888888888888886,
+      "retrieval_top1_accuracy": 0.5416666666666666,
+      "nli_contradiction_count": 3
+    },
+    "bm25_qwen2_5": {
+      "row_count": 360,
+      "case_count": 120,
+      "draft_token_f1": 0.15928898002094893,
+      "verified_token_f1": 0.16685799395892617,
+      "evidence_support_rate": 0.3055555555555556,
+      "final_abstention_rate": 0.6944444444444444,
+      "revision_rate": 0.6944444444444444,
+      "retrieval_top1_accuracy": 0.5416666666666666,
+      "nli_contradiction_count": 228
+    },
+    "medsiglip_medgemma_1_5": {
+      "row_count": 360,
+      "case_count": 120,
+      "draft_token_f1": 0.5303490046731245,
+      "verified_token_f1": 0.522575745151674,
+      "evidence_support_rate": 0.9694444444444444,
+      "final_abstention_rate": 0.025,
+      "revision_rate": 0.2388888888888889,
+      "retrieval_top1_accuracy": 0.575,
+      "nli_contradiction_count": 3
+    },
+    "medsiglip_qwen2_5": {
+      "row_count": 360,
+      "case_count": 120,
+      "draft_token_f1": 0.17111904987900653,
+      "verified_token_f1": 0.17891952292888755,
+      "evidence_support_rate": 0.28888888888888886,
+      "final_abstention_rate": 0.7111111111111111,
+      "revision_rate": 0.7111111111111111,
+      "retrieval_top1_accuracy": 0.575,
+      "nli_contradiction_count": 233
+    }
+  },
+  "runtime": {
+    "device": "cuda",
+    "batch_size": 64,
+    "pending_at_start": 1440,
+    "verified_this_run": 1440,
+    "verification_seconds": 44.86106749996543,
+    "records_per_second": 32.099102412155254
+  },
+  "outputs": {
+    "input_rows_sha256": "d5f3cce5e726af1ca00bf37808bc94d48fd24ccec074830c56430057c3665012",
+    "input_summary_sha256": "f416c8d5b3e70a94a0b86a4cffba73e0b5d0a52e7e0e54b4b51993ded9d9a15b",
+    "verified_rows_sha256": "a095229b99cc83cc28c539e3fadd3c35f0ddfc02147adbe1dd717001c659f1ef",
+    "verified_row_count": 1440,
+    "verified_rows": "experiments/post_submission_v6/confirmation_qa_factorial_verified_rows.jsonl",
+    "summary": "experiments/post_submission_v6/confirmation_qa_factorial_verified_summary.json"
+  },
+  "input_summary_status": "formal_confirmation_raw_qa_outcomes_frozen",
+  "claim_boundary": "Automated semantic verification is not human clinical adjudication; verified Token-F1 measures frozen-reference consistency after automated filtering."
+}
