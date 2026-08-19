@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import html
 import json
 import os
 import sys
@@ -29,6 +30,14 @@ from medical_rag.dashboard.multimodal_runtime import (
     answer_with_evidence_agent,
     encode_uploaded_image,
     paired_shortlist_retrieve,
+)
+from medical_rag.dashboard.v6_runtime import (
+    V6DashboardResources,
+    build_v6_generation_prompt,
+    encode_uploaded_image as encode_v6_uploaded_image,
+    extractive_v6_answer,
+    load_v6_resources as load_v6_runtime_resources,
+    retrieve_v6,
 )
 from medical_rag.dashboard.runtime import resolve_dashboard_runtime
 from medical_rag.evaluation.case_scoped_benchmark import build_case_chunks, expected_section
@@ -120,6 +129,11 @@ MULTIMODAL_V42_STATISTICS_PATH = (
 )
 MULTIMODAL_V42_RUNTIME_PATH = (
     ROOT / "experiments" / "post_submission_v42" / "runtime_profile.json"
+)
+V6_CONFIG_PATH = ROOT / "config" / "v6_confirmation.json"
+V6_COHORT_PATH = ROOT / "data" / "splits" / "v6" / "v6_confirmation_cohort.json"
+V6_MEDSIGLIP_CACHE_PATH = (
+    ROOT / "data" / "processed" / "v6_confirmation_medsiglip_embeddings.npz"
 )
 MODEL_OPTIONS = {
     "Qwen2.5-1.5B (full experiment)": "Qwen/Qwen2.5-1.5B-Instruct",
@@ -315,6 +329,35 @@ def load_multimodal_resources() -> tuple[
         text_max_length=int(config["encoder"]["text_max_length"]),
     )
     return config, cases, ordered_ids, bm25, report_embeddings, encoder
+
+
+@st.cache_resource(show_spinner=False)
+def load_v6_dashboard_resources() -> V6DashboardResources:
+    return load_v6_runtime_resources(
+        config_path=V6_CONFIG_PATH,
+        cohort_path=V6_COHORT_PATH,
+        cases_path=CASES_PATH,
+        medsiglip_cache_path=V6_MEDSIGLIP_CACHE_PATH,
+    )
+
+
+@st.cache_resource(show_spinner=False)
+def load_v6_image_encoder() -> Any:
+    import torch
+
+    from medical_rag.multimodal.medsiglip import MedSiglipEncoder
+
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    config = json.loads(V6_CONFIG_PATH.read_text(encoding="utf-8"))
+    encoder_config = config["multimodal_retrieval"]["primary_encoder"]
+    return MedSiglipEncoder(
+        model_name=str(encoder_config["model"]),
+        revision=str(encoder_config["revision"]),
+        device=device,
+        cache_dir=ROOT / ".hf_cache",
+        max_text_tokens=int(encoder_config["max_text_tokens"]),
+        local_files_only=True,
+    )
 
 
 @st.cache_data(show_spinner=False)
@@ -1194,8 +1237,8 @@ if RUNTIME.is_demo:
         "available in the Experiment results tab."
     )
 
-live_tab, multimodal_tab, results_tab = st.tabs(
-    ["Report workflows", "Paired image demo", "Experiment results"]
+live_tab, v6_tab, multimodal_tab, results_tab = st.tabs(
+    ["Report workflows", "V6 confirmation demo", "Paired image demo", "Experiment results"]
 )
 
 with live_tab:
@@ -1566,6 +1609,224 @@ with live_tab:
     if "pipeline_result" in st.session_state:
         st.divider()
         render_pipeline_result(st.session_state["pipeline_result"])
+
+with v6_tab:
+    st.subheader("V6 confirmation: image-to-report demonstration")
+    st.caption(
+        "Upload a chest X-ray and retrieve the top-ranked candidate report from the frozen "
+        "240-case V6 confirmation pool using the locked MedSigLIP max-chunk policy."
+    )
+    st.warning(
+        "This is an interactive research demonstration. The retrieved report is a ranked "
+        "candidate from a closed corpus; the system does not verify patient identity, diagnose "
+        "from pixels, or establish clinical safety."
+    )
+    if RUNTIME.is_demo:
+        st.info(
+            "V6 confirmation demo needs the local OpenI source cases, official images, and "
+            "MedSigLIP weights. It is disabled in lightweight Demo Mode."
+        )
+    else:
+        v6_upload_col, v6_request_col = st.columns([2, 3], gap="large")
+        with v6_upload_col:
+            v6_image = st.file_uploader(
+                "Chest X-ray image",
+                type=["png", "jpg", "jpeg"],
+                key="v6_image",
+            )
+            if v6_image is not None:
+                st.image(v6_image.getvalue(), width=360)
+                st.caption(v6_image.name)
+        with v6_request_col:
+            v6_indication = st.text_input(
+                "Clinical indication",
+                value="Chest pain",
+                key="v6_indication",
+            )
+            v6_question = st.text_area(
+                "Report-grounded question",
+                value="What is the final radiology impression for this examination?",
+                height=110,
+                key="v6_question",
+            )
+            v6_answer_mode = st.selectbox(
+                "Answer mode",
+                [
+                    "Extractive report answer (no generator download)",
+                    "Qwen2.5-1.5B report-grounded answer",
+                ],
+                key="v6_answer_mode",
+            )
+            v6_run = st.button(
+                "Run V6 candidate retrieval",
+                type="primary",
+                icon=":material/radiology:",
+                key="run_v6_demo",
+            )
+
+        if v6_run:
+            if v6_image is None:
+                st.warning("Upload a chest X-ray image before running the V6 demonstration.")
+            elif not v6_question.strip():
+                st.warning("Enter a report-grounded question.")
+            else:
+                try:
+                    started = time.perf_counter()
+                    with st.status("Running V6 candidate-report workflow", expanded=True) as status:
+                        st.write("Loading frozen V6 candidate pool and report chunks")
+                        v6_resources = load_v6_dashboard_resources()
+                        st.write("Encoding uploaded pixels with MedSigLIP-448")
+                        v6_encoder = load_v6_image_encoder()
+                        v6_embedding = encode_v6_uploaded_image(
+                            v6_image.getvalue(), v6_encoder
+                        )
+                        st.write("Generating BM25 top-100 report shortlist")
+                        v6_retrieved = retrieve_v6(
+                            v6_indication,
+                            v6_question,
+                            v6_embedding,
+                            v6_resources,
+                            top_k=10,
+                        )
+                        v6_selected = v6_retrieved[0]
+                        v6_evidence = "\n".join(
+                            [
+                                f"Case ID: {v6_selected['case_id']}",
+                                f"Findings: {v6_selected['findings']}",
+                                f"Impression: {v6_selected['impression']}",
+                            ]
+                        )
+                        st.write("Preparing a report-grounded answer")
+                        if v6_answer_mode.startswith("Extractive"):
+                            v6_raw_answer = extractive_v6_answer(v6_question, v6_selected)
+                            v6_answer = v6_raw_answer
+                            v6_generation_mode = "extractive"
+                        else:
+                            v6_prompt = build_v6_generation_prompt(
+                                v6_indication, v6_question, v6_selected
+                            )
+                            v6_raw_answer, v6_answer = generate(
+                                v6_prompt,
+                                MODEL_OPTIONS["Qwen2.5-1.5B (full experiment)"],
+                            )
+                            v6_generation_mode = "qwen2.5"
+                        v6_audit = check_evidence_support(
+                            v6_answer,
+                            v6_evidence,
+                            min_sentence_support=0.65,
+                        )
+                        status.update(
+                            label="V6 candidate-report workflow complete",
+                            state="complete",
+                            expanded=False,
+                        )
+                    st.session_state["v6_demo_result"] = {
+                        "workflow": "v6_confirmation_candidate_report_demo",
+                        "question": v6_question.strip(),
+                        "indication": v6_indication.strip(),
+                        "image_name": v6_image.name,
+                        "image_bytes": v6_image.getvalue(),
+                        "candidate_count": len(v6_resources.candidate_ids),
+                        "shortlist_size": int(
+                            v6_resources.config["multimodal_retrieval"]["shortlist_size"]
+                        ),
+                        "text_weight": float(
+                            v6_resources.config["multimodal_retrieval"]["text_weight"]
+                        ),
+                        "image_weight": float(
+                            v6_resources.config["multimodal_retrieval"]["image_weight"]
+                        ),
+                        "encoder": "google/medsiglip-448",
+                        "retrieved_cases": v6_retrieved,
+                        "answer": v6_answer,
+                        "raw_answer": v6_raw_answer,
+                        "generation_mode": v6_generation_mode,
+                        "support_rate": float(v6_audit.support_rate),
+                        "abstained_by_audit": bool(v6_audit.abstained),
+                        "audit": asdict(v6_audit),
+                        "latency_seconds": time.perf_counter() - started,
+                    }
+                except Exception as exc:
+                    st.exception(exc)
+
+        if "v6_demo_result" in st.session_state:
+            v6_result = st.session_state["v6_demo_result"]
+            st.divider()
+            v6_metrics = st.columns(6)
+            v6_metrics[0].metric("Candidate pool", v6_result["candidate_count"])
+            v6_metrics[1].metric("BM25 shortlist", v6_result["shortlist_size"])
+            v6_metrics[2].metric("Top-ranked report", v6_result["retrieved_cases"][0]["case_id"])
+            v6_metrics[3].metric("Evidence support", f"{v6_result['support_rate']:.1%}")
+            v6_metrics[4].metric("Latency", f"{v6_result['latency_seconds'] * 1000:.0f} ms")
+            v6_metrics[5].metric("Answer", v6_result["generation_mode"])
+
+            v6_image_view, v6_report_view = st.columns([2, 3], gap="large")
+            with v6_image_view:
+                st.image(v6_result["image_bytes"], width=360)
+                st.caption(v6_result["image_name"])
+            with v6_report_view:
+                st.markdown('<div class="evidence-label">Top-ranked candidate report</div>', unsafe_allow_html=True)
+                v6_selected = v6_result["retrieved_cases"][0]
+                st.write(f"Candidate case ID: {v6_selected['case_id']}")
+                st.markdown('<div class="evidence-label">Findings</div>', unsafe_allow_html=True)
+                st.write(v6_selected["findings"] or "Not reported")
+                st.markdown('<div class="evidence-label">Impression</div>', unsafe_allow_html=True)
+                st.write(v6_selected["impression"] or "Not reported")
+
+            st.markdown('<div class="evidence-label">Report-grounded answer</div>', unsafe_allow_html=True)
+            st.markdown(
+                f'<div class="answer-band">{html.escape(str(v6_result["answer"]))}</div>',
+                unsafe_allow_html=True,
+            )
+            if v6_result["abstained_by_audit"]:
+                st.info("The lexical audit marked the generated answer as insufficiently supported; this is an audit signal, not a clinical judgment.")
+
+            st.subheader("V6 retrieval trace")
+            st.dataframe(
+                pd.DataFrame(
+                    [
+                        {
+                            "Rank": row["rank"],
+                            "Case ID": row["case_id"],
+                            "Fused": row["fused_score"],
+                            "BM25": row["bm25_score"],
+                            "BM25 normalized": row["bm25_normalized"],
+                            "Image max-chunk": row["image_similarity"],
+                            "Image normalized": row["image_normalized"],
+                        }
+                        for row in v6_result["retrieved_cases"]
+                    ]
+                ),
+                width="stretch",
+                hide_index=True,
+                column_config={
+                    "Fused": st.column_config.NumberColumn(format="%.3f"),
+                    "BM25": st.column_config.NumberColumn(format="%.3f"),
+                    "BM25 normalized": st.column_config.NumberColumn(format="%.3f"),
+                    "Image max-chunk": st.column_config.NumberColumn(format="%.3f"),
+                    "Image normalized": st.column_config.NumberColumn(format="%.3f"),
+                },
+            )
+            v6_trace_rows = [
+                {"Step": 1, "Action": "Encode uploaded image", "Output": "MedSigLIP-448 image embedding"},
+                {"Step": 2, "Action": "Text shortlist", "Output": "BM25 over the frozen 240-case pool; top 100 retained"},
+                {"Step": 3, "Action": "Multimodal reranking", "Output": "max chunk cosine; independent min-max; 0.5 text + 0.5 image"},
+                {"Step": 4, "Action": "Evidence selection", "Output": "top-ranked candidate report only"},
+                {"Step": 5, "Action": "Answer audit", "Output": "lexical report-support signal; not clinical adjudication"},
+            ]
+            st.dataframe(pd.DataFrame(v6_trace_rows), width="stretch", hide_index=True)
+            v6_export = {key: value for key, value in v6_result.items() if key not in {"image_bytes", "audit"}}
+            st.download_button(
+                "Export V6 demo run",
+                data=json.dumps(v6_export, indent=2, ensure_ascii=False),
+                file_name="v6_candidate_report_demo_run.json",
+                mime="application/json",
+                icon=":material/download:",
+            )
+            st.markdown(
+                '<div class="research-note">The V6 dashboard demonstrates closed-set candidate-report retrieval. It does not confirm patient identity, perform image diagnosis, or replace clinical review.</div>',
+                unsafe_allow_html=True,
+            )
 
 with multimodal_tab:
     st.subheader("Paired chest X-ray and report retrieval")
