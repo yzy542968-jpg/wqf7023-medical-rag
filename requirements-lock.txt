@@ -2,6 +2,7 @@
 # Install pyproject extras for a platform-resolved environment; this file records
 # the versions used to reproduce the submitted experiments.
 accelerate==1.13.0
+bitsandbytes==0.50.1
 hi-ml-multimodal==0.2.2
 numpy==2.5.2
 open-clip-torch==3.3.0
@@ -10,6 +11,7 @@ Pillow==12.3.0
 pytest==9.1.1
 python-docx==1.2.0
 radgraph==0.1.18
+sentence-transformers==5.7.0
 streamlit==1.61.1
 torch==2.11.0+cu128
 torchvision==0.26.0+cu128

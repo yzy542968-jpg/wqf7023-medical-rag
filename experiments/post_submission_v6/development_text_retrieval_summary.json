@@ -1,0 +1,89 @@
+{
+  "experiment": "V6 development text retriever selection",
+  "protocol": "docs/V6_DEVELOPMENT_PROTOCOL.md",
+  "config_sha256": "4142f2796d3f6af52c7375fafeb36ad0a4dce6ecfd9e19abe9148167a1ed3606",
+  "implementation_sha256": "5b8dfb898ae76c9eb88e8a9e2f1ceaeb82f123cc9445ec0b7d0a1591f9efdcc6",
+  "cohort_sha256": "f480f534291ff3081e06bf5c587596fdaa81e266534c2e9fb61215cd4b469e8b",
+  "source_cases_sha256": "56e367190396011d4d67f43e7e733389a8346890bf8729e82fb4326d063bbd68",
+  "model": {
+    "id": "Qwen/Qwen3-Embedding-0.6B",
+    "revision": "97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3",
+    "embedding_dimension": 1024,
+    "dtype_on_disk": "float32",
+    "query_instruction": "Given a radiology question and clinical indication, retrieve the chest X-ray report containing the evidence needed to answer the question.",
+    "instruction_format": "Instruct: {task}\\nQuery:{query}",
+    "document_instruction": null
+  },
+  "development": {
+    "target_case_count": 120,
+    "candidate_case_count": 240,
+    "question_count": 360
+  },
+  "metrics": {
+    "indication_question_bm25": {
+      "hit@1": 0.5972222222222222,
+      "recall@1": 0.5972222222222222,
+      "hit@5": 0.7638888888888888,
+      "recall@5": 0.7638888888888888,
+      "hit@10": 0.8361111111111111,
+      "recall@10": 0.8361111111111111,
+      "mrr": 0.6687446288675335,
+      "token_f1": 0.6605197393727346
+    },
+    "question_only_bm25": {
+      "hit@1": 0.002777777777777778,
+      "recall@1": 0.002777777777777778,
+      "hit@5": 0.019444444444444445,
+      "recall@5": 0.019444444444444445,
+      "hit@10": 0.03611111111111111,
+      "recall@10": 0.03611111111111111,
+      "mrr": 0.02282340923888898,
+      "token_f1": 0.20090807243730638
+    },
+    "indication_question_qwen3_embedding": {
+      "hit@1": 0.48333333333333334,
+      "recall@1": 0.48333333333333334,
+      "hit@5": 0.6888888888888889,
+      "recall@5": 0.6888888888888889,
+      "hit@10": 0.7527777777777778,
+      "recall@10": 0.7527777777777778,
+      "mrr": 0.5780953967969316,
+      "token_f1": 0.6316989455115566
+    },
+    "question_only_qwen3_embedding": {
+      "hit@1": 0.005555555555555556,
+      "recall@1": 0.005555555555555556,
+      "hit@5": 0.022222222222222223,
+      "recall@5": 0.022222222222222223,
+      "hit@10": 0.05,
+      "recall@10": 0.05,
+      "mrr": 0.026151689428481856,
+      "token_f1": 0.23760340315376985
+    }
+  },
+  "selection": {
+    "selected_text_retriever": "bm25",
+    "qwen3_minus_bm25_mrr": -0.09064923207060194,
+    "tie_tolerance": 0.005,
+    "rule": "select qwen3_embedding only when qwen3_minus_bm25_mrr >= tie_tolerance; otherwise select bm25"
+  },
+  "runtime": {
+    "embedding_cache_used": false,
+    "current_run_embedding_seconds": 5.343496900051832,
+    "embedding_build_runtime_seconds": 5.343496900051832,
+    "embedding_build_peak_gpu_memory_allocated_mib": 1457.38916015625,
+    "device": "cuda",
+    "gpu_name": "NVIDIA GeForce RTX 5070 Laptop GPU"
+  },
+  "cache": {
+    "path": "data/processed/v6_qwen3_text_embeddings.npz",
+    "signature": "7c49985741ff1299f15b9e797cd426ef331c43ece53011c35b1c3ec52916ebe3",
+    "sha256": "db67d7d6e8d171aa00cc67d261cac54af766c09d6e2a513e93f61682d1057ed5"
+  },
+  "outputs": {
+    "summary": "experiments/post_submission_v6/development_text_retrieval_summary.json",
+    "rows": "experiments/post_submission_v6/development_text_retrieval_rows.jsonl",
+    "row_count": 1440,
+    "rows_sha256": "e09faae4dcf2c33359df3557e7a68d994ac95ae2de26330939495668329a5208"
+  }
+}

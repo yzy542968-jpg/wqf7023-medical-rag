@@ -9,7 +9,9 @@ streamlit>=1.42,<2
 torch>=2.3
 transformers>=4.45,<5
 accelerate>=0.33,<2
+bitsandbytes>=0.46,<1
 open_clip_torch>=2.23,<4
+sentence-transformers>=5,<6
 qwen-vl-utils>=0.0.8,<1
 hi-ml-multimodal==0.2.2
 
