@@ -12,6 +12,7 @@ class TokenizerLike(Protocol):
         *,
         add_special_tokens: bool,
         truncation: bool,
+        verbose: bool,
     ) -> Mapping[str, Any]: ...
 
     def encode(self, text: str, *, add_special_tokens: bool) -> list[int]: ...
@@ -34,7 +35,12 @@ def sentence_units(text: str) -> list[str]:
 
 
 def token_count(tokenizer: TokenizerLike, text: str) -> int:
-    payload = tokenizer(text, add_special_tokens=True, truncation=False)
+    payload = tokenizer(
+        text,
+        add_special_tokens=True,
+        truncation=False,
+        verbose=False,
+    )
     token_ids = payload["input_ids"]
     if token_ids and isinstance(token_ids[0], list):
         token_ids = token_ids[0]

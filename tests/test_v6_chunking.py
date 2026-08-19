@@ -25,8 +25,10 @@ class WhitespaceTokenizer:
         *,
         add_special_tokens: bool,
         truncation: bool,
+        verbose: bool,
     ) -> dict[str, list[int]]:
         assert truncation is False
+        assert verbose is False
         return {"input_ids": self.encode(text, add_special_tokens=add_special_tokens)}
 
     def decode(self, token_ids: list[int], *, skip_special_tokens: bool) -> str:

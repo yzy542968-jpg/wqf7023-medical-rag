@@ -1,0 +1,134 @@
+{
+  "experiment": "V6 development multimodal retrieval and chunk-policy selection",
+  "protocol": "docs/V6_DEVELOPMENT_PROTOCOL.md",
+  "config_sha256": "4142f2796d3f6af52c7375fafeb36ad0a4dce6ecfd9e19abe9148167a1ed3606",
+  "implementation_sha256": "440c5f73c674413518a36e3a7b94f637436d664abc2b9b28f82f22a36ced0f80",
+  "cohort_sha256": "f480f534291ff3081e06bf5c587596fdaa81e266534c2e9fb61215cd4b469e8b",
+  "source_cases_sha256": "56e367190396011d4d67f43e7e733389a8346890bf8729e82fb4326d063bbd68",
+  "development": {
+    "target_case_count": 120,
+    "candidate_case_count": 240,
+    "question_count": 360,
+    "view_count": 454,
+    "chunk_count": 582,
+    "max_chunk_token_count": 64
+  },
+  "models": {
+    "medsiglip": {
+      "id": "google/medsiglip-448",
+      "revision": "9cea28a1a1195f665105faa6e8544c112fd960a4",
+      "dimension": 1152
+    },
+    "biovilt": {
+      "id": "microsoft/BiomedVLP-BioViL-T",
+      "text_revision": "692f09e",
+      "image_weights_md5": "a83080e2f23aa584a4f2b24c39b1bb64",
+      "dimension": 128
+    }
+  },
+  "fixed_reranking_policy": {
+    "text_retriever": "BM25(k1=1.5,b=0.75)",
+    "query": "clinical_indication_plus_question",
+    "shortlist_size": 100,
+    "text_weight": 0.5,
+    "image_weight": 0.5,
+    "normalization": "independent_minmax_within_text_shortlist",
+    "tie_break": "descending_score_then_ascending_case_id",
+    "standardized_chunk_boundaries_for_both_encoders": true
+  },
+  "metrics": {
+    "indication_question_bm25": {
+      "hit@1": 0.5972222222222222,
+      "recall@1": 0.5972222222222222,
+      "hit@5": 0.7638888888888888,
+      "recall@5": 0.7638888888888888,
+      "hit@10": 0.8361111111111111,
+      "recall@10": 0.8361111111111111,
+      "mrr": 0.6687446288675335,
+      "token_f1": 0.6605197393727346
+    },
+    "medsiglip_mean_chunk_reranker": {
+      "hit@1": 0.6444444444444445,
+      "recall@1": 0.6444444444444445,
+      "hit@5": 0.8055555555555556,
+      "recall@5": 0.8055555555555556,
+      "hit@10": 0.8611111111111112,
+      "recall@10": 0.8611111111111112,
+      "mrr": 0.7223884901946608,
+      "token_f1": 0.7474761083987828
+    },
+    "medsiglip_max_chunk_reranker": {
+      "hit@1": 0.6777777777777778,
+      "recall@1": 0.6777777777777778,
+      "hit@5": 0.8333333333333334,
+      "recall@5": 0.8333333333333334,
+      "hit@10": 0.8861111111111111,
+      "recall@10": 0.8861111111111111,
+      "mrr": 0.7476167554450479,
+      "token_f1": 0.7629352818269262
+    },
+    "biovilt_mean_chunk_reranker": {
+      "hit@1": 0.6166666666666667,
+      "recall@1": 0.6166666666666667,
+      "hit@5": 0.8055555555555556,
+      "recall@5": 0.8055555555555556,
+      "hit@10": 0.8833333333333333,
+      "recall@10": 0.8833333333333333,
+      "mrr": 0.7061076395373456,
+      "token_f1": 0.726171202946549
+    },
+    "biovilt_max_chunk_reranker": {
+      "hit@1": 0.6111111111111112,
+      "recall@1": 0.6111111111111112,
+      "hit@5": 0.8166666666666667,
+      "recall@5": 0.8166666666666667,
+      "hit@10": 0.8805555555555555,
+      "recall@10": 0.8805555555555555,
+      "mrr": 0.7029987243476052,
+      "token_f1": 0.7225307069426441
+    }
+  },
+  "chunk_policy_selection": {
+    "selected_chunk_policy": "maximum_image_chunk_cosine",
+    "maximum_minus_mean_mrr": 0.025228265250387127,
+    "tie_tolerance": 0.005,
+    "rule": "select maximum_image_chunk_cosine only when maximum_minus_mean_mrr >= tie_tolerance; otherwise select normalized_mean_chunk_embedding"
+  },
+  "selected_standardized_encoder_systems": {
+    "medsiglip": "medsiglip_max_chunk_reranker",
+    "biovilt": "biovilt_max_chunk_reranker"
+  },
+  "runtime": {
+    "device": "cuda",
+    "gpu_name": "NVIDIA GeForce RTX 5070 Laptop GPU",
+    "medsiglip": {
+      "cache_used": false,
+      "embedding_build_seconds": 26.886139599839225,
+      "embedding_build_peak_gpu_memory_allocated_mib": 1816.33544921875
+    },
+    "biovilt": {
+      "cache_used": false,
+      "embedding_build_seconds": 8.21801030007191,
+      "embedding_build_peak_gpu_memory_allocated_mib": 856.5517578125
+    }
+  },
+  "caches": {
+    "medsiglip": {
+      "path": "data/processed/v6_medsiglip_embeddings.npz",
+      "signature": "3bf79a24ee79e4a4d3895a911b84d3c4c56f7a20bc3b2456bc37e9e759681fa4",
+      "sha256": "af38d95b6371b79acd31d50d18fe86bf87cd037ac3025c15a5b60bf20a8a3a54"
+    },
+    "biovilt": {
+      "path": "data/processed/v6_biovilt_standardized_embeddings.npz",
+      "signature": "12c37bd12220209c3901b814f56bd79f74489cc6f7e81d4b2fa0a5320bbcf462",
+      "sha256": "e289aef4c21eaeda18a35c7dc7c6d931664b9547bc4272f2bf454d2f842afa46"
+    }
+  },
+  "outputs": {
+    "summary": "experiments/post_submission_v6/development_multimodal_retrieval_summary.json",
+    "rows": "experiments/post_submission_v6/development_multimodal_retrieval_rows.jsonl",
+    "row_count": 1800,
+    "rows_sha256": "f477e58d76bdf7c040c328093de12bf700e4eacc34429f12bdbb8623f00c6776"
+  },
+  "claim_boundary": "Development outcomes select policies only; no V6 confirmation case IDs were generated or inspected."
+}
