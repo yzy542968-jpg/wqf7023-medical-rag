@@ -1,11 +1,17 @@
 # Retrieval-Augmented Medical Question Answering over Paired Radiology Images and Reports
 
-**Name:** ZHANG YUE  
-**Matric No.:** 22097191  
-**Programme:** Master of Artificial Intelligence  
-**Course:** WQF7023 Artificial Intelligence Research Project  
-**Supervisor:** Dr. Uzair Ishtiaq  
-**Document status:** V5-integrated manuscript draft; technical and qualitative results frozen  
+**Name:** ZHANG YUE
+
+**Matric No.:** 22097191
+
+**Programme:** Master of Artificial Intelligence
+
+**Course:** WQF7023 Artificial Intelligence Research Project
+
+**Supervisor:** Dr. Uzair Ishtiaq
+
+**Document status:** V5-integrated manuscript draft; technical and qualitative results frozen
+
 **Version date:** 19 August 2026
 
 ## Abstract

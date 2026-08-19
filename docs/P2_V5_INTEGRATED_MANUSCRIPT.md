@@ -1,11 +1,17 @@
 # Retrieval-Augmented Medical Question Answering over Paired Radiology Images and Reports
 
-**Name:** ZHANG YUE  
-**Matric No.:** 22097191  
-**Programme:** Master of Artificial Intelligence  
-**Course:** WQF7023 Artificial Intelligence Research Project  
-**Supervisor:** Dr. Uzair Ishtiaq  
-**Document status:** V5-integrated manuscript draft; technical and qualitative results frozen  
+**Name:** ZHANG YUE
+
+**Matric No.:** 22097191
+
+**Programme:** Master of Artificial Intelligence
+
+**Course:** WQF7023 Artificial Intelligence Research Project
+
+**Supervisor:** Dr. Uzair Ishtiaq
+
+**Document status:** V5-integrated manuscript draft; technical and qualitative results frozen
+
 **Version date:** 19 August 2026
 
 ## Abstract
@@ -526,7 +532,8 @@ The qualitative freeze is identified by commit `f3fefbf` and tag `v5-qualitative
 
 ## Appendix C: Reproduction Entry Points
 
-**Repository:** https://github.com/yzy542968-jpg/wqf7023-medical-rag  
+**Repository:** https://github.com/yzy542968-jpg/wqf7023-medical-rag
+
 **Branch:** `post-submission-improvements`
 
 ```powershell

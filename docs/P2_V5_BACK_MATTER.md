@@ -63,7 +63,8 @@ The qualitative freeze is identified by commit `f3fefbf` and tag `v5-qualitative
 
 ## Appendix C: Reproduction Entry Points
 
-**Repository:** https://github.com/yzy542968-jpg/wqf7023-medical-rag  
+**Repository:** https://github.com/yzy542968-jpg/wqf7023-medical-rag
+
 **Branch:** `post-submission-improvements`
 
 ```powershell
