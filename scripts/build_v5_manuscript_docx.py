@@ -256,6 +256,11 @@ def add_table(doc: Document, lines: list[str]) -> None:
         widths = [CONTENT_DXA // cols] * cols
         widths[-1] += CONTENT_DXA - sum(widths)
 
+    if sum(widths) != CONTENT_DXA:
+        source_total = sum(widths)
+        widths = [round(width * CONTENT_DXA / source_total) for width in widths]
+        widths[-1] += CONTENT_DXA - sum(widths)
+
     table = doc.add_table(rows=len(rows), cols=cols)
     table.style = "Table Grid"
     set_table_geometry(table, widths)
@@ -350,9 +355,9 @@ def configure_page(doc: Document) -> None:
     add_field(p, "PAGE")
 
 
-def add_body(doc: Document, markdown: str) -> None:
-    body = markdown.split("## Abstract", maxsplit=1)[1]
-    lines = ["## Abstract"] + body.splitlines()
+def add_body(doc: Document, markdown: str, start_heading: str = "## Abstract") -> None:
+    body = markdown.split(start_heading, maxsplit=1)[1]
+    lines = [start_heading] + body.splitlines()
     i = 0
     in_code = False
     while i < len(lines):

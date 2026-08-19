@@ -316,7 +316,9 @@ The system was a research prototype. It did not provide treatment recommendation
 
 ## 4.1 Patient-Scope Ambiguity and the Indication Shortcut
 
-Table 4.1 shows the four principal confirmation retrieval conditions.
+The four principal confirmation retrieval conditions are shown in Table 4.1.
+
+Table 4.1. Retrieval results under four principal input conditions
 
 | Input condition | Hit@1 | Hit@5 | Hit@10 | MRR | Extractive proxy Token-F1 |
 |---|---:|---:|---:|---:|---:|
@@ -345,7 +347,9 @@ The plus-one Monte Carlo value was 0.0099 for both MRR and proxy Token-F1. The r
 
 ## 4.4 End-to-End Question Answering
 
-Table 4.2 compares the same generator and checker after report-only and multimodal retrieval.
+The same generator and checker are compared after report-only and multimodal retrieval in Table 4.2.
+
+Table 4.2. End-to-end QA comparison
 
 | Pipeline | Draft Token-F1 | Final Token-F1 | Automated support | Final abstention | Revision rate |
 |---|---:|---:|---:|---:|---:|
@@ -375,6 +379,8 @@ Five exploratory findings were supported:
 Additional cases exposed data limitations. One de-identification token prevented confident adjudication of whether “Lungs are clear” was supported. Another report contained an apparent left-versus-right upper-lobe inconsistency between findings and impression. These examples show that data quality can affect both generation evaluation and verifier interpretation.
 
 ## 4.6 Computational Cost
+
+Table 4.3. Runtime and computational cost
 
 | Pipeline condition | Records | Total process | Generation only | Generation throughput | Peak allocated GPU memory |
 |---|---:|---:|---:|---:|---:|
