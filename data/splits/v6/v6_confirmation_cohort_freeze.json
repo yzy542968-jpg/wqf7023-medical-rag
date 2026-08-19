@@ -1,0 +1,92 @@
+{
+  "freeze": "V6 instantiated confirmation cohort",
+  "status": "frozen_before_confirmation_outcome_execution",
+  "protocol_commit": "eee7405",
+  "builder": "scripts/build_v6_confirmation_cohort.py",
+  "builder_sha256": "7910e2ff54463dd1d0e1a43e00e391102eb51d89b6c94a3c8afb9e3d25a439fd",
+  "config": "config/v6_confirmation.json",
+  "config_sha256": "2e56bd1b08a5190ebee873e5e0346b74f15cddc3df5448de958f58fbfd0a6b26",
+  "source_cases_sha256": "56e367190396011d4d67f43e7e733389a8346890bf8729e82fb4326d063bbd68",
+  "selection_frame": {
+    "audit_path": "data/splits/v6/v6_development_confirmation_overlap_audit.json",
+    "eligible_case_count": 1479,
+    "eligible_case_ids_sha256": "cd7b59c7d890846055ad43b8b108cec28b475ecf810f14966a538a3c6c7e98eb",
+    "stratifiable_case_count": 1462,
+    "stratifiable_case_ids_sha256": "e0b03681591d48d4d83babca2d72b80872d2cb64dd01a170911d78d1b3ee5186",
+    "report_indexed_normal_count": 1045,
+    "report_indexed_normal_ids_sha256": "53e6acca324bb416a88f3132240cc02176d6284f3de593e29f58168e57a6a7c3",
+    "report_indexed_abnormal_count": 417,
+    "report_indexed_abnormal_ids_sha256": "bd25ee97a821d18620ac346f9e60ea5720ef56d437dea665f388041b557a2f70",
+    "report_index_indeterminate_count": 17,
+    "report_index_indeterminate_ids_sha256": "3a51b0809b46becafd3fe9786e12acadc9af60e4b255b9fc73568793bd7f1211",
+    "development_overlap_count": 0
+  },
+  "cohort_generation": {
+    "seed": 7026,
+    "selection_domain": "v6-selection",
+    "assignment_domain": "v6-assignment",
+    "canonical_case_id": "str(value).strip()",
+    "hash": "SHA-256 lowercase hexadecimal",
+    "hash_order": "ascending",
+    "fingerprint_serialization": "sorted unique canonical IDs joined by LF UTF-8 with no trailing LF",
+    "candidate_pool_case_count": 240,
+    "report_indexed_normal": 172,
+    "report_indexed_abnormal": 68,
+    "target": {
+      "case_count": 120,
+      "report_indexed_normal": 86,
+      "report_indexed_abnormal": 34
+    },
+    "distractor": {
+      "case_count": 120,
+      "report_indexed_normal": 86,
+      "report_indexed_abnormal": 34
+    },
+    "silent_replacement_allowed": false,
+    "case_ids_instantiated": false
+  },
+  "observed_composition": {
+    "selected": {
+      "normal": 172,
+      "abnormal": 68,
+      "total": 240
+    },
+    "target": {
+      "normal": 86,
+      "abnormal": 34,
+      "total": 120
+    },
+    "distractor": {
+      "normal": 86,
+      "abnormal": 34,
+      "total": 120
+    }
+  },
+  "readability_check": {
+    "case_count": 240,
+    "image_count": 464,
+    "all_selected_cases_have_readable_official_image": true
+  },
+  "question_count": 360,
+  "chunk_count": 885,
+  "fingerprints": {
+    "selected_240_case_ids_sha256": "db91b4f8ac5f8153456d8429d8b1e6c6c405e57f709917a6aa1ea06abc260dab",
+    "target_120_case_ids_sha256": "83ddc512d39d50c8f5b6de7396d62d12d094beef85ae825b280be5b3539985bf",
+    "distractor_120_case_ids_sha256": "a8e9ab7421ab5832ac681626fcf87cb7d6722abd788e1bc72e08031e3520ec3a",
+    "selected_normal_172_case_ids_sha256": "7e20cf340c6eee9d5a92f73b72c9e896250fdc094a29117766f7d0aa68a748f7",
+    "selected_abnormal_68_case_ids_sha256": "52dc8e9e49d86b7a5877d4ced491163e56a2da9369428c51a90a237df934a2f4",
+    "target_normal_86_case_ids_sha256": "662180007577a81a49e7ff303ba3c639f9b5bcfec34489a82f9e80c29b29a970",
+    "target_abnormal_34_case_ids_sha256": "73176f717046f016d82902be79e280d7d4c2b386383f649b8e5b22d80a16c2be",
+    "distractor_normal_86_case_ids_sha256": "d4d2ebf466503cca8007b1012a71e9690c13bed7c22054e4150825a2cc5f3db3",
+    "distractor_abnormal_34_case_ids_sha256": "e6f0717099bc9b8ee5a43c123ba2fa641f7b9c2c65b362b7021183cbc11ef490"
+  },
+  "artifacts": {
+    "cohort": "data/splits/v6/v6_confirmation_cohort.json",
+    "cohort_sha256": "b55b4f6222ad1ba492429cc67d9af435bb07f55190e9f5414ac4b406dcf3de9e",
+    "targets": "data/splits/v6/v6_confirmation_target_case_ids.txt",
+    "targets_sha256": "83ddc512d39d50c8f5b6de7396d62d12d094beef85ae825b280be5b3539985bf",
+    "distractors": "data/splits/v6/v6_confirmation_distractor_case_ids.txt",
+    "distractors_sha256": "a8e9ab7421ab5832ac681626fcf87cb7d6722abd788e1bc72e08031e3520ec3a"
+  },
+  "claim_boundary": "Case-ID disjoint same-source confirmation; patient-level independence and external validation are not established."
+}
