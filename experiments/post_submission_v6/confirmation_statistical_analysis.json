@@ -1,0 +1,301 @@
+{
+  "experiment": "V6 model-modernized confirmation statistical analysis",
+  "status": "formal_confirmation_statistics_frozen",
+  "protocol_commit": "eee7405",
+  "retrieval_outcome_commit": "c6442c9",
+  "verified_qa_outcome_commit": "3ae127f",
+  "analysis_implementation_sha256": "fc181cd922713130ba2646bef99c3387044d87006f7b2902f1ec0e3055ee7ab4",
+  "method": {
+    "unit": "case_id",
+    "paired": true,
+    "bootstrap_resamples": 5000,
+    "bootstrap_seed": 7026,
+    "confidence_level": 0.95,
+    "percentile_quantile_method": "NumPy default linear interpolation",
+    "patient_level_independence_verified": false
+  },
+  "input_artifacts": {
+    "config_sha256": "2e56bd1b08a5190ebee873e5e0346b74f15cddc3df5448de958f58fbfd0a6b26",
+    "cohort_sha256": "b55b4f6222ad1ba492429cc67d9af435bb07f55190e9f5414ac4b406dcf3de9e",
+    "retrieval_rows_sha256": "a5f556c175d1ce6faa3adc767c458018e75fcdff07f9dbe39463ba62a268c474",
+    "retrieval_summary_sha256": "8d91c721bcd5a998d6572c61fe820c1362592ea8a32fac30d49760901dce602f",
+    "verified_rows_sha256": "a095229b99cc83cc28c539e3fadd3c35f0ddfc02147adbe1dd717001c659f1ef",
+    "verified_summary_sha256": "4ebafd95f0074ba721f0ff4f4a79e801d8c3219b9c7f223f03f5f0f3ad7882c2",
+    "ranking_reconstruction": {
+      "embedding_cache": "data/processed/v6_confirmation_medsiglip_embeddings.npz",
+      "embedding_cache_sha256": "ae87a705896879fa335ccd973212c9ca9a2a372a6f09e94d3b9c0e9fdeff30e9",
+      "embedding_cache_signature": "15f3239b93839420f471b2d48d921e213735e781d672c193d5579358c16f6edb",
+      "chunk_count": 514,
+      "view_count": 464
+    }
+  },
+  "integrity": {
+    "target_case_count": 120,
+    "question_count": 360,
+    "normal_target_count": 86,
+    "abnormal_target_count": 34,
+    "reconstructed_bm25_mrr_matches_frozen": true,
+    "reconstructed_medsiglip_mrr_matches_frozen": true
+  },
+  "primary_retrieval": {
+    "case_count": 120,
+    "point_difference": 0.03069009697349532,
+    "ci_lower": 0.0090237824068265,
+    "ci_upper": 0.053678461710989694,
+    "confidence_level": 0.95,
+    "bootstrap_resamples": 5000,
+    "bootstrap_seed": 7026,
+    "ci_method": "percentile_case_grouped_paired_bootstrap",
+    "baseline": "bm25",
+    "treatment": "medsiglip_max_chunk_reranker",
+    "baseline_mrr": 0.616751492346633,
+    "treatment_mrr": 0.6474415893201283,
+    "criterion": "ci_lower_gt_zero",
+    "criterion_passed": true
+  },
+  "alignment_specificity": {
+    "correctly_aligned_medsiglip_mrr": 0.6474415893201283,
+    "shuffled_control_count": 100,
+    "shuffled_mrr_exceedance_count": 0,
+    "plus_one_monte_carlo_p_mrr": 0.009900990099009901,
+    "criterion": "plus_one_p_le_0_05",
+    "criterion_passed": true
+  },
+  "primary_qa": {
+    "qwen2_5": {
+      "case_count": 120,
+      "point_difference": 0.012061528969961358,
+      "ci_lower": 0.0016543565022384226,
+      "ci_upper": 0.023704379743231127,
+      "confidence_level": 0.95,
+      "bootstrap_resamples": 5000,
+      "bootstrap_seed": 7026,
+      "ci_method": "percentile_case_grouped_paired_bootstrap",
+      "baseline_mean": 0.16685799395892617,
+      "treatment_mean": 0.17891952292888755,
+      "metric": "verified_token_f1",
+      "baseline_system": "bm25_qwen2_5",
+      "treatment_system": "medsiglip_qwen2_5",
+      "criterion": "point_difference_gt_zero",
+      "criterion_passed": true,
+      "ci_excludes_zero": true
+    },
+    "medgemma_1_5": {
+      "case_count": 120,
+      "point_difference": 0.03857280148986443,
+      "ci_lower": 0.02198249084511388,
+      "ci_upper": 0.05642420241090816,
+      "confidence_level": 0.95,
+      "bootstrap_resamples": 5000,
+      "bootstrap_seed": 7026,
+      "ci_method": "percentile_case_grouped_paired_bootstrap",
+      "baseline_mean": 0.4840029436618096,
+      "treatment_mean": 0.522575745151674,
+      "metric": "verified_token_f1",
+      "baseline_system": "bm25_medgemma_1_5",
+      "treatment_system": "medsiglip_medgemma_1_5",
+      "criterion": "point_difference_gt_zero",
+      "criterion_passed": true,
+      "ci_excludes_zero": true
+    }
+  },
+  "difference_in_differences": {
+    "case_count": 120,
+    "point_difference": 0.02651127251990307,
+    "ci_lower": 0.012021112549346544,
+    "ci_upper": 0.042293822020160354,
+    "confidence_level": 0.95,
+    "bootstrap_resamples": 5000,
+    "bootstrap_seed": 7026,
+    "ci_method": "percentile_case_grouped_paired_bootstrap",
+    "definition": "delta_medgemma_minus_delta_qwen",
+    "confirmatory_threshold": null
+  },
+  "secondary_qa_metrics": {
+    "draft_token_f1": {
+      "qwen2_5": {
+        "case_count": 120,
+        "point_difference": 0.011830069858057601,
+        "ci_lower": 0.0006413354630642679,
+        "ci_upper": 0.024095410717819184,
+        "confidence_level": 0.95,
+        "bootstrap_resamples": 5000,
+        "bootstrap_seed": 7026,
+        "ci_method": "percentile_case_grouped_paired_bootstrap",
+        "baseline_mean": 0.15928898002094893,
+        "treatment_mean": 0.17111904987900653
+      },
+      "medgemma_1_5": {
+        "case_count": 120,
+        "point_difference": 0.038021690244888544,
+        "ci_lower": 0.02125740644826185,
+        "ci_upper": 0.056155300167274755,
+        "confidence_level": 0.95,
+        "bootstrap_resamples": 5000,
+        "bootstrap_seed": 7026,
+        "ci_method": "percentile_case_grouped_paired_bootstrap",
+        "baseline_mean": 0.49232731442823596,
+        "treatment_mean": 0.5303490046731245
+      }
+    },
+    "support_rate": {
+      "qwen2_5": {
+        "case_count": 120,
+        "point_difference": -0.01666666666666667,
+        "ci_lower": -0.04166666666666667,
+        "ci_upper": 0.00833333333333333,
+        "confidence_level": 0.95,
+        "bootstrap_resamples": 5000,
+        "bootstrap_seed": 7026,
+        "ci_method": "percentile_case_grouped_paired_bootstrap",
+        "baseline_mean": 0.3055555555555555,
+        "treatment_mean": 0.28888888888888886
+      },
+      "medgemma_1_5": {
+        "case_count": 120,
+        "point_difference": 0.027777777777777783,
+        "ci_lower": 0.01388888888888889,
+        "ci_upper": 0.044444444444444446,
+        "confidence_level": 0.95,
+        "bootstrap_resamples": 5000,
+        "bootstrap_seed": 7026,
+        "ci_method": "percentile_case_grouped_paired_bootstrap",
+        "baseline_mean": 0.9416666666666667,
+        "treatment_mean": 0.9694444444444444
+      }
+    },
+    "agent_abstained": {
+      "qwen2_5": {
+        "case_count": 120,
+        "point_difference": 0.016666666666666663,
+        "ci_lower": -0.008333333333333337,
+        "ci_upper": 0.041666666666666664,
+        "confidence_level": 0.95,
+        "bootstrap_resamples": 5000,
+        "bootstrap_seed": 7026,
+        "ci_method": "percentile_case_grouped_paired_bootstrap",
+        "baseline_mean": 0.6944444444444444,
+        "treatment_mean": 0.7111111111111111
+      },
+      "medgemma_1_5": {
+        "case_count": 120,
+        "point_difference": -0.027777777777777776,
+        "ci_lower": -0.04444444444444444,
+        "ci_upper": -0.013888888888888888,
+        "confidence_level": 0.95,
+        "bootstrap_resamples": 5000,
+        "bootstrap_seed": 7026,
+        "ci_method": "percentile_case_grouped_paired_bootstrap",
+        "baseline_mean": 0.05277777777777778,
+        "treatment_mean": 0.024999999999999998
+      }
+    },
+    "revised": {
+      "qwen2_5": {
+        "case_count": 120,
+        "point_difference": 0.016666666666666663,
+        "ci_lower": -0.008333333333333337,
+        "ci_upper": 0.041666666666666664,
+        "confidence_level": 0.95,
+        "bootstrap_resamples": 5000,
+        "bootstrap_seed": 7026,
+        "ci_method": "percentile_case_grouped_paired_bootstrap",
+        "baseline_mean": 0.6944444444444444,
+        "treatment_mean": 0.7111111111111111
+      },
+      "medgemma_1_5": {
+        "case_count": 120,
+        "point_difference": -0.05,
+        "ci_lower": -0.08611111111111111,
+        "ci_upper": -0.013888888888888888,
+        "confidence_level": 0.95,
+        "bootstrap_resamples": 5000,
+        "bootstrap_seed": 7026,
+        "ci_method": "percentile_case_grouped_paired_bootstrap",
+        "baseline_mean": 0.28888888888888886,
+        "treatment_mean": 0.23888888888888887
+      }
+    }
+  },
+  "predefined_subgroup_sensitivity": {
+    "report_indexed_normal": {
+      "case_count": 86,
+      "retrieval_mrr": {
+        "case_count": 86,
+        "point_difference": -0.0027221507483431375,
+        "ci_lower": -0.02042660754293172,
+        "ci_upper": 0.016509482068967792,
+        "confidence_level": 0.95,
+        "bootstrap_resamples": 5000,
+        "bootstrap_seed": 7026,
+        "ci_method": "percentile_case_grouped_paired_bootstrap"
+      },
+      "verified_token_f1": {
+        "qwen2_5": {
+          "case_count": 86,
+          "point_difference": 0.015501081357821743,
+          "ci_lower": 0.004714750948211256,
+          "ci_upper": 0.028453503028417017,
+          "confidence_level": 0.95,
+          "bootstrap_resamples": 5000,
+          "bootstrap_seed": 7026,
+          "ci_method": "percentile_case_grouped_paired_bootstrap",
+          "baseline_mean": 0.184190148363861,
+          "treatment_mean": 0.19969122972168274
+        },
+        "medgemma_1_5": {
+          "case_count": 86,
+          "point_difference": 0.027770883481605883,
+          "ci_lower": 0.009054211530064795,
+          "ci_upper": 0.0487949510101788,
+          "confidence_level": 0.95,
+          "bootstrap_resamples": 5000,
+          "bootstrap_seed": 7026,
+          "ci_method": "percentile_case_grouped_paired_bootstrap",
+          "baseline_mean": 0.506850329235765,
+          "treatment_mean": 0.5346212127173708
+        }
+      }
+    },
+    "report_indexed_abnormal": {
+      "case_count": 34,
+      "retrieval_mrr": {
+        "case_count": 34,
+        "point_difference": 0.11520342944638082,
+        "ci_lower": 0.0611778344305147,
+        "ci_upper": 0.17339356823456045,
+        "confidence_level": 0.95,
+        "bootstrap_resamples": 5000,
+        "bootstrap_seed": 7026,
+        "ci_method": "percentile_case_grouped_paired_bootstrap"
+      },
+      "verified_token_f1": {
+        "qwen2_5": {
+          "case_count": 34,
+          "point_difference": 0.0033614846947850933,
+          "ci_lower": -0.019309528228530597,
+          "ci_upper": 0.030441317680403524,
+          "confidence_level": 0.95,
+          "bootstrap_resamples": 5000,
+          "bootstrap_seed": 7026,
+          "ci_method": "percentile_case_grouped_paired_bootstrap",
+          "baseline_mean": 0.12301783869938517,
+          "treatment_mean": 0.12637932339417024
+        },
+        "medgemma_1_5": {
+          "case_count": 34,
+          "point_difference": 0.06589529998134193,
+          "ci_lower": 0.03122576817756953,
+          "ci_upper": 0.10275593612334889,
+          "confidence_level": 0.95,
+          "bootstrap_resamples": 5000,
+          "bootstrap_seed": 7026,
+          "ci_method": "percentile_case_grouped_paired_bootstrap",
+          "baseline_mean": 0.4262124977982755,
+          "treatment_mean": 0.49210779777961744
+        }
+      }
+    }
+  },
+  "claim_boundary": "Case-ID-grouped same-source automated evaluation; not patient-level independence, external validation, clinical correctness, or safety."
+}
