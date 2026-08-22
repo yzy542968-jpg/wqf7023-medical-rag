@@ -48,3 +48,14 @@ def test_v7_prior_use_audit_and_development_manifest() -> None:
         assert block["report_indexed_abnormal"] == 68
         assert len(block["target_case_ids"]) == 120
         assert len(block["distractor_case_ids"]) == 120
+
+
+def test_v7_confirmation_config_is_frozen_before_case_instantiation() -> None:
+    config = read_json("config/v7_confirmation.json")
+    assert config["status"] == "confirmation_protocol_frozen_before_confirmation_case_instantiation"
+    assert config["cohort_generation"]["case_ids_instantiated"] is False
+    assert config["execution"]["confirmation_case_ids_generated"] is False
+    assert config["adaptive_model"]["model_type"] == "linear_sigmoid"
+    assert config["adaptive_model"]["epochs"] == 6
+    assert config["retrieval"]["global_alpha_star"] == 0.52
+    assert config["statistics"]["h2_success"] == "plus_one_p_le_0.05"

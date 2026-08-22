@@ -1,0 +1,150 @@
+{
+  "experiment": "v7_adaptive_multimodal_fusion_confirmation",
+  "status": "confirmation_protocol_frozen_before_confirmation_case_instantiation",
+  "protocol_path": "docs/V7_CONFIRMATION_PROTOCOL.md",
+  "development_decision_path": "docs/V7_DEVELOPMENT_DECISION_RECORD.md",
+  "development_protocol_commit": "2ec6dce",
+  "development_decision_commit": "8409d9d",
+  "source": {
+    "dataset": "Indiana University Chest X-ray / OpenI",
+    "cases_path": "data/processed/openi_cases.jsonl",
+    "cases_sha256": "56e367190396011d4d67f43e7e733389a8346890bf8729e82fb4326d063bbd68",
+    "pre_confirmation_frame_audit": "data/splits/v7/v7_prior_use_audit.json",
+    "pre_confirmation_frame_case_count": 519,
+    "pre_confirmation_frame_ids_sha256": "98f52612031a9ae6efcd5e75610b2a4a44baa67fbabcc1a91f12a89e7af737a7",
+    "stratifiable_frame_case_count": 502,
+    "stratifiable_frame_ids_sha256": "800bb97469b1715f6e17c3c22b583ed3f74f5ebc5cd75b8328b14014b639d318",
+    "report_indexed_normal_count": 357,
+    "report_indexed_normal_ids_sha256": "1877873d15a272aeb3852b72fbefb5e97544f90d1363ab4a217af37be0b06a71",
+    "report_indexed_abnormal_count": 145,
+    "report_indexed_abnormal_ids_sha256": "e6c25b2e1f6eacf1ebdb410c9f51bbe9ceeabfe4f7664a07e7f462406dfe6bc9",
+    "report_index_indeterminate_count": 17,
+    "patient_level_independence_verified": false
+  },
+  "cohort_generation": {
+    "seed": 7026,
+    "selection_domain": "v7-selection",
+    "assignment_domain": "v7-assignment",
+    "canonical_case_id": "str(value).strip()",
+    "hash": "SHA-256 lowercase hexadecimal",
+    "fingerprint_serialization": "sorted unique canonical IDs joined by LF UTF-8 with no trailing LF",
+    "candidate_pool_case_count": 240,
+    "report_indexed_normal": 172,
+    "report_indexed_abnormal": 68,
+    "target": {
+      "case_count": 120,
+      "report_indexed_normal": 86,
+      "report_indexed_abnormal": 34
+    },
+    "distractor": {
+      "case_count": 120,
+      "report_indexed_normal": 86,
+      "report_indexed_abnormal": 34
+    },
+    "case_ids_instantiated": false,
+    "silent_replacement_allowed": false
+  },
+  "retrieval": {
+    "bm25": {
+      "k1": 1.5,
+      "b": 0.75,
+      "query": "clinical_indication_plus_question"
+    },
+    "shortlist_size": 100,
+    "tie_break": "descending_score_then_ascending_canonical_case_id",
+    "medsiglip": {
+      "model": "google/medsiglip-448",
+      "revision": "9cea28a1a1195f665105faa6e8544c112fd960a4",
+      "max_text_tokens": 64,
+      "report_sections": [
+        "findings",
+        "impression"
+      ],
+      "chunk_policy": "sentence_aware_at_most_64_tokens_no_overlap_no_truncation",
+      "report_aggregation": "maximum_image_chunk_cosine",
+      "image_view_aggregation": "l2_normalize_each_view_then_mean_then_l2_normalize"
+    },
+    "score_normalization": "independent_minmax_within_text_shortlist",
+    "fixed_alpha": 0.5,
+    "global_alpha_star": 0.52,
+    "simple_gate": {
+      "enabled": true,
+      "threshold": 0.85,
+      "rule": "if_bm25_top1_margin_gte_threshold_use_alpha_1_else_global_alpha"
+    }
+  },
+  "adaptive_model": {
+    "model_type": "linear_sigmoid",
+    "feature_schema": "13 protocol-defined query-and-retrieval-state features",
+    "feature_scaler": "experiments/post_submission_v7/v7_adaptive_fusion_feature_scaler.json",
+    "feature_scaler_sha256": "45272a9d25029db0c01c81ea753db25b310c4512ecd13ff6576ccfe21cba0860",
+    "checkpoint": "experiments/post_submission_v7/v7_adaptive_fusion_final_checkpoint.pt",
+    "checkpoint_sha256": "ab75c54fefa2531fb98af500d733d517804434e0ee87bc687bb706d36a6143b7",
+    "learning_rate": 0.001,
+    "weight_decay": 0.0,
+    "epochs": 6,
+    "optimizer": "AdamW",
+    "loss": "softplus(-(positive_score-negative_score))",
+    "seed": 7026,
+    "foundation_models_frozen": true
+  },
+  "questions": {
+    "per_target_case": 3,
+    "types": [
+      "case_scoped_findings",
+      "case_scoped_impression",
+      "case_scoped_summary"
+    ],
+    "question_count": 360,
+    "physician_authored": false
+  },
+  "shuffled_image_control": {
+    "count": 100,
+    "seed": 7026,
+    "order_domain": "v7-shuffle-order",
+    "fixed_points_allowed": false,
+    "duplicate_assignments_allowed": false,
+    "recompute_adaptive_features": true,
+    "recompute_alpha": true
+  },
+  "statistics": {
+    "unit": "case_id",
+    "primary_metric": "case_averaged_equal_question_type_mrr",
+    "secondary_retrieval_metrics": [
+      "hit_at_1",
+      "hit_at_5",
+      "hit_at_10",
+      "target_outside_shortlist_rate"
+    ],
+    "source_balanced_sensitivity": "0.50*findings+0.25*impression+0.25*summary",
+    "bootstrap_resamples": 5000,
+    "bootstrap_seed": 7026,
+    "confidence_level": 0.95,
+    "h1_success": "adaptive_minus_global_alpha_ci_low_gt_0",
+    "h2_p_value": "(1+count_shuffle_mrr_ge_aligned_mrr)/101",
+    "h2_success": "plus_one_p_le_0.05"
+  },
+  "secondary_qa": {
+    "enabled_after_retrieval_freeze": true,
+    "generator": "reuse_v6_medgemma_1_5",
+    "prompt": "reuse_v6_prompt",
+    "verifier": "reuse_v6_verifier",
+    "image_pixels_to_generator": false,
+    "model_selection_allowed": false
+  },
+  "execution": {
+    "confirmation_run_limit": 1,
+    "technical_rerun_under_identical_config_allowed": true,
+    "outcome_driven_rerun_or_replacement_allowed": false,
+    "subgroup_specific_tuning_allowed": false,
+    "confirmation_case_ids_generated": false,
+    "v6_artifacts_mutable": false
+  },
+  "claim_limits": [
+    "Same-source OpenI/IU-Xray confirmation, not external validation",
+    "Case-ID disjointness only; patient-level independence unavailable",
+    "Closed-set paired-report retrieval, not image diagnosis",
+    "Automated reference consistency and verifier signals are not clinical adjudication",
+    "No clinical utility, deployment safety, or patient report-linkage claim"
+  ]
+}
