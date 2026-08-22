@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import subprocess
 import sys
 import time
@@ -218,6 +219,8 @@ def main() -> None:
     parser.add_argument("--batch-size", type=int, default=64)
     args = parser.parse_args()
 
+    os.environ.setdefault("HF_HOME", str(ROOT / ".hf_cache"))
+    os.environ.setdefault("HF_HUB_DISABLE_SYMLINKS_WARNING", "1")
     args.output_dir.mkdir(parents=True, exist_ok=True)
     output_path = args.output_dir / "v7_confirmation_qa_verified_rows.jsonl"
     summary_path = args.output_dir / "v7_confirmation_qa_verified_summary.json"
