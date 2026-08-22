@@ -1,0 +1,85 @@
+{
+  "audit": "V7 prior-use and development-frame audit",
+  "version": "1.0",
+  "status": "development_manifest_instantiated_confirmation_ids_not_generated",
+  "protocol_commit": "2ec6dce",
+  "patient_level_independence_verified": false,
+  "patient_level_boundary": "Reliable patient or subject identifiers are unavailable; only case-ID disjointness is asserted.",
+  "source": {
+    "path": "data/processed/openi_cases.jsonl",
+    "case_count": 3851,
+    "sha256": "56e367190396011d4d67f43e7e733389a8346890bf8729e82fb4326d063bbd68",
+    "case_ids_sha256": "186461bd6ab1e611c92fc128be93ff762c089ab4965e5f9e72a9eb8b8478f5fc"
+  },
+  "formal_prior_use": {
+    "legacy_manifest_paths": [
+      "data/processed/openi_case_qa_seed_clean.json",
+      "data/processed/openi_case_scoped_benchmark_v2.json",
+      "data/processed/openi_case_scoped_hard_v21.json",
+      "data/processed/openi_locked_replication_cohort.json"
+    ],
+    "legacy_manifest_sha256": {
+      "data/processed/openi_case_qa_seed_clean.json": "aff9b5adaa0ef13a957ad37b946b06106e3b2e05bd7bd89550be3e226e505c6f",
+      "data/processed/openi_case_scoped_benchmark_v2.json": "df3de6c82e90a525b6d81247436d8f6d656f364da607555aad5b181c9cc62b14",
+      "data/processed/openi_case_scoped_hard_v21.json": "a45f9424b74c5aa408d749f39e077c4cada890e447e5132577959090fd47419b",
+      "data/processed/openi_locked_replication_cohort.json": "e254b9b309504a02a59d7e2bfcde13d348c42bad991f8c6def5307b6426ec76c"
+    },
+    "legacy_case_count": 1260,
+    "legacy_case_ids_sha256": "7df0cd9833378e99e8f18f555c695933b45c774b3942c3f20c2aea40dc8c36fc",
+    "v5_cohort_path": "data/processed/openi_multimodal_v5_cohort.json",
+    "v5_cohort_sha256": "f480f534291ff3081e06bf5c587596fdaa81e266534c2e9fb61215cd4b469e8b",
+    "v5_case_count": 240,
+    "v5_case_ids_sha256": "59668ddc887565bca62d791e484a6adf06e59aba058661060e4ef5f5f65e66e4",
+    "v6_development_path": "data/splits/v6/v6_development_case_ids.txt",
+    "v6_development_sha256": "a7f381262f4f9ae29a4a68f5bdca884686d97b1de2f95e3e22b3491be9aebfa5",
+    "v6_development_case_count": 120,
+    "v6_development_case_ids_sha256": "a7f381262f4f9ae29a4a68f5bdca884686d97b1de2f95e3e22b3491be9aebfa5",
+    "v6_confirmation_path": "data/splits/v6/v6_confirmation_cohort.json",
+    "v6_confirmation_sha256": "b55b4f6222ad1ba492429cc67d9af435bb07f55190e9f5414ac4b406dcf3de9e",
+    "v6_confirmation_case_count": 240,
+    "v6_confirmation_case_ids_sha256": "db91b4f8ac5f8153456d8429d8b1e6c6c405e57f709917a6aa1ea06abc260dab",
+    "union_case_count": 1740,
+    "union_case_ids_sha256": "ade049cf26ab75ba5bcb7ea7b9255b9f44351acc676550f3ff33acdec0109e28"
+  },
+  "v6_frame_recomputed": {
+    "eligible_case_count": 1479,
+    "eligible_case_ids_sha256": "cd7b59c7d890846055ad43b8b108cec28b475ecf810f14966a538a3c6c7e98eb",
+    "stratifiable_case_count": 1462,
+    "stratifiable_case_ids_sha256": "e0b03681591d48d4d83babca2d72b80872d2cb64dd01a170911d78d1b3ee5186",
+    "expected_counts_match": true
+  },
+  "v7_frame": {
+    "eligible_case_count": 1239,
+    "eligible_case_ids_sha256": "8b75fcf37ccc3f5960a488dee4f659db41a0452034e133e7f78822be868328e6",
+    "stratifiable_case_count": 1222,
+    "stratifiable_case_ids_sha256": "fab0ad4fe46abbeccb8b9cf070aa310ce7bc0e605a0d31ffba3990137fc75d09",
+    "report_indexed_normal_count": 873,
+    "report_indexed_normal_ids_sha256": "037288957e2e998a6bc0301b7f71cacb5470394e685bbff94aab16c86707a17a",
+    "report_indexed_abnormal_count": 349,
+    "report_indexed_abnormal_ids_sha256": "829b5842d68546380ed02a86820f1b1e301e51475712a0b503548f15d13daf08",
+    "report_index_indeterminate_count": 17,
+    "report_index_indeterminate_ids_sha256": "3a51b0809b46becafd3fe9786e12acadc9af60e4b255b9fc73568793bd7f1211",
+    "expected_counts_match": true
+  },
+  "overlap_checks": {
+    "development_with_formal_prior_use_count": 0,
+    "development_membership_in_pre_development_frame_count": 720,
+    "development_with_post_development_confirmation_frame_count": 0,
+    "development_with_post_development_confirmation_stratifiable_count": 0,
+    "development_blocks_pairwise_overlap_count": 0,
+    "all_required_disjointness_checks_zero": true
+  },
+  "post_development_confirmation_frame": {
+    "case_count": 519,
+    "case_ids_sha256": "98f52612031a9ae6efcd5e75610b2a4a44baa67fbabcc1a91f12a89e7af737a7",
+    "stratifiable_case_count": 502,
+    "stratifiable_case_ids_sha256": "800bb97469b1715f6e17c3c22b583ed3f74f5ebc5cd75b8328b14014b639d318",
+    "case_ids_instantiated": false
+  },
+  "development_manifest": "data/splits/v7/v7_development_manifest.json",
+  "development_manifest_sha256": "e4b2025b5ee6770be30878faedb2d040fbdad130f6ea4a9c8250e2eba739bd3d",
+  "excluded_from_primary_stratification": {
+    "report_indexed_indeterminate_count": 17,
+    "reason": "problems field equals no indexing; not treated as normal or abnormal"
+  }
+}
