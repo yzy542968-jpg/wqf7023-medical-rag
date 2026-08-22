@@ -6,7 +6,7 @@ This repository contains the reproducible implementation and frozen evidence for
 
 **Repository:** https://github.com/yzy542968-jpg/wqf7023-medical-rag  
 **Submission release:** `p2-submission`
-**Post-submission technical freeze:** `v5-technical-freeze`
+**Current post-submission status:** V6 model-modernized confirmation complete
 
 ## Study Structure
 
@@ -17,6 +17,8 @@ The final study deliberately separates two different tasks instead of treating t
 3. **V3 RadQA extension:** implements a natural-question, answerable/unanswerable benchmark and evidence-sufficiency Agent. Official results remain conditional because credentialed PhysioNet files are not present. Synthetic fixtures test software only and are never reported as research results.
 4. **V4.2 paired image-report retrieval:** uses BM25 to retrieve 100 report candidates and BioViL-T image-report similarity to rerank them. The fixed policy is evaluated once on a disjoint 120-case confirmation cohort.
 5. **V5 fresh-cohort multimodal QA:** adds indication ablations, a 100-permutation shuffled-image control, and non-oracle Qwen generation plus semantic evidence checking on a new 120-case confirmation cohort. V5 is a post-submission extension and does not modify the frozen P2 artifacts.
+6. **V6 model-modernized confirmation:** repeats the alignment-specific retrieval test on a newly instantiated, broader within-source cohort with MedSigLIP, Qwen3-Embedding, Qwen2.5, and MedGemma 1.5. V6 keeps BM25 as the primary text baseline and the V5 verifier unchanged, so retrieval, generator, and verifier effects remain distinguishable.
+7. **V7 adaptive-fusion extension (protocol stage):** proposes a trainable query-conditional fusion model that learns how to combine frozen text and image retrieval signals. V7 development is kept separate from the completed V6 confirmation and its confirmation cases will not be instantiated until the development and confirmation protocols are frozen.
 
 The demonstrated Agent follows explicit `scope`, `retrieve`, `generate`, `audit`, and `review/abstain` states. Routing rules are deterministic, and the verifier is a risk signal rather than a clinical correctness label.
 
@@ -63,9 +65,18 @@ V4.2 demonstrates that pixels can improve paired evidence retrieval when used fo
 - Non-oracle Qwen verified Token-F1 improved from `0.3563` to `0.3865`, difference `+0.0302`, case-bootstrap 95% CI `[+0.0101, +0.0511]`.
 - V5 remains a closed-set paired-report retrieval and report-grounded QA study, not new-patient diagnosis or clinical validation.
 
+### V6 Model-Modernized Confirmation
+
+- Confirmation candidate pool: 240 case IDs, with 120 targets and 120 distractors; targets produced 360 deterministic report-derived questions.
+- The pool contained 172 report-indexed normal and 68 report-indexed abnormal cases. These labels come from the dataset `problems` field and are not new clinical adjudications.
+- BM25 indication-plus-question MRR: `0.6168`; MedSigLIP reranking MRR: `0.6474`; difference `+0.03069`, case-bootstrap 95% CI `[+0.00902, +0.05368]`.
+- Correctly aligned MedSigLIP exceeded all 100 deterministic shuffled-image controls; plus-one Monte Carlo `p=0.00990`.
+- Verified Token-F1 improved under both Qwen2.5 (`+0.01206`) and MedGemma 1.5 (`+0.03857`) when the same generators received the MedSigLIP-selected report.
+- V6 is complete evidence for a within-source, closed-set paired-report confirmation. It is not external validation, patient-level independence verification, image diagnosis, clinical utility, or deployment safety evidence.
+
 ## Submission Status
 
-Automated V1/V2 experiments, validity audits, the Dashboard, V3 framework, final manuscript, and defence deck are complete. A blinded human-evaluation protocol was prepared but not conducted because no suitable independent reviewer was available before submission. Both 36-case files therefore remain at zero completed rows, no human score is reported, and no human or clinical validation is claimed.
+Automated V1/V2 experiments, validity audits, the Dashboard, V3 framework, final manuscript, defence deck, and the post-submission V4.2/V5/V6 technical extensions are complete in the corresponding repository history. A blinded human-evaluation protocol was prepared but not conducted because no suitable independent reviewer was available before submission. Both 36-case files therefore remain at zero completed rows, no human score is reported, and no human or clinical validation is claimed.
 
 The final P2 artifacts are:
 
@@ -140,6 +151,6 @@ Official RadQA files, when legally obtained, belong at `data/raw/radqa/train.jso
 
 Do not commit raw radiology files, image pixels, model weights, caches, generated prompt packs, secrets, or virtual environments. The MIT license covers project-authored code, not third-party datasets or model weights. See `docs/DATA_USE_AND_LICENSING.md`, `docs/REPOSITORY_RELEASE_POLICY.md`, and the generated `experiments/final_submission/submission_manifest.json` before publishing.
 
-Post-submission improvements and explicitly deferred independent human evaluation are documented in `docs/POST_SUBMISSION_RESEARCH_ROADMAP.md`. These additions do not modify the frozen P2 submission artifacts.
+Post-submission improvements and explicitly deferred independent human evaluation are documented in `docs/POST_SUBMISSION_RESEARCH_ROADMAP.md`. The completed V5 and V6 records are supplemental technical evidence and do not modify the frozen P2 submission artifacts. V7 remains a separately governed development extension until its protocol and confirmation study are completed.
 
 Methods and results for the v2.1 hard benchmark, two reserved wording-transfer tests, frozen v2.2 semantic planner, preregistered v2.3 hybrid planner, and 300-case locked replication are in `docs/POST_SUBMISSION_EXPERIMENTS.md`. V2.3 preserves the original result and improves transfer Macro F1, but raises false-answer risk on the second wording set; it is therefore reported as a robustness/safety trade-off rather than promoted as an unqualified replacement.
