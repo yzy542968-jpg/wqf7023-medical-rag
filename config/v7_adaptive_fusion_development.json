@@ -1,0 +1,201 @@
+{
+  "experiment": "v7_adaptive_multimodal_fusion_development",
+  "status": "development_protocol_frozen_before_training_or_confirmation_instantiation",
+  "protocol_path": "docs/V7_DEVELOPMENT_PROTOCOL.md",
+  "technology_audit_path": "docs/V7_TECHNOLOGY_REUSE_AUDIT.md",
+  "objective": "Learn a query-conditional fusion weight from case-disjoint development blocks while keeping foundation models frozen.",
+  "source": {
+    "dataset": "Indiana University Chest X-ray / OpenI",
+    "cases_path": "data/processed/openi_cases.jsonl",
+    "patient_level_independence_verified": false,
+    "prior_use_audit_required": true,
+    "source_frame_status": "pending_machine_prior_use_audit",
+    "expected_remaining_eligible_case_count": 1239,
+    "expected_remaining_stratifiable_case_count": 1222,
+    "expected_report_indexed_normal_count": 873,
+    "expected_report_indexed_abnormal_count": 349,
+    "expected_report_index_indeterminate_count": 17
+  },
+  "cohort_generation": {
+    "seed": 7026,
+    "selection_domain": "v7-selection",
+    "assignment_domain": "v7-assignment",
+    "canonical_case_id": "str(value).strip()",
+    "hash": "SHA-256 lowercase hexadecimal",
+    "fingerprint_serialization": "sorted unique canonical IDs joined by LF UTF-8 with no trailing LF",
+    "block_names": [
+      "train_a",
+      "train_b",
+      "validation",
+      "confirmation"
+    ],
+    "block_case_count": 240,
+    "block_report_indexed_normal": 172,
+    "block_report_indexed_abnormal": 68,
+    "target_case_count_per_block": 120,
+    "target_report_indexed_normal_per_block": 86,
+    "target_report_indexed_abnormal_per_block": 34,
+    "distractor_case_count_per_block": 120,
+    "distractor_report_indexed_normal_per_block": 86,
+    "distractor_report_indexed_abnormal_per_block": 34,
+    "case_ids_instantiated": false,
+    "silent_replacement_allowed": false
+  },
+  "text_retrieval": {
+    "primary": "bm25",
+    "k1": 1.5,
+    "b": 0.75,
+    "query": "clinical_indication_plus_question",
+    "shortlist_size": 100,
+    "tie_break": "descending_score_then_ascending_canonical_case_id",
+    "secondary_dense_model": "Qwen/Qwen3-Embedding-0.6B",
+    "secondary_dense_role": "diagnostic_only"
+  },
+  "multimodal_retrieval": {
+    "encoder": "google/medsiglip-448",
+    "revision_source": "reuse_frozen_v6_confirmation_revision",
+    "report_sections": [
+      "findings",
+      "impression"
+    ],
+    "chunk_policy": "reuse_v6_sentence_aware_at_most_64_tokens_no_overlap_no_truncation",
+    "report_aggregation": "reuse_v6_maximum_image_chunk_cosine",
+    "image_view_aggregation": "reuse_v6_l2_normalize_each_view_then_mean_then_l2_normalize",
+    "score_normalization": "independent_minmax_within_text_shortlist",
+    "text_weight_symbol": "alpha",
+    "image_weight_symbol": "1-alpha",
+    "fixed_alpha_conditions": [
+      0.0,
+      0.5,
+      1.0
+    ]
+  },
+  "features": {
+    "status": "frozen_feature_family_in_protocol",
+    "names": [
+      "indication_present",
+      "question_token_count",
+      "indication_token_count",
+      "bm25_top1_normalized_score",
+      "bm25_top1_top2_margin",
+      "bm25_score_std",
+      "bm25_score_iqr",
+      "image_top1_normalized_score",
+      "image_top1_top2_margin",
+      "image_score_std",
+      "image_score_iqr",
+      "text_image_top1_agreement",
+      "text_image_spearman_correlation"
+    ],
+    "forbidden_inputs": [
+      "target_case_id",
+      "reference_answer",
+      "qrels",
+      "target_in_shortlist",
+      "answer_source",
+      "generated_answer",
+      "verifier_output",
+      "confirmation_outcome"
+    ],
+    "scaler": "fit_on_training_fold_only_then_frozen",
+    "final_scaler_fit_scope": "train_a_plus_train_b_only"
+  },
+  "training": {
+    "objective": "pairwise_logistic_ranking",
+    "loss": "softplus(-(positive_score-negative_score))",
+    "positive": "target_case_if_present_in_bm25_top100",
+    "hard_negative_policy": "union_top20_non_target_by_bm25_and_top20_non_target_by_image_capped_at_40",
+    "outside_shortlist_training_policy": "exclude_from_gradient_pairs_but_retain_in_all_evaluation",
+    "learner_candidates": [
+      "linear_sigmoid",
+      "mlp_32_relu_sigmoid"
+    ],
+    "optimizer": "AdamW",
+    "learning_rate_grid": [
+      0.001,
+      0.0003
+    ],
+    "weight_decay_grid": [
+      0.0001,
+      0.0
+    ],
+    "batch_size": 64,
+    "maximum_epochs": 100,
+    "early_stop_patience": 10,
+    "early_stop_minimum_delta": 0.0001,
+    "seed": 7026,
+    "mlp_hidden_units": 32,
+    "mlp_activation": "relu",
+    "dropout": 0.0,
+    "complexity_rule": "if_mlp_mrr_minus_linear_mrr_leq_0.005_select_linear_else_select_mlp",
+    "final_epoch_rule": "floor((fold_a_epoch+fold_b_epoch)/2+0.5)"
+  },
+  "validation": {
+    "global_alpha_grid": {
+      "start": 0.0,
+      "stop": 1.0,
+      "step": 0.01,
+      "tie_break": "nearest_0.5_then_lower_alpha"
+    },
+    "simple_gate": {
+      "enabled": true,
+      "rule": "if_bm25_top1_margin_gte_threshold_use_alpha_1_else_global_alpha",
+      "threshold_grid_start": 0.0,
+      "threshold_grid_stop": 1.0,
+      "threshold_grid_step": 0.05,
+      "tie_break": "higher_coverage_then_lower_threshold"
+    },
+    "model_selection_order": [
+      "development_fold_mean_primary_mrr",
+      "linear_over_mlp_if_difference_leq_0.005",
+      "lower_parameter_count",
+      "lexicographically_smaller_serialized_config"
+    ]
+  },
+  "evaluation": {
+    "primary_metric": "case_averaged_equal_question_type_mrr",
+    "secondary_retrieval_metrics": [
+      "hit_at_1",
+      "hit_at_5",
+      "hit_at_10",
+      "target_outside_shortlist_rate"
+    ],
+    "source_balanced_sensitivity": "0.50*findings+0.25*impression+0.25*summary",
+    "bootstrap_iterations": 5000,
+    "bootstrap_seed": 7026,
+    "confidence_level": 0.95,
+    "h1_success": "adaptive_minus_global_alpha_ci_low_gt_0",
+    "h2_shuffle_count": 100,
+    "h2_shuffle_domain": "v7-shuffle-order",
+    "h2_p_value": "(1+count_shuffle_mrr_ge_aligned_mrr)/101",
+    "h2_success": "plus_one_p_le_0.05",
+    "generator_secondary": "frozen_v6_medgemma_only_after_retrieval_freeze",
+    "human_evaluation": "future_work_not_collected"
+  },
+  "optional_secondary": {
+    "xgboost_rank_pairwise": {
+      "enabled": false,
+      "role": "optional_secondary_comparator_not_primary",
+      "required_dependency": false,
+      "report_if_executed": true
+    },
+    "ranx": {
+      "enabled": false,
+      "role": "optional_numerical_cross_check_only"
+    }
+  },
+  "frozen_foundation_models": {
+    "medsiglip": "reuse_v6_confirmation_revision",
+    "qwen3_embedding": "reuse_v6_confirmation_revision",
+    "medgemma": "reuse_v6_confirmation_revision",
+    "verifier": "reuse_v6_confirmation_configuration",
+    "fine_tuning": false
+  },
+  "execution": {
+    "training_allowed_before_confirmation_protocol": true,
+    "confirmation_case_ids_before_confirmation_protocol": false,
+    "outcome_driven_rerun_or_replacement_allowed": false,
+    "technical_rerun_under_identical_config_allowed": true,
+    "v6_artifacts_mutable": false
+  }
+}
