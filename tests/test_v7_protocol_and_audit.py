@@ -59,3 +59,25 @@ def test_v7_confirmation_config_is_frozen_before_case_instantiation() -> None:
     assert config["adaptive_model"]["epochs"] == 6
     assert config["retrieval"]["global_alpha_star"] == 0.52
     assert config["statistics"]["h2_success"] == "plus_one_p_le_0.05"
+
+
+def test_v7_confirmation_cohort_is_instantiated_with_frozen_composition() -> None:
+    cohort = read_json("data/splits/v7/v7_confirmation_cohort.json")
+    development = read_json("data/splits/v7/v7_development_manifest.json")
+    prior_audit = read_json("data/splits/v7/v7_prior_use_audit.json")
+
+    assert cohort["status"] == "instantiated_after_confirmation_protocol_commit_before_outcomes"
+    assert cohort["case_count"] == 240
+    assert len(cohort["target_case_ids"]) == 120
+    assert len(cohort["distractor_case_ids"]) == 120
+    assert set(cohort["target_case_ids"]).isdisjoint(cohort["distractor_case_ids"])
+    assert len(cohort["questions"]) == 360
+    assert len({row["case_id"] for row in cohort["questions"]}) == 120
+
+    development_ids = {
+        case_id
+        for block in development["blocks"].values()
+        for case_id in block["case_ids"]
+    }
+    assert not (set(cohort["case_ids"]) & development_ids)
+    assert prior_audit["patient_level_independence_verified"] is False
