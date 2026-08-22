@@ -1,0 +1,52 @@
+{
+  "audit": "V8 technology reuse and confirmation frame audit",
+  "version": "1.0",
+  "status": "development_protocol_frame_audited_confirmation_ids_not_instantiated",
+  "source": {
+    "path": "data/processed/openi_cases.jsonl",
+    "case_count": 3851,
+    "sha256": "56e367190396011d4d67f43e7e733389a8346890bf8729e82fb4326d063bbd68"
+  },
+  "development": {
+    "path": "data/splits/v7/v7_development_manifest.json",
+    "case_count": 720,
+    "case_ids_sha256": "9815f42e8bc5ae7dae19c931de8934a58d609e551db6a4f0f7fc2d17a5bb5123",
+    "blocks": [
+      "train_a",
+      "train_b",
+      "validation"
+    ],
+    "confirmation_overlap_count": 0
+  },
+  "v7_confirmation": {
+    "path": "data/splits/v7/v7_confirmation_cohort.json",
+    "case_count": 240,
+    "case_ids_sha256": "03a3f0fbb49c316ba84c6fc95b0820d4c5909738e8e5f22c96ac5c69af653d75",
+    "confirmation_overlap_count": 0
+  },
+  "v8_confirmation_frame": {
+    "eligible_case_count": 279,
+    "eligible_case_ids_sha256": "a723b9654fed3b0e7739c82a3e4f0317e8368bc4a980cbffc8dea5e15dbb0544",
+    "stratifiable_case_count": 262,
+    "stratifiable_case_ids_sha256": "d06254afb3ca75d0a3daeae0cdf34bd772b1eea347bc562609c12f7f1f1c6f90",
+    "report_indexed_normal_count": 185,
+    "report_indexed_abnormal_count": 77,
+    "report_index_indeterminate_count": 17,
+    "case_ids_instantiated": false
+  },
+  "predefined_confirmation_composition": {
+    "candidate_pool_case_count": 240,
+    "report_indexed_normal": 170,
+    "report_indexed_abnormal": 70,
+    "target_normal": 85,
+    "target_abnormal": 35,
+    "distractor_normal": 85,
+    "distractor_abnormal": 35
+  },
+  "overlap_checks": {
+    "v7_development_with_v8_confirmation_frame": 0,
+    "v7_confirmation_with_v8_confirmation_frame": 0,
+    "formal_prior_with_v8_confirmation_frame": 0
+  },
+  "patient_level_independence_verified": false
+}
