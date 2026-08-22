@@ -35,6 +35,11 @@ experiments/*_answers.json
 experiments/**/*sentence_scores*.json
 experiments/**/*checked_rows*.json
 experiments/full360_analysis/*.csv
+experiments/post_submission_v7/*.json
+experiments/post_submission_v7/*.pt
+experiments/post_submission_v7/*.jsonl
+experiments/post_submission_v7/*.csv
+data/processed/v7_*.npz
 
 # Local render and browser QA output
 outputs/
