@@ -1,0 +1,124 @@
+{
+  "experiment": "v5_end_to_end_multimodal_qa",
+  "manifest_kind": "post_freeze_reproducibility_supplement",
+  "primary_v5_results_modified": false,
+  "purpose": "Record transitive runtime dependencies omitted from the original lightweight freeze manifest.",
+  "model_and_cache_note": "Local BioViL-T, Qwen, MedNLI weights, image pixels, and generated JSONL rows remain environment- or policy-controlled inputs.",
+  "dependencies": [
+    {
+      "path": "config/multimodal_v5.json",
+      "bytes": 2940,
+      "sha256_lf_normalized": "579525a0d3e70b4cba92d74c44576c3ccee2dcb0ff7c21285621bc5d1249ce9a"
+    },
+    {
+      "path": "config/multimodal_v41.json",
+      "bytes": 4387,
+      "sha256_lf_normalized": "f9b022a3aa5b92fabcf76a2764bef0f83480b07014881a09bb49dab65c9deac5"
+    },
+    {
+      "path": "data/processed/openi_cases.jsonl",
+      "bytes": 3734962,
+      "sha256_lf_normalized": "74646ef85dd96e2173fab5c322968a5c3a2f4362b5aeec7ef4a7371f7e6104a2"
+    },
+    {
+      "path": "data/processed/openi_multimodal_v5_cohort.json",
+      "bytes": 1138831,
+      "sha256_lf_normalized": "501af7411f3f066c76a308e97f0e96c09c3230d5631250bd247508ec9e555489"
+    },
+    {
+      "path": "experiments/final_optimized/semantic_agent/semantic_agent_selection.json",
+      "bytes": 2442,
+      "sha256_lf_normalized": "be834e766dc47928249d15f92b068c52bdc65b77567367f90bef500225b42d50"
+    },
+    {
+      "path": "scripts/build_multimodal_v5_cohort.py",
+      "bytes": 4961,
+      "sha256_lf_normalized": "eb89119d358c4f0296558fdecea0b0533cecac12b224c63a81bcfa189a489683"
+    },
+    {
+      "path": "scripts/build_multimodal_v5_prompt_packs.py",
+      "bytes": 4696,
+      "sha256_lf_normalized": "3978d407c681d6346781b5df753b1e12f88b77dd1e558b399acd1a3cbcb3a171"
+    },
+    {
+      "path": "scripts/run_multimodal_v4_retrieval.py",
+      "bytes": 11585,
+      "sha256_lf_normalized": "b3388cf816dd596ba93dcd014e5adec93c4875b25b9c7f0bec70d361d07821c1"
+    },
+    {
+      "path": "scripts/run_multimodal_v41_retrieval.py",
+      "bytes": 8449,
+      "sha256_lf_normalized": "f66acb535860d8ab14dfee76baa2fca2e290de62732430578e3d0b1a120f9b82"
+    },
+    {
+      "path": "scripts/run_multimodal_v5_retrieval.py",
+      "bytes": 10902,
+      "sha256_lf_normalized": "b2abec6b6c25b022f426f0a2840411d827cc78f02643afdcc43a180af6293e1f"
+    },
+    {
+      "path": "scripts/run_hf_generation.py",
+      "bytes": 11633,
+      "sha256_lf_normalized": "63c913677d0ef269b8b85b70845fe258363530da267035582e3b0fa1e6f961e4"
+    },
+    {
+      "path": "scripts/evaluate_final_optimized_test.py",
+      "bytes": 5938,
+      "sha256_lf_normalized": "10cfd6788c9ea2ac9df1069711cd0403ad3d02813e5dac1d8e96ce6ca15671d9"
+    },
+    {
+      "path": "scripts/analyze_multimodal_v5_statistics.py",
+      "bytes": 5817,
+      "sha256_lf_normalized": "53cfd0c7128615072eccece01bc10fdf197c533668f480d8370f796b43b2e2b2"
+    },
+    {
+      "path": "scripts/run_grouped_statistical_analysis.py",
+      "bytes": 9479,
+      "sha256_lf_normalized": "96253b3f00a2260edffb665d9abdd9a02b2222e4bb175d8f3dc72c6001eebb21"
+    },
+    {
+      "path": "src/medical_rag/multimodal/biovilt.py",
+      "bytes": 4252,
+      "sha256_lf_normalized": "4ce80f385a2d5565205e722efdd741033b2ff8801b54e2e85d38a60c8fd1282a"
+    },
+    {
+      "path": "src/medical_rag/multimodal/evaluation.py",
+      "bytes": 4283,
+      "sha256_lf_normalized": "0beeb5a631e8848c16b7db4bbaecf9b6aa7c9d8cfbd760dfdb4c53e321d9982c"
+    },
+    {
+      "path": "src/medical_rag/multimodal/fusion.py",
+      "bytes": 5111,
+      "sha256_lf_normalized": "e6c5bb1edc7698781d9ab63428c559fa7a4cde8fcd2b1565c658263ee8747f94"
+    },
+    {
+      "path": "src/medical_rag/retrieval/bm25_retriever.py",
+      "bytes": 3022,
+      "sha256_lf_normalized": "8a59ff9c4740d87de8a628fb6f73bc401001822e17412c9968b0466a03af4e39"
+    },
+    {
+      "path": "src/medical_rag/retrieval/tfidf_retriever.py",
+      "bytes": 3202,
+      "sha256_lf_normalized": "7b26fa78df4b397ee9fa44fc44b405c2b397d6cd5b704e81b7aba1ad912de529"
+    },
+    {
+      "path": "src/medical_rag/evaluation/answer_metrics.py",
+      "bytes": 1041,
+      "sha256_lf_normalized": "b5664d9da3278e070469add4e1e6ca683b360bbe40f66c4cf73e9eebc320d33d"
+    },
+    {
+      "path": "src/medical_rag/evaluation/metrics.py",
+      "bytes": 1348,
+      "sha256_lf_normalized": "acd1d617c8f3e2449136d801f021a9a8b51d928718d2edc98490e303f1d333df"
+    },
+    {
+      "path": "src/medical_rag/agentic/evidence_checker.py",
+      "bytes": 5827,
+      "sha256_lf_normalized": "5f38d5588197e891ecd8428f307d31517f42bdbf4c485ae5626f3e21d2e5e627"
+    },
+    {
+      "path": "src/medical_rag/agentic/semantic_evidence_checker.py",
+      "bytes": 9994,
+      "sha256_lf_normalized": "bbfaf92e5a40bd1f9d331b8a89ef928225410a791f507392a7a2d0b79f7bbbdb"
+    }
+  ]
+}

@@ -1,0 +1,183 @@
+{
+  "analysis": "v5_frozen_output_supplement",
+  "status": "supplemental_descriptive_and_sensitivity_analysis",
+  "primary_v5_results_modified": false,
+  "inputs": {
+    "cohort": "data/processed/openi_multimodal_v5_cohort.json",
+    "retrieval_rows": "experiments/post_submission_v5/confirmation_retrieval_rows.jsonl",
+    "report_only_qa_rows": "experiments/post_submission_v5/qa_report_only/final_optimized_test_rows.jsonl",
+    "multimodal_qa_rows": "experiments/post_submission_v5/qa_multimodal/final_optimized_test_rows.jsonl"
+  },
+  "cohort_profile": {
+    "source_case_count": 3851,
+    "prior_excluded_case_count": 1260,
+    "eligible_before_prior_exclusions": 1934,
+    "fresh_eligible_case_count": 674,
+    "selected_case_count": 240,
+    "development_case_count": 120,
+    "confirmation_case_count": 120,
+    "source_fields": [
+      "case_id",
+      "comparison",
+      "findings",
+      "images",
+      "impression",
+      "indication",
+      "mesh",
+      "problems",
+      "report_text"
+    ],
+    "patient_identifier_fields_available": [],
+    "eligibility_rule": {
+      "requires_image": true,
+      "minimum_findings_characters": 40,
+      "minimum_impression_characters": 8,
+      "maximum_indication_placeholder_ratio": 0.5,
+      "excludes_empty_or_normal_problems": true
+    }
+  },
+  "reference_profile": {
+    "confirmation_question_count": 360,
+    "question_type_counts": {
+      "case_scoped_findings": 120,
+      "case_scoped_impression": 120,
+      "case_scoped_summary": 120
+    },
+    "unique_reference_strings": 214,
+    "cases_with_identical_impression_and_summary_reference": 120,
+    "metric_weighting_warning": "Impression content is used twice per case: once as impression reference and once as summary reference."
+  },
+  "retrieval_target_recall_at_100": {
+    "indication_question_bm25": {
+      "question_count": 360,
+      "target_recall_at_100": 0.9861111111111112,
+      "target_outside_top_100_count": 5
+    },
+    "indication_question_correct_image": {
+      "question_count": 360,
+      "target_recall_at_100": 0.9861111111111112,
+      "target_outside_top_100_count": 5
+    },
+    "question_only_bm25": {
+      "question_count": 360,
+      "target_recall_at_100": 0.425,
+      "target_outside_top_100_count": 207
+    },
+    "question_only_correct_image": {
+      "question_count": 360,
+      "target_recall_at_100": 0.425,
+      "target_outside_top_100_count": 207
+    }
+  },
+  "question_type_means": {
+    "report_only": {
+      "findings": {
+        "final_token_f1": 0.4100703050042495,
+        "support_rate": 0.7984722222222222
+      },
+      "impression": {
+        "final_token_f1": 0.44292057069945234,
+        "support_rate": 0.8694444444444445
+      },
+      "summary": {
+        "final_token_f1": 0.21577239100671264,
+        "support_rate": 0.8548611111111111
+      }
+    },
+    "multimodal": {
+      "findings": {
+        "final_token_f1": 0.41914529721420873,
+        "support_rate": 0.7713888888888889
+      },
+      "impression": {
+        "final_token_f1": 0.5079032561601224,
+        "support_rate": 0.825
+      },
+      "summary": {
+        "final_token_f1": 0.23237057417584206,
+        "support_rate": 0.8243055555555555
+      }
+    }
+  },
+  "question_type_paired_differences": {
+    "final_token_f1": {
+      "findings": {
+        "mean_difference": 0.009074992209959169,
+        "ci_low": -0.004743271462863513,
+        "ci_high": 0.024509852801677556,
+        "two_sided_bootstrap_p": 0.2296,
+        "paired_randomization_p": 0.2411517696460708,
+        "case_count": 120,
+        "holm_adjusted_paired_randomization_p": 0.2411517696460708
+      },
+      "impression": {
+        "mean_difference": 0.06498268546067014,
+        "ci_low": 0.020486885376143054,
+        "ci_high": 0.11175915346440457,
+        "two_sided_bootstrap_p": 0.0028,
+        "paired_randomization_p": 0.006998600279944011,
+        "case_count": 120,
+        "holm_adjusted_paired_randomization_p": 0.020995800839832032
+      },
+      "summary": {
+        "mean_difference": 0.016598183169129407,
+        "ci_low": 0.0011173989207741285,
+        "ci_high": 0.03226899787106593,
+        "two_sided_bootstrap_p": 0.0372,
+        "paired_randomization_p": 0.03459308138372325,
+        "case_count": 120,
+        "holm_adjusted_paired_randomization_p": 0.0691861627674465
+      }
+    },
+    "support_rate": {
+      "findings": {
+        "mean_difference": -0.027083333333333334,
+        "ci_low": -0.065,
+        "ci_high": 0.009166666666666665,
+        "two_sided_bootstrap_p": 0.1516,
+        "paired_randomization_p": 0.19276144771045792,
+        "case_count": 120,
+        "holm_adjusted_paired_randomization_p": 0.20515896820635873
+      },
+      "impression": {
+        "mean_difference": -0.04444444444444444,
+        "ci_low": -0.07222222222222222,
+        "ci_high": -0.01944444444444444,
+        "two_sided_bootstrap_p": 0.0,
+        "paired_randomization_p": 0.0011997600479904018,
+        "case_count": 120,
+        "holm_adjusted_paired_randomization_p": 0.0035992801439712055
+      },
+      "summary": {
+        "mean_difference": -0.030555555555555558,
+        "ci_low": -0.06944444444444445,
+        "ci_high": 0.002777777777777776,
+        "two_sided_bootstrap_p": 0.074,
+        "paired_randomization_p": 0.10257948410317937,
+        "case_count": 120,
+        "holm_adjusted_paired_randomization_p": 0.20515896820635873
+      }
+    }
+  },
+  "random_image_control_integrity": {
+    "configured_permutations": 100,
+    "unique_permutations": 100
+  },
+  "logical_cost_profile": {
+    "confirmation_questions": 360,
+    "logical_bm25_query_calls": 720,
+    "deterministic_retrieval_condition_rows": 1440,
+    "correct_image_reranking_rows": 720,
+    "shuffled_image_reranking_rows": 36000,
+    "generation_records_report_only_and_multimodal": 720,
+    "semantic_checker_records_report_only_and_multimodal": 720,
+    "candidate_pool_cases": 240,
+    "image_reranking_shortlist_size": 100
+  },
+  "interpretation_limits": [
+    "Question-type analyses are secondary and exploratory; the frozen primary comparisons are unchanged.",
+    "The shortlist diagnostic measures whether the target is available to the image reranker, not independent retrieval quality outside the fixed Top-100 design.",
+    "The cohort profile describes selection rules and does not establish patient-level independence because no patient identifier is available in the processed source records.",
+    "The duplicated impression and summary reference is disclosed rather than corrected post hoc."
+  ]
+}

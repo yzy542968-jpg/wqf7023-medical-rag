@@ -131,7 +131,7 @@ The dashboard is a research demonstration rather than an authenticated hospital 
 
 The conceptual framework organizes the system around five linked stages: case construction, target retrieval, answer generation, evidence verification, and audit. Each stage has a distinct input, output, success criterion, and failure mode.
 
-Case construction defines the unit over which evidence ownership is preserved. Each unit contains a stable case identifier, indication, findings, impression, report text, and one or more linked chest radiographs. Patient-level partitioning is applied before evaluation so that development decisions cannot use confirmation patients. The resulting case record is not merely a convenient data structure. It is the boundary that determines which image and report are allowed to support one another.
+Case construction defines the unit over which evidence ownership is preserved. Each unit contains a stable case identifier, indication, findings, impression, report text, and one or more linked chest radiographs. The frozen cohort applies a reproducible case-level partition before evaluation so that development decisions cannot use confirmation cases. The processed source records do not contain a stable patient identifier, so patient-level independence cannot be verified. The resulting case record is not merely a convenient data structure. It is the boundary that determines which image and report are allowed to support one another.
 
 Target retrieval receives a question and an optional indication or image signal. It returns an ordered list of candidate case reports. Success at this stage means that the frozen target report is ranked highly, especially at rank one because the downstream generator uses only the Top-1 report. Hit@k measures whether the target appears within a rank cutoff, while MRR preserves information about movement throughout the ranking. The extractive proxy measures how much answer-bearing text would be available if a candidate report were selected. Together these measures distinguish useful rank improvement from actual Top-1 success.
 
@@ -261,7 +261,7 @@ An ablation is informative only when the remaining inputs and evaluation set are
 
 Shuffled-image controls serve a different purpose from image ablation. Removing the image asks whether the multimodal path improves on text alone. Shuffling asks whether the improvement depends on correct pairing. An arbitrary image can still alter normalized fusion scores and rankings; therefore, a single shuffled run could be unusually favorable or unfavorable. Repeating the control across 100 deterministic derangements provides a distribution of outcomes and a more stable alignment test.
 
-Patient-level separation also protects benchmark validity. If examinations from the same patient appeared across development and confirmation, repeated anatomy, chronic findings, or report language could leak. The frozen cohort applies patient-level partitioning before experimentation. This does not create institutional external validity, but it reduces one important source of within-dataset dependence.
+Case-level separation protects benchmark validity at the available identifier granularity. The split prevents the same processed case from appearing in both development and confirmation, but the absence of a stable patient identifier means that repeated examinations from one patient cannot be ruled out. This does not create institutional external validity or establish patient-level independence.
 
 ## 2.9 Agentic and Auditable RAG Workflows
 
