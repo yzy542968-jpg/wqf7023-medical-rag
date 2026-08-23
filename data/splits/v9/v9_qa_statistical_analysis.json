@@ -1,0 +1,260 @@
+{
+  "analysis": "V9 frozen QA case-grouped statistical analysis",
+  "status": "complete_no_retuning",
+  "rows_sha256": "89c69c9a27e393c93c85e572587b330f908598e835cb8162a8678cd15ba512b4",
+  "raw_summary_sha256": "afc5802f8a3111a4001573ed221a2c51cca54901234a4e14515209895a0a2500",
+  "script_sha256": "a33bba6a33335ddb617ae311badb5c86ba9354f67817575068d712fa799c9e80",
+  "bootstrap_iterations": 10000,
+  "confidence_level": 0.95,
+  "primary_comparison": "all.g3_minus_g0",
+  "secondary_comparisons_are_descriptive": true,
+  "frames": {
+    "all": {
+      "case_count": 685,
+      "system_token_f1": {
+        "g0_no_retrieval": 0.1455587338454248,
+        "g1_bm25_rag": 0.1479470007310607,
+        "g2_fixed_multimodal_rag": 0.17909025126129632,
+        "g3_learned_multimodal_rag": 0.1848030314855801
+      },
+      "comparisons": {
+        "g1_minus_g0": {
+          "case_count": 685,
+          "difference": 0.0023882668856358993,
+          "ci_95_low": -0.003188560567811059,
+          "ci_95_high": 0.008119572467112934
+        },
+        "g2_minus_g0": {
+          "case_count": 685,
+          "difference": 0.0335315174158715,
+          "ci_95_low": 0.027790457546592057,
+          "ci_95_high": 0.039501628963315334
+        },
+        "g3_minus_g0": {
+          "case_count": 685,
+          "difference": 0.039244297640155294,
+          "ci_95_low": 0.03276965430810544,
+          "ci_95_high": 0.045961619696747294
+        },
+        "g3_minus_g2": {
+          "case_count": 685,
+          "difference": 0.005712780224283793,
+          "ci_95_low": -0.0009576623222666416,
+          "ci_95_high": 0.012280155217230106
+        },
+        "g3_minus_g1": {
+          "case_count": 685,
+          "difference": 0.036856030754519396,
+          "ci_95_low": 0.0304102199815724,
+          "ci_95_high": 0.04352399052741959
+        }
+      }
+    },
+    "question_findings": {
+      "case_count": 685,
+      "system_token_f1": {
+        "g0_no_retrieval": 0.23174340913181318,
+        "g1_bm25_rag": 0.22953690016975387,
+        "g2_fixed_multimodal_rag": 0.24191774160191082,
+        "g3_learned_multimodal_rag": 0.2503286664443063
+      },
+      "comparisons": {
+        "g1_minus_g0": {
+          "case_count": 685,
+          "difference": -0.002206508962059337,
+          "ci_95_low": -0.011208753539395298,
+          "ci_95_high": 0.006956944165527899
+        },
+        "g2_minus_g0": {
+          "case_count": 685,
+          "difference": 0.01017433247009762,
+          "ci_95_low": 0.0013455889430157688,
+          "ci_95_high": 0.018968545013610765
+        },
+        "g3_minus_g0": {
+          "case_count": 685,
+          "difference": 0.01858525731249307,
+          "ci_95_low": 0.00977510646654104,
+          "ci_95_high": 0.027600254485260056
+        },
+        "g3_minus_g2": {
+          "case_count": 685,
+          "difference": 0.00841092484239545,
+          "ci_95_low": -0.00031905044963070184,
+          "ci_95_high": 0.017275274979341535
+        },
+        "g3_minus_g1": {
+          "case_count": 685,
+          "difference": 0.02079176627455241,
+          "ci_95_low": 0.011930295927108077,
+          "ci_95_high": 0.02998498198744171
+        }
+      }
+    },
+    "question_impression": {
+      "case_count": 685,
+      "system_token_f1": {
+        "g0_no_retrieval": 0.059374058559036436,
+        "g1_bm25_rag": 0.06635710129236758,
+        "g2_fixed_multimodal_rag": 0.11626276092068183,
+        "g3_learned_multimodal_rag": 0.11927739652685394
+      },
+      "comparisons": {
+        "g1_minus_g0": {
+          "case_count": 685,
+          "difference": 0.0069830427333311355,
+          "ci_95_low": 0.0006375744637905015,
+          "ci_95_high": 0.013249715409409151
+        },
+        "g2_minus_g0": {
+          "case_count": 685,
+          "difference": 0.05688870236164539,
+          "ci_95_low": 0.04915117637495898,
+          "ci_95_high": 0.06446940958138207
+        },
+        "g3_minus_g0": {
+          "case_count": 685,
+          "difference": 0.05990333796781752,
+          "ci_95_low": 0.05152523449216886,
+          "ci_95_high": 0.06844797769330499
+        },
+        "g3_minus_g2": {
+          "case_count": 685,
+          "difference": 0.0030146356061721336,
+          "ci_95_low": -0.0066555612373219875,
+          "ci_95_high": 0.013026428752992932
+        },
+        "g3_minus_g1": {
+          "case_count": 685,
+          "difference": 0.05292029523448638,
+          "ci_95_low": 0.04404565464022876,
+          "ci_95_high": 0.06206348402841729
+        }
+      }
+    },
+    "report_indexed_normal": {
+      "case_count": 266,
+      "system_token_f1": {
+        "g0_no_retrieval": 0.13935049613794567,
+        "g1_bm25_rag": 0.1484332654654864,
+        "g2_fixed_multimodal_rag": 0.19143003516691467,
+        "g3_learned_multimodal_rag": 0.20013411141943044
+      },
+      "comparisons": {
+        "g1_minus_g0": {
+          "case_count": 266,
+          "difference": 0.00908276932754075,
+          "ci_95_low": -0.0010298548719014872,
+          "ci_95_high": 0.019315774316477224
+        },
+        "g2_minus_g0": {
+          "case_count": 266,
+          "difference": 0.05207953902896902,
+          "ci_95_low": 0.04255099178986605,
+          "ci_95_high": 0.06191309360404902
+        },
+        "g3_minus_g0": {
+          "case_count": 266,
+          "difference": 0.06078361528148479,
+          "ci_95_low": 0.04872981539530023,
+          "ci_95_high": 0.07345988886495888
+        },
+        "g3_minus_g2": {
+          "case_count": 266,
+          "difference": 0.00870407625251576,
+          "ci_95_low": -0.0038973462335771987,
+          "ci_95_high": 0.021439118577082007
+        },
+        "g3_minus_g1": {
+          "case_count": 266,
+          "difference": 0.05170084595394403,
+          "ci_95_low": 0.039401457859838514,
+          "ci_95_high": 0.0643195154014865
+        }
+      }
+    },
+    "report_indexed_abnormal": {
+      "case_count": 419,
+      "system_token_f1": {
+        "g0_no_retrieval": 0.14950000169790562,
+        "g1_bm25_rag": 0.14763829805956372,
+        "g2_fixed_multimodal_rag": 0.17125640276751472,
+        "g3_learned_multimodal_rag": 0.17507017405740782
+      },
+      "comparisons": {
+        "g1_minus_g0": {
+          "case_count": 419,
+          "difference": -0.0018617036383418832,
+          "ci_95_low": -0.008771905281585493,
+          "ci_95_high": 0.004842329860104956
+        },
+        "g2_minus_g0": {
+          "case_count": 419,
+          "difference": 0.021756401069609112,
+          "ci_95_low": 0.01477310484789216,
+          "ci_95_high": 0.028812630092160636
+        },
+        "g3_minus_g0": {
+          "case_count": 419,
+          "difference": 0.025570172359502204,
+          "ci_95_low": 0.018433408705358686,
+          "ci_95_high": 0.03283149879285505
+        },
+        "g3_minus_g2": {
+          "case_count": 419,
+          "difference": 0.00381377128989309,
+          "ci_95_low": -0.003479975603373003,
+          "ci_95_high": 0.011207609587393527
+        },
+        "g3_minus_g1": {
+          "case_count": 419,
+          "difference": 0.027431875997844087,
+          "ci_95_low": 0.02027838107635479,
+          "ci_95_high": 0.034615642020048
+        }
+      }
+    },
+    "strict_project_history_untouched": {
+      "case_count": 262,
+      "system_token_f1": {
+        "g0_no_retrieval": 0.14360733076128623,
+        "g1_bm25_rag": 0.1499112141319463,
+        "g2_fixed_multimodal_rag": 0.1855867909475223,
+        "g3_learned_multimodal_rag": 0.1907943158591504
+      },
+      "comparisons": {
+        "g1_minus_g0": {
+          "case_count": 262,
+          "difference": 0.006303883370660054,
+          "ci_95_low": -0.004048543830240264,
+          "ci_95_high": 0.016440079990362885
+        },
+        "g2_minus_g0": {
+          "case_count": 262,
+          "difference": 0.04197946018623607,
+          "ci_95_low": 0.03149174835707897,
+          "ci_95_high": 0.05247906280746453
+        },
+        "g3_minus_g0": {
+          "case_count": 262,
+          "difference": 0.04718698509786417,
+          "ci_95_low": 0.03491079702776905,
+          "ci_95_high": 0.05970398870471425
+        },
+        "g3_minus_g2": {
+          "case_count": 262,
+          "difference": 0.005207524911628092,
+          "ci_95_low": -0.0076349759318521315,
+          "ci_95_high": 0.017918743525812537
+        },
+        "g3_minus_g1": {
+          "case_count": 262,
+          "difference": 0.040883101727204114,
+          "ci_95_low": 0.028870666668170418,
+          "ci_95_high": 0.05328639536607603
+        }
+      }
+    }
+  },
+  "human_clinical_adjudication": false
+}

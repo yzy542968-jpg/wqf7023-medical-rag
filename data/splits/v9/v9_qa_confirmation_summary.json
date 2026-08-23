@@ -1,0 +1,38 @@
+{
+  "study": "V9 QA confirmation",
+  "status": "formal_test_qa_outcomes_frozen_no_retuning",
+  "qa_case_count": 685,
+  "question_count": 1370,
+  "row_count": 5480,
+  "metrics": {
+    "g0_no_retrieval": {"token_f1": 0.1455587338454248, "structured_output_valid_rate": 0.42043795620437957},
+    "g1_bm25_rag": {"token_f1": 0.1479470007310607, "structured_output_valid_rate": 0.39416058394160586},
+    "g2_fixed_multimodal_rag": {"token_f1": 0.17909025126129632, "structured_output_valid_rate": 0.464963503649635},
+    "g3_learned_multimodal_rag": {"token_f1": 0.1848030314855801, "structured_output_valid_rate": 0.5722627737226277}
+  },
+  "primary_comparison_g3_minus_g0": {
+    "difference": 0.039244297640155294,
+    "ci_95_low": 0.032571568426206766,
+    "ci_95_high": 0.04574476717534258,
+    "bootstrap_unit": "case",
+    "bootstrap_iterations": 10000
+  },
+  "runtime": {
+    "model": "google/medgemma-1.5-4b-it",
+    "revision": "91850547d9f0b2fdd21aa7c5f4f3d1a8a52c243b",
+    "generation_seconds": 13496.210207299795,
+    "records_per_second": 0.4060399116365268,
+    "peak_gpu_memory_allocated_mib": 5184.52734375,
+    "batch_size": 8
+  },
+  "hashes": {
+    "config_sha256": "de12b3b3f5e1e8d3f6eb2de8e3d848331e9c277f15280d575e72acdcb1653a5b",
+    "rankings_sha256": "28639821abc5fba8189c7c0149822ed0e3935325d0136578803155cc5a4ebd9b",
+    "rows_sha256": "89c69c9a27e393c93c85e572587b330f908598e835cb8162a8678cd15ba512b4",
+    "implementation_sha256": "c5d2faaad2bcd5b588bcebe3bfb9e5b508ae380e75deb808c566ce64314301b3",
+    "prompt_implementation_sha256": "b1f75d854767b995633ee20cc72ca99969693532172b496447b94644b4770a88"
+  },
+  "raw_rows_committed": false,
+  "human_clinical_adjudication": false,
+  "retuning_after_test_generation": false
+}

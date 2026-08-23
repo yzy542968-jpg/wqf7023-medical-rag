@@ -1,0 +1,34 @@
+{
+  "study": "V9 bounded historical-evidence agent",
+  "status": "agent_evaluation_complete_no_retuning",
+  "case_count": 685,
+  "row_count": 1370,
+  "metrics": {
+    "g3_initial_unsupported_historical_rate": 0.16423357664233576,
+    "g4_final_unsupported_historical_rate": 0.0,
+    "historical_claim_presence_rate": 0.5722627737226277,
+    "retry_rate": 0.16423357664233576,
+    "historical_evidence_abstention_rate": 0.15985401459854015,
+    "historical_support_revision_rate": 0.172992700729927,
+    "mean_retrieval_calls": 1.1642335766423357,
+    "g4_token_f1": 0.1848030314855801
+  },
+  "paired_case_bootstrap": {
+    "g4_minus_g3_unsupported_historical_rate": {
+      "difference": -0.16423357664233576,
+      "ci_95_low": -0.18467153284671534,
+      "ci_95_high": -0.14452554744525548
+    },
+    "g4_minus_g3_token_f1": {"difference": 0.0, "ci_95_low": 0.0, "ci_95_high": 0.0}
+  },
+  "success": {"unsupported_historical_rate_reduced": true, "qa_noninferiority_met": true},
+  "hashes": {
+    "raw_qa_rows_sha256": "89c69c9a27e393c93c85e572587b330f908598e835cb8162a8678cd15ba512b4",
+    "agent_rows_sha256": "9cc8b4513f2ef12f7e849d7b5853a79ef07495b022699c5a84785d1d94624fc1",
+    "local_review_pack_sha256": "731acb579b3b1059d0e601cdc5d003dd7765361fd5ccfe7ac4429dbe56719840",
+    "public_case_index_sha256": "64c2c991a75025f7d081301ffa5774fc8f901f0516f3488b3856fb32931b1067"
+  },
+  "target_image_answer_verified_by_agent": false,
+  "human_clinical_adjudication": false,
+  "retuning_after_agent_outcomes": false
+}
