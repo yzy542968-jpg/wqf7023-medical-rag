@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 from pathlib import Path
 
 
@@ -10,11 +11,13 @@ OUTPUT = ROOT / "docs" / "P2_V9_FINAL_MANUSCRIPT.md"
 
 ABSTRACT = r"""## Abstract
 
-Retrieval-augmented generation can provide language models with traceable evidence, but conventional text-only retrieval is poorly matched to a new radiology case whose formal report has not yet been written. This research develops and evaluates a multimodal, similar-case medical question-answering workflow in which a target chest radiograph, pre-report clinical indication, and question retrieve other-case image-report pairs from a frozen historical bank. The target report is hidden from every inference component and is used only as an offline reference. The study uses 3,851 paired OpenI/IU-Xray examinations. A deterministic, report-indexed stratified split assigns 2,631 cases to Train, 376 to Validation, and 752 to an untouched V9 Test partition; 2,608 report-bearing Train cases form the shared historical bank. Report-derived graded relevance combines active-label similarity and RadGraph fact overlap. The retrieval comparison includes BM25 text retrieval, MedSigLIP image-image retrieval, image-report retrieval, fixed multimodal fusion, and a project-trained 865-parameter multilayer perceptron reranker. The reranker is trained with 307,176 weighted pairwise examples while all foundation models remain frozen.
+Retrieval-augmented generation can provide language models with traceable evidence, but conventional text-only retrieval is poorly matched to a new radiology case whose formal report has not yet been written. This research develops and evaluates a multimodal similar-case medical question-answering workflow in which a target chest radiograph, pre-report clinical indication, and question retrieve other-case image-report pairs from a frozen historical bank. The target report is hidden from every inference component and used only for offline evaluation. The study uses 3,851 paired OpenI/IU-Xray examinations. A deterministic report-indexed split assigns 2,631 cases to Train, 376 to Validation, and 752 to Test; 2,608 report-bearing Train cases form the historical bank. Report-derived graded relevance combines active-label similarity and RadGraph fact overlap. Baselines include BM25, MedSigLIP image-image and image-report retrieval, and fixed fusion. The proposed improvement is a project-trained 865-parameter multilayer perceptron reranker learned from 307,176 weighted pairs while all foundation models remain frozen.
 
-On 752 Test cases, the learned reranker achieved nDCG@10 of 0.327942 and MRR of 0.331968. It exceeded the strongest frozen image-only component by 0.012381 nDCG@10, with a 95% case-bootstrap confidence interval of [0.009226, 0.015584]. Under 100 fixed-point-free shuffled-image controls, aligned retrieval achieved 0.327942 compared with a shuffled mean of 0.220370 (plus-one p = 0.009901), demonstrating that the gain depended on correct image alignment. Downstream evaluation used 685 complete-reference Test cases, two fixed questions per case, four conditions, and 5,480 local MedGemma 1.5 generations. Learned multimodal RAG achieved Token-F1 of 0.184803 versus 0.145559 without retrieval, a difference of 0.039244 with 95% confidence interval [0.032572, 0.045745]. Its advantage over fixed multimodal RAG was numerical but not statistically resolved. A bounded evidence-control agent reduced automatically unsupported historical-support rows from 16.42% to 0% through one backup route or evidence-field abstention while preserving the target-image answer by design.
+On 752 Test cases, the learned reranker achieved nDCG@10 of 0.327942 and exceeded the strongest frozen image-only component by 0.012381, with 95% case-bootstrap confidence interval [0.009226, 0.015584]. Aligned retrieval also exceeded all 100 fixed-point-free shuffled-image controls (shuffled mean 0.220370; plus-one p = 0.009901). Downstream evaluation used 685 cases, two questions per case, four retrieval conditions, and 5,480 local MedGemma 1.5 generations. Learned multimodal RAG achieved Token-F1 0.184803 versus 0.145559 without retrieval, a difference of 0.039244 [0.032572, 0.045745], although its advantage over fixed multimodal RAG was unresolved. A bounded evidence-control agent reduced automatically unsupported historical-support fields from 16.42% to 0% through one backup route or evidence abstention while preserving the target-image answer by design.
 
-The results support a scoped conclusion: correctly aligned chest-image information improves report-derived similar-case retrieval, and retrieved multimodal historical evidence improves report-reference consistency over the same generator without retrieval. The work does not establish physician-adjudicated similarity, diagnostic accuracy, patient safety, external generalization, or deployment readiness. Its main contribution is an auditable evaluation of retrieval, generation, alignment, and evidence-control stages in a realistic new-case multimodal RAG task.
+Post-hoc protocol-governed audits qualified these findings. After excluding 187 Test cases with Train-report cosine similarity at least 0.95, the learned reranker remained first at nDCG@10 0.279730 versus 0.264642 for image-image retrieval. It also ranked first under label-only, RadGraph-only, and combined qrels. Qwen3-Embedding-0.6B improved the modern text baseline to 0.195633 but remained below the learned multimodal system and was more wording-sensitive. F1-RadGraph showed a clear learned-RAG advantage over BM25-RAG but no resolved advantage over no retrieval or fixed multimodal RAG. Robust reparsing recovered no additional structured outputs, confirming truncation as a genuine engineering limitation. A researcher accepted all labels in a purposively selected 24-case tool-assisted review; no independent radiologist adjudication was performed.
+
+The evidence supports a scoped conclusion: correctly aligned chest-image information improves report-derived similar-case retrieval, and multimodal retrieved context improves report-reference consistency over weak text retrieval and the same generator without retrieval. The study does not establish diagnostic accuracy, patient safety, external generalization, or deployment readiness. Its main contribution is an auditable separation of retrieval, alignment, generation, evidence control, and validity threats in a realistic new-case multimodal RAG task.
 """
 
 
@@ -135,24 +138,37 @@ Chapter 2 reviews RAG, biomedical retrieval, multimodal radiology representation
 CHAPTER_2_ADDENDUM = r"""
 ## 2.12 Similar-Case Multimodal RAG and the Final Research Gap
 
-The closest line of work combines chest-image retrieval with report generation. CXR-RePaiR uses a CLIP-style image-to-report retriever to construct reports from retrieved exemplars. X-REM adds coarse retrieval, learned image-text matching, and an NLI filter. FactMM-RAG uses factual pairs derived from CheXbert and RadGraph to improve factual report generation. These systems establish that historical image-report pairs can support image-conditioned language generation. They do not, however, directly test a question-conditioned new-patient workflow in which the target image, clinical indication, and medical question jointly retrieve other cases and the final output explicitly separates target observations from historical analogies.
+The closest line of work combines chest-image retrieval with report generation. CXR-RePaiR uses a contrastive image-to-report retriever to construct reports from retrieved exemplars. X-REM adds coarse retrieval, learned image-text matching, and an NLI filter. FactMM-RAG mines factual report pairs with CheXbert and RadGraph to train a fact-aware multimodal retriever. The 2026 RA-RRG system retrieves clinically important key phrases and uses them to condition report generation, while MedProbCLIP introduces probabilistic image-report embeddings, calibration, and risk-coverage evaluation. These systems establish that historical image-report pairs can support image-conditioned language generation and that retrieval reliability deserves explicit measurement. They do not, however, directly test a question-conditioned new-patient workflow in which the target image, clinical indication, and medical question jointly retrieve other cases and the final output explicitly separates target observations from historical analogies.
 
 Recent multimodal and agentic systems also motivate a stricter evaluation boundary. Concept-enhanced RAG methods combine visual embeddings with medical concepts; agentic radiology systems separate planning, retrieval, generation, and validation roles; and generated-report approaches use an intermediate radiology description to improve VQA. These designs show that orchestration can improve modularity, but additional agents do not automatically create stronger evidence. An agent may simply repeat the same unsupported claim through more steps. The relevant contribution is therefore not the number of roles but whether actions are bounded, inputs are permitted, failures are traceable, and abstention is available.
 
-The literature leaves four connected gaps. First, many retrieval-augmented radiology studies focus on report generation rather than answering a user question. Second, evaluations often compare multimodal fusion with text baselines but do not require superiority over the strongest individual visual component. Third, aligned-image gains are rarely challenged by complete shuffled-image recomputation. Fourth, evidence verification is commonly reported without separating support for a historical analogy from correctness about the target image.
+The literature leaves five connected gaps. First, many retrieval-augmented radiology studies focus on report generation rather than answering a user question. Second, evaluations often compare multimodal fusion with text baselines but do not require superiority over the strongest individual visual component. Third, aligned-image gains are rarely challenged by complete shuffled-image recomputation. Fourth, evidence verification is commonly reported without separating support for a historical analogy from correctness about the target image. Fifth, near-duplicate sensitivity, relevance-definition sensitivity, and wording robustness are often treated as implementation details even though they can materially change retrieval conclusions.
 
 V9 addresses these gaps with a scoped design. It compares text-only, image-only, image-report, fixed fusion, and learned fusion over one bank; trains only a small reranker; evaluates alignment with 100 fixed-point-free controls; uses the same multimodal generator across retrieval conditions; and limits the agent to historical-evidence checking. The final research gap is consequently not "whether RAG can be used in radiology." It is whether correctly aligned visual evidence can produce reproducible gains in other-case retrieval and whether those gains transfer to reference-consistent QA under an auditable evidence contract.
 """
 
 
-V9_METHODS = r"""
-## 3.14 Transition from Preliminary Studies to the Final V9 Study
+V9_METHODS = r"""# Chapter 3: Methodology
 
-Sections 3.1-3.13 describe the preliminary controlled study that established the project's evaluation vocabulary: target alignment, indication shortcut, shuffled-image control, retrieval-to-generation transfer, and automated-verifier disagreement. Those experiments retrieved the paired target report from a controlled corpus and are retained because they explain the methodological development. They are not the final task. V9 removes the target report from the bank and treats every retrieved report as an other-case historical analogy.
+## 3.1 Final Research Design and Version Boundary
 
-The transition was protocol governed. V5-V8 artifacts remained frozen. A technology-reuse audit defined which repository components could be retained and which external methods could be independently reimplemented. A full-source split amendment was committed before the final split was instantiated. RadGraph preprocessing, MedSigLIP development, learned-reranker training, retrieval confirmation, QA confirmation, and qualitative extraction each had separate frozen boundaries. No Test outcome was used to alter a model, prompt, threshold, metric, case, or hypothesis.
+The final study is V9. Preliminary V5-V8 experiments established the evaluation vocabulary of target alignment, indication shortcuts, shuffled-image controls, retrieval-to-generation transfer, and automated-verifier disagreement. Their role is formative, and their detailed methods and results are retained in Appendices G and H rather than interleaved with the primary study. V9 changes the task construct: the target report is removed from the bank and every retrieved report is an other-case historical analogy.
 
-## 3.15 Data Source, Eligibility, and Deterministic Partition
+The transition was protocol governed. V5-V8 artifacts remained frozen. A technology-reuse audit defined which repository components could be retained and which external methods could be independently reimplemented. A full-source split amendment was committed before the final split was instantiated. RadGraph preprocessing, MedSigLIP development, learned-reranker training, retrieval confirmation, QA confirmation, qualitative extraction, and supplemental validity analysis each had separate boundaries. No V9 Test outcome was used to alter a model, prompt, threshold, metric, case, or hypothesis.
+
+## 3.2 Task Contract, Systems, and Hypotheses
+
+The intended use case is a new examination for which a chest radiograph and pre-report clinical indication are available but no formal target report has yet been written. The system receives the target image, indication, and a question such as a request for findings or impression. It searches a historical Train-only bank for similar other-patient image-report pairs. The retrieved reports provide terminology and analogies to a multimodal generator; they are never presented as the current patient's own report. During offline evaluation, the hidden target findings and impression supply references and report-derived relevance annotations.
+
+This contract resolves a common ambiguity. The research does not retrieve an already known report that belongs to the target examination. Nor does it assume that a new patient arrives with a complete report and then ask the system to rediscover similar text. The scientific question is whether the image contributes patient-specific retrieval information before reporting, and whether other-case evidence improves a bounded answer when the generator must still inspect the target image.
+
+The retrieval baselines and improvement are explicit. R0 is BM25 text retrieval. The supplemental modern text baseline is Qwen3-Embedding-0.6B. R1 is MedSigLIP image-image retrieval and was the strongest frozen component on Validation. R2 is target-image-to-historical-report retrieval. R3 is validation-selected fixed score fusion. R4, the proposed improvement, is a learned nine-feature MLP reranker. Generation uses G0 without retrieval, G1 with BM25 reports, G2 with fixed-fusion reports, and G3 with learned-reranker reports. G4 is a bounded post-generation evidence-control agent. This separation makes clear that R4 is the improved retrieval model, G3 is the improved end-to-end RAG condition, and G4 is an auditable control layer rather than a replacement generator.
+
+The primary retrieval hypothesis was that R4 would exceed R1 on case-grouped nDCG@10. The alignment hypothesis required correctly paired images to exceed the complete shuffled-image distribution. The primary generation hypothesis was that G3 would exceed G0 on case-grouped Token-F1. Learned-versus-fixed generation, subgroup, clinical semantic, wording, duplicate, and qrel analyses were secondary or post-hoc exploratory. No result was allowed to redefine these roles after outcome inspection.
+
+The implementation uses fixed prompt engineering but does not depend on LangChain. Prompt instructions separate target-image observations from historical support, constrain output to one JSON object, restrict citations to retrieved IDs, and permit uncertainty or abstention. The agent is implemented as a deterministic state machine with one optional retry because an orchestration framework would not add scientific evidence to this bounded workflow.
+
+## 3.3 Data Source, Eligibility, and Deterministic Partition
 
 The source artifact contains 3,851 paired OpenI/IU-Xray studies. Cases were classified from the normalized `problems` field before splitting. There were 1,379 report-indexed normal cases, 2,380 report-indexed abnormal cases, and 92 report-index indeterminate cases. "Report-indexed" denotes the dataset annotation and does not represent new physician review. The 92 empty or `no indexing` cases were excluded from the primary stratifiable frame rather than reclassified. The resulting primary universe contained 3,759 cases.
 
@@ -162,7 +178,7 @@ Twenty-five source cases had neither findings nor impression. Twenty-three occur
 
 The source publication describes one study per patient, but released patient identifiers were unavailable in the processed data. Case-ID disjointness was verified. The thesis does not claim independently verified patient-level separation. Validation and Test queries nevertheless retrieve only from the Train bank, so their own study reports are absent from inference.
 
-## 3.16 Report-Derived Graded Relevance
+## 3.4 Report-Derived Graded Relevance
 
 V9 requires a graded notion of clinical similarity because exact report identity is neither available nor desirable in the historical bank. Offline relevance was constructed from hidden target-report annotations and candidate-report annotations. It was never exposed to retrieval, generation, verification, or agent routing.
 
@@ -178,7 +194,7 @@ gain(query, candidate)
 
 The score was constrained to [0,1]. nDCG@10 used the continuous gain. Binary MRR and Recall diagnostics used a frozen gain threshold of 0.50. Label-only and fact-only results were sensitivity analyses. The operational relevance supports reproducible ranking comparisons but is not physician-adjudicated similarity.
 
-## 3.17 Retrieval Components and Fixed Fusion
+## 3.5 Retrieval Components and Fixed Fusion
 
 R0 was BM25 over historical findings and impression, queried with the clinical indication and one of three fixed question templates. R1 was cosine similarity between the normalized mean MedSigLIP embedding of the target image views and the normalized mean embedding of each historical study's image views. R2 was MedSigLIP cross-modal similarity between the target image representation and the historical report representation.
 
@@ -186,7 +202,7 @@ Historical reports were split into sentence-aware, section-prefixed chunks of at
 
 Each retrieval channel was independently min-max normalized across all 2,608 candidates for a query. Constant channels mapped to zero. The fixed fusion grid evaluated nonnegative weight triples in increments of 0.25 that summed to one. A valid multimodal candidate required positive BM25 weight and positive total image weight. Validation nDCG@10 selected the final R3 weights under a simplicity rule that favored more BM25 weight among candidates within 0.005 of the maximum. Canonical case ID resolved every ranking tie.
 
-## 3.18 Learned Multimodal Reranker
+## 3.6 Learned Multimodal Reranker
 
 The project-trained component was deliberately small. A nine-feature vector represented each query-candidate state: independently normalized BM25, image-image, and image-report scores; normalized reciprocal rank under each component; and three one-hot indicators for findings, impression, or acute question type. Raw text, image pixels, identifiers, filenames, labels, RadGraph facts, references, and QA outcomes were prohibited as features.
 
@@ -194,13 +210,13 @@ The 2,608 Train-bank cases were deterministically assigned to 1,600 pairwise-fit
 
 Two scorers were prespecified: a linear 9-to-1 model and a multilayer perceptron `9 → 32 → 16 → 1` with ReLU activations. Both used weighted pairwise softplus loss, AdamW, learning rate 0.001, weight decay 0.0001, batch size 4,096 pairs, at most 30 epochs, seed 7030, and internal early stopping. Validation selected the architecture. The MLP was promoted because it met the frozen margin over fixed fusion and also exceeded the strongest individual component. Its 865 parameters were the only learned model parameters in the final system. Foundation encoders and language models remained frozen.
 
-## 3.19 Retrieval Confirmation and Alignment Control
+## 3.7 Retrieval Confirmation and Alignment Control
 
 Five frozen systems were evaluated once on 752 Test cases and three fixed questions: BM25, image-image, image-report, fixed fusion, and the learned MLP. The primary metric was case-grouped equal-question nDCG@10. The primary paired comparison was learned MLP minus image-image because image-image was the strongest frozen component on Validation. A 10,000-iteration case bootstrap with seed 7031 produced a percentile 95% confidence interval. Confirmed superiority required the lower bound to be greater than zero.
 
 Alignment dependence was evaluated through 100 deterministic, unique, fixed-point-free wrong-image assignments. Test cases were ordered by a domain-separated SHA-256 rule, and cyclic shifts 1-100 supplied complete image-view sets from other Test cases. For each assignment, image-image scores, image-report scores, normalization, ranks, features, MLP scores, and rankings were recomputed. BM25 remained attached to the original indication and question. The plus-one randomization p-value counted how many shuffled nDCG@10 values equaled or exceeded aligned performance. A predefined 262-case project-history-untouched subset was reported only as sensitivity analysis.
 
-## 3.20 Downstream Multimodal Question Answering
+## 3.8 Downstream Multimodal Question Answering
 
 The downstream frame contained 685 Test cases with nonempty findings and impression. Each contributed a findings question and an impression question, producing 1,370 questions. The acute question used for retrieval was excluded from generation scoring because the dataset lacked a physician-adjudicated binary acute-abnormality reference.
 
@@ -208,22 +224,35 @@ All four generation conditions used the same `google/medgemma-1.5-4b-it` revisio
 
 The prompt required JSON fields for answer, target-image findings, supporting case IDs, historical support, uncertainty, and abstention. It stated explicitly that historical reports were analogies and not proof about the target patient. Parser failures and token-ceiling outputs were retained; no selective regeneration was allowed. The primary metric was case-grouped equal-question Token-F1 against hidden target findings or impression. G3 minus G0 was the primary comparison, with 10,000 case-bootstrap iterations. Exact match, JSON completeness, per-question effects, subgroup effects, latency, tokens, and memory were secondary.
 
-## 3.21 Bounded Evidence-Control Agent
+## 3.9 Bounded Evidence-Control Agent
 
 G4 was a bounded control layer applied after G3. Its verifier checked only whether statements in the `historical_support` field were supported by the cited historical reports. It did not verify the `answer` or `target_image_findings` against the target image. If G3 historical support failed the frozen checker, the agent could perform one deterministic retry using the frozen image-image R1 Top-3 route. If the backup evidence still failed, it removed the historical-support statement and citations, retained the target-image answer, and recorded historical-evidence abstention.
 
 The agent had no internet access, no model-selection authority, no threshold changes, no target-report access, and no unbounded loop. Every initial route, cited ID, support score, retry, revision, abstention, and reason was recorded. The primary agent outcome was the paired change in automated unsupported historical-support rate. A Token-F1 noninferiority margin of -0.01 guarded against unintended answer modification, although the target answer was preserved by design.
 
-## 3.22 Reproducibility, Ethics, and Qualitative Review
+## 3.10 Researcher-Reviewed Qualitative Analysis
 
-The implementation used local CUDA inference and preserved model revisions, configuration files, checkpoint hashes, result hashes, split fingerprints, and protocol commits. Large source-derived texts, image pixels, vectors, checkpoints, prompts, and per-row generations remained local under repository policy. Aggregate summaries, source-neutral code, hashes, tests, and a lightweight case index were public. The final suite contained 206 passing automated tests.
+A post-hoc qualitative protocol was committed before systematic case extraction and coding. The deterministic pack contained six cases with the largest mean G3-minus-G0 Token-F1 gains, six with the largest losses, six agent retry cases, and six historical-evidence abstention cases. The extraction tool assembled frozen retrieval, generation, reference, and agent evidence and proposed taxonomy labels. The named researcher then reviewed all 24 rows and accepted the proposed label sets without modification on 19 August 2026. The audit trail retains original proposals, researcher-reviewed labels, status, initials, date, and bounded notes.
 
-A qualitative protocol was committed before deterministic extraction. Twenty-four cases include six largest G3 gains, six largest losses, six agent retry cases, and six historical-evidence abstentions. Tool-assisted proposals remain pending researcher review. They are not reported as completed human findings. No radiologist evaluated similarity, retrieved reports, target-image answers, or agent decisions. The study therefore reports retrospective technical performance and explicitly excludes claims of diagnostic safety, clinical utility, or deployment readiness.
+This process is described as researcher-reviewed, tool-assisted exploratory analysis. It was not blinded because some outputs had been inspected during pipeline verification; it was not independent because the researcher was the project author; and it was not clinical adjudication because no radiologist scored the cases. Category counts characterize the purposively selected pack only and are not population-rate estimates.
+
+## 3.11 Supplemental Validity and Robustness Audits
+
+After the V9 technical freeze, a separate post-hoc protocol was committed before supplemental outcomes. Five analyses were prespecified. First, normalized report text and image dHash were used to audit cross-split similarity; a sensitivity analysis excluded Test reports with maximum Train cosine similarity at least 0.95. Second, frozen rankings were evaluated under active-label-only, RadGraph-fact-only, and original combined qrels. Third, pinned Qwen3-Embedding-0.6B provided a modern dense text comparator and nine fixed question wordings tested retrieval robustness. Fourth, frozen answers were evaluated with F1-RadGraph and case-grouped bootstrap intervals; F1CheXbert would be reported only if an official compatible local dependency was available. Fifth, balanced JSON extraction, fence removal, and trailing-comma removal tested whether structured-output failures were repairable without fabricating truncated content.
+
+All supplemental analyses were interpretive. They could strengthen, qualify, or weaken the final claims but could not trigger retraining, prompt changes, threshold changes, case replacement, or a new primary hypothesis. The duplicate hash is not treated as proof of patient identity; fixed paraphrases are not treated as physician-authored questions; and automated graph overlap is not treated as clinical correctness.
+
+## 3.12 Reproducibility, Ethics, and Evidence Boundaries
+
+The implementation used local CUDA inference and preserved model revisions, configuration files, checkpoint hashes, result hashes, split fingerprints, and protocol commits. Large source-derived texts, image pixels, vectors, checkpoints, prompts, and per-row generations remained local under repository policy. Aggregate summaries, source-neutral code, hashes, tests, and a lightweight case index were public. The verified suite contained 206 passing automated tests before the supplemental additions; the final suite was rerun after integration.
+
+No radiologist evaluated pairwise similarity, retrieved reports, target-image answers, or agent decisions. The completed researcher review supports exploratory pipeline interpretation only. The study therefore reports retrospective technical performance and explicitly excludes claims of diagnostic safety, clinical utility, or deployment readiness.
 """
 
 
-V9_RESULTS = r"""
-## 4.8 Final V9 Retrieval Confirmation
+V9_RESULTS = r"""# Chapter 4: Results and Analysis
+
+## 4.1 Final V9 Retrieval Confirmation
 
 The V9 Test evaluation contained 752 cases, three questions per case, five systems, and 11,280 ranking rows. Every system ranked the same 2,608-case historical bank. BM25 produced nDCG@10 of 0.134156 and MRR of 0.083542. Image-image retrieval was substantially stronger at 0.315561 nDCG@10 and 0.328270 MRR. Image-report retrieval achieved 0.274069 and 0.256032 respectively. Fixed multimodal fusion reached 0.246935 nDCG@10 and 0.211322 MRR, below the image-only component. The learned MLP produced the strongest nDCG@10, 0.327942, and MRR, 0.331968.
 
@@ -233,13 +262,13 @@ The fixed-fusion result is an important negative finding. More modalities did no
 
 The 262-case strict project-history-untouched subset showed the same direction. In that subset, BM25, image-image, image-report, fixed fusion, and learned MLP achieved nDCG@10 values of 0.129956, 0.411812, 0.331673, 0.288307, and 0.419901 respectively. These values were not used for selection and are not a separate confirmatory family. They reduce concern that the full result was driven only by cases encountered in earlier project stages.
 
-## 4.9 Alignment-Specific Image Contribution
+## 4.2 Alignment-Specific Image Contribution
 
 Aligned R4 nDCG@10 was 0.327942. Across 100 complete wrong-image recomputations, mean nDCG@10 was 0.220370, standard deviation 0.004900, and the 2.5th and 97.5th percentiles were 0.210726 and 0.231474. The aligned score exceeded every shuffled assignment. The plus-one p-value was 0.009901.
 
 This control is stronger than substituting one arbitrary image or shuffling only the final score. Every visual component and all derived learned features were recomputed under the wrong image. The original clinical indication and question were retained. The result therefore shows that correct target-image alignment materially influenced similar-case ranking. It does not prove that every retrieved case is clinically appropriate, but it rules out an explanation based only on text or a generic image prior.
 
-## 4.10 Downstream QA Transfer
+## 4.3 Downstream QA Transfer
 
 The QA study used 685 complete-reference Test cases, 1,370 questions, four systems, and 5,480 local MedGemma generations. G0 target-image generation without retrieval achieved Token-F1 0.145559 and complete JSON rate 42.04%. G1 BM25 RAG achieved 0.147947 and 39.42%. G2 fixed multimodal RAG achieved 0.179090 and 46.50%. G3 learned multimodal RAG achieved the highest Token-F1, 0.184803, and complete JSON rate, 57.23%.
 
@@ -251,23 +280,47 @@ The effect was larger for impression questions (+0.059903) than findings questio
 
 Absolute performance remained low. MedGemma sometimes reached the 192-token limit or returned non-strict JSON. Only 57.23% of G3 rows contained the complete requested object. All outputs were retained under a tolerant parser rather than selectively regenerated. These failures matter because a system can improve mean Token-F1 while remaining unsuitable for deployment.
 
-## 4.11 Bounded Agent Results
+## 4.4 Bounded Agent Results
 
 The G4 agent evaluated all 1,370 G3 rows. Before control, 16.423% of rows contained historical-support statements that the frozen automated checker did not substantiate from the cited reports. After one optional R1 backup route or evidence-field removal, the final automated unsupported historical-support rate was 0%. The paired reduction was 16.423 percentage points, with 95% case-bootstrap interval [14.4526, 18.4672] percentage points in magnitude.
 
 The agent retried 16.423% of rows, revised historical support in 17.299%, and abstained from historical evidence in 15.985%. Mean retrieval calls increased from one to 1.164. Token-F1 remained 0.184803 because the target answer was preserved by design. The zero final unsupported rate is therefore partly structural: when no support could be established, the field was removed. It demonstrates auditable claim suppression and abstention, not that all retained target-image answers were correct.
 
-## 4.12 Computational Cost and Artifact Integrity
+## 4.5 Computational Cost and Artifact Integrity
 
 The 5,480 local MedGemma generations required 13,496 seconds, or approximately 3.75 hours, at 0.406 records per second. Peak allocated GPU memory was 5,184.5 MiB on the RTX 5070 Laptop GPU with batch size eight. The small reranker trained on CPU-sized feature tensors and introduced negligible inference cost compared with MedSigLIP and MedGemma.
 
 Frozen hashes identify the principal artifacts. Retrieval rows hash to `baa56924928b144c9b877b8e2218e04d17df6b77a6f794ed3830f7ccf3e449fd`. The MLP checkpoint hash is `8afa68a48de9d6c9128d190f1368d0d45d41a958e5eb12787d7e725e7eb09efa`. The Top-3 ranking pack hash is `28639821abc5fba8189c7c0149822ed0e3935325d0136578803155cc5a4ebd9b`. QA raw rows hash to `89c69c9a27e393c93c85e572587b330f908598e835cb8162a8678cd15ba512b4`, and agent rows hash to `9cc8b4513f2ef12f7e849d7b5853a79ef07495b022699c5a84785d1d94624fc1`.
 
-## 4.13 Qualitative Status and Results Summary
+## 4.6 Researcher-Reviewed Qualitative Findings
 
-The deterministic 24-case review pack is complete, but researcher review remains pending. Provisional extraction shows heterogeneous gains and losses, cases in which retrieval improvement did not guarantee a reference-consistent answer, retries that occasionally recovered historical support, and abstentions that removed unsupported analogies. These observations guide review but are not presented as human-confirmed findings.
+The researcher reviewed all 24 selected cases and accepted the tool-assisted taxonomy labels without modification; no case was excluded. Labels overlapped. Fifteen cases showed retrieval relevance gain and nine showed retrieval relevance failure. Two were labeled reference-consistent and thirteen reference-inconsistent. Ten exposed structured-output failure, five showed historical-support retry recovery, thirteen historical-support abstention, and five citation repair.
+
+The review confirms heterogeneous pipeline behavior rather than a prevalence estimate. Retrieval gain did not guarantee a reference-consistent answer. Correctly retrieved evidence could still be omitted or misinterpreted during generation, while the bounded agent sometimes recovered support and more often removed an unsupported analogy. These are researcher-reviewed exploratory interpretations of frozen references and traces, not radiologist judgments of clinical correctness.
+
+## 4.7 Cross-Split Similarity Sensitivity
+
+The audit found 162 exact normalized Train-report duplicates among 752 Test cases. Maximum Train-report cosine similarity was at least 0.90 for 214 Test cases, 0.95 for 187, and 0.99 for 170. Image dHash distance was zero for 11 Test cases and at most four for 447; because chest radiographs share layout and anatomy, these perceptual collisions do not prove repeated patients.
+
+The prespecified report sensitivity excluded the 187 Test cases with cosine similarity at least 0.95. On the retained 565 cases, R4 nDCG@10 was 0.279730, followed by R1 at 0.264642, R2 at 0.247601, R3 at 0.226451, and R0 at 0.139179. R4 therefore remained first and its margin over R1 was +0.015088. The direction of the primary finding survived, but the high same-source near-duplicate prevalence remains a material threat to external and population validity.
+
+## 4.8 Qrel, Dense-Baseline, and Wording Robustness
+
+R4 ranked first under each prespecified relevance construct. Under active labels alone, R4 and R1 achieved nDCG@10 of 0.333863 and 0.318698, a difference of +0.015165. Under RadGraph facts alone, they achieved 0.292220 and 0.289271, a much smaller +0.002950. Under the frozen combined qrel, the difference was +0.012381. The ordering is therefore robust, but effect magnitude depends on how clinical similarity is operationalized.
+
+The pinned Qwen3 dense baseline achieved canonical nDCG@10 of 0.195633, exceeding BM25 by +0.061476 but remaining below R4 at 0.327942. Across two fixed paraphrases for each of three question roles, Top-1 agreement with the canonical wording was 11.41% for BM25, 35.70% for Qwen3 dense, and 99.69% for R4. Mean Top-10 Jaccard was 0.1096, 0.3226, and 0.8887 respectively. R4's stability is consistent with the strong contribution of its visual channels; it is wording robustness under researcher-written variants, not physician-authored language validation.
+
+## 4.9 Clinical Semantic and Structured-Output Audits
+
+F1-RadGraph provided a different view of generation quality. G0, G1, G2, and G3 complete F1 values were 0.124852, 0.103866, 0.124971, and 0.124803. G3 exceeded G1 by +0.020937 with 95% interval [0.012863, 0.028992], but differed from G0 by -0.000049 [-0.006803, 0.006897] and from G2 by -0.000168 [-0.008553, 0.008127]. Entity and entity-relation results followed the same broad pattern. Thus learned multimodal RAG clearly repaired the weak BM25-RAG route, but automated clinical graph overlap did not establish general superiority over target-image-only or fixed multimodal generation. F1CheXbert was not run because an official compatible local dependency was unavailable; no substitute was used.
+
+Balanced JSON extraction, markdown-fence removal, and trailing-comma repair recovered no additional rows. Across all systems, 2,537 of 5,480 outputs were valid before and after robust reparsing; 2,943 remained unrecoverable and answer-change rate was zero. The same held for G3: 784 of 1,370 were valid. The incomplete-output problem is therefore primarily token-ceiling truncation rather than a removable parser artifact.
+
+## 4.10 Integrated Results Summary
 
 The final quantitative evidence chain is complete. Correct images improved retrieval relative to shuffled images. The learned reranker exceeded the strongest frozen component. Learned multimodal RAG improved reference consistency over no retrieval and text-only RAG. The bounded agent suppressed unsupported historical evidence. At the same time, fixed fusion underperformed image-only retrieval, learned QA did not clearly beat fixed QA, structured output was incomplete, and no clinical human score was obtained.
+
+The supplemental evidence makes this conclusion more precise. Retrieval ordering persisted after a strict near-duplicate exclusion and across three qrel definitions. A modern dense model improved the text baseline but did not close the multimodal gap. Wording robustness strongly favored R4. In contrast, F1-RadGraph did not reproduce a learned-RAG advantage over G0 or G2. The study therefore supports its retrieval claim more strongly than a claim of universal answer-quality superiority.
 """
 
 
@@ -301,13 +354,13 @@ This is useful but narrower than diagnosis verification. A zero unsupported-hist
 
 ### RQ5: What limitations remain?
 
-The principal limitations are same-source evaluation, report-derived rather than physician-derived similarity, low absolute Token-F1, incomplete structured outputs, automated verification, unavailable identifier-level patient auditing, one image passed to the generator, and no independent clinician evaluation. These limitations constrain the claim but do not nullify the controlled comparisons. They define the boundary between a reproducible master's research contribution and a clinically validated system.
+The principal limitations are same-source near duplicates, report-derived rather than physician-derived similarity, qrel-construct dependence, researcher-written questions, low absolute Token-F1, incomplete structured outputs, automated verification, unavailable identifier-level patient auditing, one image passed to the generator, and no independent clinician evaluation. Robustness analyses constrain rather than erase these limitations. They define the boundary between a reproducible master's research contribution and a clinically validated system.
 
 ## 5.2 Interpretation of the Evidence Chain
 
-The most important finding is not a single score. It is the agreement of several controls. Image-image retrieval strongly exceeded generic-question BM25. The learned MLP produced a smaller but statistically resolved improvement over image-image. Shuffled images substantially reduced the learned score. Multimodal historical reports improved MedGemma reference consistency. The agent then reduced unsupported claims about those reports. Together, these results support a coherent chain from aligned visual retrieval to more useful historical context and more controlled evidence use.
+The most important finding is not a single score. It is the agreement of several controls. Image-image retrieval strongly exceeded generic-question BM25. The learned MLP produced a smaller but statistically resolved improvement over image-image. Shuffled images substantially reduced the learned score. The ordering remained after near-duplicate exclusion and under label-only, fact-only, and combined qrels. A modern dense model improved over BM25 but did not approach R4, and R4 was almost invariant to fixed wording changes. Multimodal historical reports improved MedGemma Token-F1, and the agent then reduced unsupported claims about those reports. Together, these results support a coherent retrieval chain from aligned visual input to more controlled evidence use.
 
-The chain also contains productive negative results. BM25 alone barely changed QA relative to no retrieval. Fixed score fusion underperformed the strongest image component. Learned retrieval did not clearly outperform fixed retrieval at the final QA stage. More than two fifths of G3 generations lacked a complete JSON object. These results prevent the thesis from becoming a simple demonstration in which every added component appears beneficial. They identify where engineering complexity is justified and where it is not.
+The chain also contains productive negative results. BM25 alone barely changed QA relative to no retrieval. Fixed score fusion underperformed the strongest image component. Learned retrieval did not clearly outperform fixed retrieval at the final QA stage. F1-RadGraph did not show a learned-RAG advantage over image-only generation or fixed multimodal RAG. More than two fifths of G3 generations lacked a complete JSON object, and robust reparsing confirmed that truncation could not be repaired by a better extractor. These results prevent the thesis from becoming a simple demonstration in which every added component appears beneficial. They identify where engineering complexity is justified and where it is not.
 
 The distinction between target evidence and historical analogy is central. A retrieved report may be highly similar and its summary may be faithfully cited, yet it still belongs to another patient. The generator must inspect the target image and use historical cases only as contextual analogies. This is why the output separates `answer`, `target_image_findings`, and `historical_support`. The distinction is also why the agent checks the historical field only. Treating a historical report as proof would create precisely the cross-case contamination risk that the earlier studies exposed.
 
@@ -323,7 +376,7 @@ The method combines frozen biomedical foundation models with a small learned rer
 
 ### 5.3.3 Evaluation Contribution
 
-The evaluation integrates graded nDCG, component baselines, case-grouped bootstrap intervals, shuffled-image negative controls, retrieval-to-QA transfer, strict-subset sensitivity, structured-output validity, automated historical support, runtime, and artifact hashes. Each measure has a stated scope. The result is an auditable evidence chain rather than a single favorable metric.
+The evaluation integrates graded nDCG, component baselines, case-grouped bootstrap intervals, shuffled-image negative controls, retrieval-to-QA transfer, near-duplicate exclusion, qrel variants, a modern dense text baseline, wording perturbations, F1-RadGraph, structured-output reparsing, automated historical support, runtime, and artifact hashes. Each measure has a stated scope. The result is an auditable evidence chain rather than a single favorable metric.
 
 ### 5.3.4 Agent Contribution
 
@@ -347,21 +400,23 @@ The study also extends the concept of grounding. Local faithfulness asks whether
 
 All final results come from OpenI/IU-Xray chest radiographs. The study improves within-source spectrum coverage but does not demonstrate external generalization. Scanner distributions, reporting styles, disease prevalence, and image quality may differ in MIMIC-CXR, CheXpert Plus, PadChest, or local hospital data. Other radiology modalities such as CT, MRI, ultrasound, or mammography would require different encoders, study-level aggregation, and relevance definitions.
 
+The supplemental audit found substantial normalized-report similarity between Train and Test. R4 remained first after excluding Test reports with cosine similarity at least 0.95, but the prevalence of exact and near duplicates means that the benchmark should not be presented as a clean estimate for a different hospital or reporting environment. Image dHash collisions were also frequent, although perceptual similarity in standardized chest radiographs cannot establish patient duplication.
+
 ### Patient identity boundary
 
 The source design reports one study per patient, but stable patient identifiers were unavailable for independent verification. The split is case-ID disjoint. It should not be described as identifier-verified patient-disjoint evaluation.
 
 ### Operational relevance
 
-The primary gain combines active dataset labels and RadGraph facts. It is reproducible and avoids rewarding negative-label agreement, but it reflects report similarity rather than physician judgment of which historical cases are useful. Label extraction and RadGraph annotation can both contain errors. Normal-normal gain is necessarily coarse.
+The primary gain combines active dataset labels and RadGraph facts. It is reproducible and avoids rewarding negative-label agreement, but it reflects report similarity rather than physician judgment of which historical cases are useful. Label extraction and RadGraph annotation can both contain errors. Normal-normal gain is necessarily coarse. R4 remained first under label-only and fact-only qrels, but its fact-only advantage over image retrieval was only 0.002950 nDCG@10, demonstrating construct-dependent effect size.
 
 ### Question and reference provenance
 
-The findings and impression questions are fixed templates, not physician-authored questions arising during care. References are report sections and Token-F1 rewards lexical overlap. Paraphrases, clinically equivalent terminology, and valid image observations absent from the report can be under-rewarded. ReportQA, RadQA, or clinician-authored evaluation would complement the current design but cannot be substituted without respecting licensing and access rules.
+The findings and impression questions are fixed templates, not physician-authored questions arising during care. References are report sections and Token-F1 rewards lexical overlap. Fixed paraphrase tests showed that R4 was stable, but researcher-written variants cannot substitute for clinician language. Clinically equivalent terminology and valid image observations absent from the report can be under-rewarded. ReportQA, RadQA, or clinician-authored evaluation would complement the current design but cannot be substituted without respecting licensing and access rules.
 
 ### Generation reliability
 
-Absolute Token-F1 remained low, and strict JSON completeness peaked at 57.23%. The maximum generation length and 4-bit local configuration may constrain output, but changing them after confirmation would invalidate the freeze. A stronger model or constrained decoder could improve usability, yet must be evaluated in a new protocol.
+Absolute Token-F1 remained low, and strict JSON completeness peaked at 57.23%. Robust formatting-only reparsing recovered no additional rows, indicating that token-ceiling truncation rather than a simple regular-expression defect caused most failures. The maximum generation length and 4-bit local configuration may constrain output, but changing them after confirmation would invalidate the freeze. A stronger model or constrained decoder could improve usability, yet must be evaluated in a new protocol.
 
 ### Automated verification
 
@@ -369,7 +424,7 @@ BioLinkBERT-MedNLI is not a clinical gold standard. The agent's zero final unsup
 
 ### Human evaluation
 
-The deterministic 24-case pack awaits researcher review, and no independent radiologist adjudication was completed. The thesis must not report assistant proposals as human findings or claim inter-rater reliability. Human evaluation remains the strongest missing validation layer.
+The author completed the deterministic 24-case review and accepted the tool-assisted labels. This is not independent radiologist adjudication, blinded review, or inter-rater evaluation. The selected-case counts cannot estimate cohort-wide error prevalence. Independent clinical evaluation remains the strongest missing validation layer.
 
 ### Clinical and deployment boundary
 
@@ -389,9 +444,9 @@ Fifth, the agent can be expanded cautiously. A future version could route by que
 
 ## 5.7 Conclusion
 
-This thesis developed a complete multimodal similar-case RAG workflow for new-patient chest-radiograph question answering. From 3,851 OpenI cases, it constructed a deterministic Train/Validation/Test study and a 2,608-case historical bank. Frozen BM25 and MedSigLIP channels were compared with fixed fusion and a trained 865-parameter reranker. The learned reranker achieved a statistically resolved nDCG@10 gain over image-only retrieval, and aligned images substantially exceeded 100 shuffled controls. Retrieved multimodal reports improved MedGemma answer-reference consistency over the same generator without retrieval and over text-only RAG. A bounded agent then suppressed unsupported historical-support claims through one retry or evidence abstention.
+This thesis developed a complete multimodal similar-case RAG workflow for new-patient chest-radiograph question answering. From 3,851 OpenI cases, it constructed a deterministic Train/Validation/Test study and a 2,608-case historical bank. Frozen BM25 and MedSigLIP channels were compared with a current dense text baseline, fixed fusion, and a trained 865-parameter reranker. The learned reranker achieved a statistically resolved nDCG@10 gain over image-only retrieval, and aligned images substantially exceeded 100 shuffled controls. Its ordering remained first after strict near-duplicate exclusion, across three qrel variants, and under fixed wording changes. Retrieved multimodal reports improved MedGemma Token-F1 over the same generator without retrieval and over text-only RAG. A bounded agent then suppressed unsupported historical-support claims through one retry or evidence abstention.
 
-The contribution is deliberately scoped. The system does not prove diagnostic accuracy, clinical safety, or external validity. It demonstrates that correct image alignment matters, that learned fusion can outperform the strongest frozen retrieval component, that retrieval gains can transfer to downstream QA, and that agentic evidence control can be made bounded and auditable. Equally important, it records where the evidence remains weak: fixed fusion can degrade retrieval, learned retrieval need not produce confirmed learned-QA superiority, structured output can fail, automated verification is not clinical judgment, and human evaluation is still required.
+The contribution is deliberately scoped. The system does not prove diagnostic accuracy, clinical safety, or external validity. It demonstrates that correct image alignment matters, that learned fusion can outperform the strongest frozen retrieval component, that retrieval gains can transfer to downstream QA, and that agentic evidence control can be made bounded and auditable. Equally important, it records where the evidence remains weak: fixed fusion can degrade retrieval, learned retrieval need not produce confirmed learned-QA superiority, F1-RadGraph did not establish broad G3 superiority, structured output can fail through truncation, automated verification is not clinical judgment, and independent clinical evaluation is still required.
 
 The final value of the research is therefore not a claim that an agent can replace a radiologist. It is a reproducible account of how images, clinical text, historical reports, learned fusion, generation, and evidence control interact in a medically sensitive RAG pipeline, together with the controls needed to distinguish technical improvement from unsupported clinical claims.
 """
@@ -407,6 +462,10 @@ Boecking, B., Usuyama, N., Bannur, S., et al. (2022). Making the most of text se
 
 Demner-Fushman, D., Kohli, M. D., Rosenman, M. B., et al. (2016). Preparing a collection of radiology examinations for distribution and retrieval. *Journal of the American Medical Informatics Association, 23*(2), 304-310.
 
+Elallaf, A., Zhang, Y., Masupalli, Y., et al. (2026). MedProbCLIP: Probabilistic adaptation of vision-language foundation model for reliable radiograph-report retrieval. *Proceedings of the IEEE/CVF Winter Conference on Applications of Computer Vision Workshops*, 1-10.
+
+Endo, M., Krishnan, R., Krishna, V., Ng, A. Y., and Rajpurkar, P. (2021). Retrieval-based chest X-ray report generation using a pre-trained contrastive language-image model. *Proceedings of Machine Learning for Health*, 209-219.
+
 Es, S., James, J., Espinosa-Anke, L., and Schockaert, S. (2024). RAGAS: Automated evaluation of retrieval augmented generation. *Proceedings of EACL System Demonstrations*.
 
 Google Health AI Developer Foundations. (2025). MedGemma model card. https://developers.google.com/health-ai-developer-foundations/medgemma/model-card
@@ -415,9 +474,15 @@ Google Health AI Developer Foundations. (2025). MedSigLIP model card. https://de
 
 Jain, S., Agrawal, A., Saporta, A., et al. (2021). RadGraph: Extracting clinical entities and relations from radiology reports. *NeurIPS Datasets and Benchmarks*.
 
+Jeong, J., Tian, K., Li, A., et al. (2023). Multimodal image-text matching improves retrieval-based chest X-ray report generation. *Medical Imaging with Deep Learning*.
+
 Lewis, P., Perez, E., Piktus, A., et al. (2020). Retrieval-augmented generation for knowledge-intensive NLP tasks. *Advances in Neural Information Processing Systems*.
 
 Pal, A., Umapathi, L. K., and Sankarasubbu, M. (2023). Med-HALT: Medical domain hallucination test for large language models. *Proceedings of CoNLL*, 314-334.
+
+Park, J., Yoon, B., Kim, S., and Choi, K. (2026). RA-RRG: Multimodal retrieval-augmented radiology report generation with key phrase extraction. *Findings of the Association for Computational Linguistics: ACL 2026*, 5029-5048.
+
+Qwen Team. (2025). Qwen3 Embedding: Advancing text embedding and reranking through foundation models. https://qwenlm.github.io/blog/qwen3-embedding/
 
 Robertson, S., and Zaragoza, H. (2009). The probabilistic relevance framework: BM25 and beyond. *Foundations and Trends in Information Retrieval, 3*(4), 333-389.
 
@@ -426,6 +491,8 @@ Romanov, A., and Shivade, C. (2018). Lessons from natural language inference in 
 Singhal, K., Azizi, S., Tu, T., et al. (2023). Large language models encode clinical knowledge. *Nature, 620*, 172-180.
 
 Soni, S., Gudala, M., Pajouhi, A., and Roberts, K. (2022). RadQA: A question answering dataset to improve comprehension of radiology reports. *Proceedings of LREC 2022*, 6250-6259.
+
+Sun, L., Zhao, J. J., Han, W., and Xiong, C. (2025). Fact-aware multimodal retrieval augmentation for accurate medical radiology report generation. *Proceedings of NAACL 2025*, 643-655.
 
 Xiong, G., Jin, Q., Lu, Z., and Zhang, A. (2024). Benchmarking retrieval-augmented generation for medicine. *Findings of ACL 2024*, 6233-6251.
 
@@ -441,6 +508,8 @@ Xiong, G., Jin, Q., Lu, Z., and Zhang, A. (2024). Benchmarking retrieval-augment
 - Retrieval decision record: `docs/V9_RETRIEVAL_DEVELOPMENT_DECISION_RECORD.md`
 - Retrieval confirmation protocol and results: `docs/V9_RETRIEVAL_CONFIRMATION_PROTOCOL.md`, `docs/V9_RETRIEVAL_CONFIRMATION_RESULTS.md`
 - QA and agent protocol and results: `docs/V9_QA_AGENT_CONFIRMATION_PROTOCOL.md`, `docs/V9_QA_AGENT_RESULTS.md`
+- Qualitative protocol and final review: `docs/V9_QUALITATIVE_ANALYSIS_PROTOCOL.md`, `docs/V9_QUALITATIVE_ERROR_ANALYSIS.md`
+- Supplemental validity protocol and results: `docs/V9_SUPPLEMENTAL_VALIDITY_PROTOCOL.md`, `docs/V9_SUPPLEMENTAL_VALIDITY_RESULTS.md`
 - Final freeze: `docs/V9_TECHNICAL_FREEZE.md`
 
 ## Appendix B: Aggregate Result Artifacts
@@ -451,6 +520,12 @@ Xiong, G., Jin, Q., Lu, Z., and Zhang, A. (2024). Benchmarking retrieval-augment
 - Agent summary: `data/splits/v9/v9_agent_evaluation_summary.json`
 - Split freeze: `data/splits/v9/v9_full_source_split_freeze.json`
 - Public qualitative index: `data/splits/v9/v9_qualitative_case_index.csv`
+- Qualitative review summary: `data/splits/v9/v9_qualitative_review_summary.json`
+- Cross-split duplicate audit: `data/splits/v9/v9_cross_split_duplicate_summary.json`
+- Qrel sensitivity: `data/splits/v9/v9_qrel_sensitivity_summary.json`
+- Dense baseline and wording robustness: `data/splits/v9/v9_dense_text_robustness_summary.json`
+- F1-RadGraph clinical metrics: `data/splits/v9/v9_clinical_metrics_summary.json`
+- Structured-output reparse audit: `data/splits/v9/v9_structured_reparse_summary.json`
 
 Large source-derived reports, image pixels, vectors, checkpoints, prompts, and per-row generations remain local. Public hashes verify their frozen identity without redistributing source content.
 
@@ -465,6 +540,11 @@ Large source-derived reports, image pixels, vectors, checkpoints, prompts, and p
 & ".\.venv\Scripts\python.exe" scripts\run_v9_retrieval_confirmation.py
 & ".\.venv\Scripts\python.exe" scripts\analyze_v9_qa_statistics.py
 & ".\.venv\Scripts\python.exe" scripts\evaluate_v9_qa_agent.py
+& ".\.venv\Scripts\python.exe" scripts\audit_v9_cross_split_duplicates.py
+& ".\.venv\Scripts\python.exe" scripts\audit_v9_qrel_sensitivity.py
+& ".\.venv\Scripts\python.exe" scripts\run_v9_supplemental_dense_robustness.py
+& ".\.venv\Scripts\python.exe" scripts\evaluate_v9_clinical_metrics.py
+& ".\.venv\Scripts\python.exe" scripts\audit_v9_structured_output_reparse.py
 streamlit run app.py --server.port 8504
 ```
 
@@ -472,7 +552,7 @@ Exact executable options, model revisions, hashes, failure rules, and local arti
 
 ## Appendix D: Qualitative and Human-Evaluation Boundary
 
-The deterministic 24-case pack and assistant-proposed labels are complete. The student's final row-by-row review is pending. Until it is signed, all case-level interpretations remain provisional and no researcher-reviewed count is reported. No independent radiologist correctness, similarity, grounding, preference, harmfulness, or inter-rater agreement result is claimed.
+The researcher reviewed all 24 deterministically selected cases and accepted the assistant-proposed exploratory labels without modification. The process was tool-assisted, author-conducted, and non-blinded; it is not independent radiologist adjudication. No clinical correctness, similarity, harmfulness, usefulness, preference, or inter-rater agreement result is claimed, and selected-pack counts are not extrapolated to the full cohort.
 
 ## Appendix E: Dashboard Demonstration Boundary
 
@@ -480,7 +560,7 @@ The dashboard accepts a target chest radiograph, indication, and question; retri
 
 ## Appendix F: Version Boundary
 
-V5-V7 are preliminary controlled studies and remain frozen. V8 ended in a documented development no-go. V9 is the final primary study. No V9 outcome was used to rewrite a frozen model, prompt, threshold, metric, split, or confirmation case. Reporting edits do not alter technical artifacts.
+V5-V7 are preliminary controlled studies and remain frozen. V8 ended in a documented development no-go. V9 is the final primary study. Supplemental V9 audits were committed after the technical freeze and before their own outcomes; they did not change a frozen model, prompt, threshold, metric, split, case, or primary conclusion. Reporting edits do not alter technical artifacts.
 """
 
 
@@ -490,28 +570,35 @@ def between(text: str, start: str, end: str) -> str:
     return text[start_idx:end_idx]
 
 
+def demote_preliminary(text: str, *, chapter: str, appendix: str, title: str) -> str:
+    output = text.strip()
+    output = re.sub(
+        rf"^# Chapter {chapter}:.*$",
+        f"## Appendix {appendix}: {title}",
+        output,
+        count=1,
+        flags=re.MULTILINE,
+    )
+    output = re.sub(
+        rf"^### {chapter}\.(\d+)(.*)$",
+        rf"#### {appendix}.\1\2",
+        output,
+        flags=re.MULTILINE,
+    )
+    output = re.sub(
+        rf"^## {chapter}\.(\d+)(.*)$",
+        rf"### {appendix}.\1\2",
+        output,
+        flags=re.MULTILINE,
+    )
+    return output
+
+
 def main() -> None:
     source = SOURCE.read_text(encoding="utf-8-sig")
     chapter_2 = between(source, "# Chapter 2:", "# Chapter 3:").rstrip()
-    preliminary_methods_results = between(source, "# Chapter 3:", "# Chapter 5:").rstrip()
-
-    preliminary_methods_results = preliminary_methods_results.replace(
-        "# Chapter 3: Methodology",
-        "# Chapter 3: Methodology\n\n"
-        "The chapter reports two linked stages. Sections 3.1-3.13 retain the "
-        "preliminary V5 controlled study because it established the alignment "
-        "and grounding controls. Sections 3.14-3.22 define the final V9 "
-        "new-patient similar-case study on which the primary thesis claims rest.",
-        1,
-    )
-    preliminary_methods_results = preliminary_methods_results.replace(
-        "# Chapter 4: Results and Analysis",
-        "# Chapter 4: Results and Analysis\n\n"
-        "Sections 4.1-4.7 summarize the frozen preliminary evidence. Sections "
-        "4.8-4.13 report the final V9 held-out study and control the conclusions "
-        "of this thesis.",
-        1,
-    )
+    preliminary_methods = between(source, "# Chapter 3:", "# Chapter 4:").rstrip()
+    preliminary_results = between(source, "# Chapter 4:", "# Chapter 5:").rstrip()
 
     chapter_2 = chapter_2.replace(
         "# Chapter 2: Literature Review",
@@ -523,18 +610,29 @@ def main() -> None:
         1,
     )
     chapter_2 = chapter_2 + "\n\n" + CHAPTER_2_ADDENDUM.strip()
-    preliminary_methods_results = preliminary_methods_results.replace(
+    preliminary_methods = preliminary_methods.replace(
         "V5 was the final technical experiment.",
         "Within the preliminary controlled phase, V5 was the final frozen experiment.",
     )
-    preliminary_methods_results = preliminary_methods_results.replace(
+    preliminary_methods = preliminary_methods.replace(
         "the final V5 experiment",
         "the preliminary V5 confirmation experiment",
     )
-    preliminary_methods_results = preliminary_methods_results.replace(
-        "# Chapter 4: Results and Analysis",
-        V9_METHODS.strip() + "\n\n# Chapter 4: Results and Analysis",
-        1,
+    preliminary_results = preliminary_results.replace(
+        "the final V5 experiment",
+        "the preliminary V5 confirmation experiment",
+    )
+    preliminary_methods = demote_preliminary(
+        preliminary_methods,
+        chapter="3",
+        appendix="G",
+        title="Frozen Preliminary Controlled-Study Methods",
+    )
+    preliminary_results = demote_preliminary(
+        preliminary_results,
+        chapter="4",
+        appendix="H",
+        title="Frozen Preliminary Controlled-Study Results",
     )
     body = "\n\n".join(
         [
@@ -542,13 +640,21 @@ def main() -> None:
             ABSTRACT.strip(),
             CHAPTER_1.strip(),
             chapter_2,
-            preliminary_methods_results,
+            V9_METHODS.strip(),
             V9_RESULTS.strip(),
             CHAPTER_5.strip(),
             REFERENCES_AND_APPENDICES.strip(),
+            (
+                "The following appendices preserve the detailed V5 controlled "
+                "study for traceability. They are formative evidence and do not "
+                "replace the V9 primary study."
+            ),
+            preliminary_methods,
+            preliminary_results,
         ]
     )
-    OUTPUT.write_text(body.strip() + "\n", encoding="utf-8")
+    body = body.replace("脳", "*").replace("鈫?", "->")
+    OUTPUT.write_text(body.strip() + "\n", encoding="utf-8", newline="\n")
     words = len(body.split())
     if not 10000 < words < 30000:
         raise RuntimeError(f"Unexpected manuscript word count: {words}")
