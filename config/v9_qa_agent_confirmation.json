@@ -1,0 +1,72 @@
+{
+  "study": "v9_qa_and_bounded_agent_confirmation",
+  "status": "frozen_before_test_generation_and_qa_outcome_inspection",
+  "upstream_retrieval_result_commit": "7efcefc",
+  "source_split": "data/splits/v9/v9_full_source_split.json",
+  "retrieval_summary": "data/splits/v9/v9_retrieval_confirmation_summary.json",
+  "qa_frame": {
+    "partition": "test",
+    "eligibility": "nonempty_findings_and_nonempty_impression",
+    "case_count": 685,
+    "question_types": ["findings", "impression"],
+    "question_count": 1370,
+    "acute_question_excluded_reason": "no_physician_adjudicated_acute_binary_reference"
+  },
+  "target_image": {
+    "views_per_query": 1,
+    "selection": "frontal_preferred_then_lexicographic_filename",
+    "pixels_visible_to_generator": true
+  },
+  "historical_evidence": {
+    "top_k": 3,
+    "fields": ["case_id", "findings", "impression"],
+    "historical_images_visible_to_generator": false,
+    "target_report_fields_visible_to_generator": false
+  },
+  "systems": {
+    "g0": "target_image_indication_question_no_retrieval",
+    "g1": "g0_plus_r0_bm25_top3_reports",
+    "g2": "g0_plus_r3_fixed_multimodal_top3_reports",
+    "g3": "g0_plus_r4_learned_mlp_top3_reports",
+    "g4": "g3_plus_bounded_historical_evidence_control_agent"
+  },
+  "generator": {
+    "model": "google/medgemma-1.5-4b-it",
+    "revision": "91850547d9f0b2fdd21aa7c5f4f3d1a8a52c243b",
+    "precision": "4bit_nf4_double_quantization_bfloat16_compute",
+    "do_sample": false,
+    "temperature": 0.0,
+    "max_new_tokens": 192,
+    "batch_size": 8,
+    "output": "json_object_with_answer_target_image_findings_supporting_case_ids_historical_support_uncertainty_abstain"
+  },
+  "agent": {
+    "primary_route": "r4_learned_mlp",
+    "retry_route": "r1_image_image",
+    "maximum_retrieval_retries": 1,
+    "historical_support_checker": "cnut1648/biolinkbert-mednli",
+    "minimum_support_rate": 0.5,
+    "entailment_threshold": 0.75,
+    "contradiction_threshold": 0.5,
+    "minimum_combined_support": 0.55,
+    "unsupported_action": "remove_historical_support_and_citations_preserve_unverified_target_image_answer",
+    "internet_access": false,
+    "unbounded_loop": false
+  },
+  "primary_qa_metric": "case_grouped_equal_question_token_f1",
+  "primary_comparison": "g3_minus_g0",
+  "bootstrap": {
+    "iterations": 10000,
+    "seed": 7032,
+    "unit": "case",
+    "confidence_level": 0.95
+  },
+  "agent_success": {
+    "primary": "historical_unsupported_claim_rate_g4_less_than_g3",
+    "qa_noninferiority_margin": -0.01,
+    "qa_metric": "case_grouped_equal_question_token_f1"
+  },
+  "human_evaluation": "future_work",
+  "outcome_driven_retuning_allowed": false,
+  "clinical_correctness_claim_allowed": false
+}
