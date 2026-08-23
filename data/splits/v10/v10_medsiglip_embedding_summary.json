@@ -1,0 +1,14 @@
+{
+  "study": "V10 complete-source MedSigLIP encoding",
+  "status": "complete",
+  "model": "google/medsiglip-448",
+  "revision": "9cea28a1a1195f665105faa6e8544c112fd960a4",
+  "signature": "8e5b69370462df61b75f8aea125441db49f8fb356ea026b442aae71bfaa8b526",
+  "artifact_sha256": "f81f4629a8f6eb10dc6b35d868f719384adb40903e19d165f9fba2039fce8867",
+  "case_count": 3851,
+  "view_count": 7466,
+  "report_count": 3826,
+  "chunk_count": 8274,
+  "elapsed_seconds": 447.3386208999998,
+  "peak_gpu_memory_mib": 1816.33544921875
+}
