@@ -18,6 +18,7 @@ from scripts.train_v9_learned_reranker import (
     exact_leave_one_out_bm25_scores,
     feature_matrix,
 )
+from scripts.run_v9_retrieval_confirmation import shuffled_orders
 
 from medical_rag.evaluation.graded_retrieval import (
     evaluate_graded_retrieval,
@@ -626,3 +627,12 @@ def test_v9_reranker_feature_matrix_has_frozen_nine_features() -> None:
     )
     assert features.shape == (2, 9)
     assert features[0, 6:].tolist() == [1.0, 0.0, 0.0]
+
+
+def test_v9_shuffled_assignments_are_unique_and_fixed_point_free() -> None:
+    assignments = shuffled_orders(
+        ["a", "b", "c", "d"], seed=7031, domain="test", count=3
+    )
+    assert len(assignments) == 3
+    assert len({tuple(sorted(item.items())) for item in assignments}) == 3
+    assert all(source != target for item in assignments for source, target in item.items())
