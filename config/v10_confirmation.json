@@ -1,0 +1,42 @@
+{
+  "study": "v10_cluster_disjoint_publication_confirmation",
+  "status": "confirmation_frozen_before_test_execution",
+  "test_execution_authorized": true,
+  "test_outcomes_inspected": false,
+  "frozen_input_sha256": {
+    "cases": "56e367190396011d4d67f43e7e733389a8346890bf8729e82fb4326d063bbd68",
+    "radgraph": "631aa3e11cc52005656ee8a66de3de1ee5d3411a2f271a3c5f8a14de39b51599",
+    "split": "b4c1b091c3dbff0399d07c8350f4d8d68ce8ce52e0157dcc96f46af8c8baa7b3",
+    "embeddings": "f81f4629a8f6eb10dc6b35d868f719384adb40903e19d165f9fba2039fce8867",
+    "calibrator": "e88d85e911c9214baa814d478754e34923c51568091686d63a7bebe6796a762e"
+  },
+  "primary_retrieval_system": "r5_fact_attention",
+  "primary_retrieval_comparator": "r4_nine_feature",
+  "primary_retrieval_metric": "ndcg@10",
+  "positive_gain_threshold": 0.5,
+  "evidence_policy": "whole_report",
+  "selective_coverage_operating_point": 0.8,
+  "shuffled_image_assignments": 100,
+  "shuffle_seed": 7049,
+  "bootstrap_iterations": 10000,
+  "bootstrap_seed": 7050,
+  "qa_conditions": {
+    "g0_target_image": "target image and indication; no historical cases",
+    "g1_whole_report": "R4 Top-3 historical whole reports",
+    "g2_hierarchical": "R5-attention Top-3 historical whole reports under selected E0 policy",
+    "g3_selective": "G2 with historical evidence suppressed below the frozen confidence threshold"
+  },
+  "generator": {
+    "model": "google/medgemma-1.5-4b-it",
+    "batch_size": 8,
+    "answer_max_new_tokens": 64,
+    "maximum_complete_sentences": 2,
+    "stop_token": "<end_of_turn>",
+    "provenance_assembly": "deterministic"
+  },
+  "clinical_metrics": {
+    "f1_radgraph": "planned_secondary",
+    "f1_chexbert": "report_only_if_dependency_available"
+  },
+  "retuning_after_test_permitted": false
+}
