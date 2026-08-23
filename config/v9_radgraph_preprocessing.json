@@ -1,0 +1,46 @@
+{
+  "protocol": "v9_radgraph_preprocessing",
+  "status": "preprocessing_rule_frozen_before_batch_annotation_and_v9_outcomes",
+  "source": {
+    "path": "data/processed/openi_cases.jsonl",
+    "case_count": 3851,
+    "sha256": "56e367190396011d4d67f43e7e733389a8346890bf8729e82fb4326d063bbd68"
+  },
+  "split": {
+    "path": "data/splits/v9/v9_full_source_split.json",
+    "case_count": 3759,
+    "sha256": "1224d76e87a8cbbe7a60e2d776878efe5d504e40bfd07ca30236ae364415b488"
+  },
+  "model": {
+    "package": "radgraph",
+    "package_version": "0.1.18",
+    "model_type": "modern-radgraph-xl",
+    "frozen": true,
+    "local_inference_only": true
+  },
+  "report_text": {
+    "fields": ["findings", "impression"],
+    "normalization": "collapse_internal_whitespace_and_join_nonempty_fields_with_lf",
+    "nonempty_source_count": 3826,
+    "empty_source_count": 25
+  },
+  "empty_report_distribution": {
+    "train": 23,
+    "validation": 2,
+    "test": 0,
+    "strict_untouched_test": 0
+  },
+  "primary_frames": {
+    "shared_candidate_bank": 2608,
+    "train_qrel_queries": 2608,
+    "validation_qrel_queries": 374,
+    "test_qrel_queries": 752,
+    "strict_untouched_test_queries": 262,
+    "all_qrel_eligible": 3734
+  },
+  "empty_report_policy": "retain_in_split_exclude_from_shared_bank_and_primary_radgraph_qrels",
+  "target_radgraph_inference_access": false,
+  "candidate_radgraph_retrieval_feature": false,
+  "batch_annotation_complete": false,
+  "v9_outcomes_inspected": false
+}
