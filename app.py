@@ -155,6 +155,10 @@ V9_MEDSIGLIP_CACHE_PATH = ROOT / "data" / "processed" / "v9_medsiglip_developmen
 V9_RERANKER_CHECKPOINT_PATH = (
     ROOT / "experiments" / "post_submission_v9" / "reranker_checkpoints" / "v9_mlp_best.pt"
 )
+V9_RETRIEVAL_SUMMARY_PATH = ROOT / "data" / "splits" / "v9" / "v9_retrieval_confirmation_summary.json"
+V9_QA_SUMMARY_PATH = ROOT / "data" / "splits" / "v9" / "v9_qa_confirmation_summary.json"
+V9_AGENT_SUMMARY_PATH = ROOT / "data" / "splits" / "v9" / "v9_agent_evaluation_summary.json"
+V9_QA_STATISTICS_PATH = ROOT / "data" / "splits" / "v9" / "v9_qa_statistical_analysis.json"
 MODEL_OPTIONS = {
     "Qwen2.5-1.5B (full experiment)": "Qwen/Qwen2.5-1.5B-Instruct",
     "Qwen2.5-0.5B (faster demo)": "Qwen/Qwen2.5-0.5B-Instruct",
@@ -864,6 +868,64 @@ def render_results() -> None:
     )
     v22 = json.loads(V22_SUMMARY_PATH.read_text(encoding="utf-8"))
     v23 = json.loads(V23_SUMMARY_PATH.read_text(encoding="utf-8"))
+
+    v9_retrieval = json.loads(V9_RETRIEVAL_SUMMARY_PATH.read_text(encoding="utf-8"))
+    v9_qa = json.loads(V9_QA_SUMMARY_PATH.read_text(encoding="utf-8"))
+    v9_agent = json.loads(V9_AGENT_SUMMARY_PATH.read_text(encoding="utf-8"))
+    v9_statistics = json.loads(V9_QA_STATISTICS_PATH.read_text(encoding="utf-8"))
+
+    st.subheader("V9 final new-patient similar-case study")
+    v9_columns = st.columns(6)
+    v9_columns[0].metric("Historical bank", v9_retrieval["candidate_bank_count"])
+    v9_columns[1].metric("Test cases", v9_retrieval["test_case_count"])
+    v9_columns[2].metric("Image-only nDCG@10", f"{v9_retrieval['metrics']['r1_image_image']['ndcg@10']:.3f}")
+    v9_columns[3].metric(
+        "Learned nDCG@10",
+        f"{v9_retrieval['metrics']['r4_learned_mlp']['ndcg@10']:.3f}",
+        delta=f"{v9_retrieval['primary_comparison_r4_minus_r1']['difference']:+.3f}",
+    )
+    v9_columns[4].metric("No-RAG Token-F1", f"{v9_qa['metrics']['g0_no_retrieval']['token_f1']:.3f}")
+    v9_columns[5].metric(
+        "Learned-RAG Token-F1",
+        f"{v9_qa['metrics']['g3_learned_multimodal_rag']['token_f1']:.3f}",
+        delta=f"{v9_qa['primary_comparison_g3_minus_g0']['difference']:+.3f}",
+    )
+    retrieval_ci = v9_retrieval["primary_comparison_r4_minus_r1"]
+    qa_ci = v9_qa["primary_comparison_g3_minus_g0"]
+    st.success(
+        "Learned reranker minus image-only nDCG@10 95% CI "
+        f"[{retrieval_ci['ci_95_low']:+.3f}, {retrieval_ci['ci_95_high']:+.3f}]; "
+        "learned multimodal RAG minus no retrieval Token-F1 95% CI "
+        f"[{qa_ci['ci_95_low']:+.3f}, {qa_ci['ci_95_high']:+.3f}]."
+    )
+    v9_frame = pd.DataFrame(
+        [
+            {"Condition": "G0 target image, no retrieval", "Token-F1": v9_qa["metrics"]["g0_no_retrieval"]["token_f1"]},
+            {"Condition": "G1 BM25 RAG", "Token-F1": v9_qa["metrics"]["g1_bm25_rag"]["token_f1"]},
+            {"Condition": "G2 fixed multimodal RAG", "Token-F1": v9_qa["metrics"]["g2_fixed_multimodal_rag"]["token_f1"]},
+            {"Condition": "G3 learned multimodal RAG", "Token-F1": v9_qa["metrics"]["g3_learned_multimodal_rag"]["token_f1"]},
+        ]
+    )
+    st.dataframe(
+        v9_frame,
+        width="stretch",
+        hide_index=True,
+        column_config={"Token-F1": st.column_config.NumberColumn(format="%.3f")},
+    )
+    secondary = v9_statistics["frames"]["all"]["comparisons"]["g3_minus_g2"]
+    st.info(
+        "The bounded agent reduced automated unsupported historical-support rows from "
+        f"{v9_agent['metrics']['g3_initial_unsupported_historical_rate']:.1%} to "
+        f"{v9_agent['metrics']['g4_final_unsupported_historical_rate']:.1%} through one backup "
+        "route or evidence-field abstention. G3 exceeded G2 numerically by "
+        f"{secondary['difference']:+.3f}, but its 95% CI "
+        f"[{secondary['ci_95_low']:+.3f}, {secondary['ci_95_high']:+.3f}] crossed zero."
+    )
+    st.caption(
+        "V9 evaluates retrospective, same-source report-reference consistency. The agent checks "
+        "historical report claims only; it does not verify target-image diagnoses. The 24-case "
+        "qualitative pack remains pending researcher review, and no clinical human score is reported."
+    )
 
     st.subheader("Locked held-out test")
     metrics = st.columns(5)

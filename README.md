@@ -6,7 +6,7 @@ This repository contains the reproducible implementation and frozen evidence for
 
 **Repository:** https://github.com/yzy542968-jpg/wqf7023-medical-rag  
 **Submission release:** `p2-submission`
-**Current post-submission status:** V6 model-modernized confirmation complete
+**Current post-submission status:** V9 technical study complete; 24-case researcher qualitative review pending
 
 ## Study Structure
 
@@ -18,7 +18,9 @@ The final study deliberately separates two different tasks instead of treating t
 4. **V4.2 paired image-report retrieval:** uses BM25 to retrieve 100 report candidates and BioViL-T image-report similarity to rerank them. The fixed policy is evaluated once on a disjoint 120-case confirmation cohort.
 5. **V5 fresh-cohort multimodal QA:** adds indication ablations, a 100-permutation shuffled-image control, and non-oracle Qwen generation plus semantic evidence checking on a new 120-case confirmation cohort. V5 is a post-submission extension and does not modify the frozen P2 artifacts.
 6. **V6 model-modernized confirmation:** repeats the alignment-specific retrieval test on a newly instantiated, broader within-source cohort with MedSigLIP, Qwen3-Embedding, Qwen2.5, and MedGemma 1.5. V6 keeps BM25 as the primary text baseline and the V5 verifier unchanged, so retrieval, generator, and verifier effects remain distinguishable.
-7. **V7 adaptive-fusion extension (protocol stage):** proposes a trainable query-conditional fusion model that learns how to combine frozen text and image retrieval signals. V7 development is kept separate from the completed V6 confirmation and its confirmation cases will not be instantiated until the development and confirmation protocols are frozen.
+7. **V7 adaptive-fusion extension:** trains a query-conditional text/image fusion model. Correct-image dependence replicated, but adaptive fusion did not exceed the validation-selected global weight; the mixed result is retained.
+8. **V8 external-source development gate:** audits CheXpert Plus as an external replication source. The locally available 279-case validation subset did not meet the prespecified full-study requirement, so V8 stopped at a documented no-go.
+9. **V9 new-patient other-patient similar-case RAG:** reallocates the complete 3,851-case OpenI source, trains an 865-parameter multimodal reranker on a 2,608-case historical bank, confirms retrieval on 752 Test cases, and evaluates target-image QA on 685 complete-reference Test cases. The target report is hidden at inference and is never retrieved as evidence.
 
 The demonstrated Agent follows explicit `scope`, `retrieve`, `generate`, `audit`, and `review/abstain` states. Routing rules are deterministic, and the verifier is a risk signal rather than a clinical correctness label.
 
@@ -74,9 +76,30 @@ V4.2 demonstrates that pixels can improve paired evidence retrieval when used fo
 - Verified Token-F1 improved under both Qwen2.5 (`+0.01206`) and MedGemma 1.5 (`+0.03857`) when the same generators received the MedSigLIP-selected report.
 - V6 is complete evidence for a within-source, closed-set paired-report confirmation. It is not external validation, patient-level independence verification, image diagnosis, clinical utility, or deployment safety evidence.
 
+### V7 Adaptive-Fusion Result
+
+- Global `alpha*=0.52` MRR: `0.6134`; adaptive query-conditional MRR: `0.6019`.
+- Adaptive minus global: `-0.0115`, 95% case-bootstrap CI `[-0.0268,+0.0031]`; adaptive superiority did not pass.
+- Correctly aligned adaptive retrieval still exceeded the shuffled-image distribution (`p=0.0198`).
+- This mixed result motivated V9's graded-similarity task and candidate-level reranker rather than post-confirmation V7 tuning.
+
+### V9 New-Patient Similar-Case RAG
+
+- Full OpenI source: 3,851 cases; primary split: 2,631 Train / 376 Validation / 752 Test; historical bank: 2,608 report-bearing Train cases.
+- Retrieval nDCG@10: BM25 `0.1342`, image-image `0.3156`, fixed multimodal `0.2469`, learned MLP `0.3279`.
+- Learned minus image-only nDCG@10: `+0.01238`, 95% case-bootstrap CI `[+0.00923,+0.01558]`.
+- Correctly aligned learned retrieval exceeded all 100 shuffled-image controls (plus-one `p=0.00990`).
+- QA frame: 685 Test cases, 1,370 findings/impression questions, 5,480 local MedGemma generations.
+- Token-F1: no retrieval `0.1456`, BM25 RAG `0.1479`, fixed multimodal RAG `0.1791`, learned multimodal RAG `0.1848`.
+- Learned multimodal RAG minus no retrieval: `+0.03924`, 95% case-bootstrap CI `[+0.03257,+0.04574]`.
+- Learned minus fixed multimodal QA was only numerical: `+0.00571`, CI `[-0.00096,+0.01228]`.
+- The bounded agent reduced automated unsupported historical-support rows from `16.42%` to `0%` through one backup route or removal of the historical-support field; it did not verify target-image diagnoses.
+
+V9 is the final primary technical study. It models a new patient whose report is unavailable, retrieves other-patient analogies, and separates target-image answers from historical support. It does not establish physician-adjudicated similarity, clinical diagnostic accuracy, safety, external generalization, or deployment utility.
+
 ## Submission Status
 
-Automated V1/V2 experiments, validity audits, the Dashboard, V3 framework, final manuscript, defence deck, and the post-submission V4.2/V5/V6 technical extensions are complete in the corresponding repository history. A blinded human-evaluation protocol was prepared but not conducted because no suitable independent reviewer was available before submission. Both 36-case files therefore remain at zero completed rows, no human score is reported, and no human or clinical validation is claimed.
+Automated V1-V9 experiments, validity audits, and the Dashboard implementation are complete in the corresponding repository history. The final V9 24-case qualitative pack has deterministic assistant proposals but remains pending student review; no researcher-reviewed V9 category count is claimed yet. Independent clinical human evaluation was not conducted, no human score is reported, and no clinical validation is claimed.
 
 The final P2 artifacts are:
 
@@ -139,7 +162,7 @@ Launch the system-blinded rating interface separately:
 & ".\.venv\Scripts\python.exe" -m streamlit run human_evaluation_app.py --server.port 8502
 ```
 
-The main Dashboard exposes report workflows, frozen result tables, and a paired image demo. In Full Mode, the paired tab accepts a chest X-ray upload, computes a BioViL-T image embedding, reranks the locked BM25 top-100 reports, returns report-grounded evidence, and runs a sentence-level support check. The rating application does not load the system-identity keys.
+The main Dashboard exposes report workflows, frozen result tables, the earlier paired demos, and the final V9 workflow. In V9 Full Mode, an uploaded chest X-ray, indication, and question retrieve Top-3 reports from the 2,608-case other-patient bank with MedSigLIP and the frozen learned MLP. The optional local MedGemma path separates target-image findings from historical support, and the bounded agent checks only the historical evidence claim. The rating application does not load the system-identity keys.
 
 For an editable install, use `python -m pip install -e ".[all]"`. Exact direct versions from the audited machine are recorded in `requirements-lock.txt`. GitHub Actions runs compilation, all unit tests, and the fresh-clone Dashboard smoke test without downloading model weights.
 
@@ -151,6 +174,6 @@ Official RadQA files, when legally obtained, belong at `data/raw/radqa/train.jso
 
 Do not commit raw radiology files, image pixels, model weights, caches, generated prompt packs, secrets, or virtual environments. The MIT license covers project-authored code, not third-party datasets or model weights. See `docs/DATA_USE_AND_LICENSING.md`, `docs/REPOSITORY_RELEASE_POLICY.md`, and the generated `experiments/final_submission/submission_manifest.json` before publishing.
 
-Post-submission improvements and explicitly deferred independent human evaluation are documented in `docs/POST_SUBMISSION_RESEARCH_ROADMAP.md`. The completed V5 and V6 records are supplemental technical evidence and do not modify the frozen P2 submission artifacts. V7 remains a separately governed development extension until its protocol and confirmation study are completed.
+Post-submission improvements and explicitly deferred independent human evaluation are documented in `docs/POST_SUBMISSION_RESEARCH_ROADMAP.md`. V5-V8 remain frozen historical studies. The V9 technical result is frozen in `docs/V9_TECHNICAL_FREEZE.md`; only its student qualitative review and reporting integration remain.
 
 Methods and results for the v2.1 hard benchmark, two reserved wording-transfer tests, frozen v2.2 semantic planner, preregistered v2.3 hybrid planner, and 300-case locked replication are in `docs/POST_SUBMISSION_EXPERIMENTS.md`. V2.3 preserves the original result and improves transfer Macro F1, but raises false-answer risk on the second wording set; it is therefore reported as a robustness/safety trade-off rather than promoted as an unqualified replacement.
