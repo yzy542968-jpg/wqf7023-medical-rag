@@ -8,8 +8,12 @@ and the interactive demonstration are technically complete. V5-V8 remain
 unchanged. No V9 outcome triggered model, prompt, threshold, case, or metric
 retuning.
 
-The only unfinished research action is the student's review of the 24-case
-qualitative pack. Independent clinical human evaluation remains Future Work.
+At the time of this technical freeze, the only unfinished research action was
+the student's review of the 24-case qualitative pack. That post-freeze review
+was completed on 19 August 2026: all 24 assistant-proposed exploratory labels
+were accepted without modification, and no case was excluded. The review did
+not alter the frozen V9 systems or quantitative results. Independent clinical
+human evaluation remains Future Work.
 
 ## Final task
 

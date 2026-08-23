@@ -159,6 +159,12 @@ V9_RETRIEVAL_SUMMARY_PATH = ROOT / "data" / "splits" / "v9" / "v9_retrieval_conf
 V9_QA_SUMMARY_PATH = ROOT / "data" / "splits" / "v9" / "v9_qa_confirmation_summary.json"
 V9_AGENT_SUMMARY_PATH = ROOT / "data" / "splits" / "v9" / "v9_agent_evaluation_summary.json"
 V9_QA_STATISTICS_PATH = ROOT / "data" / "splits" / "v9" / "v9_qa_statistical_analysis.json"
+V9_DUPLICATE_AUDIT_PATH = ROOT / "data" / "splits" / "v9" / "v9_cross_split_duplicate_summary.json"
+V9_QREL_AUDIT_PATH = ROOT / "data" / "splits" / "v9" / "v9_qrel_sensitivity_summary.json"
+V9_CLINICAL_METRICS_PATH = ROOT / "data" / "splits" / "v9" / "v9_clinical_metrics_summary.json"
+V9_REPARSE_AUDIT_PATH = ROOT / "data" / "splits" / "v9" / "v9_structured_reparse_summary.json"
+V9_DENSE_ROBUSTNESS_PATH = ROOT / "data" / "splits" / "v9" / "v9_dense_text_robustness_summary.json"
+V9_QUALITATIVE_REVIEW_PATH = ROOT / "data" / "splits" / "v9" / "v9_qualitative_review_summary.json"
 MODEL_OPTIONS = {
     "Qwen2.5-1.5B (full experiment)": "Qwen/Qwen2.5-1.5B-Instruct",
     "Qwen2.5-0.5B (faster demo)": "Qwen/Qwen2.5-0.5B-Instruct",
@@ -873,6 +879,12 @@ def render_results() -> None:
     v9_qa = json.loads(V9_QA_SUMMARY_PATH.read_text(encoding="utf-8"))
     v9_agent = json.loads(V9_AGENT_SUMMARY_PATH.read_text(encoding="utf-8"))
     v9_statistics = json.loads(V9_QA_STATISTICS_PATH.read_text(encoding="utf-8"))
+    v9_duplicate_audit = json.loads(V9_DUPLICATE_AUDIT_PATH.read_text(encoding="utf-8"))
+    v9_qrel_audit = json.loads(V9_QREL_AUDIT_PATH.read_text(encoding="utf-8"))
+    v9_clinical_metrics = json.loads(V9_CLINICAL_METRICS_PATH.read_text(encoding="utf-8"))
+    v9_reparse_audit = json.loads(V9_REPARSE_AUDIT_PATH.read_text(encoding="utf-8"))
+    v9_dense_robustness = json.loads(V9_DENSE_ROBUSTNESS_PATH.read_text(encoding="utf-8"))
+    v9_qualitative_review = json.loads(V9_QUALITATIVE_REVIEW_PATH.read_text(encoding="utf-8"))
 
     st.subheader("V9 final new-patient similar-case study")
     v9_columns = st.columns(6)
@@ -923,9 +935,78 @@ def render_results() -> None:
     )
     st.caption(
         "V9 evaluates retrospective, same-source report-reference consistency. The agent checks "
-        "historical report claims only; it does not verify target-image diagnoses. The 24-case "
-        "qualitative pack remains pending researcher review, and no clinical human score is reported."
+        "historical report claims only; it does not verify target-image diagnoses. The researcher "
+        "accepted all 24 exploratory case labels, but no independent clinical human score is reported."
     )
+
+    with st.expander("Supplemental validity and robustness audits"):
+        duplicate_metrics = v9_duplicate_audit["sensitivity_exclusion"]["frozen_retrieval_metrics"]
+        qrel_metrics = v9_qrel_audit["metrics"]
+        dense_systems = v9_dense_robustness["systems"]
+        clinical_comparison = v9_clinical_metrics["paired_comparisons"][
+            "g3_learned_multimodal_rag_minus_g1_bm25_rag"
+        ]["f1_radgraph_complete"]
+        reparse_overall = v9_reparse_audit["overall"]
+        audit_rows = [
+            {
+                "Audit": "Cross-split near duplicates",
+                "Result": (
+                    f"R4 {duplicate_metrics['r4_learned_mlp']['ndcg@10']:.4f} vs "
+                    f"R1 {duplicate_metrics['r1_image_image']['ndcg@10']:.4f} after excluding "
+                    f"{v9_duplicate_audit['sensitivity_exclusion']['excluded_test_case_count']} "
+                    "high-similarity Test reports"
+                ),
+            },
+            {
+                "Audit": "Qrel construct sensitivity",
+                "Result": (
+                    "R4 ranked first for label-only, RadGraph-only, and combined qrels; "
+                    f"R4-R1 differences {qrel_metrics['active_label_only']['r4_minus_r1_ndcg@10']:+.4f}, "
+                    f"{qrel_metrics['radgraph_fact_only']['r4_minus_r1_ndcg@10']:+.4f}, and "
+                    f"{qrel_metrics['frozen_combined']['r4_minus_r1_ndcg@10']:+.4f}"
+                ),
+            },
+            {
+                "Audit": "Modern dense text baseline",
+                "Result": (
+                    f"Qwen3-Embedding nDCG@10 {dense_systems['qwen3_dense_text']['canonical_ndcg@10']:.4f} "
+                    f"vs R4 {dense_systems['r4_learned_mlp']['canonical_ndcg@10']:.4f}; "
+                    f"Top-1 wording consistency {dense_systems['qwen3_dense_text']['top1_consistency_with_canonical']:.3f} "
+                    f"vs {dense_systems['r4_learned_mlp']['top1_consistency_with_canonical']:.3f}"
+                ),
+            },
+            {
+                "Audit": "F1-RadGraph",
+                "Result": (
+                    f"G3-G1 {clinical_comparison['difference']:+.4f}, 95% CI "
+                    f"[{clinical_comparison['ci_95_low']:+.4f}, {clinical_comparison['ci_95_high']:+.4f}]; "
+                    "advantages over G0 and G2 were unresolved"
+                ),
+            },
+            {
+                "Audit": "Structured-output reparsing",
+                "Result": (
+                    f"{reparse_overall['newly_recovered_count']} newly recovered from "
+                    f"{reparse_overall['row_count']} outputs; "
+                    f"{reparse_overall['unrecoverable_count']} remained truncated or incomplete"
+                ),
+            },
+            {
+                "Audit": "Researcher qualitative review",
+                "Result": (
+                    f"{v9_qualitative_review['accepted_without_modification']}/"
+                    f"{v9_qualitative_review['reviewed_case_count']} labels accepted; "
+                    f"{v9_qualitative_review['modified']} modified and "
+                    f"{v9_qualitative_review['excluded']} excluded"
+                ),
+            },
+        ]
+        st.dataframe(pd.DataFrame(audit_rows), width="stretch", hide_index=True)
+        st.caption(
+            "These analyses were post-hoc, protocol-governed, and exploratory. They did not alter "
+            "the frozen V9 systems or primary results. The qualitative review was conducted by the "
+            "researcher and was not independent radiologist adjudication."
+        )
 
     st.subheader("Locked held-out test")
     metrics = st.columns(5)
@@ -1337,10 +1418,10 @@ def render_results() -> None:
     )
 
 
-st.title("Evidence-Checking Medical RAG")
+st.title("Multimodal Similar-Case Medical RAG")
 st.caption(
-    f"IU X-Ray / OpenI | {RUNTIME.full_case_count:,} available cases | "
-    f"{RUNTIME.mode.title()} Mode"
+    f"New-case chest X-ray QA with bounded historical evidence | IU X-Ray / OpenI | "
+    f"{RUNTIME.full_case_count:,} available cases | {RUNTIME.mode.title()} Mode"
 )
 if RUNTIME.is_demo:
     st.info(

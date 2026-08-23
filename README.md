@@ -2,11 +2,12 @@
 
 **Research title:** Retrieval-Augmented Medical Question Answering over Paired Radiology Images and Reports
 
-This repository contains the reproducible implementation and frozen evidence for Zhang Yue's WQF7023 Artificial Intelligence Research Project. It includes report-only baselines, an evidence-checking Agent, and a paired image-report retrieval extension that consumes real OpenI / IU X-Ray chest X-ray pixels with BioViL-T. It is not a diagnostic model, a clinically validated tool, or an authenticated clinical deployment.
+This repository contains the reproducible implementation and frozen evidence for Zhang Yue's WQF7023 Artificial Intelligence Research Project. The final V9 study models a new chest-radiography case whose formal report is unavailable: the target image, pre-report indication, and question retrieve similar other-patient image-report pairs from a fixed historical bank, then a local multimodal generator answers with bounded historical support. The repository also preserves the V1-V8 studies that motivated this final task. It is not a diagnostic model, a clinically validated tool, or an authenticated clinical deployment.
 
 **Repository:** https://github.com/yzy542968-jpg/wqf7023-medical-rag  
-**Submission release:** `p2-submission`
-**Current post-submission status:** V9 technical study complete; 24-case researcher qualitative review pending
+- **Historical submission release:** `p2-submission`
+- **Final research release:** `v9-final-research-freeze`
+- **Current status:** V9 technical study, supplemental validity audits, 24-case researcher review, manuscript, and Dashboard integration complete
 
 ## Study Structure
 
@@ -52,7 +53,7 @@ All headline values are generated from locked artifacts in `experiments/final_su
 - Fixed candidate pool: 720 cases; development/confirmation: 600 / 120 cases.
 - Confirmation report-only BM25 MRR: `0.556`; paired shortlist-reranker MRR: `0.596`.
 - Paired MRR difference: `+0.040`, case-bootstrap 95% CI `[+0.014, +0.068]`.
-- Confirmation Hit@10: `0.664 → 0.736`; Token-F1: `0.594 → 0.645`.
+- Confirmation Hit@10: `0.664 -> 0.736`; Token-F1: `0.594 -> 0.645`.
 - Hit@1 improved numerically from `0.497` to `0.522`, but its 95% interval crosses zero.
 - Warm paired request estimate on the local RTX 5070 Laptop GPU: `16.9 ms`; loaded model memory: approximately `526 MiB`.
 
@@ -97,9 +98,23 @@ V4.2 demonstrates that pixels can improve paired evidence retrieval when used fo
 
 V9 is the final primary technical study. It models a new patient whose report is unavailable, retrieves other-patient analogies, and separates target-image answers from historical support. It does not establish physician-adjudicated similarity, clinical diagnostic accuracy, safety, external generalization, or deployment utility.
 
+### V9 Supplemental Validity and Robustness Audits
+
+These analyses were committed under a post-hoc protocol and did not alter any frozen V9 model, prompt, parameter, output, or primary result.
+
+- Cross-split similarity audit: 187 Test cases had Train-report cosine similarity at least `0.95`. After excluding them, the learned reranker remained first at nDCG@10 `0.2797` versus image-image retrieval `0.2646`.
+- Qrel construct sensitivity: the learned reranker ranked first under label-only, RadGraph-fact-only, and frozen combined relevance definitions.
+- Modern text baseline: Qwen3-Embedding-0.6B reached nDCG@10 `0.1956`, above BM25 `0.1342` but below learned multimodal retrieval `0.3279`.
+- Wording robustness: canonical-to-paraphrase Top-1 consistency was `0.114` for BM25, `0.357` for Qwen3-Embedding, and `0.997` for the learned multimodal reranker.
+- Clinical semantic overlap: F1-RadGraph showed learned multimodal RAG above BM25 RAG by `+0.02094`, 95% case-bootstrap CI `[+0.01286,+0.02899]`; differences from no retrieval and fixed multimodal RAG were unresolved.
+- Structured-output audit: robust reparsing recovered `0` additional outputs; `2,943/5,480` remained incomplete, identifying output truncation as a genuine engineering limitation rather than a regex artifact.
+- Researcher review: all 24 assistant-proposed exploratory labels were accepted without modification; none were excluded. This was researcher review, not independent radiologist adjudication.
+
+The consolidated interpretation is in `docs/V9_SUPPLEMENTAL_VALIDITY_RESULTS.md`. The final manuscript retains these analyses as validity qualifications rather than new confirmatory hypotheses.
+
 ## Submission Status
 
-Automated V1-V9 experiments, validity audits, and the Dashboard implementation are complete in the corresponding repository history. The final V9 24-case qualitative pack has deterministic assistant proposals but remains pending student review; no researcher-reviewed V9 category count is claimed yet. Independent clinical human evaluation was not conducted, no human score is reported, and no clinical validation is claimed.
+Automated V1-V9 experiments, supplemental validity audits, the Dashboard implementation, and the final V9 researcher review are complete in the corresponding repository history. The researcher accepted all 24 assistant-proposed exploratory labels without modification. This review was not independent clinical adjudication; no radiologist score is reported, and no clinical validation is claimed.
 
 The final V9 reporting artifacts are:
 
@@ -144,6 +159,18 @@ python -m venv .venv
 & ".\.venv\Scripts\python.exe" scripts\build_submission_manifest.py
 ```
 
+Reproduce the lightweight V9 supplemental audits from the frozen local artifacts with:
+
+```powershell
+& ".\.venv\Scripts\python.exe" scripts\audit_v9_cross_split_duplicates.py
+& ".\.venv\Scripts\python.exe" scripts\audit_v9_qrel_sensitivity.py
+& ".\.venv\Scripts\python.exe" scripts\audit_v9_structured_output_reparse.py
+& ".\.venv\Scripts\python.exe" scripts\build_v9_final_manuscript.py
+& ".\.venv\Scripts\python.exe" scripts\build_v9_final_docx.py
+```
+
+The F1-RadGraph and Qwen3-Embedding audits additionally require their pinned local model snapshots. Their committed aggregate summaries remain inspectable without downloading weights.
+
 The manifest command verifies required files, locked SHA-256 values, tracked-file exclusions, file-size limits, the declared human-evaluation disposition, repository publication, and conditional V3 status. Use `--strict` only for the final submission gate; it exits unsuccessfully while external requirements such as the remote repository remain pending.
 
 Raw OpenI files are not redistributed. Data acquisition, expected filenames, and processing commands are documented in `docs/DATA.md`. Exact selected configurations, seeds, split fingerprints, and locked outputs are versioned in `config/`, `data/splits/`, and `experiments/`.
@@ -178,6 +205,6 @@ Official RadQA files, when legally obtained, belong at `data/raw/radqa/train.jso
 
 Do not commit raw radiology files, image pixels, model weights, caches, generated prompt packs, secrets, or virtual environments. The MIT license covers project-authored code, not third-party datasets or model weights. See `docs/DATA_USE_AND_LICENSING.md`, `docs/REPOSITORY_RELEASE_POLICY.md`, and the generated `experiments/final_submission/submission_manifest.json` before publishing.
 
-Post-submission improvements and explicitly deferred independent human evaluation are documented in `docs/POST_SUBMISSION_RESEARCH_ROADMAP.md`. V5-V8 remain frozen historical studies. The V9 technical result is frozen in `docs/V9_TECHNICAL_FREEZE.md`; only its student qualitative review and reporting integration remain.
+Post-submission improvements and explicitly deferred independent clinical evaluation are documented in `docs/POST_SUBMISSION_RESEARCH_ROADMAP.md`. V5-V8 remain frozen historical studies. The V9 primary result is frozen in `docs/V9_TECHNICAL_FREEZE.md`; the completed researcher review and post-hoc validity audits are separately versioned and did not modify that freeze.
 
 Methods and results for the v2.1 hard benchmark, two reserved wording-transfer tests, frozen v2.2 semantic planner, preregistered v2.3 hybrid planner, and 300-case locked replication are in `docs/POST_SUBMISSION_EXPERIMENTS.md`. V2.3 preserves the original result and improves transfer Macro F1, but raises false-answer risk on the second wording set; it is therefore reported as a robustness/safety trade-off rather than promoted as an unqualified replacement.
