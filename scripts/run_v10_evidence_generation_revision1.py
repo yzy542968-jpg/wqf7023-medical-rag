@@ -96,6 +96,14 @@ def main() -> None:
             evidence=task["evidence"],
             no_reliable_history=False,
         )
+    pending.sort(
+        key=lambda task: (
+            str(task["evidence_policy"]),
+            len(str(task["answer_prompt"])),
+            str(task["case_id"]),
+            str(task["question_type"]),
+        )
+    )
 
     args.rows_output.parent.mkdir(parents=True, exist_ok=True)
     generator = MedGemmaImageGenerator(
