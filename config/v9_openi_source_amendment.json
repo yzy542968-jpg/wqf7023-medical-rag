@@ -1,0 +1,25 @@
+{
+  "amendment": "v9_openi_primary_source_eligibility",
+  "status": "source_rule_frozen_before_v9_outcomes",
+  "supersedes": "openi_engineering_smoke_only_clause",
+  "source": {
+    "path": "data/processed/openi_cases.jsonl",
+    "case_count": 3851,
+    "sha256": "56e367190396011d4d67f43e7e733389a8346890bf8729e82fb4326d063bbd68"
+  },
+  "patient_identity_basis": {
+    "released_patient_identifiers_available": false,
+    "source_collection_one_study_per_patient": true,
+    "case_disjointness_operationalizes_patient_disjointness": true,
+    "evidence_doi": "10.1093/jamia/ocv080",
+    "claim_label": "source-design patient uniqueness"
+  },
+  "report_relevance": {
+    "openi_active_problem_weight": 0.6,
+    "local_radgraph_fact_weight": 0.4,
+    "exclude_no_indexing": true
+  },
+  "chexpert_plus_required": false,
+  "confirmation_ids_instantiated": false,
+  "v9_outcomes_inspected": false
+}
