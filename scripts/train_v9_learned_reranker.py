@@ -33,8 +33,7 @@ from medical_rag.retrieval.bm25_retriever import BM25Retriever  # noqa: E402
 from medical_rag.retrieval.tfidf_retriever import _tokens  # noqa: E402
 from medical_rag.similar_case.openi_adapter import read_openi_paired_cases  # noqa: E402
 from medical_rag.similar_case.relevance import (  # noqa: E402
-    active_label_similarity,
-    radgraph_fact_similarity,
+    active_label_weights,
 )
 
 
@@ -70,6 +69,7 @@ def exact_leave_one_out_bm25_scores(
     query: str,
     *,
     excluded_index: int | None,
+    term_cache: dict[str, tuple[np.ndarray, int]] | None = None,
 ) -> np.ndarray:
     """Score with exact leave-one-out corpus statistics when an index is excluded."""
 
@@ -87,16 +87,22 @@ def exact_leave_one_out_bm25_scores(
     query_terms = _tokens(query)
     frequencies = Counter(query_terms)
     for term, query_frequency in frequencies.items():
-        document_frequency = sum(term in counts for counts in retriever.doc_term_counts)
+        cached = term_cache.get(term) if term_cache is not None else None
+        if cached is None:
+            term_frequency = np.fromiter(
+                (counts.get(term, 0) for counts in retriever.doc_term_counts),
+                dtype=np.float64,
+                count=count,
+            )
+            document_frequency = int(np.count_nonzero(term_frequency))
+            if term_cache is not None:
+                term_cache[term] = (term_frequency, document_frequency)
+        else:
+            term_frequency, document_frequency = cached
         if excluded_index is not None and term in retriever.doc_term_counts[excluded_index]:
             document_frequency -= 1
         idf = math.log(
             1 + (effective_count - document_frequency + 0.5) / (document_frequency + 0.5)
-        )
-        term_frequency = np.fromiter(
-            (counts.get(term, 0) for counts in retriever.doc_term_counts),
-            dtype=np.float64,
-            count=count,
         )
         denominator = term_frequency + retriever.k1 * (
             1 - retriever.b
@@ -136,14 +142,53 @@ def normalized_scores_and_reciprocal_ranks(
     return normalized, reciprocal
 
 
-def relevance_array(query: Any, bank: Sequence[Any], excluded_index: int | None) -> np.ndarray:
+def relevance_array(
+    query: Any,
+    bank: Sequence[Any],
+    excluded_index: int | None,
+    *,
+    prepared_labels: Sequence[Mapping[str, float]] | None = None,
+    prepared_facts: Sequence[frozenset[str]] | None = None,
+) -> np.ndarray:
+    query_labels = active_label_weights(query.labels)
+    query_facts = query.radgraph_facts
     gains = np.empty(len(bank), dtype=np.float32)
     for index, candidate in enumerate(bank):
         if excluded_index is not None and index == excluded_index:
             gains[index] = np.nan
             continue
-        label = active_label_similarity(query.labels, candidate.labels)
-        facts = radgraph_fact_similarity(query.radgraph_facts, candidate.radgraph_facts)
+        candidate_labels = (
+            prepared_labels[index]
+            if prepared_labels is not None
+            else active_label_weights(candidate.labels)
+        )
+        label_keys = set(query_labels) | set(candidate_labels)
+        if not label_keys:
+            label = 1.0
+        else:
+            numerator = sum(
+                min(query_labels.get(key, 0.0), candidate_labels.get(key, 0.0))
+                for key in label_keys
+            )
+            denominator = sum(
+                max(query_labels.get(key, 0.0), candidate_labels.get(key, 0.0))
+                for key in label_keys
+            )
+            label = numerator / denominator if denominator else 0.0
+        candidate_facts = (
+            prepared_facts[index] if prepared_facts is not None else candidate.radgraph_facts
+        )
+        if not query_facts and not candidate_facts:
+            facts = 1.0
+        elif not query_facts or not candidate_facts:
+            facts = 0.0
+        else:
+            overlap = len(query_facts & candidate_facts)
+            facts = (
+                2.0 * overlap / (len(query_facts) + len(candidate_facts))
+                if overlap
+                else 0.0
+            )
         gains[index] = 0.60 * label + 0.40 * facts
     return gains
 
@@ -382,6 +427,9 @@ def main() -> None:
             for case in bank
         ]
     )
+    bm25_term_cache: dict[str, tuple[np.ndarray, int]] = {}
+    prepared_labels = [active_label_weights(case.labels) for case in bank]
+    prepared_facts = [case.radgraph_facts for case in bank]
     index_by_id = {case_id: index for index, case_id in enumerate(candidate_ids)}
     question_suite = protocol["question_suite"]
 
@@ -398,12 +446,21 @@ def main() -> None:
         image_report = report_means @ bank_images[query_index]
         image_image[query_index] = -np.inf
         image_report[query_index] = -np.inf
-        gains = relevance_array(query, bank, query_index)
+        gains = relevance_array(
+            query,
+            bank,
+            query_index,
+            prepared_labels=prepared_labels,
+            prepared_facts=prepared_facts,
+        )
         query_had_pair = False
         for question_type, question in question_suite.items():
             query_text = query.query_text(question)
             bm25 = exact_leave_one_out_bm25_scores(
-                raw_bm25, query_text, excluded_index=query_index
+                raw_bm25,
+                query_text,
+                excluded_index=query_index,
+                term_cache=bm25_term_cache,
             )
             features = feature_matrix(
                 bm25,
@@ -441,11 +498,20 @@ def main() -> None:
         image_report = report_means @ bank_images[query_index]
         image_image[query_index] = -np.inf
         image_report[query_index] = -np.inf
-        gains = relevance_array(query, bank, query_index)
+        gains = relevance_array(
+            query,
+            bank,
+            query_index,
+            prepared_labels=prepared_labels,
+            prepared_facts=prepared_facts,
+        )
         matrices = []
         for question_type, question in question_suite.items():
             bm25 = exact_leave_one_out_bm25_scores(
-                raw_bm25, query.query_text(question), excluded_index=query_index
+                raw_bm25,
+                query.query_text(question),
+                excluded_index=query_index,
+                term_cache=bm25_term_cache,
             )
             matrices.append(
                 feature_matrix(
@@ -483,13 +549,26 @@ def main() -> None:
         query = cases[case_id]
         qrels = {
             candidate.study_id: float(gain)
-            for candidate, gain in zip(bank, relevance_array(query, bank, None), strict=True)
+            for candidate, gain in zip(
+                bank,
+                relevance_array(
+                    query,
+                    bank,
+                    None,
+                    prepared_labels=prepared_labels,
+                    prepared_facts=prepared_facts,
+                ),
+                strict=True,
+            )
         }
         image_image = bank_images @ validation_images[query_index]
         image_report = report_means @ validation_images[query_index]
         for question_type, question in question_suite.items():
             bm25 = exact_leave_one_out_bm25_scores(
-                raw_bm25, query.query_text(question), excluded_index=None
+                raw_bm25,
+                query.query_text(question),
+                excluded_index=None,
+                term_cache=bm25_term_cache,
             )
             features = feature_matrix(
                 bm25,
