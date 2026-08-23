@@ -1,0 +1,28 @@
+{
+  "case_count": 3851,
+  "case_disjointness_operationalizes_patient_disjointness": true,
+  "case_ids_sha256": "186461bd6ab1e611c92fc128be93ff762c089ab4965e5f9e72a9eb8b8478f5fc",
+  "confirmation_ids_instantiated": false,
+  "patient_identity_claim": "source-design patient uniqueness",
+  "patient_identity_evidence_doi": "10.1093/jamia/ocv080",
+  "previously_untouched_eligible_frame_count": 279,
+  "previously_untouched_eligible_frame_sha256": "a723b9654fed3b0e7739c82a3e4f0317e8368bc4a980cbffc8dea5e15dbb0544",
+  "prior_use_audit_path": "data\\splits\\v8\\v8_reuse_audit.json",
+  "prior_use_audit_sha256": "aa50be7c30248230e1b3dea7ebbc4be3095e951b1402e1ec2160e9dab1836fb3",
+  "provenance_patient_key_count": 3851,
+  "provenance_patient_keys_sha256": "5fc0dcbfc237b9117cb0825334e9903d83f762c9625cf57f97e31681587a76bb",
+  "radgraph_generation_complete": false,
+  "released_patient_identifiers_available": false,
+  "report_index_class_counts": {
+    "abnormal": 2380,
+    "indeterminate": 92,
+    "normal": 1379
+  },
+  "report_index_qrel_frame_count": 3759,
+  "report_index_qrel_frame_sha256": "17338b2edd462e766128558d3a62182e12d47f87ce8880206b8f24e9e2d3d4a9",
+  "source_collection_one_study_per_patient": true,
+  "source_path": "data\\processed\\openi_cases.jsonl",
+  "source_sha256": "56e367190396011d4d67f43e7e733389a8346890bf8729e82fb4326d063bbd68",
+  "status": "formal_source_eligible_before_v9_outcomes",
+  "v9_outcomes_inspected": false
+}

@@ -356,6 +356,30 @@ def test_openi_adapter_is_explicitly_not_patient_level() -> None:
     assert case.metadata["label_annotation_available"] is True
 
 
+def test_openi_formal_mode_uses_source_design_patient_keys() -> None:
+    rows = [
+        openi_row_to_paired_case(
+            {
+                "case_id": case_id,
+                "findings": "Clear lungs.",
+                "impression": "No acute disease.",
+                "problems": "normal",
+                "images": [{"filename": f"{case_id}.png"}],
+            },
+            source_unique_patient=True,
+        )
+        for case_id in ("CXR1", "CXR2")
+    ]
+
+    assert rows[0].patient_id == "openi-source-unique:CXR1"
+    assert rows[0].source == "openi_iu_xray_primary_source"
+    assert rows[0].metadata["released_patient_identifier_available"] is False
+    assert rows[0].metadata["source_collection_one_study_per_patient"] is True
+    bank, audit = build_candidate_bank(rows[0], rows, require_patient_ids=True)
+    assert [case.study_id for case in bank] == ["CXR2"]
+    assert audit.patient_level_exclusion_verified is True
+
+
 def test_openi_normal_and_unindexed_reports_are_not_conflated() -> None:
     common = {
         "indication": "Screening",
@@ -392,3 +416,42 @@ def test_v9_protocol_keeps_confirmation_uninstantiated() -> None:
         "radgraph_entities_relations",
     ]
     assert config["candidate_exclusions"] == ["same_study", "same_patient"]
+
+
+def test_v9_full_source_split_matches_frozen_protocol() -> None:
+    protocol = json.loads(
+        (ROOT / "config/v9_full_source_split_protocol.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    manifest = json.loads(
+        (ROOT / "data/splits/v9/v9_full_source_split.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    partitions = {
+        name: set(block["case_ids"])
+        for name, block in manifest["partitions"].items()
+    }
+
+    for name, case_ids in partitions.items():
+        block = manifest["partitions"][name]
+        expected = protocol["partitions"][name]
+        assert len(case_ids) == expected["total"] == block["case_count"]
+        assert block["report_indexed_normal"] == expected["normal"]
+        assert block["report_indexed_abnormal"] == expected["abnormal"]
+
+    assert not (partitions["train"] & partitions["validation"])
+    assert not (partitions["train"] & partitions["test"])
+    assert not (partitions["validation"] & partitions["test"])
+    assert len(set.union(*partitions.values())) == 3759
+
+    strict = set(
+        manifest["strict_project_history_untouched_test_subset"]["case_ids"]
+    )
+    assert len(strict) == 262
+    assert strict <= partitions["test"]
+    assert sum(
+        block["complete_findings_and_impression_reference"]
+        for block in manifest["partitions"].values()
+    ) == protocol["qa_complete_reference_source_count"] == 3244

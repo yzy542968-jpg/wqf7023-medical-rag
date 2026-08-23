@@ -1,0 +1,48 @@
+{
+  "freeze": "V9 full-source split instantiation",
+  "status": "frozen_before_v9_outcome_execution",
+  "protocol_commit": "afd7ef7",
+  "builder_path": "scripts/build_v9_full_source_split.py",
+  "builder_sha256": "6a497d4372e40f97480b156c037c3928dee0102451809ab6d8d872f07d04d3c3",
+  "config_path": "config/v9_full_source_split_protocol.json",
+  "config_sha256": "61b038a5a1c140407f3ec1a415134d90b05866f5e5a156cb063caaaffe24cb02",
+  "source_path": "data/processed/openi_cases.jsonl",
+  "source_sha256": "56e367190396011d4d67f43e7e733389a8346890bf8729e82fb4326d063bbd68",
+  "stratifiable_case_count": 3759,
+  "stratifiable_case_ids_sha256": "17338b2edd462e766128558d3a62182e12d47f87ce8880206b8f24e9e2d3d4a9",
+  "report_index_indeterminate_case_count": 92,
+  "report_index_indeterminate_case_ids_sha256": "272c59d7c9b9075b439ac0ee2224aacc8844a8834b99c84086824b5d667c1efc",
+  "partition_fingerprints": {
+    "train": {
+      "case_count": 2631,
+      "case_ids_sha256": "5c2002d5904cfb92f8e0c7d805789724c6e0be1e071d68087e496f73da55faff",
+      "complete_reference_case_count": 2232,
+      "complete_reference_case_ids_sha256": "e6a677d3a75df903d6e1d881b1fd9dcca5d84923527343cb075d99ba18adbfa9"
+    },
+    "validation": {
+      "case_count": 376,
+      "case_ids_sha256": "cad57f4ffd44ce34ccc2ebef638db49184b3d38074487e5d375d3a986708ce7f",
+      "complete_reference_case_count": 327,
+      "complete_reference_case_ids_sha256": "0906a673273ee4400a78e1c07fd90f65a7e6c902a0a6d870bd1faa1b23bb3b2c"
+    },
+    "test": {
+      "case_count": 752,
+      "case_ids_sha256": "784f924b7baea036384c762e1ecf0fb32e442a558a83dcadf03253ea7b6f98de",
+      "complete_reference_case_count": 685,
+      "complete_reference_case_ids_sha256": "026d73fe9b7c9c4ead68e4783a02fc0d638dee778641755be08f5afae76c4ed7"
+    }
+  },
+  "strict_untouched_test_subset": {
+    "case_count": 262,
+    "case_ids_sha256": "d06254afb3ca75d0a3daeae0cdf34bd772b1eea347bc562609c12f7f1f1c6f90",
+    "is_subset_of_test": true
+  },
+  "overlap_counts": {
+    "train_validation": 0,
+    "train_test": 0,
+    "validation_test": 0
+  },
+  "manifest_path": "data/splits/v9/v9_full_source_split.json",
+  "manifest_sha256": "1224d76e87a8cbbe7a60e2d776878efe5d504e40bfd07ca30236ae364415b488",
+  "v9_outcomes_inspected": false
+}

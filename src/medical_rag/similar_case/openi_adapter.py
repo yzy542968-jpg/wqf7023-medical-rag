@@ -26,6 +26,7 @@ def openi_row_to_paired_case(
     row: Mapping[str, Any],
     *,
     image_root: Path | None = None,
+    source_unique_patient: bool = False,
 ) -> PairedCase:
     image_paths = []
     for image in row.get("images", []):
@@ -35,16 +36,22 @@ def openi_row_to_paired_case(
         image_paths.append(str(image_root / filename) if image_root else filename)
     labels = _openi_problem_labels(row.get("problems"))
     report_index_class = _openi_report_index_class(row.get("problems"))
+    study_id = str(row.get("case_id", ""))
+    patient_id = f"openi-source-unique:{study_id}" if source_unique_patient else None
     return PairedCase(
-        study_id=str(row.get("case_id", "")),
-        patient_id=None,
+        study_id=study_id,
+        patient_id=patient_id,
         image_paths=tuple(image_paths),
         indication=str(row.get("indication", "")),
         findings=str(row.get("findings", "")),
         impression=str(row.get("impression", "")),
         labels=labels,
         radgraph_facts=frozenset(labels),
-        source="openi_engineering_smoke_only",
+        source=(
+            "openi_iu_xray_primary_source"
+            if source_unique_patient
+            else "openi_engineering_smoke_only"
+        ),
         metadata={
             "problems": row.get("problems", ""),
             "mesh": row.get("mesh", ""),
@@ -52,7 +59,13 @@ def openi_row_to_paired_case(
             "label_annotation_available": report_index_class != "indeterminate",
             "radgraph_annotation_available": report_index_class != "indeterminate",
             "radgraph_annotation_source": "problem_label_proxy_not_formal_radgraph",
-            "patient_level_independence_available": False,
+            "released_patient_identifier_available": False,
+            "source_collection_one_study_per_patient": source_unique_patient,
+            "patient_key_basis": (
+                "source_design_one_study_per_patient"
+                if source_unique_patient
+                else "unavailable"
+            ),
         },
     )
 
@@ -61,6 +74,7 @@ def read_openi_paired_cases(
     path: Path,
     *,
     image_root: Path | None = None,
+    source_unique_patient: bool = False,
 ) -> list[PairedCase]:
     if not path.exists():
         raise FileNotFoundError(path)
@@ -71,7 +85,13 @@ def read_openi_paired_cases(
                 continue
             try:
                 raw = json.loads(line)
-                rows.append(openi_row_to_paired_case(raw, image_root=image_root))
+                rows.append(
+                    openi_row_to_paired_case(
+                        raw,
+                        image_root=image_root,
+                        source_unique_patient=source_unique_patient,
+                    )
+                )
             except (TypeError, ValueError, json.JSONDecodeError) as exc:
                 raise ValueError(f"Invalid OpenI row at line {line_number}: {exc}") from exc
     return rows
