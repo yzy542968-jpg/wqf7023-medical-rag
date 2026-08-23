@@ -1,0 +1,114 @@
+{
+  "audit_output": {
+    "committed_to_public_repository": false,
+    "path": "experiments/post_submission_v9/v9_structured_reparse_rows.csv",
+    "sha256": "4f7059eb3ae97ea575aefed393c30f37c0276dbe96e5eaea444e6d588934bb48"
+  },
+  "claim_boundary": "The audit repairs parseable formatting only, does not fabricate truncated objects, and does not replace frozen primary QA metrics.",
+  "config_sha256": "f775ab85782db4dac49edebea724706a9483ce148f737d765f22b7010835c418",
+  "overall": {
+    "answer_change_count": 0,
+    "answer_change_rate": 0.0,
+    "newly_recovered_count": 0,
+    "newly_recovered_rate": 0.0,
+    "newly_recovered_token_f1": null,
+    "original_token_f1": 0.16434975433084048,
+    "original_valid_count": 2537,
+    "original_valid_rate": 0.46295620437956203,
+    "repair_counts": {
+      "balanced_json": 2537,
+      "unrecoverable": 2943
+    },
+    "reparsed_or_original_token_f1": 0.16434975433084048,
+    "reparsed_valid_count": 2537,
+    "reparsed_valid_rate": 0.46295620437956203,
+    "row_count": 5480,
+    "unrecoverable_count": 2943,
+    "unrecoverable_rate": 0.5370437956204379
+  },
+  "source_rows_sha256": "89c69c9a27e393c93c85e572587b330f908598e835cb8162a8678cd15ba512b4",
+  "status": "post_hoc_engineering_sensitivity_complete",
+  "study": "V9 structured-output reparse audit",
+  "systems": {
+    "g0_no_retrieval": {
+      "answer_change_count": 0,
+      "answer_change_rate": 0.0,
+      "newly_recovered_count": 0,
+      "newly_recovered_rate": 0.0,
+      "newly_recovered_token_f1": null,
+      "original_token_f1": 0.1455587338454248,
+      "original_valid_count": 576,
+      "original_valid_rate": 0.42043795620437957,
+      "repair_counts": {
+        "balanced_json": 576,
+        "unrecoverable": 794
+      },
+      "reparsed_or_original_token_f1": 0.1455587338454248,
+      "reparsed_valid_count": 576,
+      "reparsed_valid_rate": 0.42043795620437957,
+      "row_count": 1370,
+      "unrecoverable_count": 794,
+      "unrecoverable_rate": 0.5795620437956205
+    },
+    "g1_bm25_rag": {
+      "answer_change_count": 0,
+      "answer_change_rate": 0.0,
+      "newly_recovered_count": 0,
+      "newly_recovered_rate": 0.0,
+      "newly_recovered_token_f1": null,
+      "original_token_f1": 0.1479470007310607,
+      "original_valid_count": 540,
+      "original_valid_rate": 0.39416058394160586,
+      "repair_counts": {
+        "balanced_json": 540,
+        "unrecoverable": 830
+      },
+      "reparsed_or_original_token_f1": 0.1479470007310607,
+      "reparsed_valid_count": 540,
+      "reparsed_valid_rate": 0.39416058394160586,
+      "row_count": 1370,
+      "unrecoverable_count": 830,
+      "unrecoverable_rate": 0.6058394160583942
+    },
+    "g2_fixed_multimodal_rag": {
+      "answer_change_count": 0,
+      "answer_change_rate": 0.0,
+      "newly_recovered_count": 0,
+      "newly_recovered_rate": 0.0,
+      "newly_recovered_token_f1": null,
+      "original_token_f1": 0.17909025126129632,
+      "original_valid_count": 637,
+      "original_valid_rate": 0.464963503649635,
+      "repair_counts": {
+        "balanced_json": 637,
+        "unrecoverable": 733
+      },
+      "reparsed_or_original_token_f1": 0.17909025126129632,
+      "reparsed_valid_count": 637,
+      "reparsed_valid_rate": 0.464963503649635,
+      "row_count": 1370,
+      "unrecoverable_count": 733,
+      "unrecoverable_rate": 0.535036496350365
+    },
+    "g3_learned_multimodal_rag": {
+      "answer_change_count": 0,
+      "answer_change_rate": 0.0,
+      "newly_recovered_count": 0,
+      "newly_recovered_rate": 0.0,
+      "newly_recovered_token_f1": null,
+      "original_token_f1": 0.1848030314855801,
+      "original_valid_count": 784,
+      "original_valid_rate": 0.5722627737226277,
+      "repair_counts": {
+        "balanced_json": 784,
+        "unrecoverable": 586
+      },
+      "reparsed_or_original_token_f1": 0.1848030314855801,
+      "reparsed_valid_count": 784,
+      "reparsed_valid_rate": 0.5722627737226277,
+      "row_count": 1370,
+      "unrecoverable_count": 586,
+      "unrecoverable_rate": 0.42773722627737226
+    }
+  }
+}
