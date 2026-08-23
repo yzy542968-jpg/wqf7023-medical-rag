@@ -1,0 +1,16 @@
+{
+  "study": "V10 compact generation development",
+  "attempt": "two_stage_prompt_only_json",
+  "status": "technical_failure_terminated_before_completion",
+  "completed_rows": 144,
+  "planned_rows": 2256,
+  "answer_stage_valid_rate": 0.0,
+  "support_stage_valid_rate": 0.0,
+  "mean_answer_output_tokens": 64.0,
+  "mean_support_output_tokens": 96.0,
+  "answer_token_ceiling": 64,
+  "support_token_ceiling": 96,
+  "local_failure_rows_sha256": "500c8813bf92fc88789db9fd9e49b52e47bef97232520255abaff0a176e5a232",
+  "test_outcomes_inspected": false,
+  "interpretation": "Prompt-only JSON control failed because generations emitted free text or reasoning and exhausted both token ceilings. The attempt was stopped to avoid duplicating a deterministic technical failure."
+}

@@ -1,0 +1,29 @@
+{
+  "study": "v10_evidence_compact_generation_development_revision1",
+  "status": "frozen_before_revised_validation_generation_outcomes",
+  "question_types": ["findings", "impression"],
+  "evidence_policies": ["whole_report", "sentence_top3", "sentence_top2_fact_top5"],
+  "retrieved_case_count": 3,
+  "generator": {
+    "model": "google/medgemma-1.5-4b-it",
+    "revision": "91850547d9f0b2fdd21aa7c5f4f3d1a8a52c243b",
+    "precision": "4bit_nf4_double_quantization_bfloat16_compute",
+    "do_sample": false,
+    "answer_max_new_tokens": 64,
+    "stop_token": "<end_of_turn>",
+    "batch_size": 8
+  },
+  "provenance_attachment": {
+    "policy": "highest_query_relevance_unit_per_retrieved_case",
+    "maximum_units": 3,
+    "semantic_label": "retrieved_historical_evidence_not_adjudicated_support"
+  },
+  "uncertainty_policy": "high_on_inability_or_insufficiency_cue_else_medium",
+  "minimum_assembled_schema_valid_rate": 0.99,
+  "minimum_citation_valid_rate": 0.99,
+  "material_token_f1_difference": 0.005,
+  "compactness_tie_order": ["sentence_top2_fact_top5", "sentence_top3", "whole_report"],
+  "validation_outcomes_inspected": false,
+  "calibration_outcomes_inspected": false,
+  "test_outcomes_inspected": false
+}
