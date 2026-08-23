@@ -45,6 +45,7 @@ DEFAULT_SPLIT = ROOT / "data" / "splits" / "v10" / "v10_cluster_disjoint_split.j
 DEFAULT_EMBEDDINGS = ROOT / "data" / "processed" / "v10_medsiglip_embeddings.npz"
 DEFAULT_CALIBRATOR = ROOT / "artifacts" / "v10" / "retrieval_calibrator.json"
 DEFAULT_RETRIEVAL = ROOT / "experiments" / "v10_publication" / "v10_confirmation_retrieval_rows.jsonl"
+DEFAULT_RETRIEVAL_SUMMARY = ROOT / "data" / "splits" / "v10" / "v10_confirmation_retrieval_summary.json"
 DEFAULT_IMAGE_ROOT = ROOT / "data" / "raw" / "openi_official_images"
 DEFAULT_ROWS = ROOT / "experiments" / "v10_publication" / "v10_confirmation_qa_rows.jsonl"
 DEFAULT_SUMMARY = ROOT / "data" / "splits" / "v10" / "v10_confirmation_qa_summary.json"
@@ -107,6 +108,7 @@ def main() -> None:
     parser.add_argument("--embeddings", type=Path, default=DEFAULT_EMBEDDINGS)
     parser.add_argument("--calibrator", type=Path, default=DEFAULT_CALIBRATOR)
     parser.add_argument("--retrieval-rows", type=Path, default=DEFAULT_RETRIEVAL)
+    parser.add_argument("--retrieval-summary", type=Path, default=DEFAULT_RETRIEVAL_SUMMARY)
     parser.add_argument("--image-root", type=Path, default=DEFAULT_IMAGE_ROOT)
     parser.add_argument("--rows-output", type=Path, default=DEFAULT_ROWS)
     parser.add_argument("--summary-output", type=Path, default=DEFAULT_SUMMARY)
@@ -124,8 +126,11 @@ def main() -> None:
         },
     )
     retrieval_rows = read_jsonl(args.retrieval_rows)
-    if file_sha256(args.retrieval_rows) != str(config["test_retrieval_rows_sha256"]):
-        raise RuntimeError("Test retrieval rows differ from the completed frozen retrieval run")
+    retrieval_summary = read_json(args.retrieval_summary)
+    if retrieval_summary.get("status") != "confirmation_complete_no_retuning":
+        raise RuntimeError("Test retrieval confirmation is not complete")
+    if file_sha256(args.retrieval_rows) != str(retrieval_summary["retrieval_rows_sha256"]):
+        raise RuntimeError("Test retrieval rows differ from their completed summary")
     retrieval = {
         (str(row["case_id"]), str(row["question_type"])): row
         for row in retrieval_rows
