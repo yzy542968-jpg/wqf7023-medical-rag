@@ -1,0 +1,61 @@
+{
+  "study": "v9_learned_paired_reranker",
+  "status": "protocol_frozen_before_role_instantiation_and_training",
+  "seed": 7030,
+  "role_domain": "v9-reranker-role",
+  "train_bank": {
+    "total": 2608,
+    "normal": 942,
+    "abnormal": 1666
+  },
+  "roles": {
+    "fit": {"normal": 578, "abnormal": 1022, "total": 1600},
+    "internal_early_stop": {"normal": 181, "abnormal": 319, "total": 500},
+    "bank_only": {"normal": 183, "abnormal": 325, "total": 508}
+  },
+  "leave_one_out_bm25": true,
+  "report_policy": "normalized_mean_chunk_embedding",
+  "feature_order": [
+    "bm25_minmax",
+    "image_image_minmax",
+    "image_report_minmax",
+    "bm25_reciprocal_rank_normalized",
+    "image_image_reciprocal_rank_normalized",
+    "image_report_reciprocal_rank_normalized",
+    "question_findings",
+    "question_impression",
+    "question_acute"
+  ],
+  "pair_sampling": {
+    "top_per_bm25": 32,
+    "top_per_image_image": 32,
+    "top_per_image_report": 32,
+    "top_per_relevance": 32,
+    "bottom_per_relevance": 32,
+    "high_candidates": 8,
+    "low_candidates": 8,
+    "minimum_gain_difference": 0.05,
+    "pair_weight": "continuous_gain_difference"
+  },
+  "architectures": {
+    "linear": [9, 1],
+    "mlp": [9, 32, 16, 1]
+  },
+  "training": {
+    "loss": "weighted_pairwise_softplus",
+    "optimizer": "AdamW",
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "batch_size": 4096,
+    "maximum_epochs": 30,
+    "early_stopping_patience": 5,
+    "early_stopping_minimum_improvement": 0.0005,
+    "device": "cpu"
+  },
+  "architecture_tie_tolerance": 0.005,
+  "promotion_margin_over_fixed_multimodal": 0.005,
+  "strong_diagnostic_margin_over_best_component": 0.005,
+  "validation_case_count": 374,
+  "test_queries_executed": 0,
+  "v9_test_outcomes_inspected": false
+}
