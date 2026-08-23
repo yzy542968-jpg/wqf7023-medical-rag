@@ -57,6 +57,14 @@ normal_abnormal_spectrum_ambiguity
 is `pending_researcher_review`. The assistant must not populate reviewer
 initials, review date, or researcher-confirmed labels.
 
+Assistant proposals are deterministic: positive/negative mean `G3-G0`
+Token-F1 gives a retrieval gain/failure proposal; mean G3 Token-F1 `>=0.50`
+or `<0.20` gives a reference-consistent/reference-inconsistent proposal;
+any invalid G3 structured output is flagged; and agent traces directly assign
+retry-recovered, historical-evidence-abstained, and citation-repaired labels.
+No automated rule assigns `image_interpretation_alignment`, because that
+requires the researcher to inspect the image and frozen report reference.
+
 ## Interpretation boundary
 
 The reviewer may compare outputs with frozen report references and retrieved

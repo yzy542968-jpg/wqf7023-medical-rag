@@ -126,6 +126,39 @@ def case_pack_selection(
     return selected
 
 
+def proposed_case_review(
+    case_id: str,
+    selection_category: str,
+    raw_rows: Sequence[Mapping[str, Any]],
+    agent_rows: Sequence[Mapping[str, Any]],
+) -> tuple[list[str], str]:
+    g0 = [float(row["token_f1"]) for row in raw_rows if row["system"] == "g0_no_retrieval"]
+    g3_rows = [row for row in raw_rows if row["system"] == "g3_learned_multimodal_rag"]
+    g3 = [float(row["token_f1"]) for row in g3_rows]
+    delta = statistics.fmean(g3) - statistics.fmean(g0)
+    g3_mean = statistics.fmean(g3)
+    labels = ["retrieval_relevance_gain" if delta >= 0 else "retrieval_relevance_failure"]
+    if g3_mean >= 0.50:
+        labels.append("reference_consistent_answer")
+    elif g3_mean < 0.20:
+        labels.append("reference_inconsistent_answer")
+    if any(not bool(row["structured_output_valid"]) for row in g3_rows):
+        labels.append("structured_output_failure")
+    if any(row["retried"] and not row["historical_evidence_abstained"] for row in agent_rows):
+        labels.append("historical_support_retry_recovered")
+    if any(row["historical_evidence_abstained"] for row in agent_rows):
+        labels.append("historical_support_abstained")
+    if any(row["historical_support_revised"] and not row["historical_evidence_abstained"] for row in agent_rows):
+        labels.append("citation_repaired")
+    note = (
+        f"selection={selection_category}; mean_g3_minus_g0_token_f1={delta:+.4f}; "
+        f"mean_g3_token_f1={g3_mean:.4f}; "
+        f"agent_retry_rows={sum(bool(row['retried']) for row in agent_rows)}/2; "
+        f"agent_evidence_abstention_rows={sum(bool(row['historical_evidence_abstained']) for row in agent_rows)}/2"
+    )
+    return sorted(set(labels)), note
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Apply the frozen V9 bounded evidence-control agent.")
     parser.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
@@ -226,6 +259,12 @@ def main() -> None:
     with local_pack_path.open("w", encoding="utf-8", newline="\n") as handle:
         for selected in selection:
             case_id = selected["case_id"]
+            proposed, note = proposed_case_review(
+                case_id,
+                selected["selection_category"],
+                raw_by_case[case_id],
+                agent_by_case[case_id],
+            )
             handle.write(
                 json.dumps(
                     {
@@ -233,10 +272,10 @@ def main() -> None:
                         "source_case": cases[case_id],
                         "generation_rows": raw_by_case[case_id],
                         "agent_rows": agent_by_case[case_id],
-                        "assistant_proposed_labels_v1_0": [],
+                        "assistant_proposed_labels_v1_0": proposed,
                         "researcher_reviewed_labels_v1_0": [],
                         "review_status": "pending_researcher_review",
-                        "review_note": "",
+                        "review_note": note,
                         "reviewer_initials": "",
                         "review_date": "",
                     },
@@ -263,13 +302,20 @@ def main() -> None:
         )
         writer.writeheader()
         for row in selection:
+            case_id = row["case_id"]
+            proposed, note = proposed_case_review(
+                case_id,
+                row["selection_category"],
+                raw_by_case[case_id],
+                agent_by_case[case_id],
+            )
             writer.writerow(
                 {
                     **row,
-                    "assistant_proposed_labels_v1_0": "",
+                    "assistant_proposed_labels_v1_0": ";".join(proposed),
                     "researcher_reviewed_labels_v1_0": "",
                     "review_status": "pending_researcher_review",
-                    "review_note": "",
+                    "review_note": note,
                     "reviewer_initials": "",
                     "review_date": "",
                 }
