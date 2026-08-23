@@ -14,6 +14,12 @@ from medical_rag.similar_case.v10_generation import (
     parse_answer_stage,
     parse_support_stage,
 )
+from medical_rag.similar_case.v10_reranker import (
+    FactAwareFeatureIndex,
+    augment_r4_features,
+    sample_fact_aware_pairs,
+)
+import numpy as np
 
 
 CASE = {
@@ -95,3 +101,45 @@ def test_retrieval_calibration_and_risk_coverage_are_deterministic() -> None:
     assert 0.0 <= metrics["brier"] <= 1.0
     assert 0.0 <= metrics["ece_10"] <= 1.0
 
+
+def test_fact_aware_index_and_pair_sampler_use_inference_available_features() -> None:
+    cases = {
+        "CXR1": CASE,
+        "CXR2": {
+            "case_id": "CXR2",
+            "findings": "Pulmonary edema and bilateral pleural effusions.",
+            "impression": "Congestive heart failure.",
+        },
+        "CXR3": {
+            "case_id": "CXR3",
+            "findings": "The lungs are clear.",
+            "impression": "No acute disease.",
+        },
+    }
+    facts = {
+        "CXR1": FACTS,
+        "CXR2": {"entity|edema|observation::definitely present"},
+        "CXR3": {"entity|edema|observation::definitely absent"},
+    }
+    index = FactAwareFeatureIndex.build(["CXR1", "CXR2", "CXR3"], cases, facts)
+    added = index.query_features("Is there pulmonary edema?")
+    combined = augment_r4_features(np.zeros((3, 9), dtype=np.float32), added)
+    assert combined.shape == (3, 17)
+    assert added[1, 0] > added[0, 0]
+    high, low, weights = sample_fact_aware_pairs(
+        combined,
+        np.asarray([0.7, 0.9, 0.1], dtype=np.float32),
+        [np.asarray([0.5, 0.8, 0.9]), np.asarray([0.4, 0.7, 0.8])],
+        config={
+            "component_top_k": 3,
+            "relevance_top_k": 3,
+            "relevance_bottom_k": 3,
+            "hard_negative_k": 2,
+            "hard_negative_max_gain": 0.25,
+            "high_candidates": 2,
+            "low_candidates": 2,
+            "minimum_gain_difference": 0.05,
+        },
+    )
+    assert high.shape[1] == low.shape[1] == 17
+    assert len(weights) > 0
