@@ -18,6 +18,10 @@ from medical_rag.similar_case.chexpert_plus_adapter import (
 )
 from medical_rag.similar_case.openi_adapter import openi_row_to_paired_case
 from medical_rag.similar_case.prompt import build_evidence_constrained_prompt
+from medical_rag.similar_case.radgraph_adapter import (
+    match_radgraph_facts,
+    read_radgraph_facts_by_text,
+)
 from medical_rag.similar_case.relevance import (
     active_label_similarity,
     report_relevance_gain,
@@ -273,6 +277,47 @@ def test_chexpert_path_parser_rejects_noncanonical_ids() -> None:
         parse_chexpert_patient_study("train/unknown/view.jpg")
     with pytest.raises(ValueError, match="safe relative path"):
         parse_chexpert_patient_study("../patient1/study1/view.jpg")
+
+
+def test_official_radgraph_xl_annotations_are_flattened_deterministically(
+    tmp_path: Path,
+) -> None:
+    annotation_path = tmp_path / "section_findings.json"
+    annotation_path.write_text(
+        json.dumps(
+            [
+                {
+                    "0": {
+                        "text": "Bilateral edema .",
+                        "entities": {
+                            "1": {
+                                "tokens": "edema",
+                                "label": "OBS-DP",
+                                "relations": [["located_at", "2"]],
+                            },
+                            "2": {
+                                "tokens": "lungs",
+                                "label": "ANAT-DP",
+                                "relations": [],
+                            },
+                        },
+                    }
+                }
+            ]
+        ),
+        encoding="utf-8",
+    )
+
+    facts_by_text = read_radgraph_facts_by_text(annotation_path)
+    facts, available = match_radgraph_facts("Bilateral edema.", facts_by_text)
+
+    assert available is True
+    assert facts == frozenset(
+        {
+            "relation|edema|obs-dp|located_at|lungs",
+            "entity|lungs|anat-dp",
+        }
+    )
 
 
 def test_prompt_separates_target_observation_from_historical_analogy() -> None:

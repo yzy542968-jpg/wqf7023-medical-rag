@@ -12,6 +12,9 @@ sys.path.insert(0, str(ROOT / "src"))
 from medical_rag.similar_case.chexpert_plus_adapter import (  # noqa: E402
     read_chexpert_plus_cases,
 )
+from medical_rag.similar_case.radgraph_adapter import (  # noqa: E402
+    read_radgraph_facts_by_text,
+)
 
 
 def sha256_file(path: Path) -> str:
@@ -34,13 +37,20 @@ def main() -> None:
     parser.add_argument("--csv", type=Path, required=True)
     parser.add_argument("--image-root", type=Path, required=True)
     parser.add_argument("--chexbert-labels", type=Path)
+    parser.add_argument("--radgraph-annotations", type=Path)
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
 
+    radgraph_facts = (
+        read_radgraph_facts_by_text(args.radgraph_annotations)
+        if args.radgraph_annotations is not None
+        else None
+    )
     cases = read_chexpert_plus_cases(
         args.csv,
         image_root=args.image_root,
         chexbert_labels_path=args.chexbert_labels,
+        radgraph_facts_by_findings=radgraph_facts,
         require_image_files=False,
     )
     image_paths = [Path(path) for case in cases for path in case.image_paths]
@@ -63,6 +73,16 @@ def main() -> None:
         "chexbert_labels_sha256": (
             sha256_file(args.chexbert_labels)
             if args.chexbert_labels is not None
+            else None
+        ),
+        "radgraph_annotations_path": (
+            str(args.radgraph_annotations)
+            if args.radgraph_annotations is not None
+            else None
+        ),
+        "radgraph_annotations_sha256": (
+            sha256_file(args.radgraph_annotations)
+            if args.radgraph_annotations is not None
             else None
         ),
         "study_count": len(cases),

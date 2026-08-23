@@ -8,6 +8,7 @@ from pathlib import Path, PurePosixPath
 from typing import Any
 
 from medical_rag.similar_case.schema import PairedCase
+from medical_rag.similar_case.radgraph_adapter import match_radgraph_facts
 
 
 CHEXBERT_LABEL_COLUMNS = (
@@ -173,12 +174,11 @@ def read_chexpert_plus_cases(
         if not group["findings"] and not group["impression"]:
             continue
         facts: Sequence[str] = ()
-        radgraph_available = (
-            radgraph_facts_by_findings is not None
-            and group["findings"] in radgraph_facts_by_findings
-        )
-        if radgraph_available:
-            facts = radgraph_facts_by_findings.get(group["findings"], ())
+        radgraph_available = False
+        if radgraph_facts_by_findings is not None:
+            facts, radgraph_available = match_radgraph_facts(
+                group["findings"], radgraph_facts_by_findings
+            )
         labels = group["labels"] or {}
         cases.append(
             PairedCase(
