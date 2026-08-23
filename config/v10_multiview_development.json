@@ -1,0 +1,25 @@
+{
+  "study": "v10_multiview_development",
+  "status": "frozen_before_training_and_validation_outcomes",
+  "attention_architecture": [1152, 1],
+  "seeds": [7051, 7052, 7053, 7054, 7055],
+  "pair_sampling": {
+    "high_candidates": 8,
+    "low_candidates": 8,
+    "minimum_gain_difference": 0.05
+  },
+  "training": {
+    "loss": "weighted_pairwise_softplus",
+    "optimizer": "AdamW",
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "maximum_epochs": 30,
+    "early_stopping_patience": 5,
+    "early_stopping_minimum_improvement": 0.0005,
+    "device": "cpu"
+  },
+  "component_fusion": "independent_minmax_then_unweighted_mean",
+  "promotion_margin_ndcg10": 0.005,
+  "validation_outcomes_inspected": false,
+  "test_outcomes_inspected": false
+}
