@@ -101,13 +101,17 @@ V9 is the final primary technical study. It models a new patient whose report is
 
 Automated V1-V9 experiments, validity audits, and the Dashboard implementation are complete in the corresponding repository history. The final V9 24-case qualitative pack has deterministic assistant proposals but remains pending student review; no researcher-reviewed V9 category count is claimed yet. Independent clinical human evaluation was not conducted, no human score is reported, and no clinical validation is claimed.
 
-The final P2 artifacts are:
+The final V9 reporting artifacts are:
 
 ```text
-deliverables/22097191_ZHANG_YUE_P2_Research_Project.docx
-deliverables/22097191_ZHANG_YUE_P2_Research_Project.pdf
-deliverables/22097191_ZHANG_YUE_P2_Defence.pptx
+deliverables/22097191_ZHANG_YUE_V9_Final_Research_Project.docx
+deliverables/22097191_ZHANG_YUE_V9_Final_Research_Project.pdf
+deliverables/22097191_ZHANG_YUE_V9_Final_Defence.pptx
 ```
+
+The earlier `P2_Research_Project` and `P2_Defence` files remain preserved as
+historical pre-V9 artifacts. They should not be used as the current V9 result
+summary.
 
 The decision is recorded in `config/submission_decisions.json` and propagated into the result registry, manuscript, deck, and release audit. The blinded packages and rating interface are preserved for a future extension; they are not evidence for the submitted study.
 
