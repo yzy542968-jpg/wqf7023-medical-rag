@@ -1,0 +1,13 @@
+{
+  "study": "v10_evidence_answer_normalization",
+  "status": "frozen_before_full_validation_metrics_and_policy_selection",
+  "expected_revision1_rows": 2256,
+  "maximum_complete_sentences": 2,
+  "sentence_endings": [".", "?", "!"],
+  "fallback": "normalized_available_text_then_explicit_inability_statement",
+  "recompute_provenance": true,
+  "recompute_metrics": true,
+  "validation_aggregate_metrics_inspected": false,
+  "calibration_outcomes_inspected": false,
+  "test_outcomes_inspected": false
+}
