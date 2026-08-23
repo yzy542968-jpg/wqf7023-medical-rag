@@ -1,0 +1,30 @@
+{
+  "accepted_without_modification": 24,
+  "excluded": 0,
+  "independent_clinical_adjudication": false,
+  "local_pack_sha256": "2395a7fef5b3973dd6e801f5525d23cb4a35a2059475f900942c725cfc4a6713",
+  "modified": 0,
+  "public_index_sha256": "0291ac6769dd14b16ba8a381dd4448a7cdb6b45d7dd315053e227c19d1f44b8f",
+  "review_date": "2026-08-19",
+  "review_type": "researcher acceptance of assistant-proposed exploratory labels",
+  "reviewed_case_count": 24,
+  "reviewed_label_counts": {
+    "citation_repaired": 5,
+    "historical_support_abstained": 13,
+    "historical_support_retry_recovered": 5,
+    "reference_consistent_answer": 2,
+    "reference_inconsistent_answer": 13,
+    "retrieval_relevance_failure": 9,
+    "retrieval_relevance_gain": 15,
+    "structured_output_failure": 10
+  },
+  "reviewer_initials": "ZY",
+  "selection_category_counts": {
+    "agent_historical_evidence_abstention": 6,
+    "agent_retry_recovered": 6,
+    "largest_g3_minus_g0_gain": 6,
+    "largest_g3_minus_g0_loss": 6
+  },
+  "status": "researcher_review_complete",
+  "study": "v9_post_hoc_qualitative_review"
+}
