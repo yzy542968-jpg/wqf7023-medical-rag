@@ -59,8 +59,7 @@ class BM25Retriever:
         if not self.cases:
             raise RuntimeError("Retriever has not been fitted.")
 
-        query_terms = _tokens(query)
-        scores = [self._score_document(query_terms, index) for index in range(len(self.cases))]
+        scores = self.score_all(query)
         ranked_indices = sorted(range(len(scores)), key=lambda index: scores[index], reverse=True)[:top_k]
 
         results: list[dict[str, Any]] = []
@@ -78,3 +77,8 @@ class BM25Retriever:
             )
         return results
 
+    def score_all(self, query: str) -> list[float]:
+        if not self.cases:
+            raise RuntimeError("Retriever has not been fitted.")
+        query_terms = _tokens(query)
+        return [self._score_document(query_terms, index) for index in range(len(self.cases))]
