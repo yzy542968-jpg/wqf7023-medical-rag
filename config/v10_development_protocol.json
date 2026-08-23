@@ -1,0 +1,42 @@
+{
+  "study": "v10_publication_extension",
+  "status": "protocol_frozen_before_partition_instantiation_and_v10_outcomes",
+  "source": "data/processed/openi_cases.jsonl",
+  "radgraph": "data/processed/v9_radgraph_modern_xl.jsonl",
+  "seed": 7040,
+  "duplicate_clustering": {
+    "text": "normalized_findings_plus_impression",
+    "normalization": ["NFKC", "lowercase", "collapse_whitespace", "trim"],
+    "exact_nonempty": true,
+    "tfidf_analyzer": "char",
+    "tfidf_ngram_range": [3, 5],
+    "tfidf_cosine_threshold": 0.95,
+    "exact_image_sha256_union": true,
+    "dhash_union": false
+  },
+  "partition_fractions": {
+    "train": 0.65,
+    "calibration": 0.10,
+    "validation": 0.10,
+    "test": 0.15
+  },
+  "partition_domain": "v10-cluster-split",
+  "partition_tie_order": ["train", "calibration", "validation", "test"],
+  "reranker_seeds": [7041, 7042, 7043, 7044, 7045],
+  "calibration_seed": 7046,
+  "promotion_margin_ndcg10": 0.005,
+  "ensemble_degradation_tolerance_ndcg10": 0.005,
+  "evidence_policies": {
+    "whole_report": {"findings": true, "impression": true},
+    "sentence_top3": {"sentences_per_case": 3},
+    "sentence_top2_fact_top5": {"sentences_per_case": 2, "facts_per_case": 5}
+  },
+  "retrieved_case_count": 3,
+  "calibration_positive_gain_threshold": 0.5,
+  "coverage_operating_points": [1.0, 0.9, 0.8, 0.7, 0.5],
+  "bootstrap_iterations": 10000,
+  "shuffled_image_assignments": 100,
+  "clinical_review_case_count": 100,
+  "test_outcomes_inspected": false,
+  "v9_mutation_permitted": false
+}
