@@ -1,0 +1,69 @@
+{
+  "protocol_amendment": "v9_full_source_split",
+  "status": "split_rule_frozen_before_manifest_instantiation_and_v9_outcomes",
+  "source": {
+    "path": "data/processed/openi_cases.jsonl",
+    "case_count": 3851,
+    "sha256": "56e367190396011d4d67f43e7e733389a8346890bf8729e82fb4326d063bbd68"
+  },
+  "eligibility": {
+    "report_indexed_normal": 1379,
+    "report_indexed_abnormal": 2380,
+    "report_index_indeterminate": 92,
+    "stratifiable_total": 3759,
+    "exclude_indeterminate_from_primary_graded_evaluation": true
+  },
+  "partitions": {
+    "train": {
+      "normal": 965,
+      "abnormal": 1666,
+      "total": 2631
+    },
+    "validation": {
+      "normal": 138,
+      "abnormal": 238,
+      "total": 376
+    },
+    "test": {
+      "normal": 276,
+      "abnormal": 476,
+      "total": 752
+    }
+  },
+  "strict_project_history_untouched_subset": {
+    "normal": 185,
+    "abnormal": 77,
+    "total": 262,
+    "case_ids_sha256": "d06254afb3ca75d0a3daeae0cdf34bd772b1eea347bc562609c12f7f1f1c6f90",
+    "nested_in_test": true,
+    "used_for_model_selection": false
+  },
+  "test_supplement": {
+    "normal": 91,
+    "abnormal": 399,
+    "total": 490
+  },
+  "deterministic_selection": {
+    "seed": "7029",
+    "test_supplement_domain": "v9-test-supplement",
+    "validation_domain": "v9-validation",
+    "canonical_case_id": "str(case_id).strip()",
+    "encoding": "utf-8",
+    "digest": "sha256_lowercase_hex",
+    "tie_break": "canonical_case_id",
+    "sampling": "without_replacement",
+    "fingerprint_payload": "sorted_unique_ids_newline_joined_without_trailing_newline"
+  },
+  "candidate_bank": {
+    "source_partition": "train",
+    "fixed_case_count": 2631,
+    "exclude_query_report": true,
+    "validation_or_test_reference_fields_available_at_inference": false
+  },
+  "qa_complete_reference_source_count": 3244,
+  "patient_identity_claim": "source-design patient uniqueness",
+  "full_test_claim": "v9_held_out_not_globally_untouched",
+  "strict_subset_claim": "project_history_untouched_sensitivity",
+  "split_ids_instantiated": false,
+  "v9_outcomes_inspected": false
+}
