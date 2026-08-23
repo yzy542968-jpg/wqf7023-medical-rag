@@ -139,7 +139,7 @@ def main() -> None:
     retrieval_r4 = {
         (str(row["case_id"]), str(row["question_type"])): row
         for row in retrieval_rows
-        if row["system"] == "r4_original"
+        if row["system"] == "r4_nine_feature"
     }
     if set(retrieval_r4) != set(retrieval_r5):
         raise RuntimeError("R4 and R5 Test retrieval rows do not cover the same queries")
