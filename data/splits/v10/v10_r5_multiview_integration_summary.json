@@ -1,0 +1,26 @@
+{
+  "study": "V10 R5 and multi-view integration",
+  "status": "development_complete_test_not_run",
+  "inputs": {
+    "cases_sha256": "56e367190396011d4d67f43e7e733389a8346890bf8729e82fb4326d063bbd68",
+    "radgraph_sha256": "631aa3e11cc52005656ee8a66de3de1ee5d3411a2f271a3c5f8a14de39b51599",
+    "split_sha256": "b4c1b091c3dbff0399d07c8350f4d8d68ce8ce52e0157dcc96f46af8c8baa7b3",
+    "config_sha256": "aacab35615c77f8592da7271d98e48ceec0e8e9d1bdd2f184825e3dfeddef01d",
+    "embedding_signature": "8e5b69370462df61b75f8aea125441db49f8fb356ea026b442aae71bfaa8b526"
+  },
+  "counts": {
+    "candidate_bank": 2506,
+    "validation_cases": 376,
+    "validation_rows": 1128
+  },
+  "validation_ndcg@10": {
+    "mean": 0.3539093679342802,
+    "learned_attention": 0.3585402599198427
+  },
+  "learned_attention_minus_mean": 0.004630891985562491,
+  "degradation_tolerance_ndcg10": 0.005,
+  "attention_accepted": true,
+  "selected_view_policy_for_r5": "learned_attention",
+  "validation_rows_sha256": "b91bcd65b1af8c629a6c865d269018cd23837508306f3d49417f3ce4497d2df4",
+  "test_outcomes_inspected": false
+}
