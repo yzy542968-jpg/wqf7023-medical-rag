@@ -1,13 +1,18 @@
 from __future__ import annotations
 
 import re
+from math import sqrt
 from pathlib import Path
 
 from docx import Document
-from docx.enum.section import WD_SECTION_START
 from docx.enum.style import WD_STYLE_TYPE
 from docx.enum.table import WD_CELL_VERTICAL_ALIGNMENT
-from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_BREAK, WD_LINE_SPACING
+from docx.enum.text import (
+    WD_ALIGN_PARAGRAPH,
+    WD_LINE_SPACING,
+    WD_TAB_ALIGNMENT,
+    WD_TAB_LEADER,
+)
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
 from docx.shared import Cm, Inches, Pt, RGBColor
@@ -21,7 +26,7 @@ BLUE = RGBColor(31, 78, 121)
 DARK_BLUE = RGBColor(11, 37, 69)
 MUTED = RGBColor(91, 103, 112)
 LIGHT = "F4F6F9"
-GRID = "B8C2CC"
+CONTENT_WIDTH_DXA = 9026  # A4 width minus two 1-inch margins.
 
 
 def set_cell_shading(cell, fill: str) -> None:
@@ -69,6 +74,30 @@ def set_table_geometry(table, widths: list[int]) -> None:
         for idx, cell in enumerate(row.cells):
             set_cell_width(cell, widths[idx])
             cell.vertical_alignment = WD_CELL_VERTICAL_ALIGNMENT.CENTER
+
+
+def set_repeat_table_header(row) -> None:
+    tr_pr = row._tr.get_or_add_trPr()
+    tbl_header = tr_pr.find(qn("w:tblHeader"))
+    if tbl_header is None:
+        tbl_header = OxmlElement("w:tblHeader")
+        tr_pr.append(tbl_header)
+    tbl_header.set(qn("w:val"), "true")
+
+
+def allocate_table_widths(rows: list[list[str]]) -> list[int]:
+    """Allocate A4-safe column widths from bounded content-length weights."""
+    cols = len(rows[0])
+    weights: list[float] = []
+    for column in range(cols):
+        longest = max(len(row[column]) for row in rows)
+        weights.append(max(2.5, min(7.5, sqrt(max(longest, 1)))))
+
+    raw = [CONTENT_WIDTH_DXA * weight / sum(weights) for weight in weights]
+    widths = [max(760, int(value)) for value in raw]
+    difference = CONTENT_WIDTH_DXA - sum(widths)
+    widths[weights.index(max(weights))] += difference
+    return widths
 
 
 def set_cell_margins(cell, top=80, start=120, bottom=80, end=120) -> None:
@@ -247,18 +276,26 @@ def add_cover(doc: Document) -> None:
     p = doc.add_paragraph()
     p.style = doc.styles["Heading 1"]
     add_inline(p, "Table of Contents")
-    for item in (
-        "Abstract",
-        "Chapter 1: Introduction",
-        "Chapter 2: Literature Review",
-        "Chapter 3: Methodology",
-        "Chapter 4: Results and Analysis",
-        "Chapter 5: Discussion and Conclusion",
-        "References",
-        "Appendices",
+    for item, page_number in (
+        ("Abstract", 3),
+        ("Chapter 1: Introduction", 4),
+        ("Chapter 2: Literature Review", 10),
+        ("Chapter 3: Methodology", 21),
+        ("Chapter 4: Results and Analysis", 27),
+        ("Chapter 5: Discussion and Conclusion", 32),
+        ("References", 39),
+        ("Appendices", 41),
     ):
-        p = doc.add_paragraph(style="List Bullet")
-        add_inline(p, item)
+        p = doc.add_paragraph()
+        p.paragraph_format.left_indent = Inches(0.2)
+        p.paragraph_format.right_indent = Inches(0.2)
+        p.paragraph_format.space_after = Pt(5)
+        p.paragraph_format.tab_stops.add_tab_stop(
+            Inches(6.05),
+            alignment=WD_TAB_ALIGNMENT.RIGHT,
+            leader=WD_TAB_LEADER.DOTS,
+        )
+        add_inline(p, f"{item}\t{page_number}")
     doc.add_page_break()
 
 
@@ -283,9 +320,9 @@ def add_table(doc: Document, rows: list[list[str]]) -> None:
     cleaned = [row + [""] * (cols - len(row)) for row in rows]
     table = doc.add_table(rows=len(cleaned), cols=cols)
     table.style = "Table Grid"
-    widths = [9360 // cols] * cols
-    widths[-1] += 9360 - sum(widths)
+    widths = allocate_table_widths(cleaned)
     set_table_geometry(table, widths)
+    set_repeat_table_header(table.rows[0])
     for ridx, values in enumerate(cleaned):
         for cidx, value in enumerate(values):
             cell = table.cell(ridx, cidx)
