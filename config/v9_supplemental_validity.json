@@ -1,0 +1,103 @@
+{
+  "study": "v9_supplemental_validity_audit",
+  "status": "post_hoc_exploratory_frozen_before_supplemental_outcomes",
+  "date_frozen": "2026-08-24",
+  "v9_primary_results_may_change": false,
+  "model_or_threshold_retuning_allowed": false,
+  "duplicate_audit": {
+    "report_representation": "findings_newline_impression",
+    "normalization": "unicode_nfkc_lowercase_whitespace_collapse",
+    "exact_hash": "sha256_utf8_no_trailing_newline",
+    "near_duplicate_vectorizer": {
+      "type": "tfidf_char_wb",
+      "ngram_range": [3, 5],
+      "min_df": 2,
+      "sublinear_tf": true,
+      "norm": "l2"
+    },
+    "report_similarity_thresholds": [0.9, 0.95, 0.99],
+    "primary_sensitivity_exclusion_threshold": 0.95,
+    "image_hash": {
+      "type": "dhash64",
+      "resize": [9, 8],
+      "case_distance": "minimum_across_view_pairs",
+      "hamming_thresholds": [0, 4, 8]
+    }
+  },
+  "qrel_sensitivity": {
+    "variants": {
+      "active_label_only": [1.0, 0.0],
+      "radgraph_fact_only": [0.0, 1.0],
+      "frozen_combined": [0.6, 0.4]
+    },
+    "systems": [
+      "r0_bm25",
+      "r1_image_image",
+      "r2_image_report",
+      "r3_fixed_multimodal",
+      "r4_learned_mlp"
+    ],
+    "metrics": ["ndcg@10", "mrr_at_gain_0.5", "recall@10_at_gain_0.5"],
+    "interpretation": "construct_robustness_not_new_confirmation"
+  },
+  "clinical_generation_metrics": {
+    "source": "frozen_v9_qa_raw_rows",
+    "systems": ["g0_no_retrieval", "g1_bm25_report_rag", "g2_fixed_multimodal_rag", "g3_learned_multimodal_rag"],
+    "metrics": ["f1_radgraph_entity", "f1_radgraph_entity_relation", "f1_radgraph_complete", "f1_chexbert_if_local_dependencies_available"],
+    "bootstrap_iterations": 10000,
+    "bootstrap_seed": 7041,
+    "unit": "case",
+    "role": "post_hoc_exploratory"
+  },
+  "dense_text_baseline": {
+    "model": "Qwen/Qwen3-Embedding-0.6B",
+    "revision": "97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3",
+    "query_instruction": "Given a radiology question and clinical indication, retrieve a chest X-ray report containing clinically relevant evidence for the question.",
+    "query": "indication_newline_question",
+    "document": "full_historical_report",
+    "normalize_embeddings": true,
+    "comparison": "dense_text_minus_bm25_on_same_v9_bank",
+    "selection_role": "none_exploratory_baseline_only"
+  },
+  "paraphrase_robustness": {
+    "roles": {
+      "findings": [
+        "What are the main radiographic findings?",
+        "Describe the principal findings visible on this chest radiograph.",
+        "Which radiographic abnormalities or normal findings are present?"
+      ],
+      "impression": [
+        "What is the most likely radiographic impression?",
+        "Summarize the overall radiologic conclusion for this examination.",
+        "What is the principal diagnostic impression from this chest radiograph?"
+      ],
+      "acute": [
+        "Is there an acute cardiopulmonary abnormality? Explain briefly.",
+        "Does this examination show an acute chest abnormality?",
+        "Are any acute cardiopulmonary findings present?"
+      ]
+    },
+    "systems": ["r0_bm25", "qwen3_dense_text", "r4_learned_mlp"],
+    "metrics": ["ndcg@10_by_variant", "top1_consistency", "top10_jaccard", "within_case_ndcg_standard_deviation"],
+    "claim_boundary": "phrasing_robustness_only_not_physician_authored_question_validation"
+  },
+  "structured_output_reparse": {
+    "source": "frozen_raw_generations",
+    "generation_rerun_allowed": false,
+    "repairs": [
+      "balanced_json_object_extraction",
+      "markdown_fence_removal",
+      "trailing_comma_removal",
+      "truncated_object_is_not_fabricated"
+    ],
+    "report": ["original_valid_rate", "recovered_valid_rate", "answer_change_rate", "unrecoverable_rate"],
+    "role": "engineering_sensitivity_not_replacement_primary_metric"
+  },
+  "reporting_boundaries": [
+    "No supplemental result replaces the frozen V9 primary result.",
+    "No supplemental result is described as preregistered or confirmatory.",
+    "No automated metric is described as clinical correctness.",
+    "No researcher review is described as independent clinician adjudication.",
+    "Unavailable local dependencies are reported rather than silently substituted."
+  ]
+}
