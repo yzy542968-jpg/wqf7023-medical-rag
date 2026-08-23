@@ -1,0 +1,48 @@
+{
+  "study": "v9_retrieval_confirmation",
+  "status": "frozen_before_test_encoding_and_outcomes",
+  "candidate_bank_count": 2608,
+  "test_case_count": 752,
+  "test_question_count": 2256,
+  "strict_untouched_test_case_count": 262,
+  "systems": {
+    "r0": "bm25_text",
+    "r1": "medsiglip_image_image",
+    "r2": "medsiglip_image_report_normalized_mean",
+    "r3": {
+      "name": "fixed_multimodal",
+      "weights": {"bm25": 0.25, "image_image": 0.5, "image_report": 0.25}
+    },
+    "r4": {
+      "name": "learned_mlp_reranker",
+      "architecture": [9, 32, 16, 1],
+      "parameter_count": 865,
+      "checkpoint_sha256": "8afa68a48de9d6c9128d190f1368d0d45d41a958e5eb12787d7e725e7eb09efa"
+    }
+  },
+  "primary_metric": "case_grouped_equal_question_ndcg_at_10",
+  "primary_comparison": "r4_minus_r1",
+  "bootstrap": {
+    "iterations": 10000,
+    "seed": 7031,
+    "unit": "case",
+    "confidence_level": 0.95,
+    "success_rule": "lower_bound_gt_0"
+  },
+  "binary_relevance_threshold": 0.5,
+  "shuffled_control": {
+    "assignment_count": 100,
+    "seed": 7031,
+    "order_domain": "v9-shuffle-order",
+    "assignment": "cyclic_shifts_1_through_100",
+    "fixed_point_free": true,
+    "recompute_complete_visual_state": true,
+    "plus_one_p_value": true,
+    "success_p_maximum": 0.05
+  },
+  "strict_subset_role": "predefined_sensitivity_not_model_selection",
+  "case_replacement_allowed": false,
+  "outcome_driven_retuning_allowed": false,
+  "test_images_encoded": false,
+  "test_outcomes_inspected": false
+}
