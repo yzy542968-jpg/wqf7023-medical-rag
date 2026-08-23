@@ -1,0 +1,54 @@
+{
+  "study": "v9_other_patient_similar_case_multimodal_rag",
+  "status": "development_protocol_only",
+  "frozen_predecessors": ["v5", "v6", "v7", "v8"],
+  "confirmation_ids_instantiated": false,
+  "query_fields": ["image_paths", "indication", "question"],
+  "hidden_reference_fields": [
+    "findings",
+    "impression",
+    "report_labels",
+    "radgraph_entities_relations"
+  ],
+  "candidate_exclusions": ["same_study", "same_patient"],
+  "report_relevance": {
+    "positive_weight": 1.0,
+    "uncertain_weight": 0.5,
+    "negative_weight": 0.0,
+    "missing_weight": 0.0,
+    "active_label_weight": 0.6,
+    "radgraph_fact_weight": 0.4,
+    "binary_relevance_threshold": 0.5
+  },
+  "question_suite": {
+    "findings": "What are the main radiographic findings?",
+    "impression": "What is the most likely radiographic impression?",
+    "acute": "Is there an acute cardiopulmonary abnormality? Explain briefly."
+  },
+  "retrieval_conditions": [
+    "bm25_text",
+    "medsiglip_image_image",
+    "medsiglip_image_report",
+    "fixed_paired_multimodal",
+    "learned_paired_reranker",
+    "shuffled_image_control"
+  ],
+  "generation_conditions": [
+    "no_retrieval",
+    "text_rag",
+    "fixed_multimodal_rag",
+    "learned_multimodal_rag_if_selected",
+    "agentic_multimodal_rag"
+  ],
+  "primary_retrieval_metric": "patient_grouped_ndcg_at_10",
+  "agent": {
+    "maximum_retrieval_retries": 1,
+    "internet_access": false,
+    "unbounded_loop": false
+  },
+  "model_policy": {
+    "foundation_encoders_frozen": true,
+    "generator_frozen": true,
+    "verifier_frozen": true
+  }
+}
