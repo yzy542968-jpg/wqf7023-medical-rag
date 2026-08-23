@@ -122,6 +122,40 @@ class MedGemmaTextGenerator:
             "output_tokens": int(answer_ids.shape[-1]),
         }
 
+    def generate_text_batch(
+        self,
+        prompts: Sequence[str],
+        *,
+        max_new_tokens: int = 256,
+    ) -> list[dict[str, Any]]:
+        messages = [[{"role": "user", "content": [{"type": "text", "text": prompt}]}] for prompt in prompts]
+        rendered = [
+            self.processor.apply_chat_template(message, add_generation_prompt=True, tokenize=False)
+            for message in messages
+        ]
+        inputs = self.processor(text=rendered, padding=True, return_tensors="pt")
+        inputs = {key: value.to(self.model.device) for key, value in inputs.items()}
+        input_lengths = inputs["attention_mask"].sum(dim=1).tolist()
+        with self.torch.inference_mode():
+            generated = self.model.generate(
+                **inputs,
+                max_new_tokens=max_new_tokens,
+                do_sample=False,
+                temperature=None,
+                top_p=None,
+                top_k=None,
+                pad_token_id=self.processor.tokenizer.pad_token_id,
+            )
+        prompt_width = int(inputs["input_ids"].shape[1])
+        return [
+            {
+                "answer": self.processor.decode(row[prompt_width:], skip_special_tokens=True).strip(),
+                "input_tokens": int(input_length),
+                "output_tokens": int(row[prompt_width:].shape[-1]),
+            }
+            for row, input_length in zip(generated, input_lengths, strict=True)
+        ]
+
 
 class QwenTextGenerator:
     def __init__(
