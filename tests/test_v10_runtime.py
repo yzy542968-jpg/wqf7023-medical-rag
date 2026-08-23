@@ -8,6 +8,7 @@ from medical_rag.similar_case.v10_runtime import (
     normalized_scores_and_reciprocal_ranks,
     r4_feature_matrix,
 )
+from medical_rag.similar_case.schema import PairedCase
 
 
 def test_bm25_score_all_matches_search_order() -> None:
@@ -45,3 +46,35 @@ def test_component_agreement_counts_selected_top1_matches() -> None:
         "image_report": np.asarray([3.0, 2.0]),
     }
     assert component_agreement(result, 0) == 2.0 / 3.0
+
+
+def test_prepare_query_is_image_independent() -> None:
+    query = PairedCase(
+        study_id="q",
+        patient_id=None,
+        image_paths=("synthetic.png",),
+        indication="cough",
+        findings="",
+        impression="",
+    )
+    retriever = BM25Retriever().fit([{"case_id": "a", "report_text": "normal chest"}])
+
+    class FactIndex:
+        def query_features(self, text: str) -> np.ndarray:
+            return np.zeros((1, 8), dtype=np.float32)
+
+    from medical_rag.similar_case.v10_runtime import FrozenR5Runtime
+
+    runtime = FrozenR5Runtime(
+        candidate_ids=["a"],
+        candidate_cases=[],
+        candidate_images=np.asarray([[1.0, 0.0]], dtype=np.float32),
+        candidate_reports=np.asarray([[1.0, 0.0]], dtype=np.float32),
+        bm25=retriever,
+        fact_index=FactIndex(),
+        r4_model=None,
+        models=[],
+    )
+    prepared = runtime.prepare_query(query, question_type="findings")
+    assert prepared["question_type"] == "findings"
+    assert prepared["fact_features"].shape == (1, 8)

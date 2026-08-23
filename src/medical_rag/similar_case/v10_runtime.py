@@ -119,16 +119,29 @@ class FrozenR5Runtime:
             models=models,
         )
 
-    def score(
+    def prepare_query(
         self,
         query: PairedCase,
-        query_image: np.ndarray,
         *,
         question_type: str,
     ) -> dict[str, Any]:
         question = QUESTIONS[question_type]
         query_text = "\n".join(part for part in (query.indication, question) if part)
         bm25_scores = np.asarray(self.bm25.score_all(query_text), dtype=np.float32)
+        return {
+            "question": question,
+            "query_text": query_text,
+            "question_type": question_type,
+            "bm25": bm25_scores,
+            "fact_features": self.fact_index.query_features(query_text),
+        }
+
+    def score_prepared(
+        self,
+        prepared: Mapping[str, Any],
+        query_image: np.ndarray,
+    ) -> dict[str, Any]:
+        bm25_scores = np.asarray(prepared["bm25"], dtype=np.float32)
         image = np.asarray(query_image, dtype=np.float32)
         image_image = self.candidate_images @ image
         image_report = self.candidate_reports @ image
@@ -136,9 +149,9 @@ class FrozenR5Runtime:
             bm25_scores,
             image_image,
             image_report,
-            question_type=question_type,
+            question_type=str(prepared["question_type"]),
         )
-        r5 = augment_r4_features(r4, self.fact_index.query_features(query_text))
+        r5 = augment_r4_features(r4, np.asarray(prepared["fact_features"], dtype=np.float32))
         with torch.inference_mode():
             r4_scores = None if self.r4_model is None else self.r4_model(torch.from_numpy(r4)).numpy()
             seed_scores = np.stack(
@@ -147,8 +160,8 @@ class FrozenR5Runtime:
         ensemble = seed_scores.mean(axis=0)
         ranking = np.lexsort((np.arange(len(ensemble)), -ensemble))
         return {
-            "question": question,
-            "query_text": query_text,
+            "question": prepared["question"],
+            "query_text": prepared["query_text"],
             "bm25": bm25_scores,
             "image_image": image_image,
             "image_report": image_report,
@@ -158,6 +171,18 @@ class FrozenR5Runtime:
             "ranking": ranking,
             "top_case_ids": [self.candidate_ids[index] for index in ranking],
         }
+
+    def score(
+        self,
+        query: PairedCase,
+        query_image: np.ndarray,
+        *,
+        question_type: str,
+    ) -> dict[str, Any]:
+        return self.score_prepared(
+            self.prepare_query(query, question_type=question_type),
+            query_image,
+        )
 
 
 def component_agreement(result: Mapping[str, np.ndarray], selected_index: int) -> float:
