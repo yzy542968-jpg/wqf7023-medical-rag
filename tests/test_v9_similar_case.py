@@ -21,10 +21,14 @@ from medical_rag.similar_case.chexpert_plus_adapter import (
     parse_chexpert_patient_study,
     read_chexpert_plus_cases,
 )
-from medical_rag.similar_case.openi_adapter import openi_row_to_paired_case
+from medical_rag.similar_case.openi_adapter import (
+    openi_row_to_paired_case,
+    read_openi_paired_cases,
+)
 from medical_rag.similar_case.prompt import build_evidence_constrained_prompt
 from medical_rag.similar_case.radgraph_adapter import (
     match_radgraph_facts,
+    read_radgraph_case_records,
     read_radgraph_facts_by_text,
 )
 from medical_rag.similar_case.relevance import (
@@ -482,3 +486,81 @@ def test_v9_empty_report_is_not_treated_as_empty_radgraph_facts() -> None:
     assert record["status"] == "empty_report"
     assert record["facts"] == []
     assert record["annotation"] is None
+
+
+def test_openi_formal_radgraph_records_replace_problem_proxy(tmp_path: Path) -> None:
+    cases_path = tmp_path / "cases.jsonl"
+    cases_path.write_text(
+        json.dumps(
+            {
+                "case_id": "CXR1",
+                "indication": "Dyspnea",
+                "findings": "Mild edema.",
+                "impression": "Pulmonary edema.",
+                "problems": "Edema",
+                "images": [{"filename": "1.png"}],
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    radgraph_path = tmp_path / "radgraph.jsonl"
+    radgraph_path.write_text(
+        json.dumps(
+            {
+                "case_id": "CXR1",
+                "status": "ok",
+                "facts": ["entity|edema|observation::definitely present"],
+                "report_text_sha256": "abc123",
+                "model_type": "modern-radgraph-xl",
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+    records = read_radgraph_case_records(radgraph_path)
+    assert records["CXR1"].status == "ok"
+    cases = read_openi_paired_cases(
+        cases_path,
+        source_unique_patient=True,
+        radgraph_path=radgraph_path,
+    )
+    assert cases[0].radgraph_facts == frozenset(
+        {"entity|edema|observation::definitely present"}
+    )
+    assert cases[0].metadata["radgraph_annotation_available"] is True
+    assert cases[0].metadata["radgraph_annotation_source"] == "modern-radgraph-xl"
+
+
+def test_openi_empty_radgraph_record_is_unavailable(tmp_path: Path) -> None:
+    cases_path = tmp_path / "cases.jsonl"
+    cases_path.write_text(
+        json.dumps(
+            {
+                "case_id": "CXR2",
+                "problems": "normal",
+                "images": [{"filename": "2.png"}],
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    radgraph_path = tmp_path / "radgraph.jsonl"
+    radgraph_path.write_text(
+        json.dumps(
+            {
+                "case_id": "CXR2",
+                "status": "empty_report",
+                "facts": [],
+                "report_text_sha256": "empty-hash",
+                "model_type": "modern-radgraph-xl",
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+    case = read_openi_paired_cases(cases_path, radgraph_path=radgraph_path)[0]
+    assert case.radgraph_facts == frozenset()
+    assert case.metadata["radgraph_annotation_available"] is False

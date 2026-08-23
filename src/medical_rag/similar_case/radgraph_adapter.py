@@ -1,9 +1,19 @@
 from __future__ import annotations
 
 import json
+from dataclasses import dataclass
 from collections.abc import Mapping
 from pathlib import Path
 from typing import Any
+
+
+@dataclass(frozen=True)
+class RadGraphCaseRecord:
+    case_id: str
+    status: str
+    facts: frozenset[str]
+    report_text_sha256: str
+    model_type: str
 
 
 def _normalized(value: object) -> str:
@@ -91,3 +101,47 @@ def match_radgraph_facts(
     if preprocessed in facts_by_text:
         return facts_by_text[preprocessed], True
     return frozenset(), False
+
+
+def read_radgraph_case_records(path: Path) -> dict[str, RadGraphCaseRecord]:
+    """Read V9 checkpointed annotations without exposing raw annotations downstream."""
+
+    if not path.exists():
+        raise FileNotFoundError(path)
+    records: dict[str, RadGraphCaseRecord] = {}
+    with path.open("r", encoding="utf-8") as handle:
+        for line_number, line in enumerate(handle, start=1):
+            if not line.strip():
+                continue
+            try:
+                row = json.loads(line)
+                case_id = str(row["case_id"]).strip()
+                status = str(row["status"]).strip()
+                report_text_sha256 = str(row["report_text_sha256"]).strip()
+                model_type = str(row["model_type"]).strip()
+                raw_facts = row.get("facts", [])
+            except (KeyError, TypeError, json.JSONDecodeError) as exc:
+                raise ValueError(
+                    f"Invalid RadGraph case record at line {line_number}: {exc}"
+                ) from exc
+            if not case_id or not report_text_sha256 or not model_type:
+                raise ValueError(f"Incomplete RadGraph case record at line {line_number}.")
+            if status not in {"ok", "empty_report", "error"}:
+                raise ValueError(f"Unsupported RadGraph status for {case_id}: {status}")
+            if not isinstance(raw_facts, list):
+                raise ValueError(f"RadGraph facts for {case_id} must be a list.")
+            facts = frozenset(
+                _normalized(value) for value in raw_facts if str(value).strip()
+            )
+            if status != "ok" and facts:
+                raise ValueError(f"Unavailable RadGraph record {case_id} contains facts.")
+            if case_id in records:
+                raise ValueError(f"Duplicate RadGraph case record: {case_id}")
+            records[case_id] = RadGraphCaseRecord(
+                case_id=case_id,
+                status=status,
+                facts=facts,
+                report_text_sha256=report_text_sha256,
+                model_type=model_type,
+            )
+    return records
