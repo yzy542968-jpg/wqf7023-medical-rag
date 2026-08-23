@@ -1,6 +1,8 @@
 from medical_rag.similar_case.v10_calibration import (
     RetrievalCalibrator,
     calibration_metrics,
+    calibrator_payload,
+    predict_from_payload,
     risk_coverage_curve,
     threshold_for_coverage,
 )
@@ -132,6 +134,8 @@ def test_retrieval_calibration_and_risk_coverage_are_deterministic() -> None:
     metrics = calibration_metrics(labels, probabilities)
     assert 0.0 <= metrics["brier"] <= 1.0
     assert 0.0 <= metrics["ece_10"] <= 1.0
+    restored = predict_from_payload(rows, calibrator_payload(calibrator))
+    assert np.allclose(probabilities, restored)
 
 
 def test_fact_aware_index_and_pair_sampler_use_inference_available_features() -> None:

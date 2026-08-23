@@ -105,12 +105,38 @@ def calibration_metrics(labels: Sequence[int], probabilities: Sequence[float]) -
     }
 
 
+def calibrator_payload(calibrator: RetrievalCalibrator) -> dict[str, object]:
+    if calibrator.model is None:
+        raise RuntimeError("calibrator is not fitted")
+    return {
+        "feature_order": list(FEATURE_ORDER),
+        "classes": [int(value) for value in calibrator.model.classes_],
+        "coef": calibrator.model.coef_.tolist(),
+        "intercept": calibrator.model.intercept_.tolist(),
+        "seed": calibrator.seed,
+    }
+
+
+def predict_from_payload(
+    rows: Sequence[Mapping[str, float]],
+    payload: Mapping[str, object],
+) -> np.ndarray:
+    if tuple(payload["feature_order"]) != FEATURE_ORDER:
+        raise ValueError("calibration feature order does not match frozen runtime")
+    coefficients = np.asarray(payload["coef"], dtype=np.float64)
+    intercept = np.asarray(payload["intercept"], dtype=np.float64)
+    logits = feature_matrix(rows) @ coefficients[0] + intercept[0]
+    return 1.0 / (1.0 + np.exp(-logits))
+
+
 __all__ = [
     "FEATURE_ORDER",
     "RetrievalCalibrator",
     "calibration_metrics",
+    "calibrator_payload",
     "expected_calibration_error",
     "feature_matrix",
+    "predict_from_payload",
     "risk_coverage_curve",
     "threshold_for_coverage",
 ]
