@@ -46,6 +46,7 @@ DEFAULT_ROLES = ROOT / "data" / "splits" / "v10" / "v10_reranker_roles.json"
 DEFAULT_CONFIG = ROOT / "config" / "v10_reranker_development.json"
 DEFAULT_EMBEDDINGS = ROOT / "data" / "processed" / "v10_medsiglip_embeddings.npz"
 DEFAULT_CHECKPOINTS = ROOT / "experiments" / "v10_publication" / "reranker_checkpoints"
+DEFAULT_ROWS = ROOT / "experiments" / "v10_publication" / "v10_reranker_validation_rows.jsonl"
 DEFAULT_SUMMARY = ROOT / "data" / "splits" / "v10" / "v10_reranker_development_summary.json"
 
 
@@ -146,6 +147,7 @@ def main() -> None:
     parser.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
     parser.add_argument("--embeddings", type=Path, default=DEFAULT_EMBEDDINGS)
     parser.add_argument("--checkpoint-dir", type=Path, default=DEFAULT_CHECKPOINTS)
+    parser.add_argument("--rows-output", type=Path, default=DEFAULT_ROWS)
     parser.add_argument("--summary-output", type=Path, default=DEFAULT_SUMMARY)
     args = parser.parse_args()
 
@@ -351,9 +353,11 @@ def main() -> None:
                 )
             r4_ranking = np.lexsort((np.arange(len(candidate_ids)), -r4_scores))
             seed_ndcgs = []
+            seed_top3 = {}
             for seed, scores in zip(config["r5_seeds"], seed_scores, strict=True):
                 ranking = np.lexsort((np.arange(len(candidate_ids)), -scores))
                 seed_ndcgs.append((seed, numeric_ndcg10(gains, ranking)))
+                seed_top3[str(seed)] = [candidate_ids[index] for index in ranking[:3]]
             ensemble_scores = seed_scores.mean(axis=0)
             ensemble_ranking = np.lexsort((np.arange(len(candidate_ids)), -ensemble_scores))
             validation_rows.append(
@@ -364,6 +368,12 @@ def main() -> None:
                     "r4": numeric_ndcg10(gains, r4_ranking),
                     "r5_ensemble": numeric_ndcg10(gains, ensemble_ranking),
                     "r5_seeds": {str(seed): value for seed, value in seed_ndcgs},
+                    "top3": {
+                        "image_image": [candidate_ids[index] for index in component_ranking[:3]],
+                        "r4": [candidate_ids[index] for index in r4_ranking[:3]],
+                        "r5_ensemble": [candidate_ids[index] for index in ensemble_ranking[:3]],
+                        "r5_seeds": seed_top3,
+                    },
                 }
             )
         if position % 25 == 0 or position == len(validation_query_ids):
@@ -385,6 +395,11 @@ def main() -> None:
     selected_r5 = "ensemble" if use_ensemble else f"seed_{best_seed}"
     selected_value = metrics["r5_ensemble"] if use_ensemble else best_seed_value
     promoted = selected_value - metrics["r4"] >= float(config["promotion_margin_ndcg10"])
+    args.rows_output.parent.mkdir(parents=True, exist_ok=True)
+    args.rows_output.write_text(
+        "\n".join(json.dumps(row, sort_keys=True) for row in validation_rows) + "\n",
+        encoding="utf-8",
+    )
 
     summary = {
         "study": "V10 fact-aware reranker development",
@@ -417,9 +432,7 @@ def main() -> None:
         "selected_r5_ndcg@10": selected_value,
         "selected_r5_minus_r4": selected_value - metrics["r4"],
         "promoted": promoted,
-        "validation_rows_sha256": hashlib.sha256(
-            json.dumps(validation_rows, sort_keys=True).encode("utf-8")
-        ).hexdigest(),
+        "validation_rows_sha256": file_sha256(args.rows_output),
         "test_outcomes_inspected": False,
     }
     args.summary_output.write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
