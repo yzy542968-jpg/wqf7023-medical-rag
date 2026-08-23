@@ -29,8 +29,8 @@ from medical_rag.multimodal.evaluation import aggregate_case_images  # noqa: E40
 from medical_rag.multimodal.medsiglip import DEFAULT_REVISION, MedSiglipEncoder  # noqa: E402
 from medical_rag.multimodal.openi_images import resolve_official_image  # noqa: E402
 from medical_rag.similar_case.openi_adapter import read_openi_paired_cases  # noqa: E402
-from scripts.run_v9_development_medsiglip import image_lookup  # noqa: E402
-from scripts.train_v9_learned_reranker import (  # noqa: E402
+from run_v9_development_medsiglip import image_lookup  # noqa: E402
+from train_v9_learned_reranker import (  # noqa: E402
     MLPScorer,
     exact_leave_one_out_bm25_scores,
     feature_matrix,
