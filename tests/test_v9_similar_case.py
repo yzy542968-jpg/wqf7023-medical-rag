@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import numpy as np
 import pytest
 
 from scripts.generate_v9_radgraph_annotations import (
@@ -12,6 +13,10 @@ from scripts.generate_v9_radgraph_annotations import (
 from scripts.run_v9_development_medsiglip import (
     select_fusion_weights,
     select_report_policy,
+)
+from scripts.train_v9_learned_reranker import (
+    exact_leave_one_out_bm25_scores,
+    feature_matrix,
 )
 
 from medical_rag.evaluation.graded_retrieval import (
@@ -592,3 +597,32 @@ def test_v9_fusion_tie_rule_prefers_conservative_text_weight() -> None:
     ]
     selected = select_fusion_weights(sweep, tolerance=0.005)
     assert selected["weights"]["bm25"] == 0.75
+
+
+def test_v9_leave_one_out_bm25_masks_target_and_changes_corpus_statistics() -> None:
+    from medical_rag.retrieval.bm25_retriever import BM25Retriever
+
+    retriever = BM25Retriever().fit(
+        [
+            {"case_id": "a", "report_text": "edema edema"},
+            {"case_id": "b", "report_text": "edema"},
+            {"case_id": "c", "report_text": "clear lungs"},
+        ]
+    )
+    scores = exact_leave_one_out_bm25_scores(
+        retriever, "edema", excluded_index=0
+    )
+    assert scores[0] == float("-inf")
+    assert scores[1] > scores[2]
+
+
+def test_v9_reranker_feature_matrix_has_frozen_nine_features() -> None:
+    features = feature_matrix(
+        bm25=np.asarray([2.0, 1.0]),
+        image_image=np.asarray([0.1, 0.2]),
+        image_report=np.asarray([0.3, 0.4]),
+        question_type="findings",
+        excluded_index=None,
+    )
+    assert features.shape == (2, 9)
+    assert features[0, 6:].tolist() == [1.0, 0.0, 0.0]
