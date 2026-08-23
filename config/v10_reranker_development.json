@@ -1,0 +1,61 @@
+{
+  "study": "v10_fact_aware_reranker_development",
+  "status": "frozen_before_role_instantiation_training_and_validation_outcomes",
+  "role_domain": "v10-reranker-role",
+  "role_seed": 7041,
+  "role_intervals": {
+    "pairwise_fit": [0.0, 0.7],
+    "internal_early_stop": [0.7, 0.85],
+    "bank_only": [0.85, 1.0]
+  },
+  "r4_feature_order": [
+    "bm25_minmax",
+    "image_image_minmax",
+    "image_report_minmax",
+    "bm25_reciprocal_rank",
+    "image_image_reciprocal_rank",
+    "image_report_reciprocal_rank",
+    "question_findings",
+    "question_impression",
+    "question_acute"
+  ],
+  "r5_added_feature_order": [
+    "sentence_similarity_max",
+    "sentence_similarity_mean",
+    "fact_similarity_max",
+    "fact_similarity_mean",
+    "positive_fact_fraction",
+    "negative_fact_fraction",
+    "uncertain_fact_fraction",
+    "evidence_redundancy"
+  ],
+  "r4_architecture": [9, 32, 16, 1],
+  "r5_architecture": [17, 64, 32, 1],
+  "r5_seeds": [7041, 7042, 7043, 7044, 7045],
+  "pair_sampling": {
+    "component_top_k": 32,
+    "relevance_top_k": 32,
+    "relevance_bottom_k": 32,
+    "hard_negative_k": 32,
+    "hard_negative_max_gain": 0.25,
+    "high_candidates": 8,
+    "low_candidates": 12,
+    "minimum_gain_difference": 0.05
+  },
+  "training": {
+    "loss": "weighted_pairwise_softplus",
+    "optimizer": "AdamW",
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "batch_size": 4096,
+    "maximum_epochs": 30,
+    "early_stopping_patience": 5,
+    "early_stopping_minimum_improvement": 0.0005,
+    "device": "cpu"
+  },
+  "promotion_margin_ndcg10": 0.005,
+  "ensemble_degradation_tolerance_ndcg10": 0.005,
+  "validation_outcomes_inspected": false,
+  "test_outcomes_inspected": false
+}
+

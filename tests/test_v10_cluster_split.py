@@ -6,6 +6,7 @@ from medical_rag.similar_case.v10_split import (
     normalized_report_text,
     report_index_spectrum,
 )
+from scripts.build_v10_reranker_roles import role_value, select_role
 
 
 def test_normalization_and_spectrum_are_deterministic() -> None:
@@ -57,3 +58,14 @@ def test_cluster_assignment_is_disjoint_complete_and_reproducible() -> None:
 
 def test_fingerprint_is_order_invariant() -> None:
     assert canonical_fingerprint(["B", "A"]) == canonical_fingerprint(["A", "B"])
+
+
+def test_reranker_role_assignment_is_bounded_and_reproducible() -> None:
+    intervals = {
+        "pairwise_fit": [0.0, 0.7],
+        "internal_early_stop": [0.7, 0.85],
+        "bank_only": [0.85, 1.0],
+    }
+    value = role_value("v10-reranker-role", 7041, "CXR1")
+    assert value == role_value("v10-reranker-role", 7041, "CXR1")
+    assert select_role(value, intervals) in intervals
