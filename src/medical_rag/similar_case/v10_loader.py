@@ -114,6 +114,11 @@ def load_v10_runtime_assets(
         )
         for seed in R5_SEEDS
     ]
+    r4_state = torch.load(
+        r5_checkpoint_dir / "r4.pt",
+        map_location="cpu",
+        weights_only=True,
+    )
     attention_models = []
     for seed in ATTENTION_SEEDS:
         model = ViewAttention()
@@ -134,6 +139,7 @@ def load_v10_runtime_assets(
         image_by_id=image_by_id,
         report_by_id=report_by_id,
         checkpoint_states=r5_states,
+        r4_checkpoint_state=r4_state,
     )
     return V10RuntimeAssets(
         runtime=runtime,

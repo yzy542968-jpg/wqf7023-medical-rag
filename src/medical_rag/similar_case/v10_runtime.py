@@ -10,6 +10,7 @@ from medical_rag.retrieval.bm25_retriever import BM25Retriever
 from medical_rag.similar_case.schema import PairedCase
 from medical_rag.similar_case.v10_reranker import (
     FactAwareFeatureIndex,
+    R4Scorer,
     R5Scorer,
     augment_r4_features,
 )
@@ -76,6 +77,7 @@ class FrozenR5Runtime:
     candidate_reports: np.ndarray
     bm25: BM25Retriever
     fact_index: FactAwareFeatureIndex
+    r4_model: R4Scorer | None
     models: list[R5Scorer]
 
     @classmethod
@@ -89,6 +91,7 @@ class FrozenR5Runtime:
         image_by_id: Mapping[str, np.ndarray],
         report_by_id: Mapping[str, np.ndarray],
         checkpoint_states: Sequence[Mapping[str, torch.Tensor]],
+        r4_checkpoint_state: Mapping[str, torch.Tensor] | None = None,
     ) -> "FrozenR5Runtime":
         identifiers = list(candidate_ids)
         bank = [cases[case_id] for case_id in identifiers]
@@ -98,6 +101,11 @@ class FrozenR5Runtime:
             model.load_state_dict(state)
             model.eval()
             models.append(model)
+        r4_model = None
+        if r4_checkpoint_state is not None:
+            r4_model = R4Scorer()
+            r4_model.load_state_dict(r4_checkpoint_state)
+            r4_model.eval()
         return cls(
             candidate_ids=identifiers,
             candidate_cases=bank,
@@ -107,6 +115,7 @@ class FrozenR5Runtime:
                 [{"case_id": case.study_id, "report_text": case.report_text} for case in bank]
             ),
             fact_index=FactAwareFeatureIndex.build(identifiers, raw_cases, facts_by_case),
+            r4_model=r4_model,
             models=models,
         )
 
@@ -131,6 +140,7 @@ class FrozenR5Runtime:
         )
         r5 = augment_r4_features(r4, self.fact_index.query_features(query_text))
         with torch.inference_mode():
+            r4_scores = None if self.r4_model is None else self.r4_model(torch.from_numpy(r4)).numpy()
             seed_scores = np.stack(
                 [model(torch.from_numpy(r5)).numpy() for model in self.models]
             )
@@ -143,6 +153,7 @@ class FrozenR5Runtime:
             "image_image": image_image,
             "image_report": image_report,
             "seed_scores": seed_scores,
+            "r4_scores": r4_scores,
             "ensemble_scores": ensemble,
             "ranking": ranking,
             "top_case_ids": [self.candidate_ids[index] for index in ranking],
