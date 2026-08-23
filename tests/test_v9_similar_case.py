@@ -5,6 +5,11 @@ from pathlib import Path
 
 import pytest
 
+from scripts.generate_v9_radgraph_annotations import (
+    annotation_record,
+    normalized_report_text,
+)
+
 from medical_rag.evaluation.graded_retrieval import (
     evaluate_graded_retrieval,
     evaluate_grouped_graded_retrieval,
@@ -455,3 +460,25 @@ def test_v9_full_source_split_matches_frozen_protocol() -> None:
         block["complete_findings_and_impression_reference"]
         for block in manifest["partitions"].values()
     ) == protocol["qa_complete_reference_source_count"] == 3244
+
+
+def test_v9_radgraph_preprocessing_preserves_section_boundary() -> None:
+    text = normalized_report_text(
+        {
+            "findings": "  Mild   pulmonary edema. ",
+            "impression": " Pulmonary edema.  ",
+        }
+    )
+    assert text == "Mild pulmonary edema.\nPulmonary edema."
+
+
+def test_v9_empty_report_is_not_treated_as_empty_radgraph_facts() -> None:
+    record = annotation_record(
+        case_id="CXR-empty",
+        report_text="",
+        model_type="modern-radgraph-xl",
+        annotation=None,
+    )
+    assert record["status"] == "empty_report"
+    assert record["facts"] == []
+    assert record["annotation"] is None

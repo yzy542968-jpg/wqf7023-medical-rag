@@ -64,3 +64,11 @@ experiments/post_submission_v8/*.jsonl
 experiments/post_submission_v8/*.pt
 experiments/post_submission_v8/*.csv
 data/processed/v8_*.npz
+
+# V9 local report-derived annotations and model outputs
+data/processed/v9_radgraph*.jsonl
+data/processed/v9_*.npz
+experiments/post_submission_v9/*.json
+experiments/post_submission_v9/*.jsonl
+experiments/post_submission_v9/*.pt
+experiments/post_submission_v9/*.csv
