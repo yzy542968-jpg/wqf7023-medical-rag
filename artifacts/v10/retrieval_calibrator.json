@@ -1,0 +1,47 @@
+{
+  "feature_order": [
+    "top1_score",
+    "top1_top2_margin",
+    "component_agreement",
+    "ensemble_variance",
+    "evidence_score",
+    "evidence_redundancy",
+    "view_count",
+    "question_findings",
+    "question_impression",
+    "question_acute"
+  ],
+  "classes": [
+    0,
+    1
+  ],
+  "coef": [
+    [
+      2.014086994338024,
+      -2.0349603583674942,
+      0.9053124371426524,
+      -0.21649872719416938,
+      0.0,
+      1.088837508714719,
+      -0.15286201351722142,
+      -0.754071452382272,
+      -1.6637230369441085,
+      -1.3648614080687371
+    ]
+  ],
+  "intercept": [
+    -3.7826558973951587
+  ],
+  "seed": 7046,
+  "study": "V10 retrieval confidence calibration",
+  "positive_gain_threshold": 0.5,
+  "evidence_policy": "whole_report",
+  "coverage_thresholds": {
+    "1.0": 0.01899955417657265,
+    "0.9": 0.1157726814380674,
+    "0.8": 0.1761120354927459,
+    "0.7": 0.21977660989779688,
+    "0.5": 0.28454078360182883
+  },
+  "calibration_rows_sha256": "331d380eab20bfe73ba7624d1c07017fd7e6adb95ea0f1274cbdec32edc378a3"
+}

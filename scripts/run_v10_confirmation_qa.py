@@ -131,23 +131,31 @@ def main() -> None:
         raise RuntimeError("Test retrieval confirmation is not complete")
     if file_sha256(args.retrieval_rows) != str(retrieval_summary["retrieval_rows_sha256"]):
         raise RuntimeError("Test retrieval rows differ from their completed summary")
-    retrieval = {
+    retrieval_r5 = {
         (str(row["case_id"]), str(row["question_type"])): row
         for row in retrieval_rows
         if row["system"] == "r5_fact_attention"
     }
+    retrieval_r4 = {
+        (str(row["case_id"]), str(row["question_type"])): row
+        for row in retrieval_rows
+        if row["system"] == "r4_original"
+    }
+    if set(retrieval_r4) != set(retrieval_r5):
+        raise RuntimeError("R4 and R5 Test retrieval rows do not cover the same queries")
     cases = {str(row["case_id"]): row for row in read_jsonl(args.cases)}
     radgraph = read_radgraph_case_records(args.radgraph)
     selected_policy = str(config["evidence_policy"])
     tasks = []
-    for (case_id, question_type), ranking in sorted(retrieval.items()):
+    for (case_id, question_type), r5_ranking in sorted(retrieval_r5.items()):
         if question_type not in {"findings", "impression"}:
             continue
         source = cases[case_id]
         question = QUESTIONS[question_type]
-        top_ids = list(ranking["top_case_ids"][:3])
         for system in SYSTEMS:
-            no_reliable = system == "g3_selective" and bool(ranking["no_reliable_history"])
+            ranking = retrieval_r4[(case_id, question_type)] if system == "g1_whole_report" else r5_ranking
+            top_ids = list(ranking["top_case_ids"][:3])
+            no_reliable = system == "g3_selective" and bool(r5_ranking["no_reliable_history"])
             if system == "g0_target_image" or no_reliable:
                 retrieved_ids = []
                 evidence = []
@@ -182,10 +190,15 @@ def main() -> None:
                     "no_reliable_history": no_reliable,
                     "target_image_path": str(select_primary_image(source, args.image_root)),
                     "answer_prompt": prompt,
-                    "retrieval_confidence": ranking.get("retrieval_confidence"),
+                    "retrieval_system": (
+                        "none"
+                        if system == "g0_target_image"
+                        else str(ranking["system"])
+                    ),
+                    "retrieval_confidence": r5_ranking.get("retrieval_confidence"),
                 }
             )
-    expected = len(retrieval) // len(QUESTIONS) * 2 * len(SYSTEMS)
+    expected = len(retrieval_r5) // len(QUESTIONS) * 2 * len(SYSTEMS)
     if len(tasks) != expected:
         raise RuntimeError(f"incomplete QA matrix: {len(tasks)} != {expected}")
     completed = completed_system_keys(args.rows_output)
