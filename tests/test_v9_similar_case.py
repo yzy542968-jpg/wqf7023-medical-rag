@@ -1,0 +1,254 @@
+from __future__ import annotations
+
+import json
+from pathlib import Path
+
+import pytest
+
+from medical_rag.evaluation.graded_retrieval import (
+    evaluate_graded_retrieval,
+    evaluate_grouped_graded_retrieval,
+    ndcg_at_k,
+)
+from medical_rag.similar_case.bank import build_candidate_bank
+from medical_rag.similar_case.openi_adapter import openi_row_to_paired_case
+from medical_rag.similar_case.prompt import build_evidence_constrained_prompt
+from medical_rag.similar_case.relevance import (
+    active_label_similarity,
+    report_relevance_gain,
+)
+from medical_rag.similar_case.retrieval import fuse_component_scores
+from medical_rag.similar_case.retrieval import cosine_score_map
+from medical_rag.similar_case.schema import PairedCase
+from medical_rag.similar_case.text_baseline import SimilarCaseBM25Retriever
+
+
+ROOT = Path(__file__).resolve().parents[1]
+
+
+def make_case(
+    study_id: str,
+    patient_id: str | None,
+    *,
+    labels: dict[str, object] | None = None,
+    facts: set[str] | None = None,
+    findings: str = "Target-hidden finding.",
+    impression: str = "Target-hidden impression.",
+) -> PairedCase:
+    return PairedCase(
+        study_id=study_id,
+        patient_id=patient_id,
+        image_paths=(f"{study_id}.png",),
+        indication="Shortness of breath",
+        findings=findings,
+        impression=impression,
+        labels=labels or {},
+        radgraph_facts=frozenset(facts or set()),
+        source="synthetic",
+    )
+
+
+def test_candidate_bank_excludes_target_study_and_same_patient() -> None:
+    query = make_case("s1", "p1")
+    source = [query, make_case("s2", "p1"), make_case("s3", "p2")]
+
+    bank, audit = build_candidate_bank(query, source)
+
+    assert [case.study_id for case in bank] == ["s3"]
+    assert audit.excluded_same_study_count == 1
+    assert audit.excluded_same_patient_count == 1
+    assert audit.post_filter_same_patient_count == 0
+    assert audit.patient_level_exclusion_verified is True
+
+
+def test_candidate_bank_requires_patient_ids_for_formal_use() -> None:
+    query = make_case("s1", None)
+    with pytest.raises(ValueError, match="query patient ID"):
+        build_candidate_bank(query, [make_case("s2", None)])
+
+
+def test_negative_label_agreement_receives_no_credit() -> None:
+    query = {"pneumonia": 1, "effusion": 0, "edema": 0}
+    candidate = {"pneumonia": 0, "effusion": 0, "edema": 0}
+    assert active_label_similarity(query, candidate) == 0.0
+
+
+def test_report_relevance_combines_active_labels_and_facts() -> None:
+    query = make_case(
+        "s1",
+        "p1",
+        labels={"effusion": 1, "edema": 0},
+        facts={"effusion located_at right"},
+    )
+    candidate = make_case(
+        "s2",
+        "p2",
+        labels={"effusion": 1, "edema": 0},
+        facts={"effusion located_at right"},
+    )
+    assert report_relevance_gain(query, candidate) == pytest.approx(1.0)
+
+
+def test_graded_ndcg_rewards_better_ordering() -> None:
+    qrels = {"a": 1.0, "b": 0.6, "c": 0.0}
+    assert ndcg_at_k(qrels, ["a", "b", "c"], 3) == pytest.approx(1.0)
+    assert ndcg_at_k(qrels, ["c", "b", "a"], 3) < 1.0
+    aggregate = evaluate_graded_retrieval(
+        {"q1": qrels}, {"q1": ["a", "b", "c"]}, k_values=(1, 3)
+    )
+    assert aggregate["ndcg@3"] == pytest.approx(1.0)
+    assert aggregate["mrr"] == pytest.approx(1.0)
+
+
+def test_patient_grouped_metric_prevents_multi_query_patient_overweighting() -> None:
+    qrels = {
+        "p1:q1": {"relevant": 1.0},
+        "p1:q2": {"relevant": 1.0},
+        "p2:q1": {"relevant": 1.0},
+    }
+    rankings = {
+        "p1:q1": ["relevant"],
+        "p1:q2": ["relevant"],
+        "p2:q1": ["irrelevant"],
+    }
+    grouped = evaluate_grouped_graded_retrieval(
+        qrels,
+        rankings,
+        {"p1:q1": "p1", "p1:q2": "p1", "p2:q1": "p2"},
+        k_values=(1,),
+    )
+    ungrouped = evaluate_graded_retrieval(qrels, rankings, k_values=(1,))
+
+    assert grouped["ndcg@1"] == pytest.approx(0.5)
+    assert ungrouped["ndcg@1"] == pytest.approx(2.0 / 3.0)
+
+
+def test_paired_score_fusion_normalizes_components_and_breaks_ties() -> None:
+    rows = fuse_component_scores(
+        {
+            "bm25": {"b": 1.0, "a": 2.0},
+            "image_image": {"b": 3.0, "a": 1.0},
+            "image_report": {"b": 2.0, "a": 2.0},
+        },
+        {"bm25": 0.5, "image_image": 0.5, "image_report": 0.0},
+    )
+    assert [row.study_id for row in rows] == ["a", "b"]
+    assert rows[0].score == pytest.approx(rows[1].score)
+
+
+def test_cosine_score_map_supports_image_and_report_embedding_channels() -> None:
+    scores = cosine_score_map(
+        query_embedding=[1.0, 0.0],
+        candidate_embeddings=[[1.0, 0.0], [0.0, 2.0]],
+        candidate_ids=["same-direction", "orthogonal"],
+    )
+    assert scores == pytest.approx({"same-direction": 1.0, "orthogonal": 0.0})
+
+
+def test_similar_case_bm25_uses_only_query_indication_and_question() -> None:
+    bank = [
+        make_case(
+            "edema",
+            "p2",
+            findings="Pulmonary edema is present.",
+            impression="Pulmonary edema.",
+        ),
+        make_case(
+            "clear",
+            "p3",
+            findings="The lungs are clear.",
+            impression="No acute disease.",
+        ),
+    ]
+    query = make_case(
+        "query",
+        "p1",
+        findings="This hidden report must not be searched.",
+        impression="This hidden reference must not be searched.",
+    )
+    retriever = SimilarCaseBM25Retriever().fit(bank)
+    rows = retriever.search(query, "Is pulmonary edema present?", top_k=2)
+
+    assert rows[0].study_id == "edema"
+    assert set(rows[0].component_scores) == {"bm25"}
+
+
+def test_similar_case_bm25_rejects_same_patient_bank_leakage() -> None:
+    query = make_case("query", "p1")
+    retriever = SimilarCaseBM25Retriever().fit([make_case("historical", "p1")])
+    with pytest.raises(ValueError, match="target-patient"):
+        retriever.search(query, "What is the finding?")
+
+
+def test_prompt_separates_target_observation_from_historical_analogy() -> None:
+    historical = make_case(
+        "h1",
+        "p2",
+        findings="Small right pleural effusion.",
+        impression="Right pleural effusion.",
+    )
+    prompt = build_evidence_constrained_prompt(
+        indication="Dyspnea",
+        question="What is the main finding?",
+        retrieved_cases=[historical],
+    )
+    assert "analogies only" in prompt
+    assert "not proof" in prompt
+    assert "h1" in prompt
+    assert "Target-hidden" not in prompt
+
+
+def test_openi_adapter_is_explicitly_not_patient_level() -> None:
+    case = openi_row_to_paired_case(
+        {
+            "case_id": "CXR2",
+            "indication": "Preoperative study",
+            "findings": "Borderline cardiomegaly.",
+            "impression": "No acute pulmonary finding.",
+            "problems": "Cardiomegaly;Pulmonary Artery",
+            "images": [{"filename": "2.png", "projection": "Frontal"}],
+        }
+    )
+    assert case.patient_id is None
+    assert case.source == "openi_engineering_smoke_only"
+    assert set(case.labels) == {"cardiomegaly", "pulmonary artery"}
+    assert case.metadata["report_index_class"] == "abnormal"
+    assert case.metadata["label_annotation_available"] is True
+
+
+def test_openi_normal_and_unindexed_reports_are_not_conflated() -> None:
+    common = {
+        "indication": "Screening",
+        "findings": "No focal opacity.",
+        "impression": "No acute disease.",
+        "images": [{"filename": "image.png"}],
+    }
+    normal = openi_row_to_paired_case(
+        {**common, "case_id": "normal", "problems": "normal"}
+    )
+    unindexed = openi_row_to_paired_case(
+        {**common, "case_id": "unindexed", "problems": "no indexing"}
+    )
+
+    assert normal.metadata["report_index_class"] == "normal"
+    assert normal.metadata["label_annotation_available"] is True
+    assert unindexed.metadata["report_index_class"] == "indeterminate"
+    assert unindexed.metadata["label_annotation_available"] is False
+    with pytest.raises(ValueError, match="unavailable label annotations"):
+        report_relevance_gain(normal, unindexed)
+
+
+def test_v9_protocol_keeps_confirmation_uninstantiated() -> None:
+    config = json.loads(
+        (ROOT / "config/v9_similar_case_rag_development.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    assert config["confirmation_ids_instantiated"] is False
+    assert config["hidden_reference_fields"] == [
+        "findings",
+        "impression",
+        "report_labels",
+        "radgraph_entities_relations",
+    ]
+    assert config["candidate_exclusions"] == ["same_study", "same_patient"]

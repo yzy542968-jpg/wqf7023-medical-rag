@@ -1,0 +1,20 @@
+{
+  "case_count": 3851,
+  "case_with_active_problem_labels_count": 2380,
+  "case_with_findings_count": 3337,
+  "case_with_images_count": 3851,
+  "case_with_impression_count": 3820,
+  "case_with_indication_count": 3765,
+  "confirmation_ids_instantiated": false,
+  "graded_qrels_exclude_report_index_indeterminate": true,
+  "patient_level_confirmation_eligible": false,
+  "reliable_patient_ids_available": false,
+  "report_index_class_counts": {
+    "abnormal": 2380,
+    "indeterminate": 92,
+    "normal": 1379
+  },
+  "source_path": "data\\processed\\openi_cases.jsonl",
+  "source_sha256": "56e367190396011d4d67f43e7e733389a8346890bf8729e82fb4326d063bbd68",
+  "status": "engineering_smoke_only_not_v9_confirmation_eligible"
+}
