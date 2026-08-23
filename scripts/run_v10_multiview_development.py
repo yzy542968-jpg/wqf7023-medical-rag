@@ -73,6 +73,7 @@ def evaluate_model(
     values = []
     for views, gains in states:
         scores = attention_view_scores([model], views, candidate_images, candidate_reports)
+        scores[~np.isfinite(gains)] = -np.inf
         ranking = np.lexsort((np.arange(len(scores)), -scores))
         values.append(numeric_ndcg10(gains, ranking))
     return statistics.fmean(values)
