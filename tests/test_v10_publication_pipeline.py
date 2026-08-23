@@ -14,6 +14,7 @@ from medical_rag.similar_case.v10_generation import (
     build_answer_prompt,
     build_plain_answer_prompt,
     deterministic_historical_evidence,
+    normalize_bounded_answer,
     parse_answer_stage,
     parse_plain_answer,
     parse_support_stage,
@@ -111,6 +112,7 @@ def test_plain_answer_and_deterministic_provenance_are_complete() -> None:
     assert result["answer"] == "Mild cardiomegaly."
     assert result["supporting_case_ids"] == ["CXR1"]
     assert result["assembled_schema_valid"] is True
+    assert normalize_bounded_answer("One. Two. Three.") == "One. Two."
 
 
 def test_retrieval_calibration_and_risk_coverage_are_deterministic() -> None:

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import re
 from typing import Any, Mapping, Sequence
 
 from medical_rag.similar_case.v10_evidence import EvidenceUnit, normalized_text, rank_units
@@ -14,6 +15,7 @@ INABILITY_CUES = (
     "limited",
     "uncertain",
 )
+COMPLETE_SENTENCE = re.compile(r".+?[.!?](?=\s|$)")
 
 
 def build_plain_answer_prompt(
@@ -58,6 +60,16 @@ def parse_plain_answer(text: str, *, stop_token: str = "<end_of_turn>") -> dict[
         "uncertainty": uncertainty,
         "answer_stage_valid": valid,
     }
+
+
+def normalize_bounded_answer(text: str, *, maximum_complete_sentences: int = 2) -> str:
+    if maximum_complete_sentences <= 0:
+        raise ValueError("maximum_complete_sentences must be positive")
+    cleaned = normalized_text(text)
+    complete = [normalized_text(match.group(0)) for match in COMPLETE_SENTENCE.finditer(cleaned)]
+    if complete:
+        return " ".join(complete[:maximum_complete_sentences])
+    return cleaned or "Unable to provide a reliable answer from the available evidence."
 
 
 def deterministic_historical_evidence(
@@ -240,6 +252,7 @@ __all__ = [
     "build_plain_answer_prompt",
     "build_support_prompt",
     "deterministic_historical_evidence",
+    "normalize_bounded_answer",
     "parse_plain_answer",
     "parse_answer_stage",
     "parse_support_stage",
