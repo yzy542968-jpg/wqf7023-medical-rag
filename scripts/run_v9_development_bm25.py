@@ -196,6 +196,15 @@ def main() -> None:
             for question_type, question_rows in sorted(by_question.items())
         },
         "relevance_diagnostics": {
+            "zero_binary_relevant_candidate_case_count": sum(
+                row["relevant_candidate_count"] == 0
+                for row in rows[:: len(questions)]
+            ),
+            "zero_binary_relevant_candidate_case_fraction": sum(
+                row["relevant_candidate_count"] == 0
+                for row in rows[:: len(questions)]
+            )
+            / len(validation),
             "mean_relevant_candidates_per_case": statistics.fmean(
                 row["relevant_candidate_count"] for row in rows[:: len(questions)]
             ),

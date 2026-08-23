@@ -1,0 +1,83 @@
+{
+  "study": "V9 development BM25 validation baseline",
+  "status": "development_validation_outcome_test_not_executed",
+  "system": "bm25_text",
+  "parameters": {
+    "k1": 1.5,
+    "b": 0.75,
+    "binary_relevance_threshold": 0.5,
+    "query": "indication + fixed question",
+    "document": "historical findings + impression",
+    "tie_rule": "score_descending_then_canonical_case_id_via_sorted_bank"
+  },
+  "source": {
+    "path": "data/processed/openi_cases.jsonl",
+    "sha256": "56e367190396011d4d67f43e7e733389a8346890bf8729e82fb4326d063bbd68"
+  },
+  "radgraph": {
+    "path": "data/processed/v9_radgraph_modern_xl.jsonl",
+    "sha256": "631aa3e11cc52005656ee8a66de3de1ee5d3411a2f271a3c5f8a14de39b51599",
+    "available_to_retrieval": false
+  },
+  "split": {
+    "path": "data/splits/v9/v9_full_source_split.json",
+    "sha256": "1224d76e87a8cbbe7a60e2d776878efe5d504e40bfd07ca30236ae364415b488",
+    "test_queries_executed": 0
+  },
+  "candidate_bank_count": 2608,
+  "validation_case_count": 374,
+  "validation_question_count": 1122,
+  "aggregate_case_grouped_equal_question_metrics": {
+    "ndcg@1": 0.10857181031176837,
+    "ndcg@5": 0.12045548741387996,
+    "ndcg@10": 0.1324905566688326,
+    "recall@1": 0.00037313521622870744,
+    "recall@5": 0.0009127796573460014,
+    "recall@10": 0.0033926070152307144,
+    "mrr": 0.08427560848333902
+  },
+  "metrics_by_question_type": {
+    "acute": {
+      "ndcg@1": 0.105631664845679,
+      "ndcg@5": 0.10965110339201642,
+      "ndcg@10": 0.12612809206550368,
+      "recall@1": 0.0005945028039148763,
+      "recall@5": 0.001070730030977159,
+      "recall@10": 0.0062285014401899826,
+      "mrr": 0.07077880303226661
+    },
+    "findings": {
+      "ndcg@1": 0.12755985109859336,
+      "ndcg@5": 0.15035098088561802,
+      "ndcg@10": 0.16036763119362185,
+      "recall@1": 9.776281818982162e-05,
+      "recall@5": 0.0009715483757949257,
+      "recall@10": 0.0028865344696900144,
+      "mrr": 0.13212643920270042
+    },
+    "impression": {
+      "ndcg@1": 0.09252391499103277,
+      "ndcg@5": 0.10136437796400544,
+      "ndcg@10": 0.11097594674737225,
+      "recall@1": 0.00042714002658142446,
+      "recall@5": 0.0006960605652659197,
+      "recall@10": 0.0010627851358121464,
+      "mrr": 0.04992158321505001
+    }
+  },
+  "relevance_diagnostics": {
+    "zero_binary_relevant_candidate_case_count": 65,
+    "zero_binary_relevant_candidate_case_fraction": 0.17379679144385027,
+    "mean_relevant_candidates_per_case": 349.2486631016043,
+    "minimum_relevant_candidates_per_case": 0,
+    "maximum_relevant_candidates_per_case": 942
+  },
+  "rows_output": {
+    "path": "experiments/post_submission_v9/v9_bm25_validation_rows.jsonl",
+    "sha256": "75d9cdf7750bfd6d911bde6db14c8ac26aa3a570356a4b5eda04c39e4369fb74",
+    "committed_to_public_repository": false
+  },
+  "elapsed_seconds": 33.718785299919546,
+  "hidden_target_report_available_to_retrieval": false,
+  "v9_test_outcomes_inspected": false
+}
