@@ -1,0 +1,11 @@
+{
+  "study": "v10_independent_clinical_review",
+  "status": "protocol_frozen_before_test_outputs_and_review_package",
+  "seed": 7047,
+  "case_count": 100,
+  "question_assignment": "odd_findings_even_impression_in_selected_hash_order",
+  "systems": ["g0_target_image", "g1_whole_report", "g2_hierarchical", "g3_selective"],
+  "review_status": "pending_independent_review",
+  "reviewer_ratings_fabricated": false,
+  "test_outcomes_inspected": false
+}
