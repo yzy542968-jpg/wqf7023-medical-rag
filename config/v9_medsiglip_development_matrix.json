@@ -1,0 +1,59 @@
+{
+  "study": "v9_medsiglip_retrieval_development",
+  "status": "matrix_frozen_before_medsiglip_validation_outcomes",
+  "candidate_bank_count": 2608,
+  "validation_qrel_case_count": 374,
+  "test_queries_encoded": 0,
+  "model": {
+    "name": "google/medsiglip-448",
+    "revision": "9cea28a1a1195f665105faa6e8544c112fd960a4",
+    "max_text_tokens": 64,
+    "inference_dtype": "float16",
+    "saved_embedding_dtype": "float32",
+    "foundation_parameters_updated": false
+  },
+  "image_view_aggregation": "l2_normalized_mean_then_l2_normalize",
+  "report_chunking": "v6_sentence_aware_section_prefixed_64_tokens",
+  "report_policy_candidates": [
+    "normalized_mean_chunk_embedding",
+    "maximum_image_chunk_cosine"
+  ],
+  "report_policy_selection": {
+    "metric": "case_grouped_equal_question_ndcg_at_10",
+    "maximum_minus_mean_required": 0.005,
+    "otherwise": "normalized_mean_chunk_embedding"
+  },
+  "score_normalization": "independent_full_bank_minmax_constant_to_zero",
+  "fusion_weight_order": ["bm25", "image_image", "image_report"],
+  "fusion_grid": [
+    [0.0, 0.0, 1.0],
+    [0.0, 0.25, 0.75],
+    [0.0, 0.5, 0.5],
+    [0.0, 0.75, 0.25],
+    [0.0, 1.0, 0.0],
+    [0.25, 0.0, 0.75],
+    [0.25, 0.25, 0.5],
+    [0.25, 0.5, 0.25],
+    [0.25, 0.75, 0.0],
+    [0.5, 0.0, 0.5],
+    [0.5, 0.25, 0.25],
+    [0.5, 0.5, 0.0],
+    [0.75, 0.0, 0.25],
+    [0.75, 0.25, 0.0],
+    [1.0, 0.0, 0.0]
+  ],
+  "fixed_multimodal_eligibility": "bm25_weight_gt_0_and_sum_image_weights_gt_0",
+  "fusion_selection": {
+    "metric": "case_grouped_equal_question_ndcg_at_10",
+    "tie_tolerance": 0.005,
+    "tie_break": [
+      "largest_bm25_weight",
+      "smallest_absolute_image_channel_weight_difference",
+      "lexicographically_smallest_weight_tuple"
+    ]
+  },
+  "binary_relevance_threshold": 0.5,
+  "per_query_rows_public": false,
+  "embedding_pixels_or_vectors_public": false,
+  "v9_test_outcomes_inspected": false
+}
