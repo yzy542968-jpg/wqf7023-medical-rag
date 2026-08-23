@@ -1,0 +1,124 @@
+{
+  "candidate_bank_count": 2608,
+  "checkpoint_sha256": "8afa68a48de9d6c9128d190f1368d0d45d41a958e5eb12787d7e725e7eb09efa",
+  "claim_boundary": "This audit tests sensitivity to the relevance construct. It does not replace the frozen combined-qrel confirmation result.",
+  "config_sha256": "f775ab85782db4dac49edebea724706a9483ce148f737d765f22b7010835c418",
+  "confirmation_config_sha256": "84ec028a5a73da09031959f5b5da59e94ecbc0e1825b9a79943ee40d0cb7c1ac",
+  "metrics": {
+    "active_label_only": {
+      "ndcg@10_ordering": [
+        "r4_learned_mlp",
+        "r1_image_image",
+        "r2_image_report",
+        "r3_fixed_multimodal",
+        "r0_bm25"
+      ],
+      "r4_minus_r1_ndcg@10": 0.01516528012552193,
+      "systems": {
+        "r0_bm25": {
+          "mrr_at_gain_0.5": 0.10425753831519444,
+          "ndcg@10": 0.08136937340355933,
+          "recall@10_at_gain_0.5": 0.0030019507773676626
+        },
+        "r1_image_image": {
+          "mrr_at_gain_0.5": 0.3793834670896498,
+          "ndcg@10": 0.3186976298848681,
+          "recall@10_at_gain_0.5": 0.012534206167031211
+        },
+        "r2_image_report": {
+          "mrr_at_gain_0.5": 0.30920710013792013,
+          "ndcg@10": 0.2880052738244325,
+          "recall@10_at_gain_0.5": 0.015197927841094479
+        },
+        "r3_fixed_multimodal": {
+          "mrr_at_gain_0.5": 0.25149457057942937,
+          "ndcg@10": 0.22215561618314683,
+          "recall@10_at_gain_0.5": 0.009456538632434801
+        },
+        "r4_learned_mlp": {
+          "mrr_at_gain_0.5": 0.3860404370180378,
+          "ndcg@10": 0.33386291001039003,
+          "recall@10_at_gain_0.5": 0.014705527195478223
+        }
+      }
+    },
+    "frozen_combined": {
+      "ndcg@10_ordering": [
+        "r4_learned_mlp",
+        "r1_image_image",
+        "r2_image_report",
+        "r3_fixed_multimodal",
+        "r0_bm25"
+      ],
+      "r4_minus_r1_ndcg@10": 0.012380893741886723,
+      "systems": {
+        "r0_bm25": {
+          "mrr_at_gain_0.5": 0.08354194061767767,
+          "ndcg@10": 0.13415643678225156,
+          "recall@10_at_gain_0.5": 0.0033000615934481972
+        },
+        "r1_image_image": {
+          "mrr_at_gain_0.5": 0.3282701610257088,
+          "ndcg@10": 0.31556134952927556,
+          "recall@10_at_gain_0.5": 0.014326146257128112
+        },
+        "r2_image_report": {
+          "mrr_at_gain_0.5": 0.2560318234737783,
+          "ndcg@10": 0.27406909015876774,
+          "recall@10_at_gain_0.5": 0.01506836336427973
+        },
+        "r3_fixed_multimodal": {
+          "mrr_at_gain_0.5": 0.21132189635061732,
+          "ndcg@10": 0.24693500533574458,
+          "recall@10_at_gain_0.5": 0.01183616628566127
+        },
+        "r4_learned_mlp": {
+          "mrr_at_gain_0.5": 0.3319678752259199,
+          "ndcg@10": 0.3279422432711623,
+          "recall@10_at_gain_0.5": 0.017125739129344984
+        }
+      }
+    },
+    "radgraph_fact_only": {
+      "ndcg@10_ordering": [
+        "r4_learned_mlp",
+        "r1_image_image",
+        "r3_fixed_multimodal",
+        "r2_image_report",
+        "r0_bm25"
+      ],
+      "r4_minus_r1_ndcg@10": 0.0029495514490404107,
+      "systems": {
+        "r0_bm25": {
+          "mrr_at_gain_0.5": 0.0533770918184791,
+          "ndcg@10": 0.2074672362596923,
+          "recall@10_at_gain_0.5": 0.0037815068195206987
+        },
+        "r1_image_image": {
+          "mrr_at_gain_0.5": 0.10288356881824015,
+          "ndcg@10": 0.28927074060319996,
+          "recall@10_at_gain_0.5": 0.00546845110757513
+        },
+        "r2_image_report": {
+          "mrr_at_gain_0.5": 0.05033079457795738,
+          "ndcg@10": 0.2257189378907205,
+          "recall@10_at_gain_0.5": 0.0061871477724398626
+        },
+        "r3_fixed_multimodal": {
+          "mrr_at_gain_0.5": 0.07507999350545573,
+          "ndcg@10": 0.26696249554734613,
+          "recall@10_at_gain_0.5": 0.00617321714530143
+        },
+        "r4_learned_mlp": {
+          "mrr_at_gain_0.5": 0.10041091421648697,
+          "ndcg@10": 0.29222029205224037,
+          "recall@10_at_gain_0.5": 0.00675412035133918
+        }
+      }
+    }
+  },
+  "question_count": 2256,
+  "status": "post_hoc_exploratory_complete",
+  "study": "V9 qrel construct sensitivity",
+  "test_case_count": 752
+}
