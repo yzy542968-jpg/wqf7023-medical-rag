@@ -3,7 +3,110 @@ from __future__ import annotations
 import json
 from typing import Any, Mapping, Sequence
 
-from medical_rag.similar_case.v10_evidence import EvidenceUnit, normalized_text
+from medical_rag.similar_case.v10_evidence import EvidenceUnit, normalized_text, rank_units
+
+
+INABILITY_CUES = (
+    "unable",
+    "insufficient",
+    "cannot determine",
+    "cannot assess",
+    "limited",
+    "uncertain",
+)
+
+
+def build_plain_answer_prompt(
+    *,
+    indication: str,
+    question: str,
+    evidence: Sequence[EvidenceUnit],
+    no_reliable_history: bool,
+) -> str:
+    evidence_lines = [f"[{unit.provenance_id}] {unit.text}" for unit in evidence]
+    history_instruction = (
+        "No reliable historical case was found. Do not use historical evidence."
+        if no_reliable_history
+        else "Historical evidence is analogy only and is not proof about the target patient."
+    )
+    return "\n".join(
+        [
+            "Answer the radiology question from the target chest image and clinical indication.",
+            history_instruction,
+            "Return only the concise answer in at most two sentences.",
+            "Do not return JSON, analysis, reasoning, labels, or a preamble.",
+            f"Indication: {normalized_text(indication) or 'Not provided'}",
+            f"Question: {normalized_text(question)}",
+            "Retrieved historical evidence:",
+            *(evidence_lines or ["No historical evidence was selected."]),
+        ]
+    )
+
+
+def parse_plain_answer(text: str, *, stop_token: str = "<end_of_turn>") -> dict[str, Any]:
+    raw = str(text or "")
+    answer = raw.split(stop_token, 1)[0]
+    answer = answer.split("<unused94>thought", 1)[0]
+    answer = normalized_text(answer)
+    valid = bool(answer)
+    if not answer:
+        answer = "Unable to provide a reliable answer from the available evidence."
+    lowered = answer.lower()
+    uncertainty = "high" if any(cue in lowered for cue in INABILITY_CUES) else "medium"
+    return {
+        "answer": answer,
+        "uncertainty": uncertainty,
+        "answer_stage_valid": valid,
+    }
+
+
+def deterministic_historical_evidence(
+    evidence: Sequence[EvidenceUnit],
+    *,
+    query: str,
+    retrieved_case_ids: Sequence[str],
+    maximum_units: int = 3,
+) -> list[dict[str, Any]]:
+    selected = []
+    for case_id in retrieved_case_ids:
+        ranked = rank_units(query, [unit for unit in evidence if unit.case_id == str(case_id)])
+        if not ranked:
+            continue
+        unit = ranked[0]
+        selected.append(
+            {
+                "provenance_id": unit.provenance_id,
+                "case_id": unit.case_id,
+                "section": unit.section,
+                "unit_type": unit.unit_type,
+                "statement": unit.text,
+                "source_sha256": unit.source_sha256,
+                "semantic_role": "retrieved_historical_evidence_not_adjudicated_support",
+            }
+        )
+        if len(selected) >= maximum_units:
+            break
+    return selected
+
+
+def assemble_deterministic_output(
+    answer_stage: Mapping[str, Any],
+    historical_evidence: Sequence[Mapping[str, Any]],
+    *,
+    no_reliable_history: bool,
+) -> dict[str, Any]:
+    support = [] if no_reliable_history else [dict(row) for row in historical_evidence]
+    return {
+        "answer": normalized_text(answer_stage.get("answer")),
+        "uncertainty": normalized_text(answer_stage.get("uncertainty")) or "high",
+        "historical_support": support,
+        "supporting_case_ids": sorted({str(row["case_id"]) for row in support}),
+        "no_reliable_history": bool(no_reliable_history),
+        "evidence_abstained": bool(no_reliable_history or not support),
+        "answer_stage_valid": bool(answer_stage.get("answer_stage_valid", False)),
+        "support_stage_valid": True,
+        "assembled_schema_valid": True,
+    }
 
 
 def build_answer_prompt(
@@ -131,9 +234,13 @@ def assemble_output(
 
 
 __all__ = [
+    "assemble_deterministic_output",
     "assemble_output",
     "build_answer_prompt",
+    "build_plain_answer_prompt",
     "build_support_prompt",
+    "deterministic_historical_evidence",
+    "parse_plain_answer",
     "parse_answer_stage",
     "parse_support_stage",
 ]

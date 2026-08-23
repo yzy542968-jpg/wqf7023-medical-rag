@@ -9,9 +9,13 @@ from medical_rag.similar_case.v10_evidence import (
     select_case_evidence,
 )
 from medical_rag.similar_case.v10_generation import (
+    assemble_deterministic_output,
     assemble_output,
     build_answer_prompt,
+    build_plain_answer_prompt,
+    deterministic_historical_evidence,
     parse_answer_stage,
+    parse_plain_answer,
     parse_support_stage,
 )
 from medical_rag.similar_case.v10_reranker import (
@@ -81,6 +85,32 @@ def test_low_confidence_output_removes_historical_support_deterministically() ->
     assert result["assembled_schema_valid"] is True
     assert result["historical_support"] == []
     assert result["evidence_abstained"] is True
+
+
+def test_plain_answer_and_deterministic_provenance_are_complete() -> None:
+    units = select_case_evidence(
+        CASE,
+        query="Is there cardiomegaly?",
+        facts=FACTS,
+        policy="sentence_top3",
+    )
+    prompt = build_plain_answer_prompt(
+        indication="Preoperative evaluation",
+        question="Is there cardiomegaly?",
+        evidence=units,
+        no_reliable_history=False,
+    )
+    assert "Return only the concise answer" in prompt
+    answer = parse_plain_answer("Mild cardiomegaly.<end_of_turn><unused94>thought")
+    support = deterministic_historical_evidence(
+        units,
+        query="cardiomegaly",
+        retrieved_case_ids=["CXR1"],
+    )
+    result = assemble_deterministic_output(answer, support, no_reliable_history=False)
+    assert result["answer"] == "Mild cardiomegaly."
+    assert result["supporting_case_ids"] == ["CXR1"]
+    assert result["assembled_schema_valid"] is True
 
 
 def test_retrieval_calibration_and_risk_coverage_are_deterministic() -> None:

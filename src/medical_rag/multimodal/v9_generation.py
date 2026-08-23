@@ -119,6 +119,7 @@ class MedGemmaImageGenerator(MedGemmaTextGenerator):
         image_paths: Sequence[Path],
         *,
         max_new_tokens: int = 192,
+        stop_token: str | None = None,
     ) -> list[dict[str, Any]]:
         if len(prompts) != len(image_paths):
             raise ValueError("prompts and image_paths must have equal length.")
@@ -142,6 +143,16 @@ class MedGemmaImageGenerator(MedGemmaTextGenerator):
         )
         inputs = {key: value.to(self.model.device) for key, value in inputs.items()}
         input_lengths = inputs["attention_mask"].sum(dim=1).tolist()
+        eos_token_id = self.model.generation_config.eos_token_id
+        stop_token_id = None
+        if stop_token is not None:
+            stop_token_id = int(self.processor.tokenizer.convert_tokens_to_ids(stop_token))
+            if stop_token_id == self.processor.tokenizer.unk_token_id:
+                raise ValueError(f"Unknown stop token: {stop_token}")
+            current = [] if eos_token_id is None else (
+                list(eos_token_id) if isinstance(eos_token_id, (list, tuple)) else [int(eos_token_id)]
+            )
+            eos_token_id = sorted(set([*current, stop_token_id]))
         with self.torch.inference_mode():
             generated = self.model.generate(
                 **inputs,
@@ -151,6 +162,7 @@ class MedGemmaImageGenerator(MedGemmaTextGenerator):
                 top_p=None,
                 top_k=None,
                 pad_token_id=self.processor.tokenizer.pad_token_id,
+                eos_token_id=eos_token_id,
             )
         prompt_width = int(inputs["input_ids"].shape[1])
         results = []
@@ -161,6 +173,11 @@ class MedGemmaImageGenerator(MedGemmaTextGenerator):
                     "answer": self.processor.decode(answer_ids, skip_special_tokens=True).strip(),
                     "input_tokens": int(input_length),
                     "output_tokens": int(answer_ids.shape[-1]),
+                    "hit_token_ceiling": int(answer_ids.shape[-1]) >= max_new_tokens,
+                    "stopped_on_requested_token": bool(
+                        stop_token_id is not None
+                        and int(answer_ids[-1]) == stop_token_id
+                    ),
                 }
             )
         for image in images:
