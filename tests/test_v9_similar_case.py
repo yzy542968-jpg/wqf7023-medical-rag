@@ -9,6 +9,10 @@ from scripts.generate_v9_radgraph_annotations import (
     annotation_record,
     normalized_report_text,
 )
+from scripts.run_v9_development_medsiglip import (
+    select_fusion_weights,
+    select_report_policy,
+)
 
 from medical_rag.evaluation.graded_retrieval import (
     evaluate_graded_retrieval,
@@ -564,3 +568,27 @@ def test_openi_empty_radgraph_record_is_unavailable(tmp_path: Path) -> None:
     case = read_openi_paired_cases(cases_path, radgraph_path=radgraph_path)[0]
     assert case.radgraph_facts == frozenset()
     assert case.metadata["radgraph_annotation_available"] is False
+
+
+def test_v9_report_policy_requires_material_maximum_gain() -> None:
+    assert select_report_policy(0.20, 0.204, 0.005) == "normalized_mean_chunk_embedding"
+    assert select_report_policy(0.20, 0.205, 0.005) == "maximum_image_chunk_cosine"
+
+
+def test_v9_fusion_tie_rule_prefers_conservative_text_weight() -> None:
+    sweep = [
+        {
+            "weights": {"bm25": 0.5, "image_image": 0.25, "image_report": 0.25},
+            "metrics": {"ndcg@10": 0.201},
+        },
+        {
+            "weights": {"bm25": 0.75, "image_image": 0.25, "image_report": 0.0},
+            "metrics": {"ndcg@10": 0.20},
+        },
+        {
+            "weights": {"bm25": 1.0, "image_image": 0.0, "image_report": 0.0},
+            "metrics": {"ndcg@10": 0.25},
+        },
+    ]
+    selected = select_fusion_weights(sweep, tolerance=0.005)
+    assert selected["weights"]["bm25"] == 0.75
