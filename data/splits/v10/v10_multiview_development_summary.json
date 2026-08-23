@@ -1,0 +1,294 @@
+{
+  "study": "V10 multi-view development",
+  "status": "development_complete_test_not_run",
+  "inputs": {
+    "cases_sha256": "56e367190396011d4d67f43e7e733389a8346890bf8729e82fb4326d063bbd68",
+    "radgraph_sha256": "631aa3e11cc52005656ee8a66de3de1ee5d3411a2f271a3c5f8a14de39b51599",
+    "split_sha256": "b4c1b091c3dbff0399d07c8350f4d8d68ce8ce52e0157dcc96f46af8c8baa7b3",
+    "roles_sha256": "de48453b6ec9acad4c1a6f22de07a25a88d3ed6158b0803a5213ce6cf5335669",
+    "config_sha256": "11a77f1dd16bac33d55381e2ce6d338ba8cfdb0436c0b89cbc5014ddd1ab92bc",
+    "embedding_signature": "8e5b69370462df61b75f8aea125441db49f8fb356ea026b442aae71bfaa8b526"
+  },
+  "counts": {
+    "candidate_bank": 2506,
+    "fit_records": 1811,
+    "internal_queries": 366,
+    "validation_queries": 376
+  },
+  "attention_seeds": [
+    {
+      "seed": 7051,
+      "best_epoch": 4,
+      "internal_ndcg@10": 0.3412439490532486,
+      "checkpoint_sha256": "88f2274fa6fcc8e8d9d4c8ef1b1183fa9a2f51d72dc09a53850080c434043720",
+      "history": [
+        {
+          "epoch": 1,
+          "loss": 0.4513434929735156,
+          "internal_ndcg@10": 0.32987502680277886
+        },
+        {
+          "epoch": 2,
+          "loss": 0.4494099112454861,
+          "internal_ndcg@10": 0.3378333918331183
+        },
+        {
+          "epoch": 3,
+          "loss": 0.4484109832380175,
+          "internal_ndcg@10": 0.33970669750343213
+        },
+        {
+          "epoch": 4,
+          "loss": 0.4478809898528916,
+          "internal_ndcg@10": 0.3412439490532486
+        },
+        {
+          "epoch": 5,
+          "loss": 0.4475701911090027,
+          "internal_ndcg@10": 0.34144728843879385
+        },
+        {
+          "epoch": 6,
+          "loss": 0.4473721638346561,
+          "internal_ndcg@10": 0.34067630314998654
+        },
+        {
+          "epoch": 7,
+          "loss": 0.4472358663772628,
+          "internal_ndcg@10": 0.3407855994713429
+        },
+        {
+          "epoch": 8,
+          "loss": 0.44713720472756835,
+          "internal_ndcg@10": 0.340992353976954
+        },
+        {
+          "epoch": 9,
+          "loss": 0.44706335261439434,
+          "internal_ndcg@10": 0.34080214859657454
+        }
+      ]
+    },
+    {
+      "seed": 7052,
+      "best_epoch": 4,
+      "internal_ndcg@10": 0.3412761923063163,
+      "checkpoint_sha256": "6733979ccbb645f0894f7c4f42a7835f5a45d65fae3816976038709273752a42",
+      "history": [
+        {
+          "epoch": 1,
+          "loss": 0.45138769486969443,
+          "internal_ndcg@10": 0.3293963387209523
+        },
+        {
+          "epoch": 2,
+          "loss": 0.4494486258692797,
+          "internal_ndcg@10": 0.3376316806651695
+        },
+        {
+          "epoch": 3,
+          "loss": 0.4484361211349133,
+          "internal_ndcg@10": 0.3399139237485638
+        },
+        {
+          "epoch": 4,
+          "loss": 0.44789767088414817,
+          "internal_ndcg@10": 0.3412761923063163
+        },
+        {
+          "epoch": 5,
+          "loss": 0.4475839054515387,
+          "internal_ndcg@10": 0.34169217620106057
+        },
+        {
+          "epoch": 6,
+          "loss": 0.4473821500728698,
+          "internal_ndcg@10": 0.3406323735262086
+        },
+        {
+          "epoch": 7,
+          "loss": 0.4472434586546554,
+          "internal_ndcg@10": 0.34073427048449817
+        },
+        {
+          "epoch": 8,
+          "loss": 0.44714366111026027,
+          "internal_ndcg@10": 0.3410228407836369
+        },
+        {
+          "epoch": 9,
+          "loss": 0.44706891111778596,
+          "internal_ndcg@10": 0.34088600058246515
+        }
+      ]
+    },
+    {
+      "seed": 7053,
+      "best_epoch": 4,
+      "internal_ndcg@10": 0.34120079997734293,
+      "checkpoint_sha256": "ccc898d8fcaa155a1dbef4438dc9da4deeb1a030d599589dea71fda58ea99ff6",
+      "history": [
+        {
+          "epoch": 1,
+          "loss": 0.4513672265902466,
+          "internal_ndcg@10": 0.3297886019995897
+        },
+        {
+          "epoch": 2,
+          "loss": 0.44942661342306206,
+          "internal_ndcg@10": 0.33778193659133515
+        },
+        {
+          "epoch": 3,
+          "loss": 0.44842022473084076,
+          "internal_ndcg@10": 0.33965100403061277
+        },
+        {
+          "epoch": 4,
+          "loss": 0.4478895005881622,
+          "internal_ndcg@10": 0.34120079997734293
+        },
+        {
+          "epoch": 5,
+          "loss": 0.4475773509647358,
+          "internal_ndcg@10": 0.3416382184308067
+        },
+        {
+          "epoch": 6,
+          "loss": 0.4473766615004384,
+          "internal_ndcg@10": 0.3406326491568908
+        },
+        {
+          "epoch": 7,
+          "loss": 0.4472393587371514,
+          "internal_ndcg@10": 0.340857809659102
+        },
+        {
+          "epoch": 8,
+          "loss": 0.4471405186849296,
+          "internal_ndcg@10": 0.34098435532412963
+        },
+        {
+          "epoch": 9,
+          "loss": 0.44706603860835353,
+          "internal_ndcg@10": 0.340844637401371
+        }
+      ]
+    },
+    {
+      "seed": 7054,
+      "best_epoch": 4,
+      "internal_ndcg@10": 0.3416136337403094,
+      "checkpoint_sha256": "326b3ba5be96fa51ec6832fbee4c8675574269b50c54372460080042a721ac4a",
+      "history": [
+        {
+          "epoch": 1,
+          "loss": 0.4513287034517227,
+          "internal_ndcg@10": 0.3300292855395126
+        },
+        {
+          "epoch": 2,
+          "loss": 0.4493964309935278,
+          "internal_ndcg@10": 0.3378197414466685
+        },
+        {
+          "epoch": 3,
+          "loss": 0.44840436427551106,
+          "internal_ndcg@10": 0.33961626425848
+        },
+        {
+          "epoch": 4,
+          "loss": 0.4478781896523518,
+          "internal_ndcg@10": 0.3416136337403094
+        },
+        {
+          "epoch": 5,
+          "loss": 0.44756846917327237,
+          "internal_ndcg@10": 0.3415124397733965
+        },
+        {
+          "epoch": 6,
+          "loss": 0.4473701617389934,
+          "internal_ndcg@10": 0.34064848890908156
+        },
+        {
+          "epoch": 7,
+          "loss": 0.44723454224740783,
+          "internal_ndcg@10": 0.34068450807501305
+        },
+        {
+          "epoch": 8,
+          "loss": 0.44713625149757147,
+          "internal_ndcg@10": 0.341016004844257
+        },
+        {
+          "epoch": 9,
+          "loss": 0.4470629410181567,
+          "internal_ndcg@10": 0.3408566063915119
+        }
+      ]
+    },
+    {
+      "seed": 7055,
+      "best_epoch": 4,
+      "internal_ndcg@10": 0.34135271493866326,
+      "checkpoint_sha256": "105e85ba54385db31a0fbc96783cc51b4743d2a5e2d5683e1781effc6e6b6a93",
+      "history": [
+        {
+          "epoch": 1,
+          "loss": 0.45133603983396725,
+          "internal_ndcg@10": 0.3302229074346434
+        },
+        {
+          "epoch": 2,
+          "loss": 0.44939363332725507,
+          "internal_ndcg@10": 0.33784399562587675
+        },
+        {
+          "epoch": 3,
+          "loss": 0.44840498670960316,
+          "internal_ndcg@10": 0.33913002476710674
+        },
+        {
+          "epoch": 4,
+          "loss": 0.44787765748918157,
+          "internal_ndcg@10": 0.34135271493866326
+        },
+        {
+          "epoch": 5,
+          "loss": 0.44756822624567266,
+          "internal_ndcg@10": 0.34140455855155966
+        },
+        {
+          "epoch": 6,
+          "loss": 0.44737053026091916,
+          "internal_ndcg@10": 0.34054253645614013
+        },
+        {
+          "epoch": 7,
+          "loss": 0.44723437405600197,
+          "internal_ndcg@10": 0.3407678279343196
+        },
+        {
+          "epoch": 8,
+          "loss": 0.44713668050455296,
+          "internal_ndcg@10": 0.34092653056687844
+        },
+        {
+          "epoch": 9,
+          "loss": 0.4470631313843993,
+          "internal_ndcg@10": 0.3410918921432427
+        }
+      ]
+    }
+  ],
+  "validation_ndcg@10": {
+    "mean": 0.32091989579636643,
+    "per_view_max": 0.29851843132008876,
+    "learned_attention": 0.3496219152427626
+  },
+  "selected_policy": "learned_attention",
+  "promotion_margin_ndcg10": 0.005,
+  "validation_rows_sha256": "cb7ebe4b116a1cbdecac43367bcf30c483b47674162dc5e5b5e3241665e11c1d",
+  "test_outcomes_inspected": false
+}

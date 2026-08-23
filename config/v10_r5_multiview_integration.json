@@ -1,0 +1,10 @@
+{
+  "study": "v10_r5_multiview_integration",
+  "status": "frozen_before_combined_validation_outcome",
+  "r5_policy": "five_seed_score_mean_ensemble",
+  "view_policy": "five_seed_attention_embedding_mean_then_l2_normalize",
+  "r5_retraining": false,
+  "validation_degradation_tolerance_ndcg10": 0.005,
+  "calibration_outcomes_inspected": false,
+  "test_outcomes_inspected": false
+}
