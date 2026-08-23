@@ -1,0 +1,37 @@
+{
+  "study": "V10 cluster-disjoint split freeze",
+  "protocol_commit": "79e0b45",
+  "builder_path": "scripts/build_v10_cluster_disjoint_split.py",
+  "builder_sha256": "4172f2fa18d764ec97b8a05486a923ff8787ece139cc9004c59f77480e282b9c",
+  "manifest_path": "data/splits/v10/v10_cluster_disjoint_split.json",
+  "manifest_sha256": "b4c1b091c3dbff0399d07c8350f4d8d68ce8ce52e0157dcc96f46af8c8baa7b3",
+  "partition_fingerprints": {
+    "train": {
+      "case_count": 2510,
+      "cluster_count": 1766,
+      "case_ids_sha256": "f0e7f609e3373bdc7aa1984608d92f594ae80609ec76dd9e55303af7bf57dd6a",
+      "cluster_ids_sha256": "7f6bf77975550785948c1a2582f693c959b1fc3dc7557692cc43fba8c7562dbb"
+    },
+    "calibration": {
+      "case_count": 383,
+      "cluster_count": 372,
+      "case_ids_sha256": "0d6f1c47c4ab20596220f3c487cc9214cd2abffbee2a36716c3e56aaa10e4e4c",
+      "cluster_ids_sha256": "f5df02f2f479b9e88c38f4c9c619b5e25e792e3628a7ffb8813f14d3e330c32c"
+    },
+    "validation": {
+      "case_count": 384,
+      "cluster_count": 372,
+      "case_ids_sha256": "62d0aaa08fb207a2cfaae49c46d09dcb59bea0e408ce95355a6c5b0f3e3913f8",
+      "cluster_ids_sha256": "8f68dcd682126c7d385ef4d04e931c4d2f1d68cad945d11d794d5eed10cc88a7"
+    },
+    "test": {
+      "case_count": 574,
+      "cluster_count": 503,
+      "case_ids_sha256": "79fd9ad75b26f216aa491108ef0eb0bb96c8c9bb6fef6eedd75edb4e1585c398",
+      "cluster_ids_sha256": "2c6b12e1ead056432f6c3f61cc41a5612dc120bf1d128dffd2178ec077eaf901"
+    }
+  },
+  "all_case_overlap_counts_zero": true,
+  "all_cluster_overlap_counts_zero": true,
+  "v10_outcomes_inspected": false
+}

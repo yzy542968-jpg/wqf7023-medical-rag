@@ -11,6 +11,7 @@ Pillow==12.3.0
 pytest==9.1.1
 python-docx==1.2.0
 radgraph==0.1.18
+scikit-learn==1.9.0
 sentence-transformers==5.7.0
 sentencepiece==0.2.2
 streamlit==1.61.1
