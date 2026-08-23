@@ -1,0 +1,106 @@
+{
+  "case_output_sha256": "1f0b9f32fb0b0148d70af8a99b2b1084d5e503ed0944667c03ad1c35650b0854",
+  "claim_boundary": "Text and image hashes diagnose cross-split similarity; they do not establish patient identity or clinical leakage.",
+  "config_sha256": "f775ab85782db4dac49edebea724706a9483ce148f737d765f22b7010835c418",
+  "sensitivity_exclusion": {
+    "excluded_test_case_count": 187,
+    "frozen_retrieval_metrics": {
+      "r0_bm25": {
+        "case_count": 565,
+        "mrr": 0.050461139524785426,
+        "ndcg@1": 0.11063398572415407,
+        "ndcg@10": 0.13917897101494797,
+        "ndcg@5": 0.12666686433767604,
+        "question_count": 1695,
+        "recall@1": 0.0017966849433924403,
+        "recall@10": 0.0039281466630589675,
+        "recall@5": 0.0030272472241991543
+      },
+      "r1_image_image": {
+        "case_count": 565,
+        "mrr": 0.17876819060658866,
+        "ndcg@1": 0.24129843499570705,
+        "ndcg@10": 0.2646419078315024,
+        "ndcg@5": 0.255025085431367,
+        "question_count": 1695,
+        "recall@1": 0.004365721248048907,
+        "recall@10": 0.016010493108536913,
+        "recall@5": 0.010063643536078852
+      },
+      "r2_image_report": {
+        "case_count": 565,
+        "mrr": 0.15303561136623953,
+        "ndcg@1": 0.20919099086469406,
+        "ndcg@10": 0.24760137331274867,
+        "ndcg@5": 0.23126472758180597,
+        "question_count": 1695,
+        "recall@1": 0.0009195534848612228,
+        "recall@10": 0.01810790649735221,
+        "recall@5": 0.009037930981543896
+      },
+      "r3_fixed_multimodal": {
+        "case_count": 565,
+        "mrr": 0.11756936044608549,
+        "ndcg@1": 0.18575343691962448,
+        "ndcg@10": 0.22645068345637873,
+        "ndcg@5": 0.20999605768341942,
+        "question_count": 1695,
+        "recall@1": 0.002277014111105006,
+        "recall@10": 0.014129336172511886,
+        "recall@5": 0.0089856715446387
+      },
+      "r4_learned_mlp": {
+        "case_count": 565,
+        "mrr": 0.18393123834006758,
+        "ndcg@1": 0.24328441252476013,
+        "ndcg@10": 0.2797300434199681,
+        "ndcg@5": 0.2666835244315526,
+        "question_count": 1695,
+        "recall@1": 0.00436760013499628,
+        "recall@10": 0.020101268943400225,
+        "recall@5": 0.011611595318849557
+      }
+    },
+    "report_cosine_threshold": 0.95,
+    "retained_test_case_count": 565
+  },
+  "source_sha256": "56e367190396011d4d67f43e7e733389a8346890bf8729e82fb4326d063bbd68",
+  "split_counts": {
+    "test": {
+      "case_count": 752,
+      "exact_train_report_duplicate_count": 162,
+      "image_dhash_counts": {
+        "0": 11,
+        "4": 447,
+        "8": 731
+      },
+      "report_available_count": 752,
+      "report_near_duplicate_counts": {
+        "0.9": 214,
+        "0.95": 187,
+        "0.99": 170
+      }
+    },
+    "validation": {
+      "case_count": 376,
+      "exact_train_report_duplicate_count": 84,
+      "image_dhash_counts": {
+        "0": 3,
+        "4": 222,
+        "8": 362
+      },
+      "report_available_count": 374,
+      "report_near_duplicate_counts": {
+        "0.9": 115,
+        "0.95": 101,
+        "0.99": 89
+      }
+    }
+  },
+  "split_sha256": "1224d76e87a8cbbe7a60e2d776878efe5d504e40bfd07ca30236ae364415b488",
+  "status": "post_hoc_exploratory_complete",
+  "study": "V9 cross-split duplicate and near-duplicate audit",
+  "test_case_count": 752,
+  "train_case_count": 2631,
+  "validation_case_count": 376
+}
