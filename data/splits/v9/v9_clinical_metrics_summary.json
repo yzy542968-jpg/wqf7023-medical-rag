@@ -1,0 +1,176 @@
+{
+  "claim_boundary": "F1-RadGraph is an automated semantic-overlap metric and is not a clinical correctness or safety adjudication.",
+  "config_sha256": "f775ab85782db4dac49edebea724706a9483ce148f737d765f22b7010835c418",
+  "f1_chexbert": {
+    "available": false,
+    "module_probes": {
+      "f1chexbert": false,
+      "rad_eval": false,
+      "radeval": false
+    },
+    "reason": "A local F1CheXbert implementation was not installed; no proxy metric was substituted.",
+    "status": "unavailable_local_dependency"
+  },
+  "model_type": "modern-radgraph-xl",
+  "paired_comparisons": {
+    "g3_learned_multimodal_rag_minus_g0_no_retrieval": {
+      "f1_radgraph_complete": {
+        "case_count": 685,
+        "ci_95_high": 0.006897380200938501,
+        "ci_95_low": -0.0068026106850426005,
+        "difference": -4.907046118197793e-05
+      },
+      "f1_radgraph_entity": {
+        "case_count": 685,
+        "ci_95_high": 0.008843228691793624,
+        "ci_95_low": -0.005744553477220305,
+        "difference": 0.0015928340246381346
+      },
+      "f1_radgraph_entity_relation": {
+        "case_count": 685,
+        "ci_95_high": 0.00547884395054807,
+        "ci_95_low": -0.008137627627968269,
+        "difference": -0.001347326109189455
+      }
+    },
+    "g3_learned_multimodal_rag_minus_g1_bm25_rag": {
+      "f1_radgraph_complete": {
+        "case_count": 685,
+        "ci_95_high": 0.02899235948446784,
+        "ci_95_low": 0.012863258057015759,
+        "difference": 0.020936811571856374
+      },
+      "f1_radgraph_entity": {
+        "case_count": 685,
+        "ci_95_high": 0.03147009058393502,
+        "ci_95_low": 0.01384291989185557,
+        "difference": 0.022590123730625657
+      },
+      "f1_radgraph_entity_relation": {
+        "case_count": 685,
+        "ci_95_high": 0.025434234660994655,
+        "ci_95_low": 0.008944357346299416,
+        "difference": 0.017168492032231652
+      }
+    },
+    "g3_learned_multimodal_rag_minus_g2_fixed_multimodal_rag": {
+      "f1_radgraph_complete": {
+        "case_count": 685,
+        "ci_95_high": 0.008126852401004104,
+        "ci_95_low": -0.008552526610991602,
+        "difference": -0.00016848526673609782
+      },
+      "f1_radgraph_entity": {
+        "case_count": 685,
+        "ci_95_high": 0.0014440288902231812,
+        "ci_95_low": -0.015813172368517675,
+        "difference": -0.007282126948307662
+      },
+      "f1_radgraph_entity_relation": {
+        "case_count": 685,
+        "ci_95_high": 0.00086260217340451,
+        "ci_95_low": -0.014578314172620996,
+        "difference": -0.00698180954507376
+      }
+    }
+  },
+  "per_answer_output": {
+    "committed_to_public_repository": false,
+    "path": "experiments/post_submission_v9/v9_clinical_metric_rows.csv",
+    "sha256": "7e8c0777102a8ef2a06bf622d739360acc34f4cef7069cd04d996a3726de913c"
+  },
+  "protocol_deviation": "The supplemental protocol used the descriptive G1 key g1_bm25_report_rag; the immutable frozen source rows use g1_bm25_rag. They denote the same BM25 report-RAG condition.",
+  "protocol_system_aliases": {
+    "g1_bm25_report_rag": "g1_bm25_rag"
+  },
+  "row_count": 5480,
+  "source_rows_sha256": "89c69c9a27e393c93c85e572587b330f908598e835cb8162a8678cd15ba512b4",
+  "status": "post_hoc_exploratory_complete",
+  "study": "V9 clinical generation metric audit",
+  "systems": {
+    "g0_no_retrieval": {
+      "case_count": 685,
+      "metrics": {
+        "f1_radgraph_complete": {
+          "ci_95_high": 0.13071654969236707,
+          "ci_95_low": 0.11894771622807271,
+          "mean": 0.12485167582208258
+        },
+        "f1_radgraph_entity": {
+          "ci_95_high": 0.1642651363950742,
+          "ci_95_low": 0.15246953254169499,
+          "mean": 0.15831330671700677
+        },
+        "f1_radgraph_entity_relation": {
+          "ci_95_high": 0.14917718762740984,
+          "ci_95_low": 0.13789945813847967,
+          "mean": 0.1433713253201501
+        }
+      },
+      "question_count": 1370
+    },
+    "g1_bm25_rag": {
+      "case_count": 685,
+      "metrics": {
+        "f1_radgraph_complete": {
+          "ci_95_high": 0.11066223543299503,
+          "ci_95_low": 0.09713130523025933,
+          "mean": 0.1038657937890442
+        },
+        "f1_radgraph_entity": {
+          "ci_95_high": 0.14447802849401636,
+          "ci_95_low": 0.13035110181972115,
+          "mean": 0.13731601701101923
+        },
+        "f1_radgraph_entity_relation": {
+          "ci_95_high": 0.13177510204940665,
+          "ci_95_low": 0.11825915313219755,
+          "mean": 0.12485550717872897
+        }
+      },
+      "question_count": 1370
+    },
+    "g2_fixed_multimodal_rag": {
+      "case_count": 685,
+      "metrics": {
+        "f1_radgraph_complete": {
+          "ci_95_high": 0.13259826350297269,
+          "ci_95_low": 0.11731290821403598,
+          "mean": 0.12497109062763671
+        },
+        "f1_radgraph_entity": {
+          "ci_95_high": 0.1754837810263401,
+          "ci_95_low": 0.1589899878329003,
+          "mean": 0.16718826768995257
+        },
+        "f1_radgraph_entity_relation": {
+          "ci_95_high": 0.15642918679496892,
+          "ci_95_low": 0.14156239431328094,
+          "mean": 0.1490058087560344
+        }
+      },
+      "question_count": 1370
+    },
+    "g3_learned_multimodal_rag": {
+      "case_count": 685,
+      "metrics": {
+        "f1_radgraph_complete": {
+          "ci_95_high": 0.1322824532285377,
+          "ci_95_low": 0.11730291680110887,
+          "mean": 0.12480260536090058
+        },
+        "f1_radgraph_entity": {
+          "ci_95_high": 0.1681065183580368,
+          "ci_95_low": 0.15164989831643627,
+          "mean": 0.1599061407416449
+        },
+        "f1_radgraph_entity_relation": {
+          "ci_95_high": 0.14951975195941916,
+          "ci_95_low": 0.1344271426574811,
+          "mean": 0.14202399921096065
+        }
+      },
+      "question_count": 1370
+    }
+  }
+}
