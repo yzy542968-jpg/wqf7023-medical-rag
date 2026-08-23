@@ -141,6 +141,7 @@ def retrieve_v9(
     image_embedding: np.ndarray,
     resources: V9DashboardResources,
     top_k: int = 3,
+    route: str = "learned",
 ) -> list[dict[str, Any]]:
     query = "\n".join(value for value in (str(indication).strip(), str(question).strip()) if value)
     if not str(question).strip():
@@ -156,9 +157,18 @@ def retrieve_v9(
     features = _feature_matrix(text, image_image, image_report, infer_question_type(question))
     with torch.inference_mode():
         learned = resources.model(torch.from_numpy(features)).numpy()
+    route_scores = {
+        "learned": learned,
+        "image_image": image_image,
+        "image_report": image_report,
+        "bm25": text,
+    }
+    if route not in route_scores:
+        raise ValueError(f"Unknown V9 dashboard route: {route}")
+    selected_scores = route_scores[route]
     order = sorted(
-        range(len(learned)),
-        key=lambda index: (-float(learned[index]), resources.candidate_ids[index]),
+        range(len(selected_scores)),
+        key=lambda index: (-float(selected_scores[index]), resources.candidate_ids[index]),
     )[: max(1, int(top_k))]
     rows = []
     for rank, index in enumerate(order, start=1):
@@ -175,6 +185,8 @@ def retrieve_v9(
                 "image_image_similarity": float(image_image[index]),
                 "image_report_similarity": float(image_report[index]),
                 "learned_score": float(learned[index]),
+                "selected_route": route,
+                "selected_route_score": float(selected_scores[index]),
             }
         )
     return rows

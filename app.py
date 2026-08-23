@@ -4,6 +4,7 @@ import html
 import json
 import os
 import sys
+import tempfile
 import time
 from dataclasses import asdict
 from pathlib import Path
@@ -25,6 +26,9 @@ from medical_rag.agentic.semantic_evidence_checker import (
     check_semantic_evidence_support,
 )
 from medical_rag.agentic.planner import plan_question
+from medical_rag.agentic.v9_historical_evidence_agent import (
+    run_bounded_historical_evidence_agent,
+)
 from medical_rag.dashboard.demo_generation import extractive_demo_answer
 from medical_rag.dashboard.multimodal_runtime import (
     answer_with_evidence_agent,
@@ -39,6 +43,11 @@ from medical_rag.dashboard.v6_runtime import (
     load_v6_resources as load_v6_runtime_resources,
     retrieve_v6,
 )
+from medical_rag.dashboard.v9_runtime import (
+    V9DashboardResources,
+    load_v9_resources as load_v9_runtime_resources,
+    retrieve_v9,
+)
 from medical_rag.dashboard.runtime import resolve_dashboard_runtime
 from medical_rag.evaluation.case_scoped_benchmark import build_case_chunks, expected_section
 from medical_rag.evaluation.answer_metrics import extract_final_answer
@@ -49,6 +58,11 @@ from medical_rag.retrieval.medcpt_reranker import MedCPTReranker
 from medical_rag.retrieval.medcpt_retriever import MedCPTRetriever
 from medical_rag.retrieval.scoped_chunk_retriever import ScopedBM25ChunkRetriever
 from medical_rag.retrieval.tfidf_retriever import load_cases_jsonl
+from medical_rag.multimodal.v9_generation import (
+    MedGemmaImageGenerator,
+    build_v9_qa_prompt,
+    parse_v9_output,
+)
 
 
 RUNTIME = resolve_dashboard_runtime(ROOT)
@@ -134,6 +148,12 @@ V6_CONFIG_PATH = ROOT / "config" / "v6_confirmation.json"
 V6_COHORT_PATH = ROOT / "data" / "splits" / "v6" / "v6_confirmation_cohort.json"
 V6_MEDSIGLIP_CACHE_PATH = (
     ROOT / "data" / "processed" / "v6_confirmation_medsiglip_embeddings.npz"
+)
+V9_QA_CONFIG_PATH = ROOT / "config" / "v9_qa_agent_confirmation.json"
+V9_RETRIEVAL_CONFIG_PATH = ROOT / "config" / "v9_retrieval_confirmation.json"
+V9_MEDSIGLIP_CACHE_PATH = ROOT / "data" / "processed" / "v9_medsiglip_development_embeddings.npz"
+V9_RERANKER_CHECKPOINT_PATH = (
+    ROOT / "experiments" / "post_submission_v9" / "reranker_checkpoints" / "v9_mlp_best.pt"
 )
 MODEL_OPTIONS = {
     "Qwen2.5-1.5B (full experiment)": "Qwen/Qwen2.5-1.5B-Instruct",
@@ -357,6 +377,36 @@ def load_v6_image_encoder() -> Any:
         cache_dir=ROOT / ".hf_cache",
         max_text_tokens=int(encoder_config["max_text_tokens"]),
         local_files_only=True,
+    )
+
+
+@st.cache_resource(show_spinner=False)
+def load_v9_dashboard_resources() -> V9DashboardResources:
+    return load_v9_runtime_resources(
+        cases_path=CASES_PATH,
+        embedding_cache_path=V9_MEDSIGLIP_CACHE_PATH,
+        checkpoint_path=V9_RERANKER_CHECKPOINT_PATH,
+        retrieval_config_path=V9_RETRIEVAL_CONFIG_PATH,
+    )
+
+
+@st.cache_resource(show_spinner=False)
+def load_v9_generator() -> MedGemmaImageGenerator:
+    config = json.loads(V9_QA_CONFIG_PATH.read_text(encoding="utf-8"))
+    return MedGemmaImageGenerator(
+        revision=str(config["generator"]["revision"]),
+        cache_dir=ROOT / ".hf_cache",
+        local_files_only=True,
+    )
+
+
+@st.cache_resource(show_spinner=False)
+def load_v9_evidence_predictor() -> MedicalNLIPredictor:
+    config = json.loads(V9_QA_CONFIG_PATH.read_text(encoding="utf-8"))
+    return MedicalNLIPredictor(
+        str(config["agent"]["historical_support_checker"]),
+        local_files_only=True,
+        batch_size=32,
     )
 
 
@@ -1237,8 +1287,8 @@ if RUNTIME.is_demo:
         "available in the Experiment results tab."
     )
 
-live_tab, v6_tab, multimodal_tab, results_tab = st.tabs(
-    ["Report workflows", "V6 confirmation demo", "Paired image demo", "Experiment results"]
+live_tab, v9_tab, v6_tab, multimodal_tab, results_tab = st.tabs(
+    ["Report workflows", "V9 similar-case QA", "V6 confirmation demo", "Paired image demo", "Experiment results"]
 )
 
 with live_tab:
@@ -1609,6 +1659,187 @@ with live_tab:
     if "pipeline_result" in st.session_state:
         st.divider()
         render_pipeline_result(st.session_state["pipeline_result"])
+
+with v9_tab:
+    st.subheader("V9 new-patient similar-case multimodal QA")
+    st.caption(
+        "Upload a target chest radiograph, add the available indication and question, then retrieve "
+        "clinically similar other-patient reports from the frozen 2,608-case historical bank."
+    )
+    st.warning(
+        "Historical reports are analogies, not proof about the uploaded patient. This research "
+        "prototype is not clinically validated and does not replace radiologist review."
+    )
+    if RUNTIME.is_demo:
+        st.info(
+            "V9 requires the local OpenI images, MedSigLIP vectors, learned checkpoint, and model "
+            "weights. It is disabled in lightweight Demo Mode."
+        )
+    else:
+        v9_upload_col, v9_request_col = st.columns([2, 3], gap="large")
+        with v9_upload_col:
+            v9_image = st.file_uploader(
+                "Target chest X-ray",
+                type=["png", "jpg", "jpeg"],
+                key="v9_image",
+            )
+            if v9_image is not None:
+                st.image(v9_image.getvalue(), width=360)
+                st.caption(v9_image.name)
+        with v9_request_col:
+            v9_indication = st.text_input(
+                "Clinical indication",
+                value="Cough and shortness of breath",
+                key="v9_indication",
+            )
+            v9_question = st.text_area(
+                "Medical question",
+                value="What are the main radiographic findings?",
+                height=110,
+                key="v9_question",
+            )
+            v9_mode = st.segmented_control(
+                "Run mode",
+                options=["Retrieve Top-3 evidence", "MedGemma answer + bounded agent"],
+                default="Retrieve Top-3 evidence",
+                key="v9_mode",
+            )
+            v9_run = st.button(
+                "Run V9 similar-case workflow",
+                type="primary",
+                icon=":material/radiology:",
+                key="run_v9_demo",
+            )
+
+        if v9_run:
+            if v9_image is None:
+                st.warning("Upload a target chest X-ray before running V9.")
+            elif not v9_question.strip():
+                st.warning("Enter a medical question.")
+            else:
+                temporary_path: Path | None = None
+                try:
+                    started = time.perf_counter()
+                    with st.status("Running V9 other-patient evidence workflow", expanded=True) as status:
+                        st.write("Loading the frozen 2,608-case historical bank and learned reranker")
+                        resources = load_v9_dashboard_resources()
+                        st.write("Encoding the uploaded target image with MedSigLIP-448")
+                        encoder = load_v6_image_encoder()
+                        embedding = encode_v6_uploaded_image(v9_image.getvalue(), encoder)
+                        st.write("Ranking other-patient image-report cases")
+                        learned_rows = retrieve_v9(
+                            indication=v9_indication,
+                            question=v9_question,
+                            image_embedding=embedding,
+                            resources=resources,
+                            top_k=3,
+                            route="learned",
+                        )
+                        retry_rows = retrieve_v9(
+                            indication=v9_indication,
+                            question=v9_question,
+                            image_embedding=embedding,
+                            resources=resources,
+                            top_k=3,
+                            route="image_image",
+                        )
+                        result: dict[str, Any] = {
+                            "workflow": "v9_new_patient_other_patient_similar_case_qa",
+                            "image_name": v9_image.name,
+                            "question": v9_question.strip(),
+                            "indication": v9_indication.strip(),
+                            "retrieved_cases": learned_rows,
+                            "candidate_bank_count": len(resources.candidate_ids),
+                            "mode": v9_mode,
+                        }
+                        if v9_mode == "MedGemma answer + bounded agent":
+                            st.write("Generating a target-image answer with separated historical support")
+                            suffix = Path(v9_image.name).suffix or ".png"
+                            with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as handle:
+                                handle.write(v9_image.getvalue())
+                                temporary_path = Path(handle.name)
+                            prompt = build_v9_qa_prompt(
+                                v9_question,
+                                v9_indication,
+                                learned_rows,
+                            )
+                            generator = load_v9_generator()
+                            generated = generator.generate_batch(
+                                [prompt], [temporary_path], max_new_tokens=192
+                            )[0]
+                            parsed = parse_v9_output(
+                                generated["answer"],
+                                [row["case_id"] for row in learned_rows],
+                            )
+                            st.write("Checking only the claimed historical support; the image answer remains unverified")
+                            qa_config = json.loads(V9_QA_CONFIG_PATH.read_text(encoding="utf-8"))
+                            agent_config = qa_config["agent"]
+                            agent = run_bounded_historical_evidence_agent(
+                                answer_row=parsed,
+                                primary_case_ids=[row["case_id"] for row in learned_rows],
+                                retry_case_ids=[row["case_id"] for row in retry_rows],
+                                cases=resources.cases,
+                                predictor=load_v9_evidence_predictor(),
+                                minimum_support_rate=float(agent_config["minimum_support_rate"]),
+                                minimum_combined_support=float(agent_config["minimum_combined_support"]),
+                                entailment_threshold=float(agent_config["entailment_threshold"]),
+                                contradiction_threshold=float(agent_config["contradiction_threshold"]),
+                            )
+                            result.update({"raw_generation": parsed, "agent": agent})
+                        result["latency_seconds"] = time.perf_counter() - started
+                        st.session_state["v9_demo_result"] = result
+                        status.update(label="V9 similar-case workflow complete", state="complete", expanded=False)
+                except Exception as exc:
+                    st.exception(exc)
+                finally:
+                    if temporary_path is not None:
+                        temporary_path.unlink(missing_ok=True)
+
+        if "v9_demo_result" in st.session_state:
+            result = st.session_state["v9_demo_result"]
+            st.divider()
+            metrics = st.columns(4)
+            metrics[0].metric("Historical bank", result["candidate_bank_count"])
+            metrics[1].metric("Retrieved evidence", len(result["retrieved_cases"]))
+            metrics[2].metric("Top case", result["retrieved_cases"][0]["case_id"])
+            metrics[3].metric("Latency", f"{result['latency_seconds']:.1f} s")
+            if "agent" in result:
+                agent = result["agent"]
+                st.markdown('<div class="evidence-label">Target-image answer</div>', unsafe_allow_html=True)
+                st.markdown(
+                    f'<div class="answer-band">{html.escape(str(agent["agent_answer"]))}</div>',
+                    unsafe_allow_html=True,
+                )
+                st.caption(
+                    "This answer was generated from the uploaded image and was not verified by the report NLI checker."
+                )
+                st.markdown('<div class="evidence-label">Historical support</div>', unsafe_allow_html=True)
+                if agent["agent_historical_support"]:
+                    st.write(agent["agent_historical_support"])
+                    st.write("Cited cases: " + ", ".join(agent["agent_supporting_case_ids"]))
+                else:
+                    st.info("The bounded agent abstained from claiming corroborating historical evidence.")
+                with st.expander("Agent trace"):
+                    st.dataframe(pd.DataFrame(agent["trace"]), width="stretch", hide_index=True)
+            st.subheader("Retrieved other-patient reports")
+            for row in result["retrieved_cases"]:
+                with st.expander(f"Rank {row['rank']} | {row['case_id']} | learned score {row['learned_score']:.3f}"):
+                    st.markdown("**Findings**")
+                    st.write(row["findings"] or "Not reported")
+                    st.markdown("**Impression**")
+                    st.write(row["impression"] or "Not reported")
+                    st.caption(
+                        f"BM25 {row['bm25_score']:.3f} | image-image {row['image_image_similarity']:.3f} | "
+                        f"image-report {row['image_report_similarity']:.3f}"
+                    )
+            export = {key: value for key, value in result.items() if key != "image_bytes"}
+            st.download_button(
+                "Export V9 run",
+                data=json.dumps(export, indent=2, ensure_ascii=False),
+                file_name="v9_similar_case_qa_run.json",
+                mime="application/json",
+                icon=":material/download:",
+            )
 
 with v6_tab:
     st.subheader("V6 confirmation: image-to-report demonstration")
