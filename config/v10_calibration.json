@@ -1,0 +1,24 @@
+{
+  "study": "v10_retrieval_confidence_calibration",
+  "status": "frozen_before_calibration_outcomes",
+  "seed": 7046,
+  "model": "logistic_regression_l2_liblinear",
+  "positive_gain_threshold": 0.5,
+  "evidence_policy": "whole_report",
+  "coverage_operating_points": [1.0, 0.9, 0.8, 0.7, 0.5],
+  "selected_qa_coverage_operating_point": 0.8,
+  "feature_order": [
+    "top1_score",
+    "top1_top2_margin",
+    "component_agreement",
+    "ensemble_variance",
+    "evidence_score",
+    "evidence_redundancy",
+    "view_count",
+    "question_findings",
+    "question_impression",
+    "question_acute"
+  ],
+  "calibration_outcomes_inspected": false,
+  "test_outcomes_inspected": false
+}

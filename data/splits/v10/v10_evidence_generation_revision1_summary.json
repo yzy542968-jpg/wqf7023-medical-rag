@@ -1,0 +1,86 @@
+{
+  "study": "V10 evidence and compact generation development revision 1",
+  "status": "development_complete_test_not_run",
+  "inputs": {
+    "config_sha256": "19e968ecf8ff1d693ba9c65eb4dd409aafae06898915c448cfc1040bd8fc99d3",
+    "cases_sha256": "56e367190396011d4d67f43e7e733389a8346890bf8729e82fb4326d063bbd68",
+    "radgraph_sha256": "631aa3e11cc52005656ee8a66de3de1ee5d3411a2f271a3c5f8a14de39b51599",
+    "ranking_rows_sha256": "b91bcd65b1af8c629a6c865d269018cd23837508306f3d49417f3ce4497d2df4"
+  },
+  "counts": {
+    "validation_cases": 376,
+    "question_rows": 752,
+    "generation_rows": 2256
+  },
+  "metrics": {
+    "whole_report": {
+      "row_count": 752,
+      "case_count": 376,
+      "token_f1_equal_question": 0.24320156102997983,
+      "token_f1_case_averaged": 0.24320156102997983,
+      "assembled_schema_valid_rate": 1.0,
+      "citation_valid_rate": 1.0,
+      "answer_stage_valid_rate": 1.0,
+      "support_stage_valid_rate": 1.0,
+      "mean_evidence_units": 18.054521276595743,
+      "mean_evidence_characters": 748.0452127659574,
+      "mean_answer_input_tokens": 773.0452127659574,
+      "mean_total_output_tokens": 59.44946808510638,
+      "by_question_type": {
+        "findings": 0.3133514454939161,
+        "impression": 0.1730516765660436
+      },
+      "answer_token_ceiling_rate": 0.6143617021276596,
+      "end_of_turn_stop_rate": 0.06648936170212766
+    },
+    "sentence_top3": {
+      "row_count": 752,
+      "case_count": 376,
+      "token_f1_equal_question": 0.21289324220501082,
+      "token_f1_case_averaged": 0.21289324220501082,
+      "assembled_schema_valid_rate": 1.0,
+      "citation_valid_rate": 1.0,
+      "answer_stage_valid_rate": 1.0,
+      "support_stage_valid_rate": 1.0,
+      "mean_evidence_units": 8.954787234042554,
+      "mean_evidence_characters": 415.5385638297872,
+      "mean_answer_input_tokens": 570.9973404255319,
+      "mean_total_output_tokens": 59.24734042553192,
+      "by_question_type": {
+        "findings": 0.2881994555352046,
+        "impression": 0.13758702887481708
+      },
+      "answer_token_ceiling_rate": 0.5638297872340425,
+      "end_of_turn_stop_rate": 0.057180851063829786
+    },
+    "sentence_top2_fact_top5": {
+      "row_count": 752,
+      "case_count": 376,
+      "token_f1_equal_question": 0.2022485852191313,
+      "token_f1_case_averaged": 0.2022485852191313,
+      "assembled_schema_valid_rate": 1.0,
+      "citation_valid_rate": 1.0,
+      "answer_stage_valid_rate": 1.0,
+      "support_stage_valid_rate": 1.0,
+      "mean_evidence_units": 20.960106382978722,
+      "mean_evidence_characters": 1038.875,
+      "mean_answer_input_tokens": 897.5199468085107,
+      "mean_total_output_tokens": 58.27127659574468,
+      "by_question_type": {
+        "findings": 0.2699774803161666,
+        "impression": 0.134519690122096
+      },
+      "answer_token_ceiling_rate": 0.5452127659574468,
+      "end_of_turn_stop_rate": 0.0678191489361702
+    }
+  },
+  "selected_evidence_policy": "whole_report",
+  "generation_rows_sha256": "e1ac34c2c816fbac6cc0840c7754eabc99552bf6ad5f296e7d3ee8685c4e5dc4",
+  "runtime": {
+    "elapsed_seconds_this_run": 2483.2230417,
+    "peak_gpu_memory_allocated_mib": 5245.783203125,
+    "batch_size": 8
+  },
+  "test_outcomes_inspected": false,
+  "claim_boundary": "Automated same-source report-reference consistency, not clinical correctness."
+}

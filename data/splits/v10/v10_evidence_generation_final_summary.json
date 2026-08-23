@@ -1,0 +1,80 @@
+{
+  "study": "V10 finalized evidence and compact generation development",
+  "status": "development_complete_test_not_run",
+  "inputs": {
+    "normalization_config_sha256": "a548e8e2728649322cedef4504324c10b12a1b4b2e4cae757ed2f9023a74531f",
+    "revision_config_sha256": "19e968ecf8ff1d693ba9c65eb4dd409aafae06898915c448cfc1040bd8fc99d3",
+    "revision1_rows_sha256": "e1ac34c2c816fbac6cc0840c7754eabc99552bf6ad5f296e7d3ee8685c4e5dc4"
+  },
+  "counts": {
+    "validation_cases": 376,
+    "question_rows": 752,
+    "finalized_rows": 2256
+  },
+  "metrics": {
+    "whole_report": {
+      "row_count": 752,
+      "case_count": 376,
+      "token_f1_equal_question": 0.20418995981136254,
+      "token_f1_case_averaged": 0.20418995981136254,
+      "assembled_schema_valid_rate": 1.0,
+      "citation_valid_rate": 1.0,
+      "answer_stage_valid_rate": 1.0,
+      "support_stage_valid_rate": 1.0,
+      "mean_evidence_units": 18.054521276595743,
+      "mean_evidence_characters": 748.0452127659574,
+      "mean_answer_input_tokens": 773.0452127659574,
+      "mean_total_output_tokens": 59.44946808510638,
+      "by_question_type": {
+        "findings": 0.2724656575934612,
+        "impression": 0.13591426202926388
+      },
+      "answer_token_ceiling_rate": 0.6143617021276596,
+      "end_of_turn_stop_rate": 0.06648936170212766
+    },
+    "sentence_top3": {
+      "row_count": 752,
+      "case_count": 376,
+      "token_f1_equal_question": 0.1852203444846367,
+      "token_f1_case_averaged": 0.1852203444846367,
+      "assembled_schema_valid_rate": 1.0,
+      "citation_valid_rate": 1.0,
+      "answer_stage_valid_rate": 1.0,
+      "support_stage_valid_rate": 1.0,
+      "mean_evidence_units": 8.954787234042554,
+      "mean_evidence_characters": 415.5385638297872,
+      "mean_answer_input_tokens": 570.9973404255319,
+      "mean_total_output_tokens": 59.24734042553192,
+      "by_question_type": {
+        "findings": 0.25000807177444145,
+        "impression": 0.12043261719483192
+      },
+      "answer_token_ceiling_rate": 0.5638297872340425,
+      "end_of_turn_stop_rate": 0.057180851063829786
+    },
+    "sentence_top2_fact_top5": {
+      "row_count": 752,
+      "case_count": 376,
+      "token_f1_equal_question": 0.1788179121211996,
+      "token_f1_case_averaged": 0.1788179121211996,
+      "assembled_schema_valid_rate": 1.0,
+      "citation_valid_rate": 1.0,
+      "answer_stage_valid_rate": 1.0,
+      "support_stage_valid_rate": 1.0,
+      "mean_evidence_units": 20.960106382978722,
+      "mean_evidence_characters": 1038.875,
+      "mean_answer_input_tokens": 897.5199468085107,
+      "mean_total_output_tokens": 58.27127659574468,
+      "by_question_type": {
+        "findings": 0.24072109895981647,
+        "impression": 0.11691472528258275
+      },
+      "answer_token_ceiling_rate": 0.5452127659574468,
+      "end_of_turn_stop_rate": 0.0678191489361702
+    }
+  },
+  "selected_evidence_policy": "whole_report",
+  "final_rows_sha256": "9c6e2783bed180d3dd60b384b50642c2faf9219567e579806dd84ae9c108039e",
+  "test_outcomes_inspected": false,
+  "claim_boundary": "Automated same-source report-reference consistency, not clinical correctness."
+}
