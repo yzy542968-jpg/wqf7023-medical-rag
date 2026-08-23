@@ -89,6 +89,13 @@ def attention_view_scores(
     )
 
 
+def attention_query_embedding(models: Sequence[ViewAttention], query_views: np.ndarray) -> np.ndarray:
+    views = torch.from_numpy(np.asarray(query_views, dtype=np.float32))
+    with torch.inference_mode():
+        embeddings = [model.aggregate(views).numpy() for model in models]
+    return l2_normalize(np.mean(np.stack(embeddings), axis=0))
+
+
 @dataclass(frozen=True)
 class AttentionTrainingRecord:
     views: np.ndarray
@@ -139,6 +146,7 @@ __all__ = [
     "AttentionTrainingRecord",
     "ViewAttention",
     "attention_record_loss",
+    "attention_query_embedding",
     "attention_view_scores",
     "fused_component_score",
     "l2_normalize",

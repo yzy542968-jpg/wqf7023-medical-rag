@@ -5,6 +5,7 @@ import torch
 
 from medical_rag.similar_case.v10_multiview import (
     ViewAttention,
+    attention_query_embedding,
     attention_record_loss,
     l2_normalize,
     make_attention_record,
@@ -61,3 +62,12 @@ def test_attention_loss_backpropagates() -> None:
     loss.backward()
     assert torch.isfinite(loss)
     assert model.projection.weight.grad is not None
+
+
+def test_attention_query_embedding_is_normalized() -> None:
+    models = [ViewAttention(width=2), ViewAttention(width=2)]
+    embedding = attention_query_embedding(
+        models,
+        np.asarray([[1.0, 0.0], [0.0, 1.0]], dtype=np.float32),
+    )
+    assert np.isclose(np.linalg.norm(embedding), 1.0)
