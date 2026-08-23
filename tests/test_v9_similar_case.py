@@ -11,6 +11,11 @@ from medical_rag.evaluation.graded_retrieval import (
     ndcg_at_k,
 )
 from medical_rag.similar_case.bank import build_candidate_bank
+from medical_rag.similar_case.chexpert_plus_adapter import (
+    CHEXBERT_LABEL_COLUMNS,
+    parse_chexpert_patient_study,
+    read_chexpert_plus_cases,
+)
 from medical_rag.similar_case.openi_adapter import openi_row_to_paired_case
 from medical_rag.similar_case.prompt import build_evidence_constrained_prompt
 from medical_rag.similar_case.relevance import (
@@ -178,6 +183,96 @@ def test_similar_case_bm25_rejects_same_patient_bank_leakage() -> None:
     retriever = SimilarCaseBM25Retriever().fit([make_case("historical", "p1")])
     with pytest.raises(ValueError, match="target-patient"):
         retriever.search(query, "What is the finding?")
+
+
+def test_chexpert_plus_adapter_groups_views_at_study_level(tmp_path: Path) -> None:
+    image_root = tmp_path / "images"
+    relative_paths = [
+        "train/patient00001/study2/view1_frontal.jpg",
+        "train/patient00001/study2/view2_lateral.jpg",
+    ]
+    for relative_path in relative_paths:
+        path = image_root.joinpath(*relative_path.split("/"))
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.touch()
+    csv_path = tmp_path / "df_chexpert_plus_240401.csv"
+    csv_path.write_text(
+        "path_to_image,section_history,section_findings,section_impression\n"
+        + "\n".join(
+            f"{path},Dyspnea,Bilateral edema.,Pulmonary edema."
+            for path in relative_paths
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    labels_path = tmp_path / "findings_fixed.jsonl"
+    label_rows = []
+    for relative_path in relative_paths:
+        row = {label: None for label in CHEXBERT_LABEL_COLUMNS}
+        row.update({"path_to_image": relative_path, "Edema": 1.0})
+        label_rows.append(json.dumps(row))
+    labels_path.write_text("\n".join(label_rows) + "\n", encoding="utf-8")
+
+    cases = read_chexpert_plus_cases(
+        csv_path,
+        image_root=image_root,
+        chexbert_labels_path=labels_path,
+        radgraph_facts_by_findings={
+            "Bilateral edema.": ["edema located_at bilateral lung"]
+        },
+    )
+
+    assert len(cases) == 1
+    case = cases[0]
+    assert case.study_id == "patient00001/study2"
+    assert case.patient_id == "patient00001"
+    assert len(case.image_paths) == 2
+    assert case.labels["Edema"] == 1.0
+    assert case.radgraph_facts == frozenset({"edema located_at bilateral lung"})
+    assert case.metadata["view_count"] == 2
+
+
+def test_chexpert_plus_adapter_blocks_qrels_until_radgraph_is_available(
+    tmp_path: Path,
+) -> None:
+    csv_path = tmp_path / "rows.csv"
+    csv_path.write_text(
+        "path_to_image,section_findings,section_impression\n"
+        "train/patient1/study1/view1_frontal.jpg,Clear lungs.,No acute disease.\n"
+        "train/patient2/study1/view1_frontal.jpg,Clear lungs.,No acute disease.\n",
+        encoding="utf-8",
+    )
+    labels_path = tmp_path / "labels.jsonl"
+    rows = []
+    for patient in ("patient1", "patient2"):
+        row = {label: None for label in CHEXBERT_LABEL_COLUMNS}
+        row.update(
+            {
+                "path_to_image": f"train/{patient}/study1/view1_frontal.jpg",
+                "No Finding": 1.0,
+            }
+        )
+        rows.append(json.dumps(row))
+    labels_path.write_text("\n".join(rows) + "\n", encoding="utf-8")
+    cases = read_chexpert_plus_cases(
+        csv_path,
+        image_root=tmp_path,
+        chexbert_labels_path=labels_path,
+        require_image_files=False,
+    )
+
+    with pytest.raises(ValueError, match="unavailable RadGraph annotations"):
+        report_relevance_gain(cases[0], cases[1])
+
+
+def test_chexpert_path_parser_rejects_noncanonical_ids() -> None:
+    assert parse_chexpert_patient_study(
+        "train/patient42142/study5/view1_frontal.jpg"
+    ) == ("patient42142", "patient42142/study5")
+    with pytest.raises(ValueError, match="Cannot parse patient/study"):
+        parse_chexpert_patient_study("train/unknown/view.jpg")
+    with pytest.raises(ValueError, match="safe relative path"):
+        parse_chexpert_patient_study("../patient1/study1/view.jpg")
 
 
 def test_prompt_separates_target_observation_from_historical_analogy() -> None:

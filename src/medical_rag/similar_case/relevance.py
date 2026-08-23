@@ -119,10 +119,20 @@ def report_relevance_gain(
         for case in (query, candidate)
         if case.metadata.get("label_annotation_available", True) is not True
     ]
-    if unavailable:
+    if active_label_weight > 0.0 and unavailable:
         raise ValueError(
             "Report relevance found unavailable label annotations for "
             + ", ".join(unavailable)
+        )
+    missing_facts = [
+        case.study_id
+        for case in (query, candidate)
+        if case.metadata.get("radgraph_annotation_available", True) is not True
+    ]
+    if radgraph_fact_weight > 0.0 and missing_facts:
+        raise ValueError(
+            "Report relevance found unavailable RadGraph annotations for "
+            + ", ".join(missing_facts)
         )
     total_weight = active_label_weight + radgraph_fact_weight
     if not math.isclose(total_weight, 1.0, abs_tol=1e-9):

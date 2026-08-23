@@ -50,6 +50,8 @@ def openi_row_to_paired_case(
             "mesh": row.get("mesh", ""),
             "report_index_class": report_index_class,
             "label_annotation_available": report_index_class != "indeterminate",
+            "radgraph_annotation_available": report_index_class != "indeterminate",
+            "radgraph_annotation_source": "problem_label_proxy_not_formal_radgraph",
             "patient_level_independence_available": False,
         },
     )
