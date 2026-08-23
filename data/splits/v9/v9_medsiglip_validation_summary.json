@@ -1,0 +1,347 @@
+{
+  "study": "V9 MedSigLIP retrieval development validation",
+  "status": "development_validation_complete_test_not_encoded_or_executed",
+  "candidate_bank_count": 2608,
+  "validation_case_count": 374,
+  "validation_question_count": 1122,
+  "model": {
+    "name": "google/medsiglip-448",
+    "revision": "9cea28a1a1195f665105faa6e8544c112fd960a4",
+    "foundation_parameters_updated": false
+  },
+  "embedding_cache": {
+    "path": "data/processed/v9_medsiglip_development_embeddings.npz",
+    "sha256": "e07f05c69b50da7bcefa2afef3a3bfff7bfbb8f5d8026abf25357ee5af2df2f7",
+    "signature": "5038ee52efcdd4977ab934a4820e22574759cf5fe78b8ae1d00c9bdde428030b",
+    "image_count": 5796,
+    "report_chunk_count": 5610,
+    "build_seconds": 349.1175604001619,
+    "peak_gpu_memory_mib": 1816.33544921875,
+    "committed_to_public_repository": false
+  },
+  "component_metrics": {
+    "bm25_text": {
+      "ndcg@1": 0.10857181031176837,
+      "ndcg@5": 0.12045548741387996,
+      "ndcg@10": 0.1324905566688326,
+      "recall@1": 0.00037313521622870744,
+      "recall@5": 0.0009127796573460014,
+      "recall@10": 0.0033926070152307144,
+      "mrr": 0.08427560848333902
+    },
+    "medsiglip_image_image": {
+      "ndcg@1": 0.2909384651013987,
+      "ndcg@5": 0.3078941892747766,
+      "ndcg@10": 0.3164540728805124,
+      "recall@1": 0.0007395445022281438,
+      "recall@5": 0.006334968341169869,
+      "recall@10": 0.01859404034096078,
+      "mrr": 0.33303730440937046
+    },
+    "medsiglip_image_report_max": {
+      "ndcg@1": 0.23942921957926078,
+      "ndcg@5": 0.2592116095349039,
+      "ndcg@10": 0.2736856938086591,
+      "recall@1": 0.0021719294026815972,
+      "recall@5": 0.010247416282868644,
+      "recall@10": 0.01629565722718833,
+      "mrr": 0.277149414225993
+    },
+    "medsiglip_image_report_mean": {
+      "ndcg@1": 0.2266745281951081,
+      "ndcg@5": 0.2630617037573891,
+      "ndcg@10": 0.2772673682962046,
+      "recall@1": 0.0007035142265985887,
+      "recall@5": 0.009949400600156352,
+      "recall@10": 0.021014634274908284,
+      "mrr": 0.2724088882116679
+    }
+  },
+  "report_policy_selection": {
+    "selected": "normalized_mean_chunk_embedding",
+    "maximum_minus_mean_ndcg_at_10": -0.003581674487545483,
+    "required_difference": 0.005
+  },
+  "fusion_sweep": [
+    {
+      "condition": "fusion_b0.00_ii0.00_ir1.00",
+      "weights": {
+        "bm25": 0.0,
+        "image_image": 0.0,
+        "image_report": 1.0
+      },
+      "metrics": {
+        "ndcg@1": 0.22667452950236813,
+        "ndcg@5": 0.26306170562991377,
+        "ndcg@10": 0.2772673702327389,
+        "recall@1": 0.0007035142265985887,
+        "recall@5": 0.009949400600156352,
+        "recall@10": 0.021014634274908284,
+        "mrr": 0.2724088882116679
+      }
+    },
+    {
+      "condition": "fusion_b0.00_ii0.25_ir0.75",
+      "weights": {
+        "bm25": 0.0,
+        "image_image": 0.25,
+        "image_report": 0.75
+      },
+      "metrics": {
+        "ndcg@1": 0.25525631698948825,
+        "ndcg@5": 0.28658485819451507,
+        "ndcg@10": 0.2985327591506105,
+        "recall@1": 0.0023851272384238353,
+        "recall@5": 0.012337820889626355,
+        "recall@10": 0.020793588185776098,
+        "mrr": 0.3122957483779183
+      }
+    },
+    {
+      "condition": "fusion_b0.00_ii0.50_ir0.50",
+      "weights": {
+        "bm25": 0.0,
+        "image_image": 0.5,
+        "image_report": 0.5
+      },
+      "metrics": {
+        "ndcg@1": 0.283280854153601,
+        "ndcg@5": 0.30552791026583764,
+        "ndcg@10": 0.3176164513309041,
+        "recall@1": 0.002488744007621265,
+        "recall@5": 0.010451257553960171,
+        "recall@10": 0.018382297486822383,
+        "mrr": 0.3222660247818158
+      }
+    },
+    {
+      "condition": "fusion_b0.00_ii0.75_ir0.25",
+      "weights": {
+        "bm25": 0.0,
+        "image_image": 0.75,
+        "image_report": 0.25
+      },
+      "metrics": {
+        "ndcg@1": 0.2961277400355457,
+        "ndcg@5": 0.3163593312910414,
+        "ndcg@10": 0.32539034335925193,
+        "recall@1": 0.0023158438918971097,
+        "recall@5": 0.009717603776105027,
+        "recall@10": 0.015011697177875443,
+        "mrr": 0.3319552766499275
+      }
+    },
+    {
+      "condition": "fusion_b0.00_ii1.00_ir0.00",
+      "weights": {
+        "bm25": 0.0,
+        "image_image": 1.0,
+        "image_report": 0.0
+      },
+      "metrics": {
+        "ndcg@1": 0.2909384675773855,
+        "ndcg@5": 0.30789419115236905,
+        "ndcg@10": 0.3164540746308452,
+        "recall@1": 0.0007395445022281438,
+        "recall@5": 0.006334968341169869,
+        "recall@10": 0.01859404034096078,
+        "mrr": 0.33303730440937046
+      }
+    },
+    {
+      "condition": "fusion_b0.25_ii0.00_ir0.75",
+      "weights": {
+        "bm25": 0.25,
+        "image_image": 0.0,
+        "image_report": 0.75
+      },
+      "metrics": {
+        "ndcg@1": 0.1795824043311417,
+        "ndcg@5": 0.2015981594024382,
+        "ndcg@10": 0.22113043016366143,
+        "recall@1": 0.003083618558319302,
+        "recall@5": 0.006564652699203466,
+        "recall@10": 0.011865956534295828,
+        "mrr": 0.1819013163478379
+      }
+    },
+    {
+      "condition": "fusion_b0.25_ii0.25_ir0.50",
+      "weights": {
+        "bm25": 0.25,
+        "image_image": 0.25,
+        "image_report": 0.5
+      },
+      "metrics": {
+        "ndcg@1": 0.18320936341998723,
+        "ndcg@5": 0.21662797566979602,
+        "ndcg@10": 0.23864850036608565,
+        "recall@1": 0.002971917478542364,
+        "recall@5": 0.007776205796044839,
+        "recall@10": 0.011975076456072974,
+        "mrr": 0.20221273825481467
+      }
+    },
+    {
+      "condition": "fusion_b0.25_ii0.50_ir0.25",
+      "weights": {
+        "bm25": 0.25,
+        "image_image": 0.5,
+        "image_report": 0.25
+      },
+      "metrics": {
+        "ndcg@1": 0.1888089652070614,
+        "ndcg@5": 0.2262472319663326,
+        "ndcg@10": 0.24848533531524886,
+        "recall@1": 0.0018590544343887146,
+        "recall@5": 0.006080180764366473,
+        "recall@10": 0.009852476560687157,
+        "mrr": 0.2132511654564967
+      }
+    },
+    {
+      "condition": "fusion_b0.25_ii0.75_ir0.00",
+      "weights": {
+        "bm25": 0.25,
+        "image_image": 0.75,
+        "image_report": 0.0
+      },
+      "metrics": {
+        "ndcg@1": 0.18532031358774206,
+        "ndcg@5": 0.22167070711166398,
+        "ndcg@10": 0.24109634509997374,
+        "recall@1": 0.0012432924737652013,
+        "recall@5": 0.003934627313399535,
+        "recall@10": 0.009657643363608463,
+        "mrr": 0.21068309863818088
+      }
+    },
+    {
+      "condition": "fusion_b0.50_ii0.00_ir0.50",
+      "weights": {
+        "bm25": 0.5,
+        "image_image": 0.0,
+        "image_report": 0.5
+      },
+      "metrics": {
+        "ndcg@1": 0.1307187189247462,
+        "ndcg@5": 0.1548429872667736,
+        "ndcg@10": 0.17251631989349356,
+        "recall@1": 0.0009017679593881827,
+        "recall@5": 0.0047897137035414076,
+        "recall@10": 0.007961304348710806,
+        "mrr": 0.12683696192627644
+      }
+    },
+    {
+      "condition": "fusion_b0.50_ii0.25_ir0.25",
+      "weights": {
+        "bm25": 0.5,
+        "image_image": 0.25,
+        "image_report": 0.25
+      },
+      "metrics": {
+        "ndcg@1": 0.14268419114781983,
+        "ndcg@5": 0.16098978296929817,
+        "ndcg@10": 0.178774671016429,
+        "recall@1": 0.0008636755281736378,
+        "recall@5": 0.0038277920986738573,
+        "recall@10": 0.007636625783130042,
+        "mrr": 0.1419713671080024
+      }
+    },
+    {
+      "condition": "fusion_b0.50_ii0.50_ir0.00",
+      "weights": {
+        "bm25": 0.5,
+        "image_image": 0.5,
+        "image_report": 0.0
+      },
+      "metrics": {
+        "ndcg@1": 0.14209347534757288,
+        "ndcg@5": 0.15739044364401727,
+        "ndcg@10": 0.17642082496561723,
+        "recall@1": 0.0003182674037849513,
+        "recall@5": 0.0018411140106249647,
+        "recall@10": 0.0053087897424916,
+        "mrr": 0.1400997987243206
+      }
+    },
+    {
+      "condition": "fusion_b0.75_ii0.00_ir0.25",
+      "weights": {
+        "bm25": 0.75,
+        "image_image": 0.0,
+        "image_report": 0.25
+      },
+      "metrics": {
+        "ndcg@1": 0.1141180034780694,
+        "ndcg@5": 0.13111858317027983,
+        "ndcg@10": 0.1448873520876625,
+        "recall@1": 0.00040805395363357593,
+        "recall@5": 0.0024337114269126743,
+        "recall@10": 0.0037503874276193752,
+        "mrr": 0.09931724098770008
+      }
+    },
+    {
+      "condition": "fusion_b0.75_ii0.25_ir0.00",
+      "weights": {
+        "bm25": 0.75,
+        "image_image": 0.25,
+        "image_report": 0.0
+      },
+      "metrics": {
+        "ndcg@1": 0.11524518326105372,
+        "ndcg@5": 0.13156300225471515,
+        "ndcg@10": 0.1462946452011789,
+        "recall@1": 0.00039842032767724853,
+        "recall@5": 0.0017060589236435675,
+        "recall@10": 0.002866047766402892,
+        "mrr": 0.10362044388259847
+      }
+    },
+    {
+      "condition": "fusion_b1.00_ii0.00_ir0.00",
+      "weights": {
+        "bm25": 1.0,
+        "image_image": 0.0,
+        "image_report": 0.0
+      },
+      "metrics": {
+        "ndcg@1": 0.10857181023085118,
+        "ndcg@5": 0.12045548768502178,
+        "ndcg@10": 0.1324905570053412,
+        "recall@1": 0.00037313521622870744,
+        "recall@5": 0.0009127796573460014,
+        "recall@10": 0.0033926070152307144,
+        "mrr": 0.08427560848333902
+      }
+    }
+  ],
+  "selected_fixed_multimodal": {
+    "condition": "fusion_b0.25_ii0.50_ir0.25",
+    "weights": {
+      "bm25": 0.25,
+      "image_image": 0.5,
+      "image_report": 0.25
+    },
+    "metrics": {
+      "ndcg@1": 0.1888089652070614,
+      "ndcg@5": 0.2262472319663326,
+      "ndcg@10": 0.24848533531524886,
+      "recall@1": 0.0018590544343887146,
+      "recall@5": 0.006080180764366473,
+      "recall@10": 0.009852476560687157,
+      "mrr": 0.2132511654564967
+    }
+  },
+  "rows_output": {
+    "path": "experiments/post_submission_v9/v9_medsiglip_validation_rows.jsonl",
+    "sha256": "0f68b8643f2203d65e2adddfcb12fc41938df846c0deb785432cd212e74ee81e",
+    "committed_to_public_repository": false
+  },
+  "elapsed_seconds": 135.2941693002358,
+  "test_queries_encoded": 0,
+  "v9_test_outcomes_inspected": false
+}
