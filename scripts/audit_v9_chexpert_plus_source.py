@@ -62,6 +62,17 @@ def main() -> None:
     radgraph_available = sum(
         case.metadata.get("radgraph_annotation_available") is True for case in cases
     )
+    qrel_eligible = [
+        case
+        for case in cases
+        if case.metadata.get("label_annotation_available") is True
+        and case.metadata.get("radgraph_annotation_available") is True
+    ]
+    eligible_missing_images = sum(
+        not Path(path).is_file()
+        for case in qrel_eligible
+        for path in case.image_paths
+    )
     payload = {
         "status": "source_readiness_audit_not_confirmation_cohort",
         "confirmation_ids_instantiated": False,
@@ -95,11 +106,19 @@ def main() -> None:
         "patient_ids_sha256": sha256_identifiers(patients),
         "study_with_chexbert_labels_count": labels_available,
         "study_with_radgraph_facts_count": radgraph_available,
+        "graded_qrels_eligible_study_count": len(qrel_eligible),
+        "graded_qrels_eligible_study_ids_sha256": sha256_identifiers(
+            [case.study_id for case in qrel_eligible]
+        ),
+        "graded_qrels_eligible_missing_image_count": eligible_missing_images,
         "patient_id_complete": len(patients) == len(cases),
-        "graded_qrels_ready": (
+        "full_source_graded_qrels_coverage": (
             bool(cases)
             and labels_available == len(cases)
             and radgraph_available == len(cases)
+        ),
+        "graded_qrels_source_subset_ready": (
+            bool(qrel_eligible) and eligible_missing_images == 0
         ),
         "image_files_complete": missing_images == 0,
     }
