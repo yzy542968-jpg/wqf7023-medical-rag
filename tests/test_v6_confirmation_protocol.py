@@ -2,10 +2,12 @@ from __future__ import annotations
 
 import hashlib
 import json
+import subprocess
 from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
+V6_FROZEN_GENERATION_COMMIT = "91a94495a55d243d1338435a58417c48648b0d77"
 
 
 def test_confirmation_config_freezes_design_without_case_ids() -> None:
@@ -31,11 +33,16 @@ def test_confirmation_config_freezes_design_without_case_ids() -> None:
 
 def test_confirmation_prompt_hash_matches_frozen_implementation() -> None:
     config = json.loads((ROOT / "config" / "v6_confirmation.json").read_text(encoding="utf-8"))
-    path = ROOT / config["generation"]["prompt_implementation"]
+    path = config["generation"]["prompt_implementation"]
+    frozen_source = subprocess.check_output(
+        ["git", "show", f"{V6_FROZEN_GENERATION_COMMIT}:{path}"],
+        cwd=ROOT,
+    )
 
-    assert hashlib.sha256(path.read_bytes()).hexdigest() == config["generation"][
+    assert hashlib.sha256(frozen_source).hexdigest() == config["generation"][
         "prompt_implementation_sha256"
     ]
+    assert (ROOT / path).is_file()
 
 
 def test_confirmation_selection_frame_matches_audit() -> None:

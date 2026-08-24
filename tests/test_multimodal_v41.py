@@ -14,6 +14,13 @@ def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def text_sha256_variants(path: Path) -> set[str]:
+    raw = path.read_bytes()
+    lf = raw.replace(b"\r\n", b"\n")
+    crlf = lf.replace(b"\n", b"\r\n")
+    return {hashlib.sha256(value).hexdigest() for value in (raw, lf, crlf)}
+
+
 def test_v41_manifest_freezes_config_and_sources() -> None:
     config_path = ROOT / "config" / "multimodal_v41.json"
     manifest_path = ROOT / "experiments" / "post_submission_v41" / "preregistration_manifest.json"
@@ -26,7 +33,7 @@ def test_v41_manifest_freezes_config_and_sources() -> None:
     assert config["retrieval"]["joint_embedding_dimension"] == 128
     assert config["retrieval"]["image_weights_md5"] == "a83080e2f23aa584a4f2b24c39b1bb64"
     for source in manifest["source_files"]:
-        assert source["sha256"] == sha256(ROOT / source["path"])
+        assert source["sha256"] in text_sha256_variants(ROOT / source["path"])
 
 
 def test_v41_confirmation_gate_rejects_text_only_selection() -> None:

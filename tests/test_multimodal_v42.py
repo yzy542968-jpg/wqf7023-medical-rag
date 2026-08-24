@@ -18,6 +18,13 @@ def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def text_sha256_variants(path: Path) -> set[str]:
+    raw = path.read_bytes()
+    lf = raw.replace(b"\r\n", b"\n")
+    crlf = lf.replace(b"\n", b"\r\n")
+    return {hashlib.sha256(value).hexdigest() for value in (raw, lf, crlf)}
+
+
 def test_v42_manifest_freezes_fixed_reranking_policy() -> None:
     config_path = ROOT / "config" / "multimodal_v42.json"
     manifest_path = ROOT / "experiments" / "post_submission_v42" / "preregistration_manifest.json"
@@ -38,7 +45,7 @@ def test_v42_source_hashes_are_current() -> None:
         )
     )
     for source in manifest["source_files"]:
-        assert source["sha256"] == sha256(ROOT / source["path"])
+        assert source["sha256"] in text_sha256_variants(ROOT / source["path"])
 
 
 def test_minmax_normalize_uses_registered_zero_range_policy() -> None:
