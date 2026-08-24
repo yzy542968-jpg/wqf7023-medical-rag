@@ -1,0 +1,151 @@
+{
+  "study": "V10 cluster-disjoint clinical generation metrics",
+  "status": "confirmation_secondary_metric_complete_no_retuning",
+  "source_rows_sha256": "0e82b3cf5d3913fdac82f49b6742451cf095849cad88caa2c5bedb070f793944",
+  "model_type": "modern-radgraph-xl",
+  "row_count": 4544,
+  "systems": {
+    "g0_target_image": {
+      "case_count": 568,
+      "row_count": 1136,
+      "metrics": {
+        "f1_radgraph_entity": {
+          "mean": 0.11336044028269614,
+          "ci_95_low": 0.10678003894636186,
+          "ci_95_high": 0.12008302766524924
+        },
+        "f1_radgraph_entity_relation": {
+          "mean": 0.10281687803715389,
+          "ci_95_low": 0.09641480573246136,
+          "ci_95_high": 0.10949435564505257
+        },
+        "f1_radgraph_complete": {
+          "mean": 0.08264905563397582,
+          "ci_95_low": 0.07605688361988291,
+          "ci_95_high": 0.0892553602895183
+        }
+      }
+    },
+    "g1_whole_report": {
+      "case_count": 568,
+      "row_count": 1136,
+      "metrics": {
+        "f1_radgraph_entity": {
+          "mean": 0.14548089886478666,
+          "ci_95_low": 0.13570853518845158,
+          "ci_95_high": 0.15527480225707918
+        },
+        "f1_radgraph_entity_relation": {
+          "mean": 0.12905284914785264,
+          "ci_95_low": 0.12019636767966428,
+          "ci_95_high": 0.13836945069912887
+        },
+        "f1_radgraph_complete": {
+          "mean": 0.10506544701753771,
+          "ci_95_low": 0.0970342440126309,
+          "ci_95_high": 0.11372899111125324
+        }
+      }
+    },
+    "g2_hierarchical": {
+      "case_count": 568,
+      "row_count": 1136,
+      "metrics": {
+        "f1_radgraph_entity": {
+          "mean": 0.14969087419369345,
+          "ci_95_low": 0.1402472388219621,
+          "ci_95_high": 0.1591302296521767
+        },
+        "f1_radgraph_entity_relation": {
+          "mean": 0.13392397460771313,
+          "ci_95_low": 0.12519399467001197,
+          "ci_95_high": 0.14325297325744746
+        },
+        "f1_radgraph_complete": {
+          "mean": 0.11052616022176041,
+          "ci_95_low": 0.10222204172112764,
+          "ci_95_high": 0.11919601293180052
+        }
+      }
+    },
+    "g3_selective": {
+      "case_count": 568,
+      "row_count": 1136,
+      "metrics": {
+        "f1_radgraph_entity": {
+          "mean": 0.14965335288665316,
+          "ci_95_low": 0.14034399532980552,
+          "ci_95_high": 0.15940741236989478
+        },
+        "f1_radgraph_entity_relation": {
+          "mean": 0.13397662329923493,
+          "ci_95_low": 0.12489230482267344,
+          "ci_95_high": 0.1430128649912107
+        },
+        "f1_radgraph_complete": {
+          "mean": 0.11040752954307469,
+          "ci_95_low": 0.10195812793159516,
+          "ci_95_high": 0.11879196210823299
+        }
+      }
+    }
+  },
+  "paired_comparisons": {
+    "g2_hierarchical_minus_g0_target_image": {
+      "f1_radgraph_entity": {
+        "case_count": 568.0,
+        "mean_difference": 0.036330433910997315,
+        "ci_95_low": 0.027037878284935934,
+        "ci_95_high": 0.045821413212116385
+      },
+      "f1_radgraph_entity_relation": {
+        "case_count": 568.0,
+        "mean_difference": 0.03110709657055924,
+        "ci_95_low": 0.022552867686262985,
+        "ci_95_high": 0.039869658063625614
+      },
+      "f1_radgraph_complete": {
+        "case_count": 568.0,
+        "mean_difference": 0.0278771045877846,
+        "ci_95_low": 0.019773167141743094,
+        "ci_95_high": 0.03639327371795458
+      }
+    },
+    "g2_hierarchical_minus_g1_whole_report": {
+      "f1_radgraph_entity": {
+        "case_count": 568.0,
+        "mean_difference": 0.004209975328906788,
+        "ci_95_low": -0.0018722633215510667,
+        "ci_95_high": 0.010336517027221945
+      },
+      "f1_radgraph_entity_relation": {
+        "case_count": 568.0,
+        "mean_difference": 0.004871125459860481,
+        "ci_95_low": -0.0008114137669924832,
+        "ci_95_high": 0.010745253581610253
+      },
+      "f1_radgraph_complete": {
+        "case_count": 568.0,
+        "mean_difference": 0.005460713204222681,
+        "ci_95_low": 5.0376939318886765e-05,
+        "ci_95_high": 0.010885579862032271
+      }
+    }
+  },
+  "f1_chexbert": {
+    "available": false,
+    "module_probes": {
+      "f1chexbert": false,
+      "rad_eval": false,
+      "radeval": false,
+      "chexbert": false
+    },
+    "status": "unavailable_local_dependency",
+    "reason": "No compatible local F1CheXbert implementation was installed; no proxy was substituted."
+  },
+  "per_row_output": {
+    "sha256": "e07f5e0144ebfa23c2c0ebebcd0e675ce7e35a3d223fad9386c8ab4d81fe901b",
+    "committed_to_public_repository": false
+  },
+  "claim_boundary": "F1RadGraph is automated graph overlap, not physician-adjudicated clinical correctness."
+}
