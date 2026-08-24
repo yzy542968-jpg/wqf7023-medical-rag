@@ -2,12 +2,13 @@
 
 **Research title:** Retrieval-Augmented Medical Question Answering over Paired Radiology Images and Reports
 
-This repository contains the reproducible implementation and frozen evidence for Zhang Yue's WQF7023 Artificial Intelligence Research Project. The final V9 study models a new chest-radiography case whose formal report is unavailable: the target image, pre-report indication, and question retrieve similar other-patient image-report pairs from a fixed historical bank, then a local multimodal generator answers with bounded historical support. The repository also preserves the V1-V8 studies that motivated this final task. It is not a diagnostic model, a clinically validated tool, or an authenticated clinical deployment.
+This repository contains the reproducible implementation and frozen evidence for Zhang Yue's WQF7023 Artificial Intelligence Research Project. The preserved V9 thesis study models a new chest-radiography case whose formal report is unavailable: the target image, pre-report indication, and question retrieve similar other-patient image-report pairs from a fixed historical bank, then a local multimodal generator answers with bounded historical support. The V10 publication extension adds duplicate-cluster-disjoint evaluation, fact-aware multiview reranking, fact-level evidence provenance, calibrated retrieval abstention, compact deterministic output assembly, and publication-oriented validity packages. It is not a diagnostic model, a clinically validated tool, or an authenticated clinical deployment.
 
 **Repository:** https://github.com/yzy542968-jpg/wqf7023-medical-rag  
 - **Historical submission release:** `p2-submission`
-- **Final research release:** `v9-final-research-freeze`
-- **Current status:** V9 technical study, supplemental validity audits, 24-case researcher review, manuscript, and Dashboard integration complete
+- **Preserved thesis release:** `v9-final-research-freeze`
+- **Publication-extension release:** `v10-publication-freeze`
+- **Current status:** V10 automated confirmation and software integration complete; independent clinical review and authorized external validation remain pending
 
 ## Study Structure
 
@@ -22,6 +23,7 @@ The final study deliberately separates two different tasks instead of treating t
 7. **V7 adaptive-fusion extension:** trains a query-conditional text/image fusion model. Correct-image dependence replicated, but adaptive fusion did not exceed the validation-selected global weight; the mixed result is retained.
 8. **V8 external-source development gate:** audits CheXpert Plus as an external replication source. The locally available 279-case validation subset did not meet the prespecified full-study requirement, so V8 stopped at a documented no-go.
 9. **V9 new-patient other-patient similar-case RAG:** reallocates the complete 3,851-case OpenI source, trains an 865-parameter multimodal reranker on a 2,608-case historical bank, confirms retrieval on 752 Test cases, and evaluates target-image QA on 685 complete-reference Test cases. The target report is hidden at inference and is never retrieved as evidence.
+10. **V10 publication extension:** clusters exact and near-duplicate reports before splitting, trains only on cluster-disjoint Train cases, evaluates a fact-aware multiview R5 ensemble on untouched Test cases, calibrates a no-reliable-history option, and separates target-image answers from deterministic case/section/fact provenance.
 
 The demonstrated Agent follows explicit `scope`, `retrieve`, `generate`, `audit`, and `review/abstain` states. Routing rules are deterministic, and the verifier is a risk signal rather than a clinical correctness label.
 
@@ -112,9 +114,25 @@ These analyses were committed under a post-hoc protocol and did not alter any fr
 
 The consolidated interpretation is in `docs/V9_SUPPLEMENTAL_VALIDITY_RESULTS.md`. The final manuscript retains these analyses as validity qualifications rather than new confirmatory hypotheses.
 
+### V10 Cluster-Disjoint Publication Extension
+
+- The 3,851-case source was partitioned by 3,013 exact/near-duplicate clusters: 2,510 Train, 383 Calibration, 384 Validation, and 574 Test cases, with zero cluster overlap between partitions.
+- Six frozen Test cases had unusable empty-report RadGraph records and were retained as documented technical exclusions without replacement; 568 cases remained technically eligible.
+- Retrieval nDCG@10: R4 nine-feature reranker `0.34905`; R5 fact-aware multiview ensemble `0.36007`; difference `+0.01103`, case-bootstrap 95% CI `[+0.00770,+0.01441]`.
+- Correctly aligned R5 retrieval exceeded all 100 deterministic fixed-point-free shuffled-image assignments: aligned `0.36007`, shuffled mean `0.24963`, plus-one Monte Carlo `p=0.00990`.
+- Retrieval confidence on Test achieved Brier `0.16739`, ECE `0.04579`, and AUROC `0.70546`; the frozen 80%-coverage threshold yielded observed coverage `81.51%`.
+- Token-F1: target image without history `0.14942`; R4 whole-report RAG `0.20752`; R5 hierarchical RAG `0.20919`; calibrated selective RAG `0.20498`.
+- R5 hierarchical RAG minus no-history generation was `+0.05978`, 95% CI `[+0.05114,+0.06860]`. Its advantage over R4 whole-report RAG was only `+0.00167`, CI `[-0.00347,+0.00683]`.
+- Complete F1RadGraph improved from `0.08265` without history to `0.11053` with R5 hierarchical RAG. The R5-minus-R4 complete-score interval was marginally above zero, while entity and entity-relation intervals crossed zero.
+- Deterministic assembly achieved `100%` schema and citation validity, but raw answer token-ceiling rates remained high. This is disclosed as a generator limitation rather than hidden by reparsing.
+- A blinded 100-case, 400-row clinical-review package is prepared with empty rating fields and a separate private key. Its status is `pending_independent_review`; no reviewer result is claimed or fabricated.
+- The MIMIC-CXR adapter and patient-level external-validation runbook are implemented, but no authorized external dataset was present for this release. No external result is claimed.
+
+V10 strengthens internal validity and traceability. Its automated metrics measure retrieval relevance and report-reference consistency, not physician-adjudicated diagnostic correctness, safety, or clinical utility.
+
 ## Submission Status
 
-Automated V1-V9 experiments, supplemental validity audits, the Dashboard implementation, and the final V9 researcher review are complete in the corresponding repository history. The researcher accepted all 24 assistant-proposed exploratory labels without modification. This review was not independent clinical adjudication; no radiologist score is reported, and no clinical validation is claimed.
+Automated V1-V10 experiments, supplemental validity audits, and Dashboard integration are complete in the corresponding repository history. The V9 researcher accepted all 24 assistant-proposed exploratory labels without modification; this was not independent clinical adjudication. V10 therefore prepares a separate blinded clinical package and leaves every rating blank pending a qualified independent reviewer.
 
 The final V9 reporting artifacts are:
 
@@ -171,6 +189,18 @@ Reproduce the lightweight V9 supplemental audits from the frozen local artifacts
 
 The F1-RadGraph and Qwen3-Embedding audits additionally require their pinned local model snapshots. Their committed aggregate summaries remain inspectable without downloading weights.
 
+Reproduce the V10 publication-extension software and lightweight checks with:
+
+```powershell
+& ".\.venv\Scripts\python.exe" scripts\build_v10_cluster_disjoint_split.py --help
+& ".\.venv\Scripts\python.exe" scripts\run_v10_confirmation_retrieval.py --help
+& ".\.venv\Scripts\python.exe" scripts\run_v10_confirmation_qa.py --help
+& ".\.venv\Scripts\python.exe" scripts\evaluate_v10_confirmation_radgraph.py --help
+& ".\.venv\Scripts\python.exe" -m pytest -q --basetemp outputs/pytest-v10
+```
+
+The audited final suite contains **252 passing tests**. Model-backed confirmation commands require the pinned local snapshots and non-public large artifacts documented by the V10 protocols; aggregate summaries remain versioned for inspection.
+
 The manifest command verifies required files, locked SHA-256 values, tracked-file exclusions, file-size limits, the declared human-evaluation disposition, repository publication, and conditional V3 status. Use `--strict` only for the final submission gate; it exits unsuccessfully while external requirements such as the remote repository remain pending.
 
 Raw OpenI files are not redistributed. Data acquisition, expected filenames, and processing commands are documented in `docs/DATA.md`. Exact selected configurations, seeds, split fingerprints, and locked outputs are versioned in `config/`, `data/splits/`, and `experiments/`.
@@ -193,7 +223,7 @@ Launch the system-blinded rating interface separately:
 & ".\.venv\Scripts\python.exe" -m streamlit run human_evaluation_app.py --server.port 8502
 ```
 
-The main Dashboard exposes report workflows, frozen result tables, the earlier paired demos, and the final V9 workflow. In V9 Full Mode, an uploaded chest X-ray, indication, and question retrieve Top-3 reports from the 2,608-case other-patient bank with MedSigLIP and the frozen learned MLP. The optional local MedGemma path separates target-image findings from historical support, and the bounded agent checks only the historical evidence claim. The rating application does not load the system-identity keys.
+The main Dashboard exposes report workflows, frozen result tables, the earlier paired demos, and both V9 and V10 workflows. In V10 Full Mode, one or two uploaded chest X-ray views, an indication, and a question retrieve Top-3 reports from the 2,506-case cluster-disjoint Train bank with the frozen R5 ensemble. The interface displays calibrated retrieval confidence, abstains from claiming reliable history below the frozen threshold, and preserves case/section/fact provenance. The optional local MedGemma path produces a bounded target-image answer before deterministic support assembly. The rating application does not load the system-identity keys.
 
 For an editable install, use `python -m pip install -e ".[all]"`. Exact direct versions from the audited machine are recorded in `requirements-lock.txt`. GitHub Actions runs compilation, all unit tests, and the fresh-clone Dashboard smoke test without downloading model weights.
 
@@ -205,6 +235,6 @@ Official RadQA files, when legally obtained, belong at `data/raw/radqa/train.jso
 
 Do not commit raw radiology files, image pixels, model weights, caches, generated prompt packs, secrets, or virtual environments. The MIT license covers project-authored code, not third-party datasets or model weights. See `docs/DATA_USE_AND_LICENSING.md`, `docs/REPOSITORY_RELEASE_POLICY.md`, and the generated `experiments/final_submission/submission_manifest.json` before publishing.
 
-Post-submission improvements and explicitly deferred independent clinical evaluation are documented in `docs/POST_SUBMISSION_RESEARCH_ROADMAP.md`. V5-V8 remain frozen historical studies. The V9 primary result is frozen in `docs/V9_TECHNICAL_FREEZE.md`; the completed researcher review and post-hoc validity audits are separately versioned and did not modify that freeze.
+Post-submission improvements and explicitly deferred independent clinical evaluation are documented in `docs/POST_SUBMISSION_RESEARCH_ROADMAP.md`. V5-V8 remain frozen historical studies. The V9 thesis result is frozen in `docs/V9_TECHNICAL_FREEZE.md`; the completed researcher review and post-hoc validity audits are separately versioned and did not modify that freeze. V10 is a separate publication extension governed by its own development, confirmation, deviation, metrics, review-status, external-validation, and technical-freeze records.
 
 Methods and results for the v2.1 hard benchmark, two reserved wording-transfer tests, frozen v2.2 semantic planner, preregistered v2.3 hybrid planner, and 300-case locked replication are in `docs/POST_SUBMISSION_EXPERIMENTS.md`. V2.3 preserves the original result and improves transfer Macro F1, but raises false-answer risk on the second wording set; it is therefore reported as a robustness/safety trade-off rather than promoted as an unqualified replacement.

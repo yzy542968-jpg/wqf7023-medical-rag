@@ -48,6 +48,11 @@ from medical_rag.dashboard.v9_runtime import (
     load_v9_resources as load_v9_runtime_resources,
     retrieve_v9,
 )
+from medical_rag.dashboard.v10_runtime import (
+    V10DashboardResources,
+    load_v10_dashboard_resources as load_v10_runtime_resources,
+    retrieve_v10,
+)
 from medical_rag.dashboard.runtime import resolve_dashboard_runtime
 from medical_rag.evaluation.case_scoped_benchmark import build_case_chunks, expected_section
 from medical_rag.evaluation.answer_metrics import extract_final_answer
@@ -62,6 +67,13 @@ from medical_rag.multimodal.v9_generation import (
     MedGemmaImageGenerator,
     build_v9_qa_prompt,
     parse_v9_output,
+)
+from medical_rag.similar_case.v10_generation import (
+    assemble_deterministic_output,
+    build_plain_answer_prompt,
+    deterministic_historical_evidence,
+    normalize_bounded_answer,
+    parse_plain_answer,
 )
 
 
@@ -165,6 +177,21 @@ V9_CLINICAL_METRICS_PATH = ROOT / "data" / "splits" / "v9" / "v9_clinical_metric
 V9_REPARSE_AUDIT_PATH = ROOT / "data" / "splits" / "v9" / "v9_structured_reparse_summary.json"
 V9_DENSE_ROBUSTNESS_PATH = ROOT / "data" / "splits" / "v9" / "v9_dense_text_robustness_summary.json"
 V9_QUALITATIVE_REVIEW_PATH = ROOT / "data" / "splits" / "v9" / "v9_qualitative_review_summary.json"
+V10_CONFIRMATION_CONFIG_PATH = ROOT / "config" / "v10_confirmation.json"
+V10_SPLIT_PATH = ROOT / "data" / "splits" / "v10" / "v10_cluster_disjoint_split.json"
+V10_RADGRAPH_PATH = ROOT / "data" / "processed" / "v9_radgraph_modern_xl.jsonl"
+V10_MEDSIGLIP_CACHE_PATH = ROOT / "data" / "processed" / "v10_medsiglip_embeddings.npz"
+V10_RERANKER_CHECKPOINT_DIR = ROOT / "experiments" / "v10_publication" / "reranker_checkpoints"
+V10_ATTENTION_CHECKPOINT_DIR = ROOT / "experiments" / "v10_publication" / "multiview_checkpoints"
+V10_CALIBRATOR_PATH = ROOT / "artifacts" / "v10" / "retrieval_calibrator.json"
+V10_RETRIEVAL_SUMMARY_PATH = (
+    ROOT / "data" / "splits" / "v10" / "v10_confirmation_retrieval_summary.json"
+)
+V10_QA_SUMMARY_PATH = ROOT / "data" / "splits" / "v10" / "v10_confirmation_qa_summary.json"
+V10_RADGRAPH_SUMMARY_PATH = ROOT / "data" / "splits" / "v10" / "v10_radgraph_metrics_summary.json"
+V10_CLINICAL_REVIEW_SUMMARY_PATH = (
+    ROOT / "data" / "splits" / "v10" / "v10_clinical_review_package_summary.json"
+)
 MODEL_OPTIONS = {
     "Qwen2.5-1.5B (full experiment)": "Qwen/Qwen2.5-1.5B-Instruct",
     "Qwen2.5-0.5B (faster demo)": "Qwen/Qwen2.5-0.5B-Instruct",
@@ -397,6 +424,20 @@ def load_v9_dashboard_resources() -> V9DashboardResources:
         embedding_cache_path=V9_MEDSIGLIP_CACHE_PATH,
         checkpoint_path=V9_RERANKER_CHECKPOINT_PATH,
         retrieval_config_path=V9_RETRIEVAL_CONFIG_PATH,
+    )
+
+
+@st.cache_resource(show_spinner=False)
+def load_v10_dashboard_resources() -> V10DashboardResources:
+    return load_v10_runtime_resources(
+        cases_path=CASES_PATH,
+        radgraph_path=V10_RADGRAPH_PATH,
+        split_path=V10_SPLIT_PATH,
+        embeddings_path=V10_MEDSIGLIP_CACHE_PATH,
+        r5_checkpoint_dir=V10_RERANKER_CHECKPOINT_DIR,
+        attention_checkpoint_dir=V10_ATTENTION_CHECKPOINT_DIR,
+        calibrator_path=V10_CALIBRATOR_PATH,
+        confirmation_config_path=V10_CONFIRMATION_CONFIG_PATH,
     )
 
 
@@ -885,6 +926,103 @@ def render_results() -> None:
     v9_reparse_audit = json.loads(V9_REPARSE_AUDIT_PATH.read_text(encoding="utf-8"))
     v9_dense_robustness = json.loads(V9_DENSE_ROBUSTNESS_PATH.read_text(encoding="utf-8"))
     v9_qualitative_review = json.loads(V9_QUALITATIVE_REVIEW_PATH.read_text(encoding="utf-8"))
+
+    v10_retrieval = json.loads(V10_RETRIEVAL_SUMMARY_PATH.read_text(encoding="utf-8"))
+    v10_qa = json.loads(V10_QA_SUMMARY_PATH.read_text(encoding="utf-8"))
+    v10_radgraph = json.loads(V10_RADGRAPH_SUMMARY_PATH.read_text(encoding="utf-8"))
+    v10_clinical = json.loads(V10_CLINICAL_REVIEW_SUMMARY_PATH.read_text(encoding="utf-8"))
+
+    st.subheader("V10 publication extension: cluster-disjoint similar-case RAG")
+    v10_columns = st.columns(6)
+    v10_columns[0].metric("Eligible Test cases", v10_retrieval["counts"]["test_cases"])
+    v10_columns[1].metric(
+        "R4 nDCG@10",
+        f"{v10_retrieval['metrics']['r4_nine_feature']['ndcg@10']:.3f}",
+    )
+    v10_columns[2].metric(
+        "R5 nDCG@10",
+        f"{v10_retrieval['metrics']['r5_fact_attention']['ndcg@10']:.3f}",
+        delta=f"{v10_retrieval['primary_r5_minus_r4']['mean_difference']:+.3f}",
+    )
+    v10_columns[3].metric(
+        "No-history Token-F1",
+        f"{v10_qa['metrics']['g0_target_image']['token_f1_equal_question']:.3f}",
+    )
+    v10_columns[4].metric(
+        "R5-RAG Token-F1",
+        f"{v10_qa['metrics']['g2_hierarchical']['token_f1_equal_question']:.3f}",
+        delta=f"{v10_qa['primary_comparisons']['g2_minus_g0_token_f1']['mean_difference']:+.3f}",
+    )
+    v10_columns[5].metric(
+        "Confidence coverage",
+        f"{v10_retrieval['calibration']['observed_answer_coverage']:.1%}",
+    )
+
+    v10_retrieval_ci = v10_retrieval["primary_r5_minus_r4"]
+    v10_qa_ci = v10_qa["primary_comparisons"]["g2_minus_g0_token_f1"]
+    st.success(
+        "R5 minus R4 nDCG@10 95% CI "
+        f"[{v10_retrieval_ci['ci_95_low']:+.3f}, {v10_retrieval_ci['ci_95_high']:+.3f}]; "
+        "R5-RAG minus no-history Token-F1 95% CI "
+        f"[{v10_qa_ci['ci_95_low']:+.3f}, {v10_qa_ci['ci_95_high']:+.3f}]."
+    )
+    alignment = v10_retrieval["alignment_control"]
+    st.info(
+        "Correctly aligned images achieved nDCG@10 "
+        f"{alignment['aligned_mean_ndcg@10']:.3f}, versus a mean of "
+        f"{alignment['shuffled_mean_ndcg@10']:.3f} across 100 fixed-point-free shuffled "
+        f"assignments (plus-one Monte Carlo p={alignment['plus_one_monte_carlo_p']:.4f}). "
+        f"Confidence AUROC was {v10_retrieval['calibration']['metrics']['auroc']:.3f}."
+    )
+    v10_qa_frame = pd.DataFrame(
+        [
+            {
+                "Condition": "G0 target image, no history",
+                "Token-F1": v10_qa["metrics"]["g0_target_image"]["token_f1_equal_question"],
+                "F1RadGraph complete": v10_radgraph["systems"]["g0_target_image"]["metrics"]["f1_radgraph_complete"]["mean"],
+                "Evidence abstention": v10_qa["metrics"]["g0_target_image"]["evidence_abstention_rate"],
+            },
+            {
+                "Condition": "G1 R4 whole-report RAG",
+                "Token-F1": v10_qa["metrics"]["g1_whole_report"]["token_f1_equal_question"],
+                "F1RadGraph complete": v10_radgraph["systems"]["g1_whole_report"]["metrics"]["f1_radgraph_complete"]["mean"],
+                "Evidence abstention": v10_qa["metrics"]["g1_whole_report"]["evidence_abstention_rate"],
+            },
+            {
+                "Condition": "G2 R5 hierarchical RAG",
+                "Token-F1": v10_qa["metrics"]["g2_hierarchical"]["token_f1_equal_question"],
+                "F1RadGraph complete": v10_radgraph["systems"]["g2_hierarchical"]["metrics"]["f1_radgraph_complete"]["mean"],
+                "Evidence abstention": v10_qa["metrics"]["g2_hierarchical"]["evidence_abstention_rate"],
+            },
+            {
+                "Condition": "G3 calibrated selective RAG",
+                "Token-F1": v10_qa["metrics"]["g3_selective"]["token_f1_equal_question"],
+                "F1RadGraph complete": v10_radgraph["systems"]["g3_selective"]["metrics"]["f1_radgraph_complete"]["mean"],
+                "Evidence abstention": v10_qa["metrics"]["g3_selective"]["evidence_abstention_rate"],
+            },
+        ]
+    )
+    st.dataframe(
+        v10_qa_frame,
+        width="stretch",
+        hide_index=True,
+        column_config={
+            "Token-F1": st.column_config.NumberColumn(format="%.3f"),
+            "F1RadGraph complete": st.column_config.NumberColumn(format="%.3f"),
+            "Evidence abstention": st.column_config.NumberColumn(format="%.1%%"),
+        },
+    )
+    v10_g2_g1 = v10_qa["primary_comparisons"]["g2_minus_g1_token_f1"]
+    st.caption(
+        "R5 improved retrieval over R4, and retrieved history improved automated reference "
+        "consistency over no-history generation. The G2-G1 Token-F1 interval "
+        f"[{v10_g2_g1['ci_95_low']:+.3f}, {v10_g2_g1['ci_95_high']:+.3f}] crossed zero. "
+        "All structured outputs and citations were valid after deterministic assembly, but raw "
+        "answer token ceilings remained common. F1RadGraph is automated graph overlap, not a "
+        "clinical correctness judgment. The blinded clinical package remains pending: "
+        f"{v10_clinical['case_count']} cases and {v10_clinical['presentation_rows']} rows; no "
+        "reviewer ratings were fabricated."
+    )
 
     st.subheader("V9 final new-patient similar-case study")
     v9_columns = st.columns(6)
@@ -1430,8 +1568,15 @@ if RUNTIME.is_demo:
         "available in the Experiment results tab."
     )
 
-live_tab, v9_tab, v6_tab, multimodal_tab, results_tab = st.tabs(
-    ["Report workflows", "V9 similar-case QA", "V6 confirmation demo", "Paired image demo", "Experiment results"]
+live_tab, v10_tab, v9_tab, v6_tab, multimodal_tab, results_tab = st.tabs(
+    [
+        "Report workflows",
+        "V10 publication workflow",
+        "V9 similar-case QA",
+        "V6 confirmation demo",
+        "Paired image demo",
+        "Experiment results",
+    ]
 )
 
 with live_tab:
@@ -1802,6 +1947,241 @@ with live_tab:
     if "pipeline_result" in st.session_state:
         st.divider()
         render_pipeline_result(st.session_state["pipeline_result"])
+
+with v10_tab:
+    st.subheader("V10 cluster-disjoint similar-case evidence workflow")
+    st.caption(
+        "Upload one or two target chest radiographs, add the available clinical indication and "
+        "question, and retrieve calibrated Top-3 historical cases from the frozen V10 Train bank."
+    )
+    st.warning(
+        "Retrieved historical cases are analogies, not target-patient facts. Confidence is a "
+        "calibrated retrieval signal, not a probability of clinical correctness. This prototype "
+        "has not received independent clinical validation."
+    )
+    v10_required_paths = (
+        V10_CONFIRMATION_CONFIG_PATH,
+        V10_SPLIT_PATH,
+        V10_RADGRAPH_PATH,
+        V10_MEDSIGLIP_CACHE_PATH,
+        V10_CALIBRATOR_PATH,
+    )
+    v10_missing = [path for path in v10_required_paths if not path.exists()]
+    if RUNTIME.is_demo or v10_missing:
+        st.info(
+            "V10 live execution requires the local OpenI images, MedSigLIP vectors, frozen R5 "
+            "and multiview checkpoints, calibrator, and MedGemma weights. Frozen V10 results "
+            "remain available in Experiment results."
+        )
+        if v10_missing:
+            st.caption("Missing local assets: " + ", ".join(path.name for path in v10_missing))
+    else:
+        v10_upload_col, v10_request_col = st.columns([2, 3], gap="large")
+        with v10_upload_col:
+            v10_images = st.file_uploader(
+                "Target chest X-ray view(s)",
+                type=["png", "jpg", "jpeg"],
+                accept_multiple_files=True,
+                key="v10_images",
+            )
+            if v10_images:
+                st.image([item.getvalue() for item in v10_images[:2]], width=240)
+                st.caption(" | ".join(item.name for item in v10_images[:2]))
+        with v10_request_col:
+            v10_indication = st.text_input(
+                "Clinical indication",
+                value="Cough and shortness of breath",
+                key="v10_indication",
+            )
+            v10_question = st.text_area(
+                "Medical question",
+                value="What are the main radiographic findings?",
+                height=110,
+                key="v10_question",
+            )
+            v10_mode = st.segmented_control(
+                "Run mode",
+                options=["Retrieve calibrated Top-3", "MedGemma bounded answer"],
+                default="Retrieve calibrated Top-3",
+                key="v10_mode",
+            )
+            v10_run = st.button(
+                "Run V10 publication workflow",
+                type="primary",
+                icon=":material/radiology:",
+                key="run_v10_demo",
+            )
+
+        if v10_run:
+            if not v10_images:
+                st.warning("Upload at least one target chest X-ray before running V10.")
+            elif len(v10_images) > 2:
+                st.warning("Use at most two views for the frozen V10 multiview policy.")
+            elif not v10_question.strip():
+                st.warning("Enter a medical question.")
+            else:
+                temporary_path: Path | None = None
+                try:
+                    started = time.perf_counter()
+                    with st.status("Running frozen V10 workflow", expanded=True) as status:
+                        st.write("Loading and hash-validating frozen V10 assets")
+                        resources = load_v10_dashboard_resources()
+                        st.write("Encoding uploaded view(s) with MedSigLIP-448")
+                        encoder = load_v6_image_encoder()
+                        view_embeddings = np.stack(
+                            [
+                                encode_v6_uploaded_image(item.getvalue(), encoder)
+                                for item in v10_images
+                            ]
+                        )
+                        st.write("Ranking the frozen historical Train bank with R5")
+                        retrieval = retrieve_v10(
+                            indication=v10_indication,
+                            question=v10_question,
+                            image_embeddings=view_embeddings,
+                            resources=resources,
+                            top_k=3,
+                        )
+                        evidence = list(retrieval.pop("evidence"))
+                        result: dict[str, Any] = {
+                            "workflow": "v10_cluster_disjoint_similar_case_rag",
+                            "image_names": [item.name for item in v10_images],
+                            "question": v10_question.strip(),
+                            "indication": v10_indication.strip(),
+                            "mode": v10_mode,
+                            **retrieval,
+                            "selected_evidence": [
+                                {**asdict(unit), "provenance_id": unit.provenance_id}
+                                for unit in evidence
+                            ],
+                        }
+                        if v10_mode == "MedGemma bounded answer":
+                            st.write("Generating a bounded target-image answer")
+                            suffix = Path(v10_images[0].name).suffix or ".png"
+                            with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as handle:
+                                handle.write(v10_images[0].getvalue())
+                                temporary_path = Path(handle.name)
+                            prompt = build_plain_answer_prompt(
+                                indication=v10_indication,
+                                question=v10_question,
+                                evidence=evidence,
+                                no_reliable_history=bool(result["no_reliable_history"]),
+                            )
+                            generated = load_v9_generator().generate_batch(
+                                [prompt],
+                                [temporary_path],
+                                max_new_tokens=64,
+                                stop_token="<end_of_turn>",
+                            )[0]
+                            answer_stage = parse_plain_answer(
+                                generated["answer"], stop_token="<end_of_turn>"
+                            )
+                            answer_stage["answer"] = normalize_bounded_answer(
+                                answer_stage["answer"], maximum_complete_sentences=2
+                            )
+                            support = deterministic_historical_evidence(
+                                evidence,
+                                query=f"{v10_question}\n{answer_stage['answer']}",
+                                retrieved_case_ids=[
+                                    row["case_id"] for row in result["retrieved_cases"]
+                                ],
+                                maximum_units=3,
+                            )
+                            result["answer"] = assemble_deterministic_output(
+                                answer_stage,
+                                support,
+                                no_reliable_history=bool(result["no_reliable_history"]),
+                            )
+                            result["generation_diagnostics"] = {
+                                key: generated[key]
+                                for key in (
+                                    "input_tokens",
+                                    "output_tokens",
+                                    "hit_token_ceiling",
+                                    "stopped_on_requested_token",
+                                )
+                            }
+                        result["latency_seconds"] = time.perf_counter() - started
+                        st.session_state["v10_demo_result"] = result
+                        status.update(
+                            label="V10 publication workflow complete",
+                            state="complete",
+                            expanded=False,
+                        )
+                except Exception as exc:
+                    st.exception(exc)
+                finally:
+                    if temporary_path is not None:
+                        temporary_path.unlink(missing_ok=True)
+
+        if "v10_demo_result" in st.session_state:
+            result = st.session_state["v10_demo_result"]
+            st.divider()
+            metrics = st.columns(5)
+            metrics[0].metric("Historical bank", result["candidate_bank_count"])
+            metrics[1].metric("Retrieved cases", len(result["retrieved_cases"]))
+            metrics[2].metric("Views", result["view_count"])
+            metrics[3].metric(
+                "Retrieval confidence",
+                f"{result['retrieval_confidence']:.3f}",
+                delta=f"threshold {result['confidence_threshold']:.3f}",
+                delta_color="off",
+            )
+            metrics[4].metric("Latency", f"{result['latency_seconds']:.1f} s")
+            if result["no_reliable_history"]:
+                st.warning(
+                    "No sufficiently reliable historical case was identified at the frozen "
+                    "80%-coverage operating point. Candidate reports are shown for audit only and "
+                    "are not used as claimed support."
+                )
+            else:
+                st.success("Historical evidence passed the frozen retrieval-confidence threshold.")
+            if "answer" in result:
+                answer = result["answer"]
+                st.markdown('<div class="evidence-label">Target-image answer</div>', unsafe_allow_html=True)
+                st.markdown(
+                    f'<div class="answer-band">{html.escape(str(answer["answer"]))}</div>',
+                    unsafe_allow_html=True,
+                )
+                st.caption(
+                    "The answer is generated from the uploaded target image and indication. "
+                    "Historical citations are deterministic provenance records, not clinical adjudication."
+                )
+                if answer["historical_support"]:
+                    st.dataframe(
+                        pd.DataFrame(answer["historical_support"])[
+                            ["provenance_id", "case_id", "section", "statement"]
+                        ],
+                        width="stretch",
+                        hide_index=True,
+                    )
+                else:
+                    st.info("The system abstained from attaching historical support.")
+            st.subheader("Top-ranked historical candidate reports")
+            for row in result["retrieved_cases"]:
+                with st.expander(
+                    f"Rank {row['rank']} | {row['case_id']} | R5 {row['r5_score']:.3f}",
+                    expanded=row["rank"] == 1,
+                ):
+                    st.markdown("**Indication**")
+                    st.write(row["indication"] or "Not reported")
+                    st.markdown("**Findings**")
+                    st.write(row["findings"] or "Not reported")
+                    st.markdown("**Impression**")
+                    st.write(row["impression"] or "Not reported")
+                    st.caption(
+                        f"BM25 {row['bm25_score']:.3f} | image-image "
+                        f"{row['image_image_similarity']:.3f} | image-report "
+                        f"{row['image_report_similarity']:.3f} | ensemble variance "
+                        f"{row['r5_seed_variance']:.5f}"
+                    )
+            st.download_button(
+                "Export V10 run",
+                data=json.dumps(result, indent=2, ensure_ascii=False),
+                file_name="v10_similar_case_rag_run.json",
+                mime="application/json",
+                icon=":material/download:",
+            )
 
 with v9_tab:
     st.subheader("V9 new-patient similar-case multimodal QA")
