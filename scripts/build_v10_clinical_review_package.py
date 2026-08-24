@@ -25,6 +25,10 @@ DEFAULT_CONFIG = ROOT / "config" / "v10_clinical_review.json"
 DEFAULT_CASES = ROOT / "data" / "processed" / "openi_cases.jsonl"
 DEFAULT_QA = ROOT / "experiments" / "v10_publication" / "v10_confirmation_qa_rows.jsonl"
 DEFAULT_RETRIEVAL = ROOT / "experiments" / "v10_publication" / "v10_confirmation_retrieval_rows.jsonl"
+DEFAULT_QA_SUMMARY = ROOT / "data" / "splits" / "v10" / "v10_confirmation_qa_summary.json"
+DEFAULT_RETRIEVAL_SUMMARY = (
+    ROOT / "data" / "splits" / "v10" / "v10_confirmation_retrieval_summary.json"
+)
 DEFAULT_PUBLIC = ROOT / "experiments" / "v10_publication" / "v10_clinical_review_public.csv"
 DEFAULT_PRIVATE = ROOT / "experiments" / "v10_publication" / "v10_clinical_review_private_key.csv"
 DEFAULT_METADATA = ROOT / "experiments" / "v10_publication" / "v10_clinical_reviewer_metadata.json"
@@ -46,6 +50,8 @@ def main() -> None:
     parser.add_argument("--cases", type=Path, default=DEFAULT_CASES)
     parser.add_argument("--qa-rows", type=Path, default=DEFAULT_QA)
     parser.add_argument("--retrieval-rows", type=Path, default=DEFAULT_RETRIEVAL)
+    parser.add_argument("--qa-summary", type=Path, default=DEFAULT_QA_SUMMARY)
+    parser.add_argument("--retrieval-summary", type=Path, default=DEFAULT_RETRIEVAL_SUMMARY)
     parser.add_argument("--public-output", type=Path, default=DEFAULT_PUBLIC)
     parser.add_argument("--private-output", type=Path, default=DEFAULT_PRIVATE)
     parser.add_argument("--metadata-output", type=Path, default=DEFAULT_METADATA)
@@ -55,6 +61,12 @@ def main() -> None:
     config = read_json(args.config)
     if config["review_status"] != "pending_independent_review":
         raise RuntimeError("clinical review config is not pending")
+    qa_summary = read_json(args.qa_summary)
+    retrieval_summary = read_json(args.retrieval_summary)
+    if file_sha256(args.qa_rows) != str(qa_summary["qa_rows_sha256"]):
+        raise RuntimeError("QA rows differ from their completed confirmation summary")
+    if file_sha256(args.retrieval_rows) != str(retrieval_summary["retrieval_rows_sha256"]):
+        raise RuntimeError("retrieval rows differ from their completed confirmation summary")
     cases = {str(row["case_id"]): row for row in read_jsonl(args.cases)}
     qa_rows = read_jsonl(args.qa_rows)
     retrieval_rows = read_jsonl(args.retrieval_rows)
