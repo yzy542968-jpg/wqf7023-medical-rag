@@ -18,3 +18,13 @@ preflight matrix check requested internal retrieval identifier `r4_original`,
 whereas the frozen retrieval output uses `r4_nine_feature`. No QA output or
 outcome existed. The lookup string was corrected to the already-prespecified R4
 comparator; no scientific condition or setting changed.
+
+## QA process segmentation and offline loading
+
+The 4,544-row QA matrix exceeded the external 30-minute command allowance.
+The frozen runner resumed by exact case/question/system key and completed in
+four process segments without overwriting completed rows. Hugging Face startup
+also attempted network metadata checks despite locally cached weights. Later
+segments set `HF_HUB_OFFLINE=1` and `TRANSFORMERS_OFFLINE=1`; this affected only
+artifact lookup and did not change the cached model revision, weights, prompts,
+decoding, batch size, or outputs already completed.

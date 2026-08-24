@@ -1,0 +1,89 @@
+{
+  "study": "V10 compact QA confirmation",
+  "status": "confirmation_complete_no_retuning",
+  "counts": {
+    "test_cases": 568,
+    "qa_rows": 4544,
+    "systems": 4
+  },
+  "metrics": {
+    "g0_target_image": {
+      "row_count": 1136,
+      "case_count": 568,
+      "token_f1_equal_question": 0.1494164466860232,
+      "token_f1_case_averaged": 0.1494164466860232,
+      "assembled_schema_valid_rate": 1.0,
+      "citation_valid_rate": 1.0,
+      "answer_token_ceiling_rate": 0.9154929577464789,
+      "evidence_abstention_rate": 1.0,
+      "by_question_type": {
+        "findings": 0.21121790428451065,
+        "impression": 0.0876149890875357
+      }
+    },
+    "g1_whole_report": {
+      "row_count": 1136,
+      "case_count": 568,
+      "token_f1_equal_question": 0.20752358868175208,
+      "token_f1_case_averaged": 0.20752358868175208,
+      "assembled_schema_valid_rate": 1.0,
+      "citation_valid_rate": 1.0,
+      "answer_token_ceiling_rate": 0.647887323943662,
+      "evidence_abstention_rate": 0.0,
+      "by_question_type": {
+        "findings": 0.2748436227897451,
+        "impression": 0.14020355457375908
+      }
+    },
+    "g2_hierarchical": {
+      "row_count": 1136,
+      "case_count": 568,
+      "token_f1_equal_question": 0.2091926459872271,
+      "token_f1_case_averaged": 0.2091926459872271,
+      "assembled_schema_valid_rate": 1.0,
+      "citation_valid_rate": 1.0,
+      "answer_token_ceiling_rate": 0.6830985915492958,
+      "evidence_abstention_rate": 0.0,
+      "by_question_type": {
+        "findings": 0.2760742903886065,
+        "impression": 0.14231100158584767
+      }
+    },
+    "g3_selective": {
+      "row_count": 1136,
+      "case_count": 568,
+      "token_f1_equal_question": 0.20498143011779893,
+      "token_f1_case_averaged": 0.20498143011779893,
+      "assembled_schema_valid_rate": 1.0,
+      "citation_valid_rate": 1.0,
+      "answer_token_ceiling_rate": 0.6830985915492958,
+      "evidence_abstention_rate": 0.17077464788732394,
+      "by_question_type": {
+        "findings": 0.27152236219798764,
+        "impression": 0.13844049803761024
+      }
+    }
+  },
+  "primary_comparisons": {
+    "g2_minus_g0_token_f1": {
+      "mean_difference": 0.05977619930120388,
+      "ci_95_low": 0.05113687208032252,
+      "ci_95_high": 0.06860184472299553,
+      "case_count": 568.0
+    },
+    "g2_minus_g1_token_f1": {
+      "mean_difference": 0.0016690573054749793,
+      "ci_95_low": -0.0034689820762255747,
+      "ci_95_high": 0.0068293937825078975,
+      "case_count": 568.0
+    }
+  },
+  "runtime": {
+    "elapsed_seconds_this_run": 232.41309680000086,
+    "peak_gpu_memory_allocated_mib": 5311.55712890625,
+    "batch_size": 8
+  },
+  "qa_rows_sha256": "0e82b3cf5d3913fdac82f49b6742451cf095849cad88caa2c5bedb070f793944",
+  "retuning_after_test": false,
+  "claim_boundary": "Automated report-reference consistency, not physician-adjudicated correctness."
+}
