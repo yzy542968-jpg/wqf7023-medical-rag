@@ -1,0 +1,15 @@
+{
+  "study": "V10 independent clinical review package",
+  "status": "pending_independent_review",
+  "case_count": 100,
+  "presentation_rows": 400,
+  "findings_cases": 50,
+  "impression_cases": 50,
+  "public_package_sha256": "ada4e793d2b6185c4cdac9de4435139e4513b9e8da759a92cfe085c449f23c8d",
+  "private_key_sha256": "2be0e00345fe40b574095da967d98891275117e449d5b0db718e24d1a65d67dc",
+  "reviewer_metadata_sha256": "166e502cc88600ef30321a0439ecf626926643211384d4e098527b5d7f05a1f1",
+  "qa_rows_sha256": "0e82b3cf5d3913fdac82f49b6742451cf095849cad88caa2c5bedb070f793944",
+  "retrieval_rows_sha256": "68a1e5db7db21a0de258e30cb9f9c6f9cee892d89576c707b81ffb63a7617c91",
+  "reviewer_ratings_fabricated": false,
+  "claim_boundary": "Package preparation is complete; independent clinical review has not been conducted."
+}
