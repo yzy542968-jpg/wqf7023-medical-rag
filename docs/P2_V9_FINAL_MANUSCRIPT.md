@@ -83,7 +83,7 @@ The fifth contribution is an end-to-end transfer analysis. The same MedGemma rev
 
 The sixth contribution is a bounded agentic evidence-control layer. The agent does not diagnose the target image. It checks only statements presented as historical support, permits one deterministic backup route, and otherwise removes unsupported historical evidence and records an abstention. This makes the agent useful and auditable without implying autonomous clinical reasoning.
 
-The seventh contribution is methodological transparency. Protocols were committed before their corresponding outcome stages; large source-derived artifacts remain local; public summaries contain hashes and aggregate metrics; and 206 automated tests verify core behavior. The work preserves negative findings, including the weakness of BM25, the underperformance of naive fixed fusion, incomplete JSON output, low absolute Token-F1, and the absence of clinical human evaluation.
+The seventh contribution is methodological transparency. Protocols were committed before their corresponding outcome stages; large source-derived artifacts remain local; public summaries contain hashes and aggregate metrics; and automated verification increased from 206 passing tests before the supplemental additions to 223 in the final V9 suite. The work preserves negative findings, including the weakness of BM25, the underperformance of naive fixed fusion, incomplete JSON output, low absolute Token-F1, and the absence of clinical human evaluation.
 
 ## 1.7 Scope and Boundaries
 
@@ -396,7 +396,7 @@ All supplemental analyses were interpretive. They could strengthen, qualify, or 
 
 ## 3.12 Reproducibility, Ethics, and Evidence Boundaries
 
-The implementation used local CUDA inference and preserved model revisions, configuration files, checkpoint hashes, result hashes, split fingerprints, and protocol commits. Large source-derived texts, image pixels, vectors, checkpoints, prompts, and per-row generations remained local under repository policy. Aggregate summaries, source-neutral code, hashes, tests, and a lightweight case index were public. The verified suite contained 206 passing automated tests before the supplemental additions; the final suite was rerun after integration.
+The implementation used local CUDA inference and preserved model revisions, configuration files, checkpoint hashes, result hashes, split fingerprints, and protocol commits. Large source-derived texts, image pixels, vectors, checkpoints, prompts, and per-row generations remained local under repository policy. Aggregate summaries, source-neutral code, hashes, tests, and a lightweight case index were public. The verified suite contained 206 passing automated tests before the supplemental additions and 223 passing tests in the final V9 integration run.
 
 No radiologist evaluated pairwise similarity, retrieved reports, target-image answers, or agent decisions. The completed researcher review supports exploratory pipeline interpretation only. The study therefore reports retrospective technical performance and explicitly excludes claims of diagnostic safety, clinical utility, or deployment readiness.
 
