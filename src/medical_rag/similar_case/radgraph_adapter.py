@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import re
 from dataclasses import dataclass
 from collections.abc import Mapping
 from pathlib import Path
@@ -18,6 +19,13 @@ class RadGraphCaseRecord:
 
 def _normalized(value: object) -> str:
     return " ".join(str(value or "").lower().split())
+
+
+def _report_text_key(value: object) -> str:
+    """Normalize whitespace without depending on the optional RadGraph package."""
+
+    collapsed = " ".join(str(value or "").split())
+    return re.sub(r"\s+([.,!?;:])", r"\1", collapsed)
 
 
 def unwrap_radgraph_annotation(annotation: Mapping[str, Any]) -> Mapping[str, Any]:
@@ -76,7 +84,7 @@ def read_radgraph_facts_by_text(path: Path) -> dict[str, frozenset[str]]:
         if not isinstance(annotation, Mapping):
             raise ValueError(f"Invalid RadGraph annotation at index {index}.")
         row = unwrap_radgraph_annotation(annotation)
-        text = " ".join(str(row.get("text", "")).split())
+        text = _report_text_key(row.get("text", ""))
         if not text:
             raise ValueError(f"RadGraph annotation {index} lacks text.")
         facts = radgraph_annotation_facts(annotation)
@@ -90,14 +98,14 @@ def match_radgraph_facts(
     report_text: str,
     facts_by_text: Mapping[str, frozenset[str]],
 ) -> tuple[frozenset[str], bool]:
-    cleaned = " ".join(report_text.split())
+    cleaned = _report_text_key(report_text)
     if cleaned in facts_by_text:
         return facts_by_text[cleaned], True
     try:
         from radgraph.utils import radgraph_xl_preprocess_report
     except ImportError:
         return frozenset(), False
-    preprocessed = radgraph_xl_preprocess_report(cleaned)
+    preprocessed = _report_text_key(radgraph_xl_preprocess_report(cleaned))
     if preprocessed in facts_by_text:
         return facts_by_text[preprocessed], True
     return frozenset(), False
