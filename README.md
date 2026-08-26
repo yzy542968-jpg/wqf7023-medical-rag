@@ -227,7 +227,7 @@ Reproduce the V10 publication-extension software and lightweight checks with:
 & ".\.venv\Scripts\python.exe" -m pytest -q --basetemp outputs/pytest-v10
 ```
 
-The current working-tree suite contains **262 passing tests**; the earlier V10 freeze recorded 252. The clean 48-case MedGemma development diagnostic is not a confirmation result. Model-backed confirmation commands require the pinned local snapshots and non-public large artifacts documented by the V10 protocols; aggregate summaries remain versioned for inspection.
+The full local-data suite contains **262 passing tests**; the earlier V10 freeze recorded 252. In a clean clone, four historical source-integrity checks are explicitly skipped because the large `openi_cases.jsonl` source artifact is intentionally not committed. The clean 48-case MedGemma development diagnostic is not a confirmation result. Model-backed confirmation commands require the pinned local snapshots and non-public large artifacts documented by the V10 protocols; aggregate summaries remain versioned for inspection.
 
 The manifest command verifies required files, locked SHA-256 values, tracked-file exclusions, file-size limits, the declared human-evaluation disposition, repository publication, and conditional V3 status. Use `--strict` only for the final submission gate; it exits unsuccessfully while external requirements such as the remote repository remain pending.
 
@@ -253,7 +253,7 @@ Launch the system-blinded rating interface separately:
 
 The main Dashboard exposes report workflows, frozen result tables, the earlier paired demos, and both V9 and V10 workflows. In V10 Full Mode, one or two uploaded chest X-ray views, an indication, and a question retrieve Top-3 reports from the 2,506-case cluster-disjoint Train bank with the frozen R5 ensemble. The interface displays calibrated retrieval confidence, abstains from claiming reliable history below the frozen threshold, and preserves case/section/fact provenance. The optional local MedGemma path produces a bounded target-image answer before deterministic support assembly. The rating application does not load the system-identity keys.
 
-For an editable install, use `python -m pip install -e ".[all]"`. Exact direct versions from the audited machine are recorded in `requirements-lock.txt`. GitHub Actions runs compilation, all unit tests, and the fresh-clone Dashboard smoke test without downloading model weights.
+For an editable install, use `python -m pip install -e ".[all]"`. Exact direct versions from the audited machine are recorded in `requirements-lock.txt`. GitHub Actions runs compilation and the fresh-clone test suite without downloading model weights; source-integrity checks that require the intentionally untracked OpenI JSONL are reported as skips rather than silently treated as passes.
 
 ## V3 RadQA
 

@@ -2,6 +2,12 @@
   "acceptance": {
     "docx_pdf_pages": 60,
     "external_validation": "future_work_no_result_claimed",
+    "fresh_clone_pytest": {
+      "errors": 0,
+      "failed": 0,
+      "passed": 258,
+      "skipped": 4
+    },
     "human_review": "future_work_no_scores_claimed",
     "pptx_overflow_test": "passed",
     "pptx_slides": 15,
@@ -41,14 +47,14 @@
       "sha256": "eca72bd41222f75b2edbfda975ac34e8075bdcc47e878273f8de2785f08343a6"
     },
     "readme": {
-      "bytes": 26776,
+      "bytes": 27050,
       "path": "README.md",
-      "sha256": "b22bc455b9aadcc6e7476983b158e88ff9bfd10f14521ef5b2388b6482df5869"
+      "sha256": "a54813a0cfbb19ea87bf442b41aed2de540d06eb3f3adbd11925b910a8b8f5e5"
     },
     "release_audit": {
-      "bytes": 4795,
+      "bytes": 4990,
       "path": "docs/V10_V11_FINAL_RELEASE_AUDIT.md",
-      "sha256": "8dc0fd571cd725fc6ca95dd7117ab3b9a3329e5574aa4b3b1a0bc855b97535fa"
+      "sha256": "b19958554bc06524bb7ac55a8bcb5b2165d666d9b05a73ac51c00df62d3571ad"
     },
     "result_registry": {
       "bytes": 5265,

@@ -56,6 +56,7 @@ def main() -> None:
         "acceptance": {
             "python_compileall": "passed",
             "pytest": {"passed": 262, "failed": 0, "errors": 0},
+            "fresh_clone_pytest": {"passed": 258, "skipped": 4, "failed": 0, "errors": 0},
             "docx_pdf_pages": 60,
             "pptx_slides": 15,
             "pptx_overflow_test": "passed",

@@ -41,8 +41,8 @@ Every public artifact listed above is fingerprinted in the JSON release manifest
 ## Software verification
 
 - `python -m compileall -q app.py human_evaluation_app.py scripts src`: passed.
-- `python -m pytest -q --basetemp=.test_tmp/pytest -p no:cacheprovider`: `262 passed`.
-- GitHub Actions quality workflow covers compile and the complete test suite on `main`, `post-submission-improvements` and `v10-publication-extension`.
+- Full local-data run, `python -m pytest -q --basetemp=.test_tmp/pytest -p no:cacheprovider`: `262 passed`.
+- The clean-clone GitHub Actions workflow covers compilation and all repository-runnable tests on `main`, `post-submission-improvements` and `v10-publication-extension`. Four historical source-integrity checks are explicitly skipped when the intentionally untracked `data/processed/openi_cases.jsonl` artifact is unavailable.
 - The Dashboard reads the frozen V10 summaries and the completed V11 48-case/planner summaries; it no longer presents a one-case smoke test as the current generation result.
 - Retrieval confidence is labeled as a research signal rather than diagnostic confidence.
 

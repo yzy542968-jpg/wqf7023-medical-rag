@@ -4,6 +4,8 @@ import json
 from collections import Counter, defaultdict
 from pathlib import Path
 
+import pytest
+
 from scripts.build_v5_reproducibility_supplement import DEPENDENCIES
 
 
@@ -48,7 +50,10 @@ def test_v5_confirmation_split_is_case_disjoint_and_has_three_questions_per_case
 def test_v5_reference_duplication_and_patient_identifier_boundary_are_explicit() -> None:
     cohort = read_json(ROOT / "data/processed/openi_multimodal_v5_cohort.json")
     confirmation = set(cohort["split"]["confirmation"]["case_ids"])
-    source_cases = read_jsonl(ROOT / "data/processed/openi_cases.jsonl")
+    source_path = ROOT / "data/processed/openi_cases.jsonl"
+    if not source_path.is_file():
+        pytest.skip("requires local OpenI source artifact excluded from Git")
+    source_cases = read_jsonl(source_path)
     source_fields = set(source_cases[0])
     assert not any("patient" in field.lower() or "subject" in field.lower() for field in source_fields)
 
@@ -64,5 +69,8 @@ def test_v5_reference_duplication_and_patient_identifier_boundary_are_explicit()
 
 
 def test_v5_supplemental_dependency_closure_exists() -> None:
+    source_path = ROOT / "data/processed/openi_cases.jsonl"
+    if not source_path.is_file():
+        pytest.skip("requires local OpenI source artifact excluded from Git")
     missing = [relative for relative in DEPENDENCIES if not (ROOT / relative).is_file()]
     assert not missing, f"Missing V5 dependency closure entries: {missing}"
