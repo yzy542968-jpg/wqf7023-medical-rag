@@ -1,0 +1,118 @@
+{
+  "acceptance": {
+    "docx_pdf_pages": 60,
+    "external_validation": "future_work_no_result_claimed",
+    "human_review": "future_work_no_scores_claimed",
+    "pptx_overflow_test": "passed",
+    "pptx_slides": 15,
+    "pytest": {
+      "errors": 0,
+      "failed": 0,
+      "passed": 262
+    },
+    "python_compileall": "passed"
+  },
+  "claim_boundary": "V10 reports automated within-source retrieval and report-reference-consistency metrics. V11 is development-only. Neither establishes physician-adjudicated diagnostic correctness, clinical safety, treatment utility, deployment performance, or external patient-level generalization.",
+  "development_extension": "V11 Train/Validation only",
+  "files": {
+    "defence_pptx": {
+      "bytes": 68135,
+      "path": "deliverables/22097191_ZHANG_YUE_Final_Defence.pptx",
+      "sha256": "9c7f072da1cf440ad90773b9027a04ca89f6a13c59d969be6abcd617fe5e02fb"
+    },
+    "manuscript_docx": {
+      "bytes": 101868,
+      "path": "deliverables/22097191_ZHANG_YUE_Final_Research_Project.docx",
+      "sha256": "90edb4ac7d9890e89724a7e3da1509fb3a63727e6479f62c6d9ccb9dd5e3fe9e"
+    },
+    "manuscript_markdown": {
+      "bytes": 164482,
+      "path": "docs/P2_V10_V11_FINAL_MANUSCRIPT.md",
+      "sha256": "fea7d6eaf37f1c257d46c0f4fd90117305c3136a7e76b50335244036f8614b1c"
+    },
+    "manuscript_pdf": {
+      "bytes": 668506,
+      "path": "deliverables/22097191_ZHANG_YUE_Final_Research_Project.pdf",
+      "sha256": "dbefa5f9ba5168ab5b8c2eaa24e3db57592ba77e47b893ced5a5cb5bfafb1014"
+    },
+    "prompt_registry": {
+      "bytes": 5033,
+      "path": "docs/PROMPT_TEMPLATES.md",
+      "sha256": "eca72bd41222f75b2edbfda975ac34e8075bdcc47e878273f8de2785f08343a6"
+    },
+    "readme": {
+      "bytes": 26776,
+      "path": "README.md",
+      "sha256": "b22bc455b9aadcc6e7476983b158e88ff9bfd10f14521ef5b2388b6482df5869"
+    },
+    "release_audit": {
+      "bytes": 4795,
+      "path": "docs/V10_V11_FINAL_RELEASE_AUDIT.md",
+      "sha256": "8dc0fd571cd725fc6ca95dd7117ab3b9a3329e5574aa4b3b1a0bc855b97535fa"
+    },
+    "result_registry": {
+      "bytes": 5265,
+      "path": "docs/FINAL_RESULTS_REGISTRY.md",
+      "sha256": "f256acb70843e41fbf5cb75101ad41eceb8c70475f554f8dc7e00da2f85ab822"
+    },
+    "v10_config": {
+      "bytes": 1779,
+      "path": "config/v10_confirmation.json",
+      "sha256": "d8533b46e7791da9dce6ab250121495abac13e1fe390d0415c0960a1f9edcb25"
+    },
+    "v10_fact_attention_summary": {
+      "bytes": 1519,
+      "path": "data/splits/v10/v10_fact_attention_2x2_summary.json",
+      "sha256": "6072f106fa9a20ac3b8e3c4b31083da4e1a8ed768bc228e9657ae77e35a239b5"
+    },
+    "v10_freeze": {
+      "bytes": 9310,
+      "path": "docs/V10_TECHNICAL_FREEZE.md",
+      "sha256": "363909ce4288317c168e3dec3d9a89d0980883437850c2d58fd9639ec62b26fe"
+    },
+    "v10_qa_summary": {
+      "bytes": 2986,
+      "path": "data/splits/v10/v10_confirmation_qa_summary.json",
+      "sha256": "46efd887c7eeba5ef5a0b7aa447bcb4ad8fcebd7fbee4537d0d97144a11529f2"
+    },
+    "v10_radgraph_summary": {
+      "bytes": 4929,
+      "path": "data/splits/v10/v10_radgraph_metrics_summary.json",
+      "sha256": "a7f014f7f142806f6ecb18219399b7a63f25f57110a13b77daed28bc24411b7e"
+    },
+    "v10_retrieval_summary": {
+      "bytes": 324950,
+      "path": "data/splits/v10/v10_confirmation_retrieval_summary.json",
+      "sha256": "1779745c26eaee0256abc01b02d822a44557820eb05c7493c6e5ae2364c537b9"
+    },
+    "v11_config": {
+      "bytes": 5142,
+      "path": "config/v11_development.json",
+      "sha256": "952b8054776c7cdcb131191de9f366bb9e7d4c017dcd297df78242e7a44b57b7"
+    },
+    "v11_generation_statistics": {
+      "bytes": 7105,
+      "path": "data/splits/v11/v11_medgemma_generation_48_statistical_summary.json",
+      "sha256": "a93032d7e4d95f68a69e7190ba7709b61b50267f9a33a27ccc1568c2048a7636"
+    },
+    "v11_generation_summary": {
+      "bytes": 5762,
+      "path": "data/splits/v11/v11_medgemma_generation_48_clean_summary.json",
+      "sha256": "1d605092fb5bb1ce5df7b8572e00ebb1c5f383ccaecd5d9a46035be29ea50598"
+    },
+    "v11_planner_reserved_protocol": {
+      "bytes": 1481,
+      "path": "docs/V11_PLANNER_RESERVED_SET_PROTOCOL.md",
+      "sha256": "bb412857bb19162e357c7588b22af265dd4ccfd4510b17c80a4887af6dafb173"
+    },
+    "v11_planner_reserved_summary": {
+      "bytes": 2344,
+      "path": "data/splits/v11/v11_question_planner_reserved_summary.json",
+      "sha256": "654f3a03453117e59a366831458345743ce0854638fcc0840c6746ef06a4a05e"
+    }
+  },
+  "generated_on": "2026-08-26",
+  "primary_study": "V10 frozen confirmation",
+  "release": "v10-v11-final-thesis-freeze",
+  "repository": "https://github.com/yzy542968-jpg/wqf7023-medical-rag"
+}

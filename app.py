@@ -192,6 +192,11 @@ V10_RADGRAPH_SUMMARY_PATH = ROOT / "data" / "splits" / "v10" / "v10_radgraph_met
 V10_CLINICAL_REVIEW_SUMMARY_PATH = (
     ROOT / "data" / "splits" / "v10" / "v10_clinical_review_package_summary.json"
 )
+V10_FACT_ATTENTION_2X2_PATH = ROOT / "data" / "splits" / "v10" / "v10_fact_attention_2x2_summary.json"
+V11_QREL_SUMMARY_PATH = ROOT / "data" / "splits" / "v11" / "v11_development_evidence_ablation_summary.json"
+V11_GENERATION_SUMMARY_PATH = ROOT / "data" / "splits" / "v11" / "v11_medgemma_generation_48_clean_summary.json"
+V11_GENERATION_STATISTICS_PATH = ROOT / "data" / "splits" / "v11" / "v11_medgemma_generation_48_statistical_summary.json"
+V11_PLANNER_RESERVED_SUMMARY_PATH = ROOT / "data" / "splits" / "v11" / "v11_question_planner_reserved_summary.json"
 MODEL_OPTIONS = {
     "Qwen2.5-1.5B (full experiment)": "Qwen/Qwen2.5-1.5B-Instruct",
     "Qwen2.5-0.5B (faster demo)": "Qwen/Qwen2.5-0.5B-Instruct",
@@ -931,6 +936,31 @@ def render_results() -> None:
     v10_qa = json.loads(V10_QA_SUMMARY_PATH.read_text(encoding="utf-8"))
     v10_radgraph = json.loads(V10_RADGRAPH_SUMMARY_PATH.read_text(encoding="utf-8"))
     v10_clinical = json.loads(V10_CLINICAL_REVIEW_SUMMARY_PATH.read_text(encoding="utf-8"))
+    v10_fact_attention = (
+        json.loads(V10_FACT_ATTENTION_2X2_PATH.read_text(encoding="utf-8"))
+        if V10_FACT_ATTENTION_2X2_PATH.is_file()
+        else None
+    )
+    v11_qrel = (
+        json.loads(V11_QREL_SUMMARY_PATH.read_text(encoding="utf-8"))
+        if V11_QREL_SUMMARY_PATH.is_file()
+        else None
+    )
+    v11_generation = (
+        json.loads(V11_GENERATION_SUMMARY_PATH.read_text(encoding="utf-8"))
+        if V11_GENERATION_SUMMARY_PATH.is_file()
+        else None
+    )
+    v11_generation_statistics = (
+        json.loads(V11_GENERATION_STATISTICS_PATH.read_text(encoding="utf-8"))
+        if V11_GENERATION_STATISTICS_PATH.is_file()
+        else None
+    )
+    v11_planner_reserved = (
+        json.loads(V11_PLANNER_RESERVED_SUMMARY_PATH.read_text(encoding="utf-8"))
+        if V11_PLANNER_RESERVED_SUMMARY_PATH.is_file()
+        else None
+    )
 
     st.subheader("V10 publication extension: cluster-disjoint similar-case RAG")
     v10_columns = st.columns(6)
@@ -1023,6 +1053,71 @@ def render_results() -> None:
         f"{v10_clinical['case_count']} cases and {v10_clinical['presentation_rows']} rows; no "
         "reviewer ratings were fabricated."
     )
+
+    st.subheader("V11 development extension: hierarchical evidence and output contract")
+    st.warning(
+        "V11 is development-only. Its qrel is report-derived, its confidence gate is not clinical calibration, "
+        "and no V11 confirmation, physician review, or external validation is claimed."
+    )
+    if v11_qrel is not None:
+        v11_metrics = v11_qrel["proxy_metrics"]
+        v11_columns = st.columns(5)
+        v11_columns[0].metric("Full-bank qrel nDCG@10", f"{v11_metrics['full_bank_qrel_ndcg10']:.3f}")
+        v11_columns[1].metric("Relevant recall@100", f"{v11_metrics['proxy_relevant_recall_at100']:.1%}")
+        v11_columns[2].metric("Top-100 presence", f"{v11_metrics['proxy_relevant_in_top100_rate']:.1%}")
+        v11_columns[3].metric("Evidence compression", f"{v11_qrel['evidence_compression']['character_reduction_fraction']:.1%}")
+        v11_columns[4].metric("Provenance completeness", f"{v11_qrel['evidence_compression']['case_to_fact']['provenance_complete_rate']:.1%}")
+        st.caption(
+            "The full-bank qrel calculation prevents shortlist-internal ideal-list inflation. "
+            "Compression improves context efficiency, but the low relevant-item recall shows that retrieval remains the limiting stage."
+        )
+    if v10_fact_attention is not None:
+        fact_attention_metrics = v10_fact_attention["validation_ndcg@10"]
+        st.dataframe(
+            pd.DataFrame(
+                [
+                    {"Condition": "R4 + mean image", "nDCG@10": fact_attention_metrics["r4_mean"]},
+                    {"Condition": "R4 + attention image", "nDCG@10": fact_attention_metrics["r4_attention"]},
+                    {"Condition": "R5 + mean image", "nDCG@10": fact_attention_metrics["r5_mean"]},
+                    {"Condition": "R5 + attention image", "nDCG@10": fact_attention_metrics["r5_attention"]},
+                ]
+            ),
+            width="stretch",
+            hide_index=True,
+            column_config={"nDCG@10": st.column_config.NumberColumn(format="%.3f")},
+        )
+        st.caption(
+            "Frozen-checkpoint Validation-only facts x attention audit: "
+            f"fact-aware contrast {v10_fact_attention['main_effect_fact_aware_reranker']:+.3f}, "
+            f"attention-view contrast {v10_fact_attention['main_effect_attention_view']:+.3f}, "
+            f"interaction {v10_fact_attention['interaction_fact_x_attention']:+.3f}."
+        )
+    if v11_generation is not None and v11_generation_statistics is not None:
+        policies = v11_generation_statistics["policies"]
+        comparison = v11_generation_statistics["primary_case_to_fact_minus_whole_report"]
+        v11_generation_columns = st.columns(5)
+        v11_generation_columns[0].metric("Clean cases", v11_generation_statistics["counts"]["cases"])
+        v11_generation_columns[1].metric("Generations", v11_generation_statistics["counts"]["rows"])
+        v11_generation_columns[2].metric("Whole-report Token-F1", f"{policies['whole_report']['metrics']['token_f1']['mean']:.3f}")
+        v11_generation_columns[3].metric("Case-to-fact Token-F1", f"{policies['case_to_fact']['metrics']['token_f1']['mean']:.3f}")
+        v11_generation_columns[4].metric("Case-to-fact input tokens", f"{v11_generation['metrics']['case_to_fact']['mean_input_tokens']:.1f}")
+        token_comparison = comparison["token_f1"]
+        graph_comparison = comparison["f1_radgraph_complete"]
+        st.caption(
+            "Case-to-fact minus whole-report Token-F1 "
+            f"{token_comparison['mean_difference']:+.3f}, 95% CI "
+            f"[{token_comparison['ci_95_low']:+.3f}, {token_comparison['ci_95_high']:+.3f}]; "
+            "complete F1RadGraph "
+            f"{graph_comparison['mean_difference']:+.3f}, 95% CI "
+            f"[{graph_comparison['ci_95_low']:+.3f}, {graph_comparison['ci_95_high']:+.3f}]. "
+            "Both intervals cross zero: the supported claim is efficiency and provenance, not confirmed generation superiority."
+        )
+    if v11_planner_reserved is not None:
+        st.caption(
+            f"Reserved 96-item planner wording audit: accuracy {v11_planner_reserved['accuracy']:.3f}, "
+            f"macro-F1 {v11_planner_reserved['macro_f1']:.3f}, and indication invariance "
+            f"{v11_planner_reserved['indication_invariance_rate']:.1%}. Labels are author-defined, not clinician-authored."
+        )
 
     st.subheader("V9 final new-patient similar-case study")
     v9_columns = st.columns(6)
@@ -2122,7 +2217,7 @@ with v10_tab:
             metrics[1].metric("Retrieved cases", len(result["retrieved_cases"]))
             metrics[2].metric("Views", result["view_count"])
             metrics[3].metric(
-                "Retrieval confidence",
+                "Retrieval-confidence research signal",
                 f"{result['retrieval_confidence']:.3f}",
                 delta=f"threshold {result['confidence_threshold']:.3f}",
                 delta_color="off",
@@ -2135,7 +2230,7 @@ with v10_tab:
                     "are not used as claimed support."
                 )
             else:
-                st.success("Historical evidence passed the frozen retrieval-confidence threshold.")
+                st.success("Historical evidence passed the frozen research-signal threshold.")
             if "answer" in result:
                 answer = result["answer"]
                 st.markdown('<div class="evidence-label">Target-image answer</div>', unsafe_allow_html=True)

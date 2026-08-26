@@ -2,7 +2,7 @@ name: quality
 
 on:
   push:
-    branches: [main, post-submission-improvements]
+    branches: [main, post-submission-improvements, v10-publication-extension]
   pull_request:
 
 permissions:

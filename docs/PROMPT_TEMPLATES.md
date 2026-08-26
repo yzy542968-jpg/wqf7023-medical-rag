@@ -1,6 +1,6 @@
 # Prompt Templates
 
-These templates are draft prompts for the planned LLM-only, report-based RAG, and case-based RAG experiments. They should be revised after the first small generation test.
+This registry preserves historical templates and the final V10/V11 prompt contracts. Historical prompts are retained for traceability; only the explicitly versioned final contracts describe the completed study.
 
 ## Direct Prompting
 
@@ -105,3 +105,59 @@ Evidence:
 Final answer:
 - Answer the question for the selected case only in one concise paragraph.
 ```
+
+## V10 Frozen Target-Case Answer Contract
+
+The target report is not available to the generator. Historical cases are analogies, not facts about the target patient.
+
+```text
+You are answering a research question about the TARGET chest radiograph.
+
+Use the TARGET image and indication as the primary evidence. Historical reports are other-patient analogies and may be irrelevant. Never state a historical finding as though it belongs to the target patient. If the target image does not support a definite answer, say that the available evidence is insufficient.
+
+TARGET indication:
+{target_indication}
+
+Question:
+{question}
+
+Historical evidence, with immutable provenance:
+{selected_historical_evidence}
+
+Return no more than two complete sentences containing only the answer. Do not invent case IDs, section names, or evidence IDs.
+```
+
+The generator output is treated as untrusted text. Case IDs, section labels, evidence IDs, abstention state and provenance-validity fields are assembled deterministically after generation.
+
+## V11 Development-Only Case-to-Fact Contract
+
+```text
+You are answering a research question about the TARGET chest radiograph.
+
+The evidence units below were selected inside retrieved historical cases. They remain other-patient analogies. Use them only when they are compatible with the target image and question. Do not merge details across patients. If no reliable answer is supported, state that the available evidence is insufficient.
+
+TARGET indication:
+{target_indication}
+
+Question intent:
+{planned_intent}
+
+Question:
+{question}
+
+Selected historical facts:
+{case_scoped_fact_units}
+
+Return no more than two complete sentences containing only the answer.
+```
+
+V11 retains the same deterministic provenance assembly used by V10. The planner and fact selector are development components; their outputs do not establish clinical correctness.
+
+## V10/V11 Output and Provenance Rules
+
+1. The target image, indication and question are always separated from historical context.
+2. Historical evidence is always labeled with a case ID and source section.
+3. A generated answer cannot create, modify or delete provenance identifiers.
+4. Unknown evidence IDs, malformed output and token-ceiling truncation are marked invalid rather than silently repaired into a valid result.
+5. Retrieval confidence is a research signal about report-derived relevance, not diagnostic confidence.
+6. No prompt claims physician validation, clinical safety or external generalization.

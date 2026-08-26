@@ -71,6 +71,12 @@
   },
   "planner_benchmark": {
     "path": "data/splits/v11/v11_question_planner_benchmark.json",
+    "reserved_path": "data/splits/v11/v11_question_planner_reserved_benchmark.json",
+    "reserved_summary": "data/splits/v11/v11_question_planner_reserved_summary.json",
+    "reserved_item_count": 96,
+    "reserved_accuracy": 0.9166666666666666,
+    "reserved_macro_f1": 0.919604743083004,
+    "reserved_indication_invariance": 1.0,
     "labels": "author_defined_intent_labels",
     "not_blinded": true,
     "not_clinical_validation": true
@@ -94,7 +100,12 @@
     "clean_48_policies": ["whole_report", "sentence_only", "case_to_fact"],
     "clean_48_validation_case_ids_sha256": "1049d6d40cdd9d5a9afa8471fe8fab75db77bc5300c963b5ef85cce3afe4dcdd",
     "clean_48_generation_rows_sha256": "2b08a50e98d1ee5bf42b3ef01a98e56e4b6843c338fc115586e471b314c24fc5",
-    "clean_48_status": "complete_development_only_not_inferential_estimate"
+    "clean_48_statistical_summary": "data/splits/v11/v11_medgemma_generation_48_statistical_summary.json",
+    "clean_48_primary_token_f1_difference": 0.021953911488702262,
+    "clean_48_primary_token_f1_ci95": [-0.0002626713753872087, 0.043021876909392645],
+    "clean_48_primary_complete_f1radgraph_difference": 0.013953087495598359,
+    "clean_48_primary_complete_f1radgraph_ci95": [-0.006908609395082173, 0.034420048848196966],
+    "clean_48_status": "complete_development_only_intervals_cross_zero_no_superiority_claim"
   },
   "stopping_rule": "no_confirmation_or_claim_of_superiority_from_development_proxy_only",
   "human_review": "future_work",

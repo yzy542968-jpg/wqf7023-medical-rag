@@ -2,13 +2,14 @@
 
 **Research title:** Retrieval-Augmented Medical Question Answering over Paired Radiology Images and Reports
 
-This repository contains the reproducible implementation and frozen evidence for Zhang Yue's WQF7023 Artificial Intelligence Research Project. The preserved V9 thesis study models a new chest-radiography case whose formal report is unavailable: the target image, pre-report indication, and question retrieve similar other-patient image-report pairs from a fixed historical bank, then a local multimodal generator answers with bounded historical support. The V10 publication extension adds duplicate-cluster-disjoint evaluation, fact-aware multiview reranking, fact-level evidence provenance, calibrated retrieval abstention, compact deterministic output assembly, and publication-oriented validity packages. It is not a diagnostic model, a clinically validated tool, or an authenticated clinical deployment.
+This repository contains the reproducible implementation and frozen evidence for Zhang Yue's WQF7023 Artificial Intelligence Research Project. V9 established the new-patient similar-case task: the target chest image, pre-report indication, and question retrieve other-patient image-report pairs from a fixed historical bank, then a local multimodal generator answers with bounded historical support. The final primary V10 study adds duplicate-cluster-disjoint evaluation, fact-aware multiview reranking, fact-level evidence provenance, calibrated retrieval abstention, compact deterministic output assembly, and publication-oriented validity packages. It is not a diagnostic model, a clinically validated tool, or an authenticated clinical deployment.
 
 **Repository:** https://github.com/yzy542968-jpg/wqf7023-medical-rag  
 - **Historical submission release:** `p2-submission`
 - **Preserved thesis release:** `v9-final-research-freeze`
 - **Publication-extension release:** `v10-publication-freeze`
-- **Current status:** V10 automated confirmation and software integration complete; independent clinical review and authorized external validation remain pending
+- **Final thesis package:** `v10-v11-final-thesis-freeze`
+- **Current status:** V10 automated confirmation and software integration complete; V11 technical development extension audited on Train/Validation only; independent clinical review and authorized external validation remain pending
 
 ## Study Structure
 
@@ -24,6 +25,7 @@ The final study deliberately separates two different tasks instead of treating t
 8. **V8 external-source development gate:** audits CheXpert Plus as an external replication source. The locally available 279-case validation subset did not meet the prespecified full-study requirement, so V8 stopped at a documented no-go.
 9. **V9 new-patient other-patient similar-case RAG:** reallocates the complete 3,851-case OpenI source, trains an 865-parameter multimodal reranker on a 2,608-case historical bank, confirms retrieval on 752 Test cases, and evaluates target-image QA on 685 complete-reference Test cases. The target report is hidden at inference and is never retrieved as evidence.
 10. **V10 publication extension:** clusters exact and near-duplicate reports before splitting, trains only on cluster-disjoint Train cases, evaluates a fact-aware multiview R5 ensemble on untouched Test cases, calibrates a no-reliable-history option, and separates target-image answers from deterministic case/section/fact provenance.
+11. **V11 development extension:** adds a structured report-derived qrel-v2 audit, deterministic question-intent planning, hierarchical case-to-fact evidence selection, compact provenance-safe output validation, selective historical-evidence gating, and shortlist-safe training helpers. V11 remains development-only and has no confirmation result; quality intervals from its clean 48-case generation audit cross zero.
 
 The demonstrated Agent follows explicit `scope`, `retrieve`, `generate`, `audit`, and `review/abstain` states. Routing rules are deterministic, and the verifier is a risk signal rather than a clinical correctness label.
 
@@ -98,7 +100,7 @@ V4.2 demonstrates that pixels can improve paired evidence retrieval when used fo
 - Learned minus fixed multimodal QA was only numerical: `+0.00571`, CI `[-0.00096,+0.01228]`.
 - The bounded agent reduced automated unsupported historical-support rows from `16.42%` to `0%` through one backup route or removal of the historical-support field; it did not verify target-image diagnoses.
 
-V9 is the final primary technical study. It models a new patient whose report is unavailable, retrieves other-patient analogies, and separates target-image answers from historical support. It does not establish physician-adjudicated similarity, clinical diagnostic accuracy, safety, external generalization, or deployment utility.
+V9 is retained as the task-reframing and historical comparison study. It models a new patient whose report is unavailable, retrieves other-patient analogies, and separates target-image answers from historical support. V10 is the final primary confirmation study. Neither establishes physician-adjudicated similarity, clinical diagnostic accuracy, safety, external generalization, or deployment utility.
 
 ### V9 Supplemental Validity and Robustness Audits
 
@@ -120,33 +122,52 @@ The consolidated interpretation is in `docs/V9_SUPPLEMENTAL_VALIDITY_RESULTS.md`
 - Six frozen Test cases had unusable empty-report RadGraph records and were retained as documented technical exclusions without replacement; 568 cases remained technically eligible.
 - Retrieval nDCG@10: R4 nine-feature reranker `0.34905`; R5 fact-aware multiview ensemble `0.36007`; difference `+0.01103`, case-bootstrap 95% CI `[+0.00770,+0.01441]`.
 - Correctly aligned R5 retrieval exceeded all 100 deterministic fixed-point-free shuffled-image assignments: aligned `0.36007`, shuffled mean `0.24963`, plus-one Monte Carlo `p=0.00990`.
+- A validation-only frozen-checkpoint 2x2 attribution audit measured R4/R5 with mean/learned-attention image views: R4 mean `0.340255`, R4 attention `0.346206`, R5 mean `0.353909`, R5 attention `0.358540`; the fact-aware main contrast was `+0.012994`, the attention-view contrast `+0.005291`, and the interaction `-0.001319`.
 - Retrieval confidence on Test achieved Brier `0.16739`, ECE `0.04579`, and AUROC `0.70546`; the frozen 80%-coverage threshold yielded observed coverage `81.51%`.
 - Token-F1: target image without history `0.14942`; R4 whole-report RAG `0.20752`; R5 hierarchical RAG `0.20919`; calibrated selective RAG `0.20498`.
 - R5 hierarchical RAG minus no-history generation was `+0.05978`, 95% CI `[+0.05114,+0.06860]`. Its advantage over R4 whole-report RAG was only `+0.00167`, CI `[-0.00347,+0.00683]`.
 - Complete F1RadGraph improved from `0.08265` without history to `0.11053` with R5 hierarchical RAG. The R5-minus-R4 complete-score interval was marginally above zero, while entity and entity-relation intervals crossed zero.
-- Deterministic assembly achieved `100%` schema and citation validity, but raw answer token-ceiling rates remained high. This is disclosed as a generator limitation rather than hidden by reparsing.
-- A blinded 100-case, 400-row clinical-review package is prepared with empty rating fields and a separate private key. Its status is `pending_independent_review`; no reviewer result is claimed or fabricated.
+- Deterministic assembly achieved `100%` schema and provenance integrity, but raw answer token-ceiling rates remained high. This is disclosed as a generator limitation rather than hidden by reparsing.
+- A blinded 100-case, 400-row clinical-review package is prepared with empty rating fields and a separate private key. It is retained as Future Work; no reviewer result is claimed or fabricated.
 - The MIMIC-CXR adapter and patient-level external-validation runbook are implemented, but no authorized external dataset was present for this release. No external result is claimed.
 
 V10 strengthens internal validity and traceability. Its automated metrics measure retrieval relevance and report-reference consistency, not physician-adjudicated diagnostic correctness, safety, or clinical utility.
 
+The post-hoc qrel sensitivity audit is reported separately in
+`docs/V10_POSTHOC_QREL_SENSITIVITY_RESULTS.md`. Under the combined qrel, R5
+remains above R4 overall, but the abnormal subgroup interval crosses zero;
+label-only results are unfavorable for abnormal cases, while fact-only results
+are positive. These are exploratory validity qualifications, not replacements
+for the frozen V10 result. R3 was declared during development but was not part
+of the frozen confirmation rows and is not reconstructed after Test execution.
+
+### V11 Technical Development Extension
+
+The V11 development audit uses V10 Train/Validation only and retains case-level retrieval before within-case evidence selection. Hierarchical case-to-fact selection reduced mean evidence context from 790.5 to 316.3 characters (59.99%) in the deterministic 384-case audit while preserving 100% provenance completeness. Full-bank qrel-v2 nDCG@10 was 0.5537; qrel>=0.5 relevant-item recall@100 was 12.00%, while 55.12% of rows had at least one relevant case in Top-100. The additional candidate-generation audit found a mixed RRF result: K=100 nDCG@10 0.5867 and relevant-item presence 57.99%, but relevant-item recall 11.82%; K=200 increased recall to 19.11% with extra cost. A case-grouped V10 2x2 bootstrap estimated a fact-aware main effect of +0.01299 (95% CI [0.00883, 0.01729]). The planner rule-coverage diagnostic reached 1.00 on 64 author-defined examples.
+
+A clean 48-case MedGemma development diagnostic (24 report-indexed normal, 24 report-indexed abnormal; 432 rows) compared whole-report, sentence-only and case-to-fact evidence. Case-to-fact achieved Token-F1 0.1531, mean input 539.3 tokens and mean evidence length 245.9 characters, versus 0.1312, 798.2 tokens and 672.3 characters for whole-report evidence. Case-to-fact minus whole-report Token-F1 was `+0.02195`, 95% CI `[-0.00026,+0.04302]`; complete F1RadGraph was `+0.01395`, CI `[-0.00691,+0.03442]`. Both intervals cross zero. All three policies had 100% answer-only contract validity and deterministic provenance validity.
+
+The deterministic planner was also evaluated once on a separately committed 96-item reserved wording set: accuracy `0.9167`, macro-F1 `0.9196`, and indication-invariance `1.0000`. Labels remain author-defined rather than clinician-authored. These findings support engineering efficiency, auditability and wording robustness; they do not establish clinical answer validity or confirmed generation superiority. No V11 confirmation cohort was instantiated; no physician or external validation is claimed. See `docs/V11_REMAINING_OPTIMIZATION_AUDIT.md`, `docs/V11_MEDGEMMA_GENERATION_RESULTS.md`, and `docs/V11_PLANNER_RESERVED_SET_RESULTS.md`.
+
 ## Submission Status
 
-Automated V1-V10 experiments, supplemental validity audits, and Dashboard integration are complete in the corresponding repository history. The V9 researcher accepted all 24 assistant-proposed exploratory labels without modification; this was not independent clinical adjudication. V10 therefore prepares a separate blinded clinical package and leaves every rating blank pending a qualified independent reviewer.
+Automated V1-V10 experiments, supplemental validity audits, and Dashboard integration are complete in the corresponding repository history. The V9 researcher accepted all 24 assistant-proposed exploratory labels without modification; this was not independent clinical adjudication. V10 retains a separate blinded clinical package as Future Work and leaves every rating blank.
 
-The final V9 reporting artifacts are:
+The current V10/V11 reporting artifacts are:
 
 ```text
-deliverables/22097191_ZHANG_YUE_V9_Final_Research_Project.docx
-deliverables/22097191_ZHANG_YUE_V9_Final_Research_Project.pdf
-deliverables/22097191_ZHANG_YUE_V9_Final_Defence.pptx
+deliverables/22097191_ZHANG_YUE_Final_Research_Project.docx
+deliverables/22097191_ZHANG_YUE_Final_Research_Project.pdf
+deliverables/22097191_ZHANG_YUE_Final_Defence.pptx
 ```
 
-The earlier `P2_Research_Project` and `P2_Defence` files remain preserved as
-historical pre-V9 artifacts. They should not be used as the current V9 result
-summary.
+The release-level acceptance audit and SHA-256 inventory are in
+`docs/V10_V11_FINAL_RELEASE_AUDIT.md` and
+`artifacts/v10_v11_final_release_manifest.json`.
 
-The decision is recorded in `config/submission_decisions.json` and propagated into the result registry, manuscript, deck, and release audit. The blinded packages and rating interface are preserved for a future extension; they are not evidence for the submitted study.
+Earlier P2/V9 reports and decks remain historical artifacts. They should not be used as the current result summary.
+
+The decision is recorded in `config/submission_decisions.json` and propagated into the result registry, manuscript, deck, and release audit. The blinded packages and rating interface are preserved for Future Work; they are not evidence for the submitted study.
 
 ## Repository Layout
 
@@ -196,10 +217,17 @@ Reproduce the V10 publication-extension software and lightweight checks with:
 & ".\.venv\Scripts\python.exe" scripts\run_v10_confirmation_retrieval.py --help
 & ".\.venv\Scripts\python.exe" scripts\run_v10_confirmation_qa.py --help
 & ".\.venv\Scripts\python.exe" scripts\evaluate_v10_confirmation_radgraph.py --help
+& ".\.venv\Scripts\python.exe" scripts\run_v11_development_evidence_ablation.py
+& ".\.venv\Scripts\python.exe" scripts\audit_v10_fact_attention_2x2.py
+& ".\.venv\Scripts\python.exe" scripts\run_v11_medgemma_development.py --max-cases 1 --batch-size 1
+& ".\.venv\Scripts\python.exe" scripts\run_v11_medgemma_development.py --max-cases 48 --stratify-spectrum --policies whole_report sentence_only case_to_fact --batch-size 4
+& ".\.venv\Scripts\python.exe" scripts\audit_v11_candidate_generation.py --help
+& ".\.venv\Scripts\python.exe" scripts\bootstrap_v10_fact_attention_2x2.py
+& ".\.venv\Scripts\python.exe" scripts\evaluate_v11_question_planner_benchmark.py
 & ".\.venv\Scripts\python.exe" -m pytest -q --basetemp outputs/pytest-v10
 ```
 
-The audited final suite contains **252 passing tests**. Model-backed confirmation commands require the pinned local snapshots and non-public large artifacts documented by the V10 protocols; aggregate summaries remain versioned for inspection.
+The current working-tree suite contains **262 passing tests**; the earlier V10 freeze recorded 252. The clean 48-case MedGemma development diagnostic is not a confirmation result. Model-backed confirmation commands require the pinned local snapshots and non-public large artifacts documented by the V10 protocols; aggregate summaries remain versioned for inspection.
 
 The manifest command verifies required files, locked SHA-256 values, tracked-file exclusions, file-size limits, the declared human-evaluation disposition, repository publication, and conditional V3 status. Use `--strict` only for the final submission gate; it exits unsuccessfully while external requirements such as the remote repository remain pending.
 

@@ -84,3 +84,15 @@ experiments/v10_publication/clinical_review/
 # to publish when they contain no report text or image pixels.
 data/splits/v11/*_rows.jsonl
 experiments/v11_development/*.csv
+
+# Local rendering and presentation QA outputs
+_qa_*/
+_ppt_build/
+.test_tmp/
+deliverables/*.pptx.inspect.ndjson
+deliverables/*_Final_Defence/
+
+# Superseded local-only integrated drafts
+deliverables/*_V10_V11_Integrated_Research_Project.docx
+deliverables/*_V10_V11_Integrated_Research_Project.pdf
+deliverables/*_V10_V11_Technical_Update.pptx
