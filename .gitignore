@@ -74,6 +74,13 @@ experiments/post_submission_v9/*.pt
 experiments/post_submission_v9/*.csv
 experiments/post_submission_v9/
 
+# V12 local pilot rows, raw diagnostics and learned checkpoint
+experiments/v12_optimization/diagnostics/*_rows.jsonl
+experiments/v12_optimization/diagnostics/v12_diagnostics.json
+experiments/v12_optimization/generation/*_rows.jsonl
+experiments/v12_optimization/retrieval/*_rows.jsonl
+experiments/v12_optimization/retrieval/*.txt
+
 # V10 local per-query rows, shuffled mappings, generations, and review packages
 experiments/v10_publication/*.json
 experiments/v10_publication/*.jsonl

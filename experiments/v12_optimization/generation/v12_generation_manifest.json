@@ -1,0 +1,21 @@
+{
+  "study": "V12 generation pilot case manifest",
+  "status": "selection_frozen_before_generation",
+  "selection_rule": "Within report-indexed normal/abnormal strata, sort by SHA256(v12-generation|canonical_case_id) and take the first 24 per stratum.",
+  "source_filter": "V10 Validation IDs intersected with case IDs covered by the saved V12 ranking rows; this is a data-integrity filter, not an outcome filter.",
+  "no_test_evaluation": true,
+  "eligible_validation_case_count": 376,
+  "eligible_spectrum_counts": {
+    "report_indexed_normal": 128,
+    "report_indexed_abnormal": 239,
+    "report_indexed_indeterminate": 9
+  },
+  "selected_case_count": 48,
+  "selected_spectrum_counts": {
+    "report_indexed_normal": 24,
+    "report_indexed_abnormal": 24
+  },
+  "selected_case_ids_sha256": "ff712d3bfa766e29127fb98f1da045b0136dd90e081819638fac59f76bdb70be",
+  "selection_rows_sha256": "93b9d7be97bf2ad3c667dff54fcc8eb0040d7895ec8edd609739769f77637bdd",
+  "selection_rows": "experiments\\v12_optimization\\generation\\v12_generation_selection_rows.jsonl"
+}

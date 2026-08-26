@@ -1,0 +1,117 @@
+{
+  "study": "V12 validation-only generation pilot",
+  "status": "development_only_no_confirmation",
+  "no_test_evaluation": true,
+  "inputs": {
+    "cases_sha256": "56e367190396011d4d67f43e7e733389a8346890bf8729e82fb4326d063bbd68",
+    "facts_sha256": "631aa3e11cc52005656ee8a66de3de1ee5d3411a2f271a3c5f8a14de39b51599",
+    "ranking_rows_sha256": "48ce1f198d2c102fd57635d8ae97de22f0e863bcc927cc673751039bd59786fd",
+    "selection_rows_sha256": "93b9d7be97bf2ad3c667dff54fcc8eb0040d7895ec8edd609739769f77637bdd",
+    "selected_case_count": 48,
+    "selected_case_ids_sha256": "ff712d3bfa766e29127fb98f1da045b0136dd90e081819638fac59f76bdb70be",
+    "selection_source": "predeclared V12 48-case Validation manifest selected by spectrum-stratified SHA-256 ordering; no outcome-based replacement",
+    "model": {
+      "name": "google/medgemma-1.5-4b-it",
+      "revision": "91850547d9f0b2fdd21aa7c5f4f3d1a8a52c243b",
+      "local_files_only": true
+    }
+  },
+  "retrieval_source": "saved V12 LambdaMART rrf_lambdamart Top-3",
+  "max_new_tokens": 96,
+  "policies": [
+    "whole_report",
+    "case_to_fact"
+  ],
+  "counts": {
+    "rows": 288,
+    "cases": 48,
+    "questions_per_case": 3
+  },
+  "metrics": {
+    "whole_report": {
+      "row_count": 144,
+      "case_count": 48,
+      "token_f1_all_rows": 0.19302924301076044,
+      "token_f1_non_proxy": 0.19159562477018388,
+      "answer_only_contract_valid_rate": 1.0,
+      "serialization_leak_rate": 0.0,
+      "evidence_provenance_valid_rate": 1.0,
+      "token_ceiling_rate": 0.013888888888888888,
+      "mean_input_tokens": 747.6319444444445,
+      "mean_output_tokens": 34.21527777777778,
+      "mean_evidence_characters": 593.1041666666666,
+      "mean_latency_seconds": 2.287736280902411,
+      "by_question_type": {
+        "findings": {
+          "token_f1": 0.2551957736037431,
+          "rows": 48
+        },
+        "impression": {
+          "token_f1": 0.12799547593662466,
+          "rows": 48
+        },
+        "acute": {
+          "token_f1": 0.19589647949191358,
+          "rows": 48
+        }
+      }
+    },
+    "case_to_fact": {
+      "row_count": 144,
+      "case_count": 48,
+      "token_f1_all_rows": 0.18234904156341913,
+      "token_f1_non_proxy": 0.14511177169944564,
+      "answer_only_contract_valid_rate": 1.0,
+      "serialization_leak_rate": 0.0,
+      "evidence_provenance_valid_rate": 1.0,
+      "token_ceiling_rate": 0.013888888888888888,
+      "mean_input_tokens": 532.4097222222222,
+      "mean_output_tokens": 34.21527777777778,
+      "mean_evidence_characters": 235.39583333333334,
+      "mean_latency_seconds": 2.287736280902411,
+      "by_question_type": {
+        "findings": {
+          "token_f1": 0.170097677860126,
+          "rows": 48
+        },
+        "impression": {
+          "token_f1": 0.1201258655387653,
+          "rows": 48
+        },
+        "acute": {
+          "token_f1": 0.2568235812913661,
+          "rows": 48
+        }
+      }
+    }
+  },
+  "paired_case_bootstrap": {
+    "case_to_fact_minus_whole_report": {
+      "token_f1": {
+        "case_count": 48,
+        "mean_difference": -0.010680201447341308,
+        "ci_95_low": -0.031191675289817675,
+        "ci_95_high": 0.00976982614028636,
+        "ci_excludes_zero": false,
+        "iterations": 10000,
+        "seed": 1212
+      },
+      "answer_only_contract_valid": {
+        "case_count": 48,
+        "mean_difference": 0.0,
+        "ci_95_low": 0.0,
+        "ci_95_high": 0.0,
+        "ci_excludes_zero": false,
+        "iterations": 10000,
+        "seed": 1212
+      }
+    }
+  },
+  "runtime": {
+    "elapsed_seconds": 672.7080816999951,
+    "batch_size": 2,
+    "max_peak_gpu_memory_mib": 3627.34326171875
+  },
+  "generation_rows_sha256": "27dcc5a49fce3950b00bd1a5df13b2e3ac4e4d6833fc8a7656f7d3d025ded9bd",
+  "claim_boundary": "Token-F1 is automated overlap with a same-source report reference, not clinical correctness. This pilot is development-only, uses the preselected Validation sample, and does not establish clinical safety, external validation, or physician agreement."
+}
