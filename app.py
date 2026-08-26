@@ -193,6 +193,7 @@ V10_CLINICAL_REVIEW_SUMMARY_PATH = (
     ROOT / "data" / "splits" / "v10" / "v10_clinical_review_package_summary.json"
 )
 V10_FACT_ATTENTION_2X2_PATH = ROOT / "data" / "splits" / "v10" / "v10_fact_attention_2x2_summary.json"
+V10_QREL_SENSITIVITY_PATH = ROOT / "data" / "splits" / "v10" / "v10_qrel_sensitivity_summary.json"
 V11_QREL_SUMMARY_PATH = ROOT / "data" / "splits" / "v11" / "v11_development_evidence_ablation_summary.json"
 V11_GENERATION_SUMMARY_PATH = ROOT / "data" / "splits" / "v11" / "v11_medgemma_generation_48_clean_summary.json"
 V11_GENERATION_STATISTICS_PATH = ROOT / "data" / "splits" / "v11" / "v11_medgemma_generation_48_statistical_summary.json"
@@ -941,6 +942,11 @@ def render_results() -> None:
         if V10_FACT_ATTENTION_2X2_PATH.is_file()
         else None
     )
+    v10_qrel_sensitivity = (
+        json.loads(V10_QREL_SENSITIVITY_PATH.read_text(encoding="utf-8"))
+        if V10_QREL_SENSITIVITY_PATH.is_file()
+        else None
+    )
     v11_qrel = (
         json.loads(V11_QREL_SUMMARY_PATH.read_text(encoding="utf-8"))
         if V11_QREL_SUMMARY_PATH.is_file()
@@ -1004,6 +1010,18 @@ def render_results() -> None:
         f"assignments (plus-one Monte Carlo p={alignment['plus_one_monte_carlo_p']:.4f}). "
         f"Confidence AUROC was {v10_retrieval['calibration']['metrics']['auroc']:.3f}."
     )
+    if v10_qrel_sensitivity is not None:
+        abnormal = v10_qrel_sensitivity["metrics"]["label_only"][
+            "r5_minus_r4_by_report_index_class"
+        ]["abnormal"]
+        st.warning(
+            "Post-hoc relevance sensitivity limits the aggregate claim: for report-indexed "
+            "abnormal cases under label-only qrels, R5 minus R4 was "
+            f"{abnormal['difference']:+.4f}, 95% CI "
+            f"[{abnormal['ci95_case_bootstrap'][0]:+.4f}, "
+            f"{abnormal['ci95_case_bootstrap'][1]:+.4f}]. This is an automated "
+            "construct audit, not clinical adjudication."
+        )
     v10_qa_frame = pd.DataFrame(
         [
             {
@@ -1019,7 +1037,7 @@ def render_results() -> None:
                 "Evidence abstention": v10_qa["metrics"]["g1_whole_report"]["evidence_abstention_rate"],
             },
             {
-                "Condition": "G2 R5 hierarchical RAG",
+                "Condition": "G2 R5 whole-report historical RAG",
                 "Token-F1": v10_qa["metrics"]["g2_hierarchical"]["token_f1_equal_question"],
                 "F1RadGraph complete": v10_radgraph["systems"]["g2_hierarchical"]["metrics"]["f1_radgraph_complete"]["mean"],
                 "Evidence abstention": v10_qa["metrics"]["g2_hierarchical"]["evidence_abstention_rate"],

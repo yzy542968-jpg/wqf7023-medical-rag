@@ -87,6 +87,98 @@ Chapter 2 synthesizes medical VQA, multimodal RAG, radiology image-report retrie
 """
 
 
+FINAL_RETRIEVAL_REVIEW = r"""## 2.3 Sparse, Dense, and Multimodal Retrieval
+
+BM25 remains a strong transparent sparse-retrieval baseline based on probabilistic term matching (Robertson and Zaragoza, 2009). It is effective when a query shares terminology with a report, but it is sensitive to lexical overlap and may exploit indication shortcuts. The contrast between BM25 and image-assisted systems helps show whether the target image contributes information beyond the available clinical text.
+
+Dense retrieval encodes queries and documents in a shared vector space. MedCPT uses large-scale PubMed search logs for biomedical retrieval (Jin et al., 2023), while CLIP established general contrastive image-text alignment (Radford et al., 2021). Domain-specific medical encoders can reduce vocabulary and representation mismatch, but semantic similarity does not guarantee evidence ownership or clinical usefulness.
+
+Multimodal retrieval adds image-image and image-report relations. These channels have different score distributions and failure modes, so a convincing evaluation should report each component rather than compare only a fused model with BM25. V10 therefore evaluates BM25, MedSigLIP image-image, MedSigLIP image-report, a nine-feature multimodal reranker and a fact-aware multiview extension on the same Train-only bank.
+
+The final runtime scores the complete technically eligible historical bank rather than relying on a BM25-only shortlist. Compact learned rerankers are fitted on Train roles and frozen before Test. Ranking ties are deterministic, all Test questions share the same candidate bank, and a target report is never inserted into that bank. V11 separately audits whether BM25, MedCPT and MedSigLIP reciprocal-rank fusion can improve first-stage candidate recall at bounded K.
+"""
+
+
+FINAL_VISION_LANGUAGE_REVIEW = r"""## 2.5 Biomedical Vision-Language Representation
+
+BioViL introduced radiology-specific image-text representation learning with localized and global alignment between chest X-rays and reports (Boecking et al., 2022). BioViL-T extended this line by exploiting temporal and multi-image structure (Bannur et al., 2023). MedSigLIP provides a newer medical image-text embedding model intended for semantic image retrieval and related representation tasks. These encoders supply domain priors but do not by themselves establish diagnostic correctness.
+
+The final V10 system uses the pinned MedSigLIP-448 revision for image-image and image-report features. The foundation encoder remains frozen; only compact retrieval components are trained. This separates representation reuse from task-specific ranking and keeps the computation feasible on the available GPU. Earlier BioViL-T studies are retained as formative history, not described as the final encoder.
+
+Multi-view examinations create an aggregation problem because frontal and lateral views may contain complementary information. V10 compares mean-view and learned-attention representations in a frozen-checkpoint mechanism audit. The final R5 ensemble uses the prespecified multiview component, but the attention-only contrast is interpreted cautiously because its interval crosses zero.
+
+An embedding is not an explanation or a calibrated clinical probability. A high image-report score does not identify the responsible anatomy, polarity or uncertainty. R5 therefore combines image features with question-conditioned report facts and preserves the retrieved case and fact provenance. The representation is evaluated as a ranking signal within a controlled RAG workflow, not as an autonomous image diagnosis model.
+"""
+
+
+FINAL_QA_REVIEW = r"""## 2.6 Medical Visual and Report Question Answering
+
+VQA-RAD contains clinically generated questions and answers about radiology images (Lau et al., 2018), while EHRXQA combines electronic health records and chest X-rays for multimodal QA (Bae et al., 2023). RadQA contains physician-authored report questions, answer spans and naturally unanswerable cases (Soni et al., 2022). These resources show the value of clinician phrasing and explicit answerability, but they differ from the same-source new-case retrieval task used here.
+
+The completed benchmark uses three fixed question roles for retrieval and two report-derived roles for V10 generation. This controlled design supports paired system comparisons but is linguistically narrow. The V11 reserved wording set tests planner robustness only; its labels are author-defined and cannot substitute for clinician-authored natural questions.
+
+The final workflow also differs from pure report QA. MedGemma receives the target chest image and may receive explicitly labelled other-case historical reports. The hidden target report is used only as an automated evaluation reference. Retrieved reports are analogies, not answer spans about the target patient. This separation makes it possible to evaluate visual alignment, historical evidence ownership and answer-reference consistency independently.
+
+Natural unanswerability remains incompletely tested. The system can withhold unreliable historical support, but the fixed questions are derived from available report roles. RadQA or a new clinician-authored set would provide a stronger answerability evaluation once authorized access and an external protocol are available.
+"""
+
+
+FINAL_ALIGNMENT_REVIEW = r"""## 2.8 Alignment Controls and Benchmark Validity
+
+Multimodal improvement can be misattributed when clinical text already identifies the answer or when any image changes score distributions. Image ablation asks whether visual information adds value; wrong-image controls ask whether the value depends on the correct image-case pairing. Both are stronger when systems share the same cases, candidate bank, model state and metrics.
+
+V10 uses 100 deterministic unique fixed-point-free image assignments. Each Test case receives the complete view set of another Test case while its indication, question and evaluation reference remain unchanged. Visual similarities, normalized features, multiview state and R5 scores are recomputed. The plus-one Monte Carlo p-value avoids reporting zero from a finite control set.
+
+Benchmark construction can introduce additional shortcuts. Generic repeated questions make text retrieval weakly identified, indications can encode disease hints, and near-duplicate reports can leak across partitions. V10 clusters exact and near-duplicate reports before allocation, uses a common Train-only bank and reports image-only, image-report and BM25 components separately. Patient-level separation remains unverifiable because reliable subject identifiers are absent from the processed source.
+
+The relevance construct is another validity boundary. Report labels and RadGraph facts enable deterministic graded qrels, but they are not physician judgments. Post-hoc sensitivity across combined, label-only and fact-only definitions is therefore reported as a construct audit rather than a replacement endpoint.
+"""
+
+
+FINAL_AGENT_REVIEW = r"""## 2.9 Agentic and Auditable RAG Workflows
+
+Agentic RAG can plan, retrieve, rerank, generate, verify or abstain. The term should be used carefully: a deterministic workflow is not learned clinical reasoning, and an automated checker is not an independent physician. Research value depends on bounded actions, inspectable state and honest failure handling rather than on the number of named agents.
+
+The final system is agent-like only in this bounded engineering sense. A deterministic planner identifies question intent, the retriever ranks historical cases, the evidence selector preserves case ownership, MedGemma generates a concise target-image answer, deterministic code attaches provenance, and a calibrated gate can withhold historical support. Each stage has an explicit contract and can be evaluated separately.
+
+Direct Python modules are used instead of LangChain because the experiment requires stable prompts, frozen transitions and artifact-level reproducibility. This choice does not imply that orchestration libraries are inferior; it avoids introducing hidden retries, memory or tool-selection behavior into a controlled study. The Dashboard exposes the retrieved case IDs, evidence units, confidence boundary and provenance without claiming autonomous clinical agency.
+
+Open-ended agents may be useful in future interactive systems, but they require separate evaluation of tool choice, prompt reformulation, retry policy and safety. The current contribution is an auditable multimodal RAG workflow, not a general autonomous medical assistant.
+"""
+
+
+FINAL_COMPARATIVE_SYNTHESIS = r"""## 2.10 Comparative Synthesis of Design Alternatives
+
+Several technically plausible architectures answer different research questions. An LLM-only system tests parametric medical knowledge but cannot expose a case-specific evidence path. A direct vision-language model can answer from the target image, but it does not test historical-case retrieval and can confound visual recognition, medical reasoning and language generation. Both remain useful generation baselines, but neither isolates the retrieval contribution studied here.
+
+Text-only RAG preserves an auditable document path and provides a necessary baseline. BM25 is transparent and fast, while modern dense text retrieval can reduce vocabulary mismatch. However, the indication and question may be generic or incomplete before the report exists. A text retriever can therefore overuse indication shortcuts or return lexically similar reports whose images differ from the target case. V10 retains BM25 as R0 rather than treating it as an intentionally weak comparator.
+
+Chunk-level retrieval offers fine-grained matching and short prompts, but radiology chunks can lose case ownership, split negation or detach findings from impressions. Whole-report retrieval preserves a coherent historical unit and was the development-selected V10 QA policy. V11 adds sentence and fact selection only after case retrieval, so every unit retains its owning `case_id`, section, unit type and source hash. This ordering avoids anonymous cross-patient fact assembly.
+
+Image-only and image-report retrieval test complementary visual relations. Image-image similarity asks whether the target radiograph resembles a historical radiograph. Image-report compatibility asks whether the target image aligns with the language of a historical report. Neither relation alone guarantees clinically useful evidence. The R4 comparator therefore combines normalized text, image-image, image-report and rank features, while R5 adds question-conditioned fact signals and multiview representation. All systems rank the same Train-only historical bank.
+
+A fully fine-tuned multimodal foundation model might achieve stronger benchmark performance, but it would introduce additional choices about negative sampling, optimization, checkpoints and model adaptation. The final study instead freezes the MedSigLIP and MedGemma foundation models and trains only compact retrieval components. This makes the incremental R5-minus-R4 comparison more attributable and feasible on the available 8 GB GPU.
+
+An agent framework or LangChain could orchestrate retrieval, planning, generation and checking. Neither is required for scientific validity. The implemented planner, evidence selector, generator contract and confidence gate are direct modules with explicit inputs and outputs. This keeps retries, abstention, provenance and failure states inspectable without implying autonomous clinical agency.
+
+The selected design follows four principles. First, retrieval units preserve evidence ownership. Second, multimodal gain is compared with strong individual components and complete wrong-image controls. Third, target-image answering and historical provenance are separated. Fourth, retrieval, generation, structure, confidence and clinical validity are evaluated as different layers. These principles motivate the final research gap.
+"""
+
+
+FINAL_LITERATURE_GAP = r"""## 2.11 Similar-Case Multimodal RAG and Final Research Gap
+
+The closest line of work combines chest-image retrieval with report generation. CXR-RePaiR uses a contrastive image-to-report retriever to construct reports from retrieved exemplars. X-REM adds coarse retrieval, learned image-text matching and an NLI filter. FactMM-RAG mines factual report pairs with CheXbert and RadGraph to train a fact-aware multimodal retriever. RA-RRG retrieves clinically important key phrases to condition report generation, while MedProbCLIP introduces probabilistic image-report embeddings, calibration and risk-coverage evaluation. These systems establish that historical image-report pairs can support image-conditioned language generation and that retrieval reliability deserves explicit measurement.
+
+They do not directly resolve the question-conditioned new-case setting examined here. At inference, the target report is hidden; the target image, available indication and medical question must retrieve other-case historical evidence. The output must distinguish observations about the target image from analogies drawn from retrieved reports. This task requires both clinically useful ranking and explicit evidence ownership.
+
+Five connected gaps remain. First, many radiology retrieval studies focus on report generation rather than a user's question. Second, multimodal improvements are not always compared with strong individual visual and text components. Third, aligned-image gains are rarely challenged by complete wrong-image recomputation. Fourth, local support for a retrieved report is often conflated with correctness for the target case. Fifth, duplicate leakage, relevance sensitivity, candidate recall, wording robustness and selective reliability can materially change conclusions but are often treated as implementation details.
+
+The final research gap is therefore not whether RAG can be used in radiology or whether a newer model can replace an older one. It is whether a correctly paired target image improves retrieval of clinically related other-case reports under duplicate-aware splitting and shuffled-image controls; whether fact-aware reranking adds value over a strong frozen multimodal comparator; whether retrieval gains transfer to automated answer-reference consistency; and whether the complete workflow preserves case, section and fact provenance while retaining negative and mixed results.
+
+V10 addresses that gap through a cluster-disjoint same-source confirmation, a common Train-only historical bank, report-derived graded relevance, deterministic fixed-point-free image shuffling, bounded local generation and explicit claim boundaries. V11 investigates residual mechanisms - candidate recall, within-case evidence compression, planner wording and retrieval confidence - on development data only. Neither automated relevance nor report-reference overlap is presented as physician-adjudicated clinical correctness.
+"""
+
+
 CHAPTER_3 = r"""# Chapter 3: Methodology
 
 ## 3.1 Research Design and Version Boundary
@@ -297,7 +389,21 @@ The separate V11 normalized gate accepted 99.83% of development rows and did not
 
 V10 QA required 232.4 seconds for the recorded confirmation execution and peaked at approximately 5,311.6 MiB allocated GPU memory. The clean V11 generation matrix required 773.8 seconds with batch size 4 and peaked at 4,261.6 MiB. These measurements demonstrate feasibility on the local 8 GB GPU but are hardware-specific rather than deployment benchmarks.
 
-## 4.11 Results Summary
+## 4.11 Post-hoc Relevance-Construct Sensitivity
+
+The frozen rankings were re-evaluated under three report-derived qrels without changing any model, threshold or ranking. The original combined construct weighted active report labels at 0.60 and RadGraph facts at 0.40. Label-only and fact-only variants were exploratory sensitivity analyses.
+
+| Qrel variant | R4 nDCG@10 | R5 nDCG@10 | R5 minus R4 | 95% case-bootstrap CI |
+|---|---:|---:|---:|---:|
+| Combined 0.60 label + 0.40 fact | 0.34905 | 0.36007 | +0.01103 | [+0.00770, +0.01446] |
+| Label only | 0.33725 | 0.34242 | +0.00517 | [+0.00096, +0.00951] |
+| Fact only | 0.31076 | 0.33159 | +0.02084 | [+0.01750, +0.02422] |
+
+The aggregate R5 advantage remained positive under all three definitions, but subgroup behavior was not uniform. Among 359 report-indexed abnormal Test cases, the combined-qrel difference was +0.00215 with CI [-0.00129, +0.00560], while the label-only difference was -0.00733 with CI [-0.01092, -0.00381]. Fact-only results were positive, but R5 itself uses RadGraph-derived features, so this variant shares representation with the evaluation construct and is not an independent clinical validation.
+
+The audit also found that all 195 evaluated report-indexed normal cases and all 14 indeterminate cases had empty active-label sets. Under the frozen similarity function, empty-versus-empty active-label agreement received a score of 1.0. These queries consequently had an average of 968 Train candidates above the combined relevance threshold, compared with 9.36 for abnormal queries. The primary overall result remains unchanged, but its meaning is spectrum-dependent and limited to the frozen report-derived construct.
+
+## 4.12 Results Summary
 
 The four-RQ evidence chain is coherent but deliberately mixed. Correct images improved retrieval and strongly exceeded shuffled controls. Fact-aware R5 improved the primary retrieval metric over R4. Historical context improved QA over no history, but R5 did not confirm a Token-F1 advantage over R4 RAG. Case-to-fact evidence substantially reduced context and preserved provenance, but its answer-quality intervals crossed zero. Candidate generation and calibrated abstention remain open technical problems.
 """
@@ -319,7 +425,7 @@ R5 improved nDCG@10 over R4 by approximately 0.011 with an interval that exclude
 
 The 2x2 audit suggests that fact-aware features account for the more stable mechanism contrast. Attention-view gains were smaller and the interaction crossed zero. This does not prove that attention is useless; it indicates that the final ensemble's advantage should not be attributed to component synergy without stronger evidence.
 
-The report-derived qrel is also a limitation. RadGraph and label overlap reward semantic similarity in the source reports, not necessarily usefulness to a radiologist facing the target image. The positive retrieval result is internally credible within that construct, while its clinical meaning remains unverified.
+The post-hoc qrel audit narrows that interpretation. R5 remained above R4 overall under combined, label-only and fact-only definitions, but the abnormal combined interval crossed zero and the abnormal label-only result favored R4. The large aggregate fact-only gain may partly reflect shared RadGraph representation between R5 features and the evaluation construct. The positive primary result is internally credible under the frozen qrel, but it is not uniform across relevance definitions or report-indexed spectrum groups.
 
 ## 5.3 Better Retrieval Does Not Guarantee Better QA
 
@@ -367,7 +473,7 @@ For engineering, the project demonstrates that a complete multimodal RAG pipelin
 
 The first limitation is source scope. All primary and development results come from OpenI/IU-Xray. Duplicate clustering strengthens internal validity but does not establish external generalization. The processed artifact lacks reliable subject identifiers, so patient-level independence cannot be proven.
 
-The second limitation is evaluation reference. Relevance, Token-F1 and F1RadGraph are derived from reports. They are useful automated proxies but not physician judgments of similarity, correctness, harmfulness or clinical usefulness. Independent blind review remains unexecuted and is not replaced by author interpretation.
+The second limitation is evaluation reference. Relevance, Token-F1 and F1RadGraph are derived from reports. The retrieval model and qrel also share RadGraph-derived information, creating feature-metric coupling. Empty active-label sets make the frozen qrel unusually broad for report-indexed normal and indeterminate cases, and label-only abnormal sensitivity did not support an R5 gain. These proxies are not physician judgments of similarity, correctness, harmfulness or clinical usefulness. Independent blind review remains unexecuted and is not replaced by author interpretation.
 
 The third limitation is absolute performance. Retrieval Hit@1 remains low, candidate recall is incomplete, and generation overlap scores are modest. Token ceilings and occasional incomplete answers remain. Deterministic assembly guarantees provenance format, not semantic truth.
 
@@ -397,7 +503,7 @@ CHAPTER_6 = r"""# Chapter 6: Conclusion
 
 **RQ2: Is the gain alignment specific?** Yes. Correctly aligned R5 nDCG@10 was 0.36007, while the mean across 100 fixed-point-free shuffled assignments was 0.24963 and no shuffled assignment reached the aligned score. The control supports dependence on the correct image-case pairing.
 
-**RQ3: Does fact-aware multiview retrieval improve graded relevance?** Yes, under the frozen report-derived metric. R5 exceeded R4 by +0.01103 nDCG@10, 95% CI [+0.00770, +0.01441]. The component audit suggests that fact-aware features provide the more stable contribution, while the incremental attention contrast is less certain.
+**RQ3: Does fact-aware multiview retrieval improve graded relevance?** Yes at the aggregate level under the frozen report-derived metric. R5 exceeded R4 by +0.01103 nDCG@10, 95% CI [+0.00770, +0.01441]. Post-hoc qrel sensitivity retained an overall positive difference under label-only and fact-only definitions, but the abnormal combined interval crossed zero and abnormal label-only retrieval favored R4. The result is therefore confirmed for the prespecified aggregate construct, not for every spectrum group or an independent clinical relevance standard.
 
 **RQ4: Does retrieval improvement transfer to QA, and does fact selection help?** Historical RAG improved automated answer-reference consistency over no history, but the incremental R5 Token-F1 advantage over R4 RAG was not confirmed. Case-to-fact evidence substantially reduced context and preserved provenance, but its Token-F1 and complete F1RadGraph improvement intervals crossed zero. The answer is therefore mixed: retrieval and evidence efficiency improved, while final answer superiority was not established.
 
@@ -419,6 +525,7 @@ FINAL_APPENDICES = r"""## Appendix I: Final V10/V11 Artifact Index
 - V10 retrieval summary: `data/splits/v10/v10_confirmation_retrieval_summary.json`
 - V10 QA summary: `data/splits/v10/v10_confirmation_qa_summary.json`
 - V10 F1RadGraph summary: `data/splits/v10/v10_radgraph_metrics_summary.json`
+- V10 post-hoc qrel sensitivity: `data/splits/v10/v10_qrel_sensitivity_summary.json`
 - V11 clean generation summary: `data/splits/v11/v11_medgemma_generation_48_clean_summary.json`
 - V11 statistical summary: `data/splits/v11/v11_medgemma_generation_48_statistical_summary.json`
 - V11 candidate-generation summaries: `data/splits/v11/v11_candidate_generation_audit_summary.json` and `v11_candidate_generation_audit_k200_summary.json`
@@ -458,24 +565,50 @@ def build() -> None:
     appendices = top_section(source, "# Appendices", None)
 
     chapter_1 = chapter_1.replace("final V9", "V10 primary").replace("Final V9", "V10 primary")
+    chapter_1 = chapter_1.replace(
+        "V9 changes the construct: the target report is removed from the candidate bank and hidden from inference. A fixed Train-only bank supplies other-case evidence to Validation and Test queries. The final claims are based on the V9 held-out study rather than on the earlier development versions.",
+        "V9 changed the construct by removing the target report from the candidate bank and hiding it at inference. V10 then added duplicate-cluster-disjoint confirmation over a fixed Train-only historical bank. The final primary claims come from V10 Test; V11 contributes development-only mechanism evidence.",
+    )
     chapter_1 = replace_section(chapter_1, "## 1.5 Research Questions", "## 1.6 Research Contributions", RESEARCH_QUESTIONS)
     chapter_1 = replace_section(chapter_1, "## 1.6 Research Contributions", "## 1.7 Scope and Boundaries", CONTRIBUTIONS)
-    chapter_1 = replace_section(chapter_1, "## 1.7 Scope and Boundaries", "## 1.8 Conceptual Framework", SCOPE_FRAMEWORK)
-    chapter_1 = chapter_1[: chapter_1.index("## 1.8 Conceptual Framework")] + SCOPE_FRAMEWORK.strip()
+    chapter_1 = chapter_1[: chapter_1.index("## 1.7 Scope and Boundaries")] + SCOPE_FRAMEWORK.strip()
 
     chapter_2 = chapter_2.replace(
         "Sections 2.1-2.11 preserve the literature synthesis that motivated the preliminary V5 controlled study. Task-specific references to V5 in those sections describe that preliminary phase. Section 2.12 updates the gap for the final V9 new-patient similar-case study.\n\n",
         "This chapter synthesizes the literature by research theme rather than as a paper-by-paper catalogue. Earlier controlled-study references are retained where they motivate the final V10/V11 design.\n\n",
     )
     chapter_2 = chapter_2.replace("final V9", "V10 primary").replace("Final V9", "V10 primary")
-    chapter_2 += r"""
+    chapter_2 = chapter_2.replace(
+        "Practical evaluations also emphasize noisy, misleading, or insufficient evidence rather than assuming ideal retrieval (Ngo et al., 2024).",
+        "RAGAS likewise separates retrieval context from answer faithfulness instead of assuming ideal evidence (Es et al., 2024).",
+    )
+    chapter_2 = chapter_2.replace("the frozen V5 experiment", "the completed study")
+    chapter_2 = chapter_2.replace(
+        "the frozen V5 references are derived from available report sections",
+        "the template-derived references in the present benchmark come from available report sections",
+    )
+    chapter_2 = chapter_2.replace("The V5 shuffled-image condition", "The V10 shuffled-image condition")
+    chapter_2 = chapter_2.replace("The V5 conditions", "The V10 conditions")
+    chapter_2 = replace_section(chapter_2, "## 2.3 Sparse, Dense, and Multimodal Retrieval", "## 2.4 Paired Radiology Images and Reports", FINAL_RETRIEVAL_REVIEW)
+    chapter_2 = replace_section(chapter_2, "## 2.5 Biomedical Vision-Language Representation", "## 2.6 Medical Visual and Report Question Answering", FINAL_VISION_LANGUAGE_REVIEW)
+    chapter_2 = replace_section(chapter_2, "## 2.6 Medical Visual and Report Question Answering", "## 2.7 Evidence Grounding and Medical Hallucination", FINAL_QA_REVIEW)
+    chapter_2 = replace_section(chapter_2, "## 2.8 Alignment Controls and Benchmark Validity", "## 2.9 Agentic and Auditable RAG Workflows", FINAL_ALIGNMENT_REVIEW)
+    chapter_2 = replace_section(chapter_2, "## 2.9 Agentic and Auditable RAG Workflows", "## 2.10 Comparative Synthesis of Design Alternatives", FINAL_AGENT_REVIEW)
+    chapter_2 = (
+        chapter_2[: chapter_2.index("## 2.10 Comparative Synthesis of Design Alternatives")]
+        + FINAL_COMPARATIVE_SYNTHESIS.strip()
+        + "\n\n"
+        + FINAL_LITERATURE_GAP.strip()
+    )
 
-## 2.13 Final Research Gap
-
-The literature provides capable medical image encoders, report generators, retrieval systems and RAG evaluation frameworks, but fewer studies isolate the complete new-case chain under strict evidence ownership. The unresolved gap is not simply model recency. It is whether the correct target image improves retrieval of other-case historical reports, whether that gain survives shuffled-image controls and duplicate-aware splitting, whether fact-aware ranking adds value over a strong multimodal comparator, and whether retrieval gains reach final QA without hiding weak provenance or negative results.
-
-The present study addresses that gap through a cluster-disjoint same-source confirmation, a common candidate bank, report-derived graded relevance, deterministic image shuffling, bounded local generation, case-preserving evidence selection and explicit claim boundaries. V11 then investigates the residual mechanisms - candidate recall, fact compression, planner wording and confidence - without treating development evidence as a new confirmation.
-"""
+    references = references.replace(
+        "Jain, S., Agrawal, A., Saporta, A., et al. (2021). RadGraph: Extracting clinical entities and relations from radiology reports. *NeurIPS Datasets and Benchmarks*.",
+        "Jain, S., Agrawal, A., Saporta, A., et al. (2021). RadGraph: Extracting clinical entities and relations from radiology reports. *NeurIPS Datasets and Benchmarks*.\n\nJin, Q., Kim, W., Chen, Q., et al. (2023). MedCPT: Contrastive pre-trained transformers with large-scale PubMed search logs for zero-shot biomedical information retrieval. *Bioinformatics, 39*(11), btad651. https://doi.org/10.1093/bioinformatics/btad651\n\nLau, J. J., Gayen, S., Ben Abacha, A., and Demner-Fushman, D. (2018). A dataset of clinically generated visual questions and answers about radiology images. *Scientific Data, 5*, 180251. https://doi.org/10.1038/sdata.2018.251",
+    )
+    references = references.replace(
+        "Qwen Team. (2025). Qwen3 Embedding: Advancing text embedding and reranking through foundation models. https://qwenlm.github.io/blog/qwen3-embedding/",
+        "Qwen Team. (2025). Qwen3 Embedding: Advancing text embedding and reranking through foundation models. https://qwenlm.github.io/blog/qwen3-embedding/\n\nRadford, A., Kim, J. W., Hallacy, C., et al. (2021). Learning transferable visual models from natural language supervision. *Proceedings of the 38th International Conference on Machine Learning*, 8748-8763.",
+    )
 
     appendices = appendices.replace(
         "# Appendices",
@@ -495,6 +628,8 @@ The present study addresses that gap through a cluster-disjoint same-source conf
         "They are formative evidence and do not replace the V9 primary study.",
         "They are formative evidence and do not replace the V10 primary study.",
     )
+    for old, new in (("Table 4.1", "Table H.1"), ("Table 4.2", "Table H.2"), ("Table 4.3", "Table H.3")):
+        appendices = appendices.replace(old, new)
     appendices += "\n\n" + FINAL_APPENDICES.strip()
 
     body = "\n\n".join(

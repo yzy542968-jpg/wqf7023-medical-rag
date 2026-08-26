@@ -71,18 +71,20 @@ V9 is retained as historical evidence. Its post-hoc similarity audit motivated d
 | R4 nDCG@10 | 0.34905 |
 | R5 nDCG@10 | 0.36007 |
 | R5 minus R4, case-bootstrap 95% CI | +0.01103 [0.00770, 0.01441] |
+| Post-hoc abnormal combined-qrel R5 minus R4 | +0.00215 [-0.00129, 0.00560] |
+| Post-hoc abnormal label-only R5 minus R4 | -0.00733 [-0.01092, -0.00381] |
 | Correct-image / shuffled mean nDCG@10 | 0.36007 / 0.24963 |
 | Shuffled-image plus-one Monte Carlo p | 0.00990 |
 | Retrieval confidence Brier / ECE / AUROC | 0.16739 / 0.04579 / 0.70546 |
 | No-history Token-F1 | 0.14942 |
 | R4 whole-report RAG Token-F1 | 0.20752 |
-| R5 hierarchical RAG Token-F1 | 0.20919 |
+| R5 whole-report historical RAG Token-F1 | 0.20919 |
 | R5 minus no history, case-bootstrap 95% CI | +0.05978 [0.05114, 0.06860] |
 | R5 minus R4, case-bootstrap 95% CI | +0.00167 [-0.00347, 0.00683] |
 | R5 complete F1RadGraph | 0.11053 |
 | Schema / provenance integrity | 100% / 100% |
 
-Interpretation: correctly aligned images improved report-derived similar-case retrieval, fact-aware reranking produced a small confirmed gain, and historical retrieval transferred to report-reference-consistent generation. Better fact selection improved efficiency and provenance but did not confirm a Token-F1 advantage over whole-report RAG. These are automated within-source results, not physician-adjudicated diagnostic accuracy.
+Interpretation: correctly aligned images improved report-derived similar-case retrieval, fact-aware reranking produced a small confirmed aggregate gain, and historical retrieval transferred to report-reference-consistent generation. Post-hoc qrel sensitivity showed spectrum-dependent behavior and feature-metric coupling; it does not support a uniform clinical-similarity claim. These are automated within-source results, not physician-adjudicated diagnostic accuracy.
 
 ## V11 Development Extension
 

@@ -35,6 +35,30 @@ def read_jsonl(path: Path) -> list[dict[str, Any]]:
         return [json.loads(line) for line in handle if line.strip()]
 
 
+def _unique_embedding_map(
+    identifiers: list[str],
+    embeddings: np.ndarray,
+    *,
+    label: str,
+) -> dict[str, np.ndarray]:
+    if embeddings.ndim != 2:
+        raise ValueError(f"{label} embeddings must be a two-dimensional matrix.")
+    if embeddings.shape[1] == 0:
+        raise ValueError(f"{label} embeddings must have at least one feature column.")
+    if len(identifiers) != len(embeddings):
+        raise ValueError(
+            f"{label} ID count ({len(identifiers)}) does not match embedding rows "
+            f"({len(embeddings)})."
+        )
+    if len(set(identifiers)) != len(identifiers):
+        raise ValueError(f"{label} contains duplicate case IDs.")
+    if any(not identifier.strip() for identifier in identifiers):
+        raise ValueError(f"{label} contains a blank case ID.")
+    if not np.isfinite(embeddings).all():
+        raise ValueError(f"{label} embeddings contain a non-finite value.")
+    return dict(zip(identifiers, embeddings, strict=True))
+
+
 @dataclass
 class V10RuntimeAssets:
     runtime: FrozenR5Runtime
@@ -90,8 +114,8 @@ def load_v10_runtime_assets(
         view_ids = [str(value) for value in encoded["view_case_ids"]]
         views = l2_normalize(np.asarray(encoded["view_embeddings"], dtype=np.float32))
         embedding_signature = str(encoded["signature"].item())
-    image_by_id = {case_id: case_images[index] for index, case_id in enumerate(case_ids)}
-    report_by_id = {case_id: reports[index] for index, case_id in enumerate(report_ids)}
+    image_by_id = _unique_embedding_map(case_ids, case_images, label="case image")
+    report_by_id = _unique_embedding_map(report_ids, reports, label="report")
     view_lists: dict[str, list[np.ndarray]] = {}
     for case_id, embedding in zip(view_ids, views, strict=True):
         view_lists.setdefault(case_id, []).append(embedding)
@@ -103,6 +127,7 @@ def load_v10_runtime_assets(
         if case_id in image_by_id
         and case_id in report_by_id
         and case_id in views_by_id
+        and case_id in radgraph
         and radgraph[case_id].status == "ok"
     }
     candidate_ids = sorted(set(split["partitions"]["train"]["case_ids"]) & eligible)

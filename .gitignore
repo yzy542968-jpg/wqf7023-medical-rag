@@ -86,6 +86,7 @@ data/splits/v11/*_rows.jsonl
 experiments/v11_development/*.csv
 
 # Local rendering and presentation QA outputs
+.qa/
 _qa_*/
 _ppt_build/
 .test_tmp/

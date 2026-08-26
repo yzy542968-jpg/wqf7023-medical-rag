@@ -46,9 +46,17 @@ def r4_feature_matrix(
     *,
     question_type: str,
 ) -> np.ndarray:
+    arrays = [np.asarray(values) for values in (bm25, image_image, image_report)]
+    if any(values.ndim != 1 for values in arrays):
+        raise ValueError("BM25, image-image, and image-report scores must be one-dimensional.")
+    lengths = {len(values) for values in arrays}
+    if len(lengths) != 1:
+        raise ValueError("BM25, image-image, and image-report scores must have equal length.")
+    if not arrays[0].size:
+        raise ValueError("Retrieval feature construction requires at least one candidate.")
     components = [
         normalized_scores_and_reciprocal_ranks(values)
-        for values in (bm25, image_image, image_report)
+        for values in arrays
     ]
     question = {
         "findings": (1.0, 0.0, 0.0),
@@ -94,7 +102,39 @@ class FrozenR5Runtime:
         r4_checkpoint_state: Mapping[str, torch.Tensor] | None = None,
     ) -> "FrozenR5Runtime":
         identifiers = list(candidate_ids)
+        if not identifiers:
+            raise ValueError("The V10 candidate bank must contain at least one case.")
+        if len(set(identifiers)) != len(identifiers):
+            raise ValueError("The V10 candidate bank contains duplicate case IDs.")
+        if not checkpoint_states:
+            raise ValueError("At least one frozen R5 checkpoint is required.")
+        required = {
+            "cases": cases,
+            "raw cases": raw_cases,
+            "fact records": facts_by_case,
+            "image embeddings": image_by_id,
+            "report embeddings": report_by_id,
+        }
+        for label, mapping in required.items():
+            missing = sorted(set(identifiers) - set(mapping))
+            if missing:
+                preview = ", ".join(missing[:3])
+                raise ValueError(f"Missing {label} for {len(missing)} candidate(s): {preview}")
         bank = [cases[case_id] for case_id in identifiers]
+        candidate_images = np.stack([image_by_id[case_id] for case_id in identifiers]).astype(
+            np.float32, copy=False
+        )
+        candidate_reports = np.stack(
+            [report_by_id[case_id] for case_id in identifiers]
+        ).astype(np.float32, copy=False)
+        if candidate_images.ndim != 2 or candidate_reports.ndim != 2:
+            raise ValueError("Candidate image and report embeddings must be matrices.")
+        if candidate_images.shape != candidate_reports.shape:
+            raise ValueError(
+                "Candidate image and report embedding matrices must have matching shape."
+            )
+        if not np.isfinite(candidate_images).all() or not np.isfinite(candidate_reports).all():
+            raise ValueError("Candidate embeddings contain a non-finite value.")
         models = []
         for state in checkpoint_states:
             model = R5Scorer()
@@ -109,8 +149,8 @@ class FrozenR5Runtime:
         return cls(
             candidate_ids=identifiers,
             candidate_cases=bank,
-            candidate_images=np.stack([image_by_id[case_id] for case_id in identifiers]),
-            candidate_reports=np.stack([report_by_id[case_id] for case_id in identifiers]),
+            candidate_images=candidate_images,
+            candidate_reports=candidate_reports,
             bm25=BM25Retriever().fit(
                 [{"case_id": case.study_id, "report_text": case.report_text} for case in bank]
             ),
@@ -143,6 +183,30 @@ class FrozenR5Runtime:
     ) -> dict[str, Any]:
         bm25_scores = np.asarray(prepared["bm25"], dtype=np.float32)
         image = np.asarray(query_image, dtype=np.float32)
+        candidate_count, embedding_width = self.candidate_images.shape
+        if bm25_scores.shape != (candidate_count,):
+            raise ValueError(
+                f"Expected {candidate_count} BM25 scores, found shape {bm25_scores.shape}."
+            )
+        if not np.isfinite(bm25_scores).all():
+            raise ValueError("BM25 scores contain a non-finite value.")
+        if image.shape != (embedding_width,):
+            raise ValueError(
+                f"Expected one {embedding_width}-dimensional query image embedding, "
+                f"found shape {image.shape}."
+            )
+        if not np.isfinite(image).all():
+            raise ValueError("The query image embedding contains a non-finite value.")
+        fact_features = np.asarray(prepared["fact_features"], dtype=np.float32)
+        if fact_features.shape != (candidate_count, 8):
+            raise ValueError(
+                f"Expected fact features with shape ({candidate_count}, 8), "
+                f"found {fact_features.shape}."
+            )
+        if not np.isfinite(fact_features).all():
+            raise ValueError("Fact features contain a non-finite value.")
+        if not self.models:
+            raise RuntimeError("The frozen V10 runtime has no loaded R5 models.")
         image_image = self.candidate_images @ image
         image_report = self.candidate_reports @ image
         r4 = r4_feature_matrix(
@@ -151,13 +215,15 @@ class FrozenR5Runtime:
             image_report,
             question_type=str(prepared["question_type"]),
         )
-        r5 = augment_r4_features(r4, np.asarray(prepared["fact_features"], dtype=np.float32))
+        r5 = augment_r4_features(r4, fact_features)
         with torch.inference_mode():
             r4_scores = None if self.r4_model is None else self.r4_model(torch.from_numpy(r4)).numpy()
             seed_scores = np.stack(
                 [model(torch.from_numpy(r5)).numpy() for model in self.models]
             )
         ensemble = seed_scores.mean(axis=0)
+        if not np.isfinite(ensemble).all():
+            raise RuntimeError("The frozen R5 ensemble produced a non-finite score.")
         ranking = np.lexsort((np.arange(len(ensemble)), -ensemble))
         return {
             "question": prepared["question"],
@@ -187,9 +253,17 @@ class FrozenR5Runtime:
 
 def component_agreement(result: Mapping[str, np.ndarray], selected_index: int) -> float:
     components = ("bm25", "image_image", "image_report")
+    component_values = [np.asarray(result[name]) for name in components]
+    if any(values.ndim != 1 for values in component_values):
+        raise ValueError("Component score arrays must be one-dimensional.")
+    if not component_values[0].size:
+        raise ValueError("Component agreement requires at least one candidate.")
+    if any(values.shape != component_values[0].shape for values in component_values[1:]):
+        raise ValueError("Component score arrays must have matching shapes.")
+    if selected_index < 0 or selected_index >= len(component_values[0]):
+        raise IndexError("Selected candidate index is outside the component score arrays.")
     matches = 0
-    for name in components:
-        values = np.asarray(result[name])
+    for values in component_values:
         top = int(np.lexsort((np.arange(len(values)), -values))[0])
         matches += int(top == selected_index)
     return matches / len(components)

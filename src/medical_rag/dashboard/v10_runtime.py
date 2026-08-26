@@ -87,6 +87,8 @@ def calibration_features(
     view_count: int,
 ) -> dict[str, float]:
     ranking = np.asarray(result["ranking"], dtype=np.int64)
+    if ranking.ndim != 1 or len(ranking) < 2:
+        raise ValueError("Retrieval calibration requires at least two ranked candidates.")
     top1, top2 = int(ranking[0]), int(ranking[1])
     diagnostics = evidence_diagnostics(evidence)
     return {
@@ -115,16 +117,31 @@ def retrieve_v10(
 ) -> dict[str, Any]:
     if not str(question).strip():
         raise ValueError("A medical question is required.")
+    runtime = resources.assets.runtime
+    candidate_count = len(runtime.candidate_ids)
+    if not isinstance(top_k, int) or isinstance(top_k, bool):
+        raise TypeError("top_k must be an integer.")
+    if top_k < 1 or top_k > candidate_count:
+        raise ValueError(f"top_k must be between 1 and {candidate_count}.")
     views = np.asarray(image_embeddings, dtype=np.float32)
     if views.ndim == 1:
         views = views[None, :]
+    if views.ndim != 2 or len(views) == 0:
+        raise ValueError("At least one image embedding is required.")
+    if not np.isfinite(views).all():
+        raise ValueError("Image embeddings contain a non-finite value.")
+    expected_width = int(runtime.candidate_images.shape[1])
+    if views.shape[1] != expected_width:
+        raise ValueError(
+            f"Expected {expected_width}-dimensional image embeddings, "
+            f"found width {views.shape[1]}."
+        )
     views = l2_normalize(views)
     query_image = attention_query_embedding(resources.assets.attention_models, views)
     question_type = infer_question_type(question)
     query_text = "\n".join(
         value for value in (str(indication).strip(), str(question).strip()) if value
     )
-    runtime = resources.assets.runtime
     prepared = {
         "question": str(question).strip(),
         "query_text": query_text,

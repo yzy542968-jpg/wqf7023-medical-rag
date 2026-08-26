@@ -18,9 +18,9 @@ V10 is the final primary study. V11 is a development-only extension and did not 
 
 | Artifact | Status |
 |---|---|
-| `docs/P2_V10_V11_FINAL_MANUSCRIPT.md` | six chapters, 22,222 whitespace-delimited words |
+| `docs/P2_V10_V11_FINAL_MANUSCRIPT.md` | six chapters, 21,010 whitespace-delimited words |
 | `deliverables/22097191_ZHANG_YUE_Final_Research_Project.docx` | generated and rendered |
-| `deliverables/22097191_ZHANG_YUE_Final_Research_Project.pdf` | 60 A4 pages |
+| `deliverables/22097191_ZHANG_YUE_Final_Research_Project.pdf` | 58 A4 pages |
 | `deliverables/22097191_ZHANG_YUE_Final_Defence.pptx` | 15 slides |
 | `README.md` | V10/V11 scope and results synchronized |
 | `docs/FINAL_RESULTS_REGISTRY.md` | V1/V2 historical, V9 historical, V10 primary and V11 development results separated |
@@ -32,6 +32,7 @@ Every public artifact listed above is fingerprinted in the JSON release manifest
 
 - V10 source/split counts agree across the manuscript, README, result registry and frozen summaries.
 - V10 R5-minus-R4 nDCG@10 is `+0.01103`, 95% CI `[+0.00770,+0.01441]`.
+- The post-hoc qrel audit preserves an overall positive R5-minus-R4 result under combined, label-only and fact-only definitions, but the abnormal combined interval crosses zero and the abnormal label-only difference is negative. The release therefore does not claim uniform clinical-similarity improvement.
 - V10 aligned nDCG@10 is `0.36007`; shuffled mean is `0.24963`; plus-one p is `0.00990`.
 - V10 G2-minus-G0 Token-F1 is `+0.05978`, 95% CI `[+0.05114,+0.06860]`.
 - V10 G2-minus-G1 Token-F1 is `+0.00167`, 95% CI `[-0.00347,+0.00683]`; no G2-over-G1 superiority is claimed.
@@ -41,7 +42,10 @@ Every public artifact listed above is fingerprinted in the JSON release manifest
 ## Software verification
 
 - `python -m compileall -q app.py human_evaluation_app.py scripts src`: passed.
-- Full local-data run, `python -m pytest -q --basetemp=.test_tmp/pytest -p no:cacheprovider`: `262 passed`.
+- Full local-data run, `python -m pytest -q --basetemp=.test_tmp/pytest -p no:cacheprovider`: `276 passed`.
+- Clean-clone run: `272 passed, 4 skipped`; only the intentionally untracked OpenI source-integrity checks were skipped.
+- Runtime validation rejects malformed candidate banks, duplicate case identifiers, inconsistent or non-finite embedding tensors, incompatible score arrays and invalid dashboard requests before ranking.
+- A tracked-file secret scan found no Hugging Face or GitHub token patterns.
 - The clean-clone GitHub Actions workflow covers compilation and all repository-runnable tests on `main`, `post-submission-improvements` and `v10-publication-extension`. Four historical source-integrity checks are explicitly skipped when the intentionally untracked `data/processed/openi_cases.jsonl` artifact is unavailable.
 - The Dashboard reads the frozen V10 summaries and the completed V11 48-case/planner summaries; it no longer presents a one-case smoke test as the current generation result.
 - Retrieval confidence is labeled as a research signal rather than diagnostic confidence.
@@ -49,7 +53,7 @@ Every public artifact listed above is fingerprinted in the JSON release manifest
 ## Document and presentation verification
 
 - The DOCX was rendered through LibreOffice and Poppler using the repository Windows QA wrapper.
-- All 60 PDF pages were inspected in contact sheets; the title page, contents, tables, chapter starts, references and appendices were also checked at full size.
+- All 58 PDF pages were inspected in contact sheets; the title page, contents, tables, chapter starts, references and appendices were also checked at full size.
 - A blank page caused by an explicit Word page-break paragraph was removed by using heading-level `page_break_before`.
 - Actual chapter page numbers were extracted from the rendered PDF and synchronized with the static contents page.
 - The PowerPoint was generated with `@oai/artifact-tool`, rendered slide by slide, checked with `slides_test.py`, and inspected at full size.

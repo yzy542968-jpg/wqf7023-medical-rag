@@ -280,12 +280,12 @@ def add_cover(doc: Document) -> None:
         ("Abstract", 3),
         ("Chapter 1: Introduction", 5),
         ("Chapter 2: Literature Review", 10),
-        ("Chapter 3: Methodology", 21),
-        ("Chapter 4: Results and Analysis", 27),
-        ("Chapter 5: Discussion", 32),
-        ("Chapter 6: Conclusion", 36),
-        ("References", 37),
-        ("Appendices", 39),
+        ("Chapter 3: Methodology", 18),
+        ("Chapter 4: Results", 24),
+        ("Chapter 5: Discussion", 29),
+        ("Chapter 6: Conclusion", 33),
+        ("References", 35),
+        ("Appendices", 37),
     ):
         p = doc.add_paragraph()
         p.paragraph_format.left_indent = Inches(0.2)

@@ -124,9 +124,9 @@ The consolidated interpretation is in `docs/V9_SUPPLEMENTAL_VALIDITY_RESULTS.md`
 - Correctly aligned R5 retrieval exceeded all 100 deterministic fixed-point-free shuffled-image assignments: aligned `0.36007`, shuffled mean `0.24963`, plus-one Monte Carlo `p=0.00990`.
 - A validation-only frozen-checkpoint 2x2 attribution audit measured R4/R5 with mean/learned-attention image views: R4 mean `0.340255`, R4 attention `0.346206`, R5 mean `0.353909`, R5 attention `0.358540`; the fact-aware main contrast was `+0.012994`, the attention-view contrast `+0.005291`, and the interaction `-0.001319`.
 - Retrieval confidence on Test achieved Brier `0.16739`, ECE `0.04579`, and AUROC `0.70546`; the frozen 80%-coverage threshold yielded observed coverage `81.51%`.
-- Token-F1: target image without history `0.14942`; R4 whole-report RAG `0.20752`; R5 hierarchical RAG `0.20919`; calibrated selective RAG `0.20498`.
-- R5 hierarchical RAG minus no-history generation was `+0.05978`, 95% CI `[+0.05114,+0.06860]`. Its advantage over R4 whole-report RAG was only `+0.00167`, CI `[-0.00347,+0.00683]`.
-- Complete F1RadGraph improved from `0.08265` without history to `0.11053` with R5 hierarchical RAG. The R5-minus-R4 complete-score interval was marginally above zero, while entity and entity-relation intervals crossed zero.
+- Token-F1: target image without history `0.14942`; R4 whole-report RAG `0.20752`; R5 whole-report historical RAG `0.20919`; calibrated selective RAG `0.20498`. The retained internal key `g2_hierarchical` is a compatibility identifier; the frozen V10 evidence policy is E0 whole report.
+- R5 whole-report historical RAG minus no-history generation was `+0.05978`, 95% CI `[+0.05114,+0.06860]`. Its advantage over R4 whole-report RAG was only `+0.00167`, CI `[-0.00347,+0.00683]`.
+- Complete F1RadGraph improved from `0.08265` without history to `0.11053` with R5 whole-report historical RAG. The R5-minus-R4 complete-score interval was marginally above zero, while entity and entity-relation intervals crossed zero.
 - Deterministic assembly achieved `100%` schema and provenance integrity, but raw answer token-ceiling rates remained high. This is disclosed as a generator limitation rather than hidden by reparsing.
 - A blinded 100-case, 400-row clinical-review package is prepared with empty rating fields and a separate private key. It is retained as Future Work; no reviewer result is claimed or fabricated.
 - The MIMIC-CXR adapter and patient-level external-validation runbook are implemented, but no authorized external dataset was present for this release. No external result is claimed.
@@ -227,7 +227,7 @@ Reproduce the V10 publication-extension software and lightweight checks with:
 & ".\.venv\Scripts\python.exe" -m pytest -q --basetemp outputs/pytest-v10
 ```
 
-The full local-data suite contains **262 passing tests**; the earlier V10 freeze recorded 252. In a clean clone, four historical source-integrity checks are explicitly skipped because the large `openi_cases.jsonl` source artifact is intentionally not committed. The clean 48-case MedGemma development diagnostic is not a confirmation result. Model-backed confirmation commands require the pinned local snapshots and non-public large artifacts documented by the V10 protocols; aggregate summaries remain versioned for inspection.
+The final full local-data suite contains **276 passing tests**; the earlier V10 freeze recorded 252. In a clean clone, **272 tests pass and four historical source-integrity checks are explicitly skipped** because the large `openi_cases.jsonl` source artifact is intentionally not committed. The clean 48-case MedGemma development diagnostic is not a confirmation result. Model-backed confirmation commands require the pinned local snapshots and non-public large artifacts documented by the V10 protocols; aggregate summaries remain versioned for inspection.
 
 The manifest command verifies required files, locked SHA-256 values, tracked-file exclusions, file-size limits, the declared human-evaluation disposition, repository publication, and conditional V3 status. Use `--strict` only for the final submission gate; it exits unsuccessfully while external requirements such as the remote repository remain pending.
 

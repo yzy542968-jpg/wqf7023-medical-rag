@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import numpy as np
+import pytest
 
 from medical_rag.dashboard.v10_runtime import calibration_features, infer_question_type
 
@@ -32,3 +33,9 @@ def test_v10_dashboard_calibration_features_preserve_frozen_order() -> None:
     assert features["question_impression"] == 1.0
     assert features["question_findings"] == 0.0
     assert features["view_count"] == 1.0
+
+
+def test_v10_dashboard_calibration_rejects_a_single_candidate() -> None:
+    result = {"ranking": np.asarray([0])}
+    with pytest.raises(ValueError, match="at least two"):
+        calibration_features(result, [], question_type="findings", view_count=1)

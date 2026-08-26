@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import numpy as np
+import pytest
 
 from medical_rag.retrieval.bm25_retriever import BM25Retriever
 from medical_rag.similar_case.v10_runtime import (
@@ -31,6 +32,24 @@ def test_runtime_feature_matrix_has_frozen_width() -> None:
     assert np.allclose(features[:, -3:], [[1.0, 0.0, 0.0]] * 3)
 
 
+def test_runtime_feature_matrix_rejects_misaligned_components() -> None:
+    with pytest.raises(ValueError, match="equal length"):
+        r4_feature_matrix(
+            np.asarray([1.0, 0.0]),
+            np.asarray([1.0]),
+            np.asarray([1.0, 0.0]),
+            question_type="findings",
+        )
+
+    with pytest.raises(ValueError, match="one-dimensional"):
+        r4_feature_matrix(
+            np.asarray([[1.0, 0.0]]),
+            np.asarray([[1.0, 0.0]]),
+            np.asarray([[1.0, 0.0]]),
+            question_type="findings",
+        )
+
+
 def test_score_normalization_uses_stable_reciprocal_ranks() -> None:
     normalized, reciprocal = normalized_scores_and_reciprocal_ranks(
         np.asarray([2.0, 2.0, 0.0], dtype=np.float32)
@@ -46,6 +65,16 @@ def test_component_agreement_counts_selected_top1_matches() -> None:
         "image_report": np.asarray([3.0, 2.0]),
     }
     assert component_agreement(result, 0) == 2.0 / 3.0
+
+
+def test_component_agreement_rejects_empty_or_invalid_selection() -> None:
+    empty = {name: np.asarray([]) for name in ("bm25", "image_image", "image_report")}
+    with pytest.raises(ValueError, match="at least one candidate"):
+        component_agreement(empty, 0)
+
+    values = {name: np.asarray([1.0]) for name in empty}
+    with pytest.raises(IndexError, match="outside"):
+        component_agreement(values, 1)
 
 
 def test_prepare_query_is_image_independent() -> None:
