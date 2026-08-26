@@ -1,0 +1,93 @@
+{
+  "study": "V11 deterministic question planner benchmark",
+  "status": "development_only_author_defined_intent_labels",
+  "benchmark_sha256": "3bddd960ee921b0e8cec241c2e86363ccacec9b7c04e2e8f585f41bc5a58f712",
+  "planner_source_sha256": "84b84a29892bcadde1924f32ba32713c1d696a2b3368a236f8cb49862e505b92",
+  "example_count": 96,
+  "accuracy": 0.9166666666666666,
+  "macro_f1": 0.919604743083004,
+  "indication_invariance_rate": 1.0,
+  "indication_changed_prediction_count": 0,
+  "per_intent": {
+    "comparison": {
+      "support": 12,
+      "precision": 1.0,
+      "recall": 0.8333333333333334,
+      "f1": 0.9090909090909091
+    },
+    "device": {
+      "support": 12,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "insufficient_information": {
+      "support": 12,
+      "precision": 1.0,
+      "recall": 0.8333333333333334,
+      "f1": 0.9090909090909091
+    },
+    "location": {
+      "support": 12,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "presence": {
+      "support": 12,
+      "precision": 0.9090909090909091,
+      "recall": 0.8333333333333334,
+      "f1": 0.8695652173913043
+    },
+    "severity": {
+      "support": 12,
+      "precision": 0.9230769230769231,
+      "recall": 1.0,
+      "f1": 0.9600000000000001
+    },
+    "summary": {
+      "support": 12,
+      "precision": 0.6666666666666666,
+      "recall": 1.0,
+      "f1": 0.8
+    },
+    "uncertainty": {
+      "support": 12,
+      "precision": 1.0,
+      "recall": 0.8333333333333334,
+      "f1": 0.9090909090909091
+    }
+  },
+  "confusion": {
+    "comparison": {
+      "comparison": 10,
+      "summary": 2
+    },
+    "device": {
+      "device": 12
+    },
+    "insufficient_information": {
+      "insufficient_information": 10,
+      "summary": 2
+    },
+    "location": {
+      "location": 12
+    },
+    "presence": {
+      "presence": 10,
+      "summary": 2
+    },
+    "severity": {
+      "severity": 12
+    },
+    "summary": {
+      "summary": 12
+    },
+    "uncertainty": {
+      "presence": 1,
+      "severity": 1,
+      "uncertainty": 10
+    }
+  },
+  "claim_boundary": "This is an author-defined intent robustness benchmark, not physician annotation, independent natural-language validation, or clinical validation."
+}
