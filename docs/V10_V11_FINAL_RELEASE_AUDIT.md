@@ -2,7 +2,10 @@
 
 ## Release identity
 
-- Release label: `v10-v11-final-thesis-freeze`
+- Release label: `v10-v11-final-thesis-freeze-r1`
+- Preserved technical-freeze tag: `v10-v11-final-thesis-freeze`
+- Revision scope: post-freeze evidence-boundary clarification; no model, split,
+  output or metric was changed.
 - Primary evidence: frozen V10 confirmation
 - Development extension: V11 Train/Validation audits only
 - Repository: `https://github.com/yzy542968-jpg/wqf7023-medical-rag`

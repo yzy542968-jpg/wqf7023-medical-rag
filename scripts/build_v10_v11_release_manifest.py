@@ -59,7 +59,7 @@ def main() -> None:
         raise FileNotFoundError("Missing release artifacts: " + ", ".join(missing))
 
     manifest = {
-        "release": "v10-v11-final-thesis-freeze",
+        "release": "v10-v11-final-thesis-freeze-r1",
         "generated_on": date.today().isoformat(),
         "repository": "https://github.com/yzy542968-jpg/wqf7023-medical-rag",
         "primary_study": "V10 frozen confirmation",

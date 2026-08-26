@@ -70,10 +70,10 @@
       "sha256": "937c297724684c5d21701631eb5e7da51d0a12542e2c81406f79674f9e7f3dc7"
     },
     "release_audit": {
-      "bytes": 6158,
+      "bytes": 6337,
       "hash_mode": "canonical_utf8_lf",
       "path": "docs/V10_V11_FINAL_RELEASE_AUDIT.md",
-      "sha256": "076bbfdd4b508c979f716cf41e2646b8d6b0a137f94432ad25faff80cc2cedb8"
+      "sha256": "578ab33014cb8bea67d4a909607996a722b9ae20326adabc2a5d4885b1730c48"
     },
     "result_registry": {
       "bytes": 5512,
@@ -198,6 +198,6 @@
   },
   "generated_on": "2026-08-26",
   "primary_study": "V10 frozen confirmation",
-  "release": "v10-v11-final-thesis-freeze",
+  "release": "v10-v11-final-thesis-freeze-r1",
   "repository": "https://github.com/yzy542968-jpg/wqf7023-medical-rag"
 }
