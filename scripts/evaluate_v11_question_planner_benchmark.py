@@ -35,9 +35,19 @@ def main() -> None:
     predictions = []
     confusion: dict[str, Counter[str]] = defaultdict(Counter)
     for example in examples:
-        predicted = plan_question(example["question"]).intent
+        indication = str(example.get("indication", ""))
+        predicted = plan_question(example["question"], indication).intent
+        without_indication = plan_question(example["question"], "").intent
         expected = str(example["intent"])
-        predictions.append({"id": example["id"], "expected": expected, "predicted": predicted})
+        predictions.append(
+            {
+                "id": example["id"],
+                "expected": expected,
+                "predicted": predicted,
+                "without_indication": without_indication,
+                "indication_invariant": predicted == without_indication,
+            }
+        )
         confusion[expected][predicted] += 1
     labels = sorted({str(example["intent"]) for example in examples})
     per_intent = {}
@@ -57,9 +67,14 @@ def main() -> None:
         "example_count": len(examples),
         "accuracy": sum(row["expected"] == row["predicted"] for row in predictions) / len(predictions),
         "macro_f1": sum(float(row["f1"]) for row in per_intent.values()) / len(per_intent),
+        "indication_invariance_rate": sum(row["indication_invariant"] for row in predictions)
+        / len(predictions),
+        "indication_changed_prediction_count": sum(
+            not row["indication_invariant"] for row in predictions
+        ),
         "per_intent": per_intent,
         "confusion": {label: dict(sorted(confusion[label].items())) for label in labels},
-        "claim_boundary": "This is an author-defined intent robustness benchmark, not physician annotation or clinical validation.",
+        "claim_boundary": "This is an author-defined intent robustness benchmark, not physician annotation, independent natural-language validation, or clinical validation.",
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
