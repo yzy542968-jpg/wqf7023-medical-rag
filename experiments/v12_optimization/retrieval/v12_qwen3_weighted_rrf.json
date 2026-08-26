@@ -1,0 +1,443 @@
+{
+  "study": "V12 Qwen3 dense channel and weighted RRF pilot",
+  "status": "validation_only_development",
+  "no_test_evaluation": true,
+  "inputs": {
+    "cases_sha256": "56e367190396011d4d67f43e7e733389a8346890bf8729e82fb4326d063bbd68",
+    "radgraph_sha256": "631aa3e11cc52005656ee8a66de3de1ee5d3411a2f271a3c5f8a14de39b51599",
+    "split_sha256": "b4c1b091c3dbff0399d07c8350f4d8d68ce8ce52e0157dcc96f46af8c8baa7b3",
+    "medsiglip_embeddings_sha256": "31be82906d372c607f8f778a189f1b726305bee9591eac944905460090772fbb",
+    "medcpt_sha256": "eb7cbf3b98dc2f5c7f9810abfc45f33c692697a0e511dcaaf32daa03cbaf4177",
+    "train_case_count": 2506,
+    "validation_case_count": 376,
+    "fit_case_count": 1811,
+    "internal_case_count": 366
+  },
+  "qwen3": {
+    "model": "Qwen/Qwen3-Embedding-0.6B",
+    "revision": "97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3",
+    "instruction": "Given a radiology question and clinical indication, retrieve a chest X-ray report containing clinically relevant evidence for the question.",
+    "document": "full_historical_report",
+    "query": "indication_newline_question",
+    "embedding_dimension": 1024,
+    "cache_signature": "e450ff43272345057d3901734183283eb66ce25b79eefb0a618f75b360a9400a",
+    "cache_sha256": "38637d58340e4bc5a4bb9b5b8816d34d8400c24404b454e091665c038eecad5e",
+    "runtime": {
+      "cache_used": true,
+      "build_seconds": 142.725695000001,
+      "peak_gpu_memory_mib": 1179.9736328125
+    }
+  },
+  "rrf": {
+    "k": 60,
+    "source_top_k": 100,
+    "output_k": 200,
+    "channels": [
+      "bm25",
+      "medcpt",
+      "medsiglip",
+      "qwen3"
+    ],
+    "weight_recipes": {
+      "three_channel_baseline": [
+        1.0,
+        1.0,
+        1.0,
+        0.0
+      ],
+      "four_channel_equal": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "text_heavy": [
+        2.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "visual_heavy": [
+        1.0,
+        1.0,
+        2.0,
+        1.0
+      ],
+      "qwen_heavy": [
+        1.0,
+        1.0,
+        1.0,
+        2.0
+      ],
+      "text_qwen_heavy": [
+        2.0,
+        1.0,
+        1.0,
+        2.0
+      ],
+      "visual_qwen_heavy": [
+        1.0,
+        1.0,
+        2.0,
+        2.0
+      ],
+      "qwen_only_diagnostic": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    "selection_role": "maximum Train internal-early-stop qrel-v2 nDCG@10; deterministic declaration-order tie-break",
+    "selected_recipe": "three_channel_baseline",
+    "internal_qrel_v2_ndcg10": {
+      "three_channel_baseline": 0.47805248598506406,
+      "four_channel_equal": 0.469783620096636,
+      "text_heavy": 0.4164907794322367,
+      "visual_heavy": 0.47425854808858636,
+      "qwen_heavy": 0.4519117484582749,
+      "text_qwen_heavy": 0.4407942573370912,
+      "visual_qwen_heavy": 0.4675779777649553,
+      "qwen_only_diagnostic": 0.43577284963477475
+    }
+  },
+  "metrics": {
+    "four_channel_equal": {
+      "qrel_v2_ndcg10": 0.5378016039808189,
+      "normal_ndcg10": 0.5728828653708525,
+      "abnormal_ndcg10": 0.5200748839336524,
+      "indeterminate_ndcg10": 0.5096110076862067
+    },
+    "qwen_heavy": {
+      "qrel_v2_ndcg10": 0.5213682587922222,
+      "normal_ndcg10": 0.5464694222942837,
+      "abnormal_ndcg10": 0.5085301248167283,
+      "indeterminate_ndcg10": 0.5052977134454609
+    },
+    "qwen_only_diagnostic": {
+      "qrel_v2_ndcg10": 0.5039125501357162,
+      "normal_ndcg10": 0.5191766888787707,
+      "abnormal_ndcg10": 0.4959200835141787,
+      "indeterminate_ndcg10": 0.4990669682953318
+    },
+    "text_heavy": {
+      "qrel_v2_ndcg10": 0.47878501696533177,
+      "normal_ndcg10": 0.4822497752859906,
+      "abnormal_ndcg10": 0.4774067834993579,
+      "indeterminate_ndcg10": 0.46610820955682636
+    },
+    "text_qwen_heavy": {
+      "qrel_v2_ndcg10": 0.5065870915579321,
+      "normal_ndcg10": 0.5257091496950151,
+      "abnormal_ndcg10": 0.49715119393625157,
+      "indeterminate_ndcg10": 0.48520443489516124
+    },
+    "three_channel_baseline": {
+      "qrel_v2_ndcg10": 0.5422466796663704,
+      "normal_ndcg10": 0.5867422758216706,
+      "abnormal_ndcg10": 0.5196211569609941,
+      "indeterminate_ndcg10": 0.5102537484115421
+    },
+    "three_channel_baseline_lambdamart": {
+      "qrel_v2_ndcg10": 0.6202330049782141,
+      "normal_ndcg10": 0.6725474354891313,
+      "abnormal_ndcg10": 0.5933936280401545,
+      "indeterminate_ndcg10": 0.588940114178087
+    },
+    "visual_heavy": {
+      "qrel_v2_ndcg10": 0.5438964041534886,
+      "normal_ndcg10": 0.5822300698786232,
+      "abnormal_ndcg10": 0.5243218932063175,
+      "indeterminate_ndcg10": 0.5185185045486732
+    },
+    "visual_qwen_heavy": {
+      "qrel_v2_ndcg10": 0.5370575783832031,
+      "normal_ndcg10": 0.5706318507698852,
+      "abnormal_ndcg10": 0.5197743624494345,
+      "indeterminate_ndcg10": 0.5185222164582458
+    }
+  },
+  "bootstrap_vs_baselines": {
+    "four_channel_equal": {
+      "difference": -0.0044450756855515024,
+      "ci95_low": -0.0081269410348241,
+      "ci95_high": -0.0008246788764612381,
+      "ci_excludes_zero": true,
+      "case_count": 376
+    },
+    "qwen_heavy": {
+      "difference": -0.02087842087414823,
+      "ci95_low": -0.027127204200441374,
+      "ci95_high": -0.014667439558809309,
+      "ci_excludes_zero": true,
+      "case_count": 376
+    },
+    "qwen_only_diagnostic": {
+      "difference": -0.038334129530654105,
+      "ci95_low": -0.04511271988910683,
+      "ci95_high": -0.03154944255436388,
+      "ci_excludes_zero": true,
+      "case_count": 376
+    },
+    "text_heavy": {
+      "difference": -0.06346166270103862,
+      "ci95_low": -0.07024746132299742,
+      "ci95_high": -0.056697218221461246,
+      "ci_excludes_zero": true,
+      "case_count": 376
+    },
+    "text_qwen_heavy": {
+      "difference": -0.03565958810843822,
+      "ci95_low": -0.04153405468649605,
+      "ci95_high": -0.02992134375457118,
+      "ci_excludes_zero": true,
+      "case_count": 376
+    },
+    "three_channel_baseline_lambdamart": {
+      "difference": 0.07798632531184373,
+      "ci95_low": 0.06816335850619903,
+      "ci95_high": 0.08773781848865633,
+      "ci_excludes_zero": true,
+      "case_count": 376
+    },
+    "visual_heavy": {
+      "difference": 0.001649724487118148,
+      "ci95_low": -0.0028966702988586675,
+      "ci95_high": 0.0062458192219687425,
+      "ci_excludes_zero": false,
+      "case_count": 376
+    },
+    "visual_qwen_heavy": {
+      "difference": -0.005189101283167313,
+      "ci95_low": -0.010010416221531548,
+      "ci95_high": -0.00024084089253280974,
+      "ci_excludes_zero": true,
+      "case_count": 376
+    }
+  },
+  "ranker": {
+    "type": "LightGBM LambdaMART",
+    "version": "4.7.0",
+    "features": 17,
+    "candidate_pool": "three_channel_baseline Top-200",
+    "qrel": "qrel-v2 full report-derived proxy",
+    "selection_rule": "maximum Train internal-early-stop qrel-v2 nDCG@10; deterministic declaration-order tie-break",
+    "selected_model": "deeper",
+    "candidates": {
+      "default": {
+        "internal_qrel_v2_ndcg10": 0.5155269318505942,
+        "best_iteration": 2,
+        "fit_query_count": 5433,
+        "internal_query_count": 1098,
+        "qrel_variant": "qrel_v2",
+        "config": {
+          "n_estimators": 300,
+          "learning_rate": 0.05,
+          "num_leaves": 15,
+          "min_child_samples": 40,
+          "reg_lambda": 1.0
+        }
+      },
+      "small_regularized": {
+        "internal_qrel_v2_ndcg10": 0.49588200226071866,
+        "best_iteration": 2,
+        "fit_query_count": 5433,
+        "internal_query_count": 1098,
+        "qrel_variant": "qrel_v2",
+        "config": {
+          "n_estimators": 400,
+          "learning_rate": 0.03,
+          "num_leaves": 7,
+          "min_child_samples": 40,
+          "reg_lambda": 2.0
+        }
+      },
+      "deeper": {
+        "internal_qrel_v2_ndcg10": 0.5264567380751118,
+        "best_iteration": 226,
+        "fit_query_count": 5433,
+        "internal_query_count": 1098,
+        "qrel_variant": "qrel_v2",
+        "config": {
+          "n_estimators": 300,
+          "learning_rate": 0.03,
+          "num_leaves": 31,
+          "min_child_samples": 40,
+          "reg_lambda": 1.0
+        }
+      },
+      "higher_min_child": {
+        "internal_qrel_v2_ndcg10": 0.5155389719376582,
+        "best_iteration": 2,
+        "fit_query_count": 5433,
+        "internal_query_count": 1098,
+        "qrel_variant": "qrel_v2",
+        "config": {
+          "n_estimators": 300,
+          "learning_rate": 0.05,
+          "num_leaves": 15,
+          "min_child_samples": 80,
+          "reg_lambda": 3.0
+        }
+      }
+    },
+    "internal_qrel_v2_ndcg10": 0.5264567380751118,
+    "best_iteration": 226,
+    "fit_query_count": 5433,
+    "internal_query_count": 1098,
+    "qrel_variant": "qrel_v2",
+    "config": {
+      "n_estimators": 300,
+      "learning_rate": 0.03,
+      "num_leaves": 31,
+      "min_child_samples": 40,
+      "reg_lambda": 1.0
+    },
+    "model_path": "experiments\\v12_optimization\\retrieval\\v12_qwen3_lambdamart.txt",
+    "model_sha256": "8c83d6188daa66939ae6a7865c14eada827c4cf625cc0314beaa4988ec2f086c"
+  },
+  "proxy_specific_rankers": {
+    "label_only": {
+      "selection_rule": "maximum Train internal nDCG for the corresponding proxy; deterministic declaration-order tie-break",
+      "selected_model": "default",
+      "candidates": {
+        "default": {
+          "internal_ndcg10": 0.4164851201775061,
+          "best_iteration": 134,
+          "fit_query_count": 5433,
+          "internal_query_count": 1098,
+          "qrel_variant": "label_only",
+          "config": {
+            "n_estimators": 300,
+            "learning_rate": 0.05,
+            "num_leaves": 15,
+            "min_child_samples": 40,
+            "reg_lambda": 1.0
+          }
+        },
+        "small_regularized": {
+          "internal_ndcg10": 0.41522835461885327,
+          "best_iteration": 71,
+          "fit_query_count": 5433,
+          "internal_query_count": 1098,
+          "qrel_variant": "label_only",
+          "config": {
+            "n_estimators": 400,
+            "learning_rate": 0.03,
+            "num_leaves": 7,
+            "min_child_samples": 40,
+            "reg_lambda": 2.0
+          }
+        },
+        "deeper": {
+          "internal_ndcg10": 0.4161096570047455,
+          "best_iteration": 93,
+          "fit_query_count": 5433,
+          "internal_query_count": 1098,
+          "qrel_variant": "label_only",
+          "config": {
+            "n_estimators": 300,
+            "learning_rate": 0.03,
+            "num_leaves": 31,
+            "min_child_samples": 40,
+            "reg_lambda": 1.0
+          }
+        },
+        "higher_min_child": {
+          "internal_ndcg10": 0.4159131951689127,
+          "best_iteration": 90,
+          "fit_query_count": 5433,
+          "internal_query_count": 1098,
+          "qrel_variant": "label_only",
+          "config": {
+            "n_estimators": 300,
+            "learning_rate": 0.05,
+            "num_leaves": 15,
+            "min_child_samples": 80,
+            "reg_lambda": 3.0
+          }
+        }
+      },
+      "validation_ndcg10_by_evaluation_proxy": {
+        "qrel_v2": 0.5525559205332119,
+        "label_only": 0.38317488929232857,
+        "fact_only": 0.32581741699968686
+      },
+      "model_path": "experiments\\v12_optimization\\retrieval\\v12_qwen3_lambdamart_label_only.txt",
+      "model_sha256": "2ee1a1558078c731bb6b24128f9a2ed1d04bcccf58557eb6440645482f621959"
+    },
+    "fact_only": {
+      "selection_rule": "maximum Train internal nDCG for the corresponding proxy; deterministic declaration-order tie-break",
+      "selected_model": "deeper",
+      "candidates": {
+        "default": {
+          "internal_ndcg10": 0.2852943112397566,
+          "best_iteration": 35,
+          "fit_query_count": 5433,
+          "internal_query_count": 1098,
+          "qrel_variant": "fact_only",
+          "config": {
+            "n_estimators": 300,
+            "learning_rate": 0.05,
+            "num_leaves": 15,
+            "min_child_samples": 40,
+            "reg_lambda": 1.0
+          }
+        },
+        "small_regularized": {
+          "internal_ndcg10": 0.2873834192955753,
+          "best_iteration": 55,
+          "fit_query_count": 5433,
+          "internal_query_count": 1098,
+          "qrel_variant": "fact_only",
+          "config": {
+            "n_estimators": 400,
+            "learning_rate": 0.03,
+            "num_leaves": 7,
+            "min_child_samples": 40,
+            "reg_lambda": 2.0
+          }
+        },
+        "deeper": {
+          "internal_ndcg10": 0.28865385672244265,
+          "best_iteration": 53,
+          "fit_query_count": 5433,
+          "internal_query_count": 1098,
+          "qrel_variant": "fact_only",
+          "config": {
+            "n_estimators": 300,
+            "learning_rate": 0.03,
+            "num_leaves": 31,
+            "min_child_samples": 40,
+            "reg_lambda": 1.0
+          }
+        },
+        "higher_min_child": {
+          "internal_ndcg10": 0.28695200703076307,
+          "best_iteration": 38,
+          "fit_query_count": 5433,
+          "internal_query_count": 1098,
+          "qrel_variant": "fact_only",
+          "config": {
+            "n_estimators": 300,
+            "learning_rate": 0.05,
+            "num_leaves": 15,
+            "min_child_samples": 80,
+            "reg_lambda": 3.0
+          }
+        }
+      },
+      "validation_ndcg10_by_evaluation_proxy": {
+        "qrel_v2": 0.5758029532206238,
+        "label_only": 0.3471763649964097,
+        "fact_only": 0.37386237667334915
+      },
+      "model_path": "experiments\\v12_optimization\\retrieval\\v12_qwen3_lambdamart_fact_only.txt",
+      "model_sha256": "6341ab02aee92f77006869d737105066ca6d5b6003fbc8a2882cc2e68cd7812e"
+    }
+  },
+  "rows_path": "experiments\\v12_optimization\\retrieval\\v12_qwen3_weighted_rrf_rows.jsonl",
+  "claim_boundary": "Exploratory Validation-only development evidence. No score is confirmation evidence or physician-adjudicated clinical correctness.",
+  "rows_sha256": "62a93265b7d184217ffab717a624e5e21cc6adb237443b1d9739573b38e8eb63",
+  "runtime_seconds": 589.715687399992
+}

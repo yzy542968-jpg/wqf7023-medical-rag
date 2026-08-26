@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import gc
+import hashlib
 import json
 import statistics
 import sys
@@ -18,7 +19,6 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 sys.path.insert(0, str(ROOT / "scripts"))
 
-from medical_rag.retrieval.medcpt_retriever import encode_queries  # noqa: E402
 from medical_rag.similar_case.openi_adapter import read_openi_paired_cases  # noqa: E402
 from medical_rag.similar_case.radgraph_adapter import read_radgraph_case_records  # noqa: E402
 from medical_rag.similar_case.v10_runtime import FrozenR5Runtime, QUESTIONS  # noqa: E402
@@ -74,6 +74,7 @@ def main() -> None:
     parser.add_argument("--embeddings", type=Path, default=ROOT / "data/processed/v10_medsiglip_embeddings.npz")
     parser.add_argument("--medcpt", type=Path, default=ROOT / "data/processed/openi_medcpt_full.npz")
     parser.add_argument("--model", type=Path, default=ROOT / "experiments/v12_optimization/retrieval/v12_lambdamart.txt")
+    parser.add_argument("--query-cache", type=Path, default=ROOT / "experiments/v12_optimization/retrieval/v12_medcpt_query_embeddings.npz")
     parser.add_argument("--checkpoints", type=Path, default=ROOT / "experiments/v10_publication/reranker_checkpoints")
     parser.add_argument("--output", type=Path, default=ROOT / "experiments/v12_optimization/retrieval/v12_validation_rankings.json")
     parser.add_argument("--device", choices=("cpu", "cuda"), default=None)
@@ -106,19 +107,40 @@ def main() -> None:
     train_medcpt = np.stack([medcpt_by_id[case_id] for case_id in train_ids])
 
     query_ids = validation_ids
+    cache_query_ids = train_ids + validation_ids
     query_texts = [
         "\n".join(part for part in (formal[case_id].indication, QUESTIONS[question_type]) if part)
-        for case_id in query_ids
+        for case_id in cache_query_ids
         for question_type in QUESTIONS
     ]
-    encoded_queries = encode_queries(query_texts, batch_size=32, device=args.device, local_files_only=True)
+    query_keys = [f"{case_id}:{question_type}" for case_id in cache_query_ids for question_type in QUESTIONS]
+    query_payload = {
+        "cache_schema": "v12-medcpt-query-cls-64-v1",
+        "cases_sha256": file_sha256(args.cases),
+        "split_sha256": file_sha256(args.split),
+        "candidate_ids": train_ids,
+        "query_keys": query_keys,
+        "query_text_sha256": hashlib.sha256("\n\u241e\n".join(query_texts).encode("utf-8")).hexdigest(),
+        "model": "ncbi/MedCPT-Query-Encoder",
+        "max_length": 64,
+        "normalized": True,
+    }
+    query_signature = hashlib.sha256(json.dumps(query_payload, sort_keys=True, ensure_ascii=True).encode("utf-8")).hexdigest()
+    with np.load(args.query_cache, allow_pickle=False) as query_cache:
+        if str(query_cache["signature"].item()) != query_signature:
+            raise RuntimeError("MedCPT query cache signature mismatch")
+        cached_keys = [str(value) for value in query_cache["query_keys"].tolist()]
+        if cached_keys != query_keys:
+            raise RuntimeError("MedCPT query cache key order mismatch")
+        encoded_queries = np.asarray(query_cache["query_embeddings"], dtype=np.float32)
+    cached_index = {key: index for index, key in enumerate(query_keys)}
     gc.collect()
     if args.device == "cuda" and torch.cuda.is_available():
         torch.cuda.empty_cache()
     query_embedding = {
-        (case_id, question_type): encoded_queries[index * len(QUESTIONS) + question_index]
-        for index, case_id in enumerate(query_ids)
-        for question_index, question_type in enumerate(QUESTIONS)
+        (case_id, question_type): encoded_queries[cached_index[f"{case_id}:{question_type}"]]
+        for case_id in query_ids
+        for question_type in QUESTIONS
     }
 
     checkpoint_states = [
@@ -156,9 +178,20 @@ def main() -> None:
                 term_cache=term_cache,
             )
             candidate_ids = state["rrf_rank"][:200]
+            # build_retrieval_state stores the complete R5 feature matrix in
+            # runtime.candidate_ids order; this differs from the weighted-RRF
+            # training helper, which stores a compact feature_case_ids view.
             indices = [runtime.candidate_ids.index(candidate_id) for candidate_id in candidate_ids]
             light_scores = model.predict(state["features_by_index"][indices])
             light_rank = [candidate_id for _, candidate_id in sorted(zip(light_scores, candidate_ids), key=lambda item: (-float(item[0]), item[1]))]
+            full_scores = model.predict(state["features_by_index"])
+            full_rank = [
+                candidate_id
+                for _, candidate_id in sorted(
+                    zip(full_scores, runtime.candidate_ids),
+                    key=lambda item: (-float(item[0]), item[1]),
+                )
+            ]
             query_prepared = prepared_by_case[case_id]
             label_qrels: dict[str, float] = {}
             fact_qrels: dict[str, float] = {}
@@ -171,6 +204,7 @@ def main() -> None:
                 "rrf_candidate": state["rrf_rank"][:200],
                 "rrf_r5_rerank": state["rrf_r5_rank"][:200],
                 "rrf_lambdamart": light_rank,
+                "full_bank_lambdamart": full_rank,
             }
             qrels = {
                 "qrel_v2": state["qrels"],
@@ -191,8 +225,17 @@ def main() -> None:
         if position % 50 == 0:
             print(f"validation_rankings={position}/{len(validation_ids)}", flush=True)
 
-    systems = ("r5_full_bank", "rrf_candidate", "rrf_r5_rerank", "rrf_lambdamart")
+    systems = (
+        "r5_full_bank",
+        "rrf_candidate",
+        "rrf_r5_rerank",
+        "rrf_lambdamart",
+        "full_bank_lambdamart",
+    )
     variants = ("qrel_v2", "label_only", "fact_only")
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output = args.output.resolve()
+    rows_path = args.output.with_name(args.output.stem + "_rows.jsonl").resolve()
     summary: dict[str, Any] = {
         "study": "V12 validation ranking and qrel sensitivity",
         "status": "validation_only_development",
@@ -207,7 +250,7 @@ def main() -> None:
         },
         "metrics": {},
         "bootstrap_vs_r5": {},
-        "rows_path": str(args.output.with_name("v12_validation_ranking_rows.jsonl").resolve().relative_to(ROOT)),
+        "rows_path": str(rows_path.relative_to(ROOT)),
     }
     for system in systems:
         summary["metrics"][system] = {}
@@ -219,14 +262,11 @@ def main() -> None:
                 "abnormal_ndcg10": mean([float(row["metrics"][system][variant]) for row in rows if row["spectrum"] == "abnormal"]),
                 "indeterminate_ndcg10": mean([float(row["metrics"][system][variant]) for row in rows if row["spectrum"] == "indeterminate"]),
             }
-    for system in ("rrf_candidate", "rrf_r5_rerank", "rrf_lambdamart"):
+    for system in ("rrf_candidate", "rrf_r5_rerank", "rrf_lambdamart", "full_bank_lambdamart"):
         summary["bootstrap_vs_r5"][system] = {
             variant: bootstrap(rows, system, "r5_full_bank", variant)
             for variant in variants
         }
-    args.output.parent.mkdir(parents=True, exist_ok=True)
-    rows_path = args.output.with_name("v12_validation_ranking_rows.jsonl").resolve()
-    args.output = args.output.resolve()
     rows_path.write_text("".join(json.dumps(row, ensure_ascii=True, separators=(",", ":")) + "\n" for row in rows), encoding="utf-8")
     args.output.write_text(json.dumps(summary, indent=2, ensure_ascii=True) + "\n", encoding="utf-8")
     print(json.dumps({"metrics": summary["metrics"], "bootstrap_vs_r5": summary["bootstrap_vs_r5"]}, indent=2))

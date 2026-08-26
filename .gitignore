@@ -80,6 +80,9 @@ experiments/v12_optimization/diagnostics/v12_diagnostics.json
 experiments/v12_optimization/generation/*_rows.jsonl
 experiments/v12_optimization/retrieval/*_rows.jsonl
 experiments/v12_optimization/retrieval/*.txt
+experiments/v12_optimization/retrieval/v12_qwen3_v10_embeddings.npz
+experiments/v12_optimization/retrieval/v12_medcpt_query_embeddings.npz
+experiments/v12_optimization/retrieval/v12_medsiglip_runtime_embeddings.npz
 
 # V10 local per-query rows, shuffled mappings, generations, and review packages
 experiments/v10_publication/*.json

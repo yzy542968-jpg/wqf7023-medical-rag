@@ -1,0 +1,179 @@
+{
+  "study": "V12 question-type evidence router analysis",
+  "status": "validation_only_post_hoc_development",
+  "no_test_evaluation": true,
+  "input_rows": "experiments\\v12_optimization\\generation\\v12_generation_96_rows.jsonl",
+  "router": {
+    "findings": "whole_report",
+    "impression": "whole_report",
+    "acute": "case_to_fact"
+  },
+  "selection_information": "question_type only; no reference answer, target report, or Token-F1 is used at routing time",
+  "rows": 144,
+  "cases": 48,
+  "metrics": {
+    "token_f1": {
+      "all_rows": 0.21333827694391128,
+      "non_proxy_rows": 0.19159562477018388,
+      "by_question_type": {
+        "findings": {
+          "policy": "whole_report",
+          "rows": 48,
+          "all_rows": 0.2551957736037431,
+          "non_proxy_rows": 0.2551957736037431
+        },
+        "impression": {
+          "policy": "whole_report",
+          "rows": 48,
+          "all_rows": 0.12799547593662466,
+          "non_proxy_rows": 0.12799547593662466
+        },
+        "acute": {
+          "policy": "case_to_fact",
+          "rows": 48,
+          "all_rows": 0.2568235812913661,
+          "non_proxy_rows": 0.0
+        }
+      }
+    },
+    "answer_only_contract_valid": {
+      "all_rows": 1.0,
+      "non_proxy_rows": 1.0,
+      "by_question_type": {
+        "findings": {
+          "policy": "whole_report",
+          "rows": 48,
+          "all_rows": 1.0,
+          "non_proxy_rows": 1.0
+        },
+        "impression": {
+          "policy": "whole_report",
+          "rows": 48,
+          "all_rows": 1.0,
+          "non_proxy_rows": 1.0
+        },
+        "acute": {
+          "policy": "case_to_fact",
+          "rows": 48,
+          "all_rows": 1.0,
+          "non_proxy_rows": 0.0
+        }
+      }
+    },
+    "input_tokens": {
+      "all_rows": 677.5972222222222,
+      "non_proxy_rows": 748.9166666666666,
+      "by_question_type": {
+        "findings": {
+          "policy": "whole_report",
+          "rows": 48,
+          "all_rows": 746.4166666666666,
+          "non_proxy_rows": 746.4166666666666
+        },
+        "impression": {
+          "policy": "whole_report",
+          "rows": 48,
+          "all_rows": 751.4166666666666,
+          "non_proxy_rows": 751.4166666666666
+        },
+        "acute": {
+          "policy": "case_to_fact",
+          "rows": 48,
+          "all_rows": 534.9583333333334,
+          "non_proxy_rows": 0.0
+        }
+      }
+    },
+    "evidence_characters": {
+      "all_rows": 481.47222222222223,
+      "non_proxy_rows": 604.375,
+      "by_question_type": {
+        "findings": {
+          "policy": "whole_report",
+          "rows": 48,
+          "all_rows": 588.625,
+          "non_proxy_rows": 588.625
+        },
+        "impression": {
+          "policy": "whole_report",
+          "rows": 48,
+          "all_rows": 620.125,
+          "non_proxy_rows": 620.125
+        },
+        "acute": {
+          "policy": "case_to_fact",
+          "rows": 48,
+          "all_rows": 235.66666666666666,
+          "non_proxy_rows": 0.0
+        }
+      }
+    }
+  },
+  "fixed_policy_comparators": {
+    "whole_report": {
+      "policy": "whole_report",
+      "all_rows": 0.19302924301076044,
+      "non_proxy_rows": 0.19159562477018388,
+      "by_question_type": {
+        "findings": {
+          "rows": 48,
+          "all_rows": 0.2551957736037431,
+          "non_proxy_rows": 0.2551957736037431
+        },
+        "impression": {
+          "rows": 48,
+          "all_rows": 0.12799547593662466,
+          "non_proxy_rows": 0.12799547593662466
+        },
+        "acute": {
+          "rows": 48,
+          "all_rows": 0.19589647949191358,
+          "non_proxy_rows": 0.0
+        }
+      }
+    },
+    "case_to_fact": {
+      "policy": "case_to_fact",
+      "all_rows": 0.18234904156341913,
+      "non_proxy_rows": 0.14511177169944564,
+      "by_question_type": {
+        "findings": {
+          "rows": 48,
+          "all_rows": 0.170097677860126,
+          "non_proxy_rows": 0.170097677860126
+        },
+        "impression": {
+          "rows": 48,
+          "all_rows": 0.1201258655387653,
+          "non_proxy_rows": 0.1201258655387653
+        },
+        "acute": {
+          "rows": 48,
+          "all_rows": 0.2568235812913661,
+          "non_proxy_rows": 0.0
+        }
+      }
+    }
+  },
+  "paired_case_to_fact_minus_whole_report": {
+    "token_f1": {
+      "difference": -0.010680201447341308,
+      "ci95_low": -0.031191675289817675,
+      "ci95_high": 0.00976982614028636,
+      "ci_excludes_zero": false,
+      "case_count": 48,
+      "iterations": 10000,
+      "seed": 1212
+    },
+    "answer_only_contract_valid": {
+      "difference": 0.0,
+      "ci95_low": 0.0,
+      "ci95_high": 0.0,
+      "ci_excludes_zero": false,
+      "case_count": 48,
+      "iterations": 10000,
+      "seed": 1212
+    }
+  },
+  "claim_boundary": "This is a deterministic Validation-only exploratory router. Its rule was derived from the observed V12 pilot and must be prospectively frozen before any future confirmation study."
+}

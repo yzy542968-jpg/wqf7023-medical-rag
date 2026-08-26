@@ -1,0 +1,198 @@
+{
+  "study": "V12 validation ranking and qrel sensitivity",
+  "status": "validation_only_development",
+  "no_test_evaluation": true,
+  "inputs": {
+    "cases_sha256": "56e367190396011d4d67f43e7e733389a8346890bf8729e82fb4326d063bbd68",
+    "radgraph_sha256": "631aa3e11cc52005656ee8a66de3de1ee5d3411a2f271a3c5f8a14de39b51599",
+    "split_sha256": "b4c1b091c3dbff0399d07c8350f4d8d68ce8ce52e0157dcc96f46af8c8baa7b3",
+    "model_sha256": "8c83d6188daa66939ae6a7865c14eada827c4cf625cc0314beaa4988ec2f086c",
+    "train_case_count": 2506,
+    "validation_case_count": 376
+  },
+  "metrics": {
+    "r5_full_bank": {
+      "qrel_v2": {
+        "ndcg10": 0.5549276835105216,
+        "normal_ndcg10": 0.585178132986504,
+        "abnormal_ndcg10": 0.5393750623152936,
+        "indeterminate_ndcg10": 0.5377075649253801
+      },
+      "label_only": {
+        "ndcg10": 0.33441569457347725,
+        "normal_ndcg10": 0.7357262928021141,
+        "abnormal_ndcg10": 0.11328597243773868,
+        "indeterminate_ndcg10": 0.49910980759303414
+      },
+      "fact_only": {
+        "ndcg10": 0.3327803597849793,
+        "normal_ndcg10": 0.3310661164588569,
+        "abnormal_ndcg10": 0.3350425042757443,
+        "indeterminate_ndcg10": 0.2970882056128499
+      }
+    },
+    "rrf_candidate": {
+      "qrel_v2": {
+        "ndcg10": 0.5422466801762821,
+        "normal_ndcg10": 0.586742277339928,
+        "abnormal_ndcg10": 0.5196211568205864,
+        "indeterminate_ndcg10": 0.5102537518501278
+      },
+      "label_only": {
+        "ndcg10": 0.2823600092986799,
+        "normal_ndcg10": 0.6531889521291578,
+        "abnormal_ndcg10": 0.0748483677927826,
+        "indeterminate_ndcg10": 0.5189353023662652
+      },
+      "fact_only": {
+        "ndcg10": 0.2948437487330773,
+        "normal_ndcg10": 0.30093153693662267,
+        "abnormal_ndcg10": 0.2934837226773273,
+        "indeterminate_ndcg10": 0.24437811954090366
+      }
+    },
+    "rrf_r5_rerank": {
+      "qrel_v2": {
+        "ndcg10": 0.5556597185369939,
+        "normal_ndcg10": 0.5867147486280636,
+        "abnormal_ndcg10": 0.5396824068211404,
+        "indeterminate_ndcg10": 0.5382745683627805
+      },
+      "label_only": {
+        "ndcg10": 0.33573876178108564,
+        "normal_ndcg10": 0.7389107915470388,
+        "abnormal_ndcg10": 0.11348343524589072,
+        "indeterminate_ndcg10": 0.5038502319888174
+      },
+      "fact_only": {
+        "ndcg10": 0.3338889445216642,
+        "normal_ndcg10": 0.33232317130892575,
+        "abnormal_ndcg10": 0.3360298909946124,
+        "indeterminate_ndcg10": 0.29930369609898555
+      }
+    },
+    "rrf_lambdamart": {
+      "qrel_v2": {
+        "ndcg10": 0.6202330060663669,
+        "normal_ndcg10": 0.6725474373473871,
+        "abnormal_ndcg10": 0.5933936285046175,
+        "indeterminate_ndcg10": 0.5889401208760924
+      },
+      "label_only": {
+        "ndcg10": 0.3645880600148431,
+        "normal_ndcg10": 0.8711742480870578,
+        "abnormal_ndcg10": 0.08326754583173128,
+        "indeterminate_ndcg10": 0.6304292618504289
+      },
+      "fact_only": {
+        "ndcg10": 0.36417491389829754,
+        "normal_ndcg10": 0.3771400080216696,
+        "abnormal_ndcg10": 0.3583229862633256,
+        "indeterminate_ndcg10": 0.3351836535612634
+      }
+    },
+    "full_bank_lambdamart": {
+      "qrel_v2": {
+        "ndcg10": 0.5465432989135891,
+        "normal_ndcg10": 0.5880915482020793,
+        "abnormal_ndcg10": 0.5254276810222729,
+        "indeterminate_ndcg10": 0.5163718285911271
+      },
+      "label_only": {
+        "ndcg10": 0.30969637310491477,
+        "normal_ndcg10": 0.7290066849002019,
+        "abnormal_ndcg10": 0.07712259900044244,
+        "indeterminate_ndcg10": 0.5222977176795957
+      },
+      "fact_only": {
+        "ndcg10": 0.30757637102920027,
+        "normal_ndcg10": 0.3273940180036428,
+        "abnormal_ndcg10": 0.29816697005595566,
+        "indeterminate_ndcg10": 0.27559726212662605
+      }
+    }
+  },
+  "bootstrap_vs_r5": {
+    "rrf_candidate": {
+      "qrel_v2": {
+        "difference": -0.012681003334239507,
+        "ci95_low": -0.019793441585716588,
+        "ci95_high": -0.0055280456778099216,
+        "case_count": 376
+      },
+      "label_only": {
+        "difference": -0.0520556852747974,
+        "ci95_low": -0.06803736535129387,
+        "ci95_high": -0.03612735964461873,
+        "case_count": 376
+      },
+      "fact_only": {
+        "difference": -0.03793661105190202,
+        "ci95_low": -0.04671003293332973,
+        "ci95_high": -0.029176642576337463,
+        "case_count": 376
+      }
+    },
+    "rrf_r5_rerank": {
+      "qrel_v2": {
+        "difference": 0.0007320350264723856,
+        "ci95_low": 3.154997829507631e-05,
+        "ci95_high": 0.0014311566602970152,
+        "case_count": 376
+      },
+      "label_only": {
+        "difference": 0.0013230672076083548,
+        "ci95_low": -0.00027266943627536654,
+        "ci95_high": 0.002992707469268567,
+        "case_count": 376
+      },
+      "fact_only": {
+        "difference": 0.001108584736684867,
+        "ci95_low": -7.706712222459419e-05,
+        "ci95_high": 0.00227162693409687,
+        "case_count": 376
+      }
+    },
+    "rrf_lambdamart": {
+      "qrel_v2": {
+        "difference": 0.06530532255584531,
+        "ci95_low": 0.05549918802543321,
+        "ci95_high": 0.07494108096028383,
+        "case_count": 376
+      },
+      "label_only": {
+        "difference": 0.030172365441365874,
+        "ci95_low": 0.013836174366113643,
+        "ci95_high": 0.046961177860250225,
+        "case_count": 376
+      },
+      "fact_only": {
+        "difference": 0.031394554113318256,
+        "ci95_low": 0.019850041011053036,
+        "ci95_high": 0.042950650309068764,
+        "case_count": 376
+      }
+    },
+    "full_bank_lambdamart": {
+      "qrel_v2": {
+        "difference": -0.008384384596932458,
+        "ci95_low": -0.01957038646865192,
+        "ci95_high": 0.0027784958777365334,
+        "case_count": 376
+      },
+      "label_only": {
+        "difference": -0.0247193214685625,
+        "ci95_low": -0.041331042305368555,
+        "ci95_high": -0.007801209591143827,
+        "case_count": 376
+      },
+      "fact_only": {
+        "difference": -0.025203988755778985,
+        "ci95_low": -0.03880210700646468,
+        "ci95_high": -0.011562893412878326,
+        "case_count": 376
+      }
+    }
+  },
+  "rows_path": "experiments\\v12_optimization\\retrieval\\v12_qwen3_validation_rankings_rows.jsonl"
+}
