@@ -1,0 +1,86 @@
+{
+  "study": "V11 deterministic question planner benchmark",
+  "status": "development_only_author_defined_intent_labels",
+  "benchmark_sha256": "e868f248b58d60a98fae88a867df880b75d6f430f83b02e2670078af421e669f",
+  "planner_source_sha256": "84b84a29892bcadde1924f32ba32713c1d696a2b3368a236f8cb49862e505b92",
+  "example_count": 64,
+  "accuracy": 1.0,
+  "macro_f1": 1.0,
+  "per_intent": {
+    "comparison": {
+      "support": 8,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "device": {
+      "support": 9,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "insufficient_information": {
+      "support": 8,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "location": {
+      "support": 7,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "presence": {
+      "support": 8,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "severity": {
+      "support": 8,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "summary": {
+      "support": 8,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "uncertainty": {
+      "support": 8,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    }
+  },
+  "confusion": {
+    "comparison": {
+      "comparison": 8
+    },
+    "device": {
+      "device": 9
+    },
+    "insufficient_information": {
+      "insufficient_information": 8
+    },
+    "location": {
+      "location": 7
+    },
+    "presence": {
+      "presence": 8
+    },
+    "severity": {
+      "severity": 8
+    },
+    "summary": {
+      "summary": 8
+    },
+    "uncertainty": {
+      "uncertainty": 8
+    }
+  },
+  "claim_boundary": "This is an author-defined intent robustness benchmark, not physician annotation or clinical validation."
+}

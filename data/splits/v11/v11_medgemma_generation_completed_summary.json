@@ -1,0 +1,170 @@
+{
+  "study": "V11 MedGemma completed-generation diagnostic",
+  "status": "development_only_completed_subset_not_confirmation",
+  "source_rows_sha256": "f2daaa49612161f72eac31229d8105b760912968ab6f0eb767e2ee1f84a487c2",
+  "completed_rows_sha256": "0845c485e4b144ea337aa0ba2763f5d4ddaf26ceee197a1e067cbb1371b41d1c",
+  "complete_case_count": 17,
+  "complete_row_count": 204,
+  "incomplete_case_ids": [
+    "CXR2434"
+  ],
+  "case_selection": {
+    "rule": "retain cases with a complete 12-row matrix from an interrupted resumable development run",
+    "report_indexed_spectrum_counts": {
+      "report_indexed_abnormal": 7,
+      "report_indexed_normal": 10
+    },
+    "not_prospectively_selected": true
+  },
+  "metrics": {
+    "whole_report": {
+      "row_count": 51,
+      "case_count": 17,
+      "token_f1_all_rows": 0.13028200672825568,
+      "token_f1_non_proxy_questions": 0.1322071059000996,
+      "structured_output_valid_rate": 0.0,
+      "raw_json_valid_rate": 0.0,
+      "parser_repaired_rate": 0.0,
+      "normalized_output_usable_rate": 0.0,
+      "answer_only_contract_valid_rate": 1.0,
+      "evidence_provenance_valid_rate": 1.0,
+      "abstention_rate": 0.0,
+      "token_ceiling_rate": 0.13725490196078433,
+      "mean_input_tokens": 794.4901960784314,
+      "mean_output_tokens": 47.509803921568626,
+      "mean_evidence_units": 17.11764705882353,
+      "mean_evidence_characters": 667.9411764705883,
+      "mean_latency_seconds": 3.040403993137457,
+      "max_peak_gpu_memory_mib": 3530.8037109375,
+      "by_question_type": {
+        "findings": {
+          "rows": 17,
+          "token_f1": 0.12545149407603257,
+          "structured_output_valid_rate": 0.0
+        },
+        "impression": {
+          "rows": 17,
+          "token_f1": 0.1389627177241666,
+          "structured_output_valid_rate": 0.0
+        },
+        "acute": {
+          "rows": 17,
+          "token_f1": 0.12643180838456786,
+          "structured_output_valid_rate": 0.0
+        }
+      }
+    },
+    "sentence_only": {
+      "row_count": 51,
+      "case_count": 17,
+      "token_f1_all_rows": 0.13004480913903768,
+      "token_f1_non_proxy_questions": 0.10991847292770826,
+      "structured_output_valid_rate": 0.0,
+      "raw_json_valid_rate": 0.0,
+      "parser_repaired_rate": 0.0,
+      "normalized_output_usable_rate": 0.0,
+      "answer_only_contract_valid_rate": 1.0,
+      "evidence_provenance_valid_rate": 1.0,
+      "abstention_rate": 0.0,
+      "token_ceiling_rate": 0.13725490196078433,
+      "mean_input_tokens": 604.8039215686274,
+      "mean_output_tokens": 47.509803921568626,
+      "mean_evidence_units": 8.764705882352942,
+      "mean_evidence_characters": 355.5098039215686,
+      "mean_latency_seconds": 3.040403993137457,
+      "max_peak_gpu_memory_mib": 3530.8037109375,
+      "by_question_type": {
+        "findings": {
+          "rows": 17,
+          "token_f1": 0.12047497912376179,
+          "structured_output_valid_rate": 0.0
+        },
+        "impression": {
+          "rows": 17,
+          "token_f1": 0.09936196673165472,
+          "structured_output_valid_rate": 0.0
+        },
+        "acute": {
+          "rows": 17,
+          "token_f1": 0.17029748156169655,
+          "structured_output_valid_rate": 0.0
+        }
+      }
+    },
+    "case_to_fact": {
+      "row_count": 51,
+      "case_count": 17,
+      "token_f1_all_rows": 0.1530881195156852,
+      "token_f1_non_proxy_questions": 0.12078948556170298,
+      "structured_output_valid_rate": 0.0,
+      "raw_json_valid_rate": 0.0,
+      "parser_repaired_rate": 0.0,
+      "normalized_output_usable_rate": 0.0,
+      "answer_only_contract_valid_rate": 1.0,
+      "evidence_provenance_valid_rate": 1.0,
+      "abstention_rate": 0.0,
+      "token_ceiling_rate": 0.0,
+      "mean_input_tokens": 541.0980392156863,
+      "mean_output_tokens": 30.11764705882353,
+      "mean_evidence_units": 5.9411764705882355,
+      "mean_evidence_characters": 251.66666666666666,
+      "mean_latency_seconds": 1.9867270774488777,
+      "max_peak_gpu_memory_mib": 3530.8037109375,
+      "by_question_type": {
+        "findings": {
+          "rows": 17,
+          "token_f1": 0.13152844283001378,
+          "structured_output_valid_rate": 0.0
+        },
+        "impression": {
+          "rows": 17,
+          "token_f1": 0.11005052829339218,
+          "structured_output_valid_rate": 0.0
+        },
+        "acute": {
+          "rows": 17,
+          "token_f1": 0.2176853874236497,
+          "structured_output_valid_rate": 0.0
+        }
+      }
+    },
+    "case_to_fact_plus_selective_gate": {
+      "row_count": 51,
+      "case_count": 17,
+      "token_f1_all_rows": 0.1530881195156852,
+      "token_f1_non_proxy_questions": 0.12078948556170298,
+      "structured_output_valid_rate": 0.0,
+      "raw_json_valid_rate": 0.0,
+      "parser_repaired_rate": 0.0,
+      "normalized_output_usable_rate": 0.0,
+      "answer_only_contract_valid_rate": 1.0,
+      "evidence_provenance_valid_rate": 1.0,
+      "abstention_rate": 0.0,
+      "token_ceiling_rate": 0.0,
+      "mean_input_tokens": 541.0980392156863,
+      "mean_output_tokens": 30.11764705882353,
+      "mean_evidence_units": 5.9411764705882355,
+      "mean_evidence_characters": 251.66666666666666,
+      "mean_latency_seconds": 1.9867270774488777,
+      "max_peak_gpu_memory_mib": 3530.8037109375,
+      "by_question_type": {
+        "findings": {
+          "rows": 17,
+          "token_f1": 0.13152844283001378,
+          "structured_output_valid_rate": 0.0
+        },
+        "impression": {
+          "rows": 17,
+          "token_f1": 0.11005052829339218,
+          "structured_output_valid_rate": 0.0
+        },
+        "acute": {
+          "rows": 17,
+          "token_f1": 0.2176853874236497,
+          "structured_output_valid_rate": 0.0
+        }
+      }
+    }
+  },
+  "claim_boundary": "This completed-subset diagnostic reports output-contract, evidence-budget and same-source reference metrics only; it is not a clinical accuracy estimate, confirmation result, human review or external validation."
+}

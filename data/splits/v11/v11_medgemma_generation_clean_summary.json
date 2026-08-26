@@ -1,0 +1,153 @@
+{
+  "study": "v11_medgemma_generation_development",
+  "status": "development_only_no_confirmation",
+  "inputs": {
+    "cases_sha256": "56e367190396011d4d67f43e7e733389a8346890bf8729e82fb4326d063bbd68",
+    "facts_sha256": "631aa3e11cc52005656ee8a66de3de1ee5d3411a2f271a3c5f8a14de39b51599",
+    "split_sha256": "b4c1b091c3dbff0399d07c8350f4d8d68ce8ce52e0157dcc96f46af8c8baa7b3",
+    "train_case_count": 2510,
+    "validation_case_count": 16,
+    "validation_case_ids_sha256": "d8b48b2df678f5fc103039ef8dbbd947d34adacf2b683f85e1498a6d90961bcc",
+    "case_selection": {
+      "rule": "sha256(v11-medgemma-development|case_id) within report-indexed spectrum strata",
+      "stratified": true,
+      "report_indexed_spectrum_counts": {
+        "report_indexed_normal": 8,
+        "report_indexed_abnormal": 8,
+        "report_index_indeterminate": 0
+      }
+    },
+    "selective_threshold_source": "data\\splits\\v11\\v11_development_evidence_ablation_summary.json"
+  },
+  "counts": {
+    "rows": 144,
+    "questions_per_case": 3,
+    "policies": [
+      "whole_report",
+      "sentence_only",
+      "case_to_fact"
+    ]
+  },
+  "metrics": {
+    "whole_report": {
+      "row_count": 48,
+      "case_count": 16,
+      "token_f1_all_rows": 0.14129773363593653,
+      "token_f1_non_proxy_questions": 0.13706502246260377,
+      "structured_output_valid_rate": 0.0,
+      "raw_json_valid_rate": 0.0,
+      "parser_repaired_rate": 0.0,
+      "normalized_output_usable_rate": 0.0,
+      "answer_only_contract_valid_rate": 1.0,
+      "evidence_provenance_valid_rate": 1.0,
+      "abstention_rate": 0.0,
+      "token_ceiling_rate": 0.125,
+      "mean_input_tokens": 825.3541666666666,
+      "mean_output_tokens": 53.8125,
+      "mean_evidence_units": 18.25,
+      "mean_evidence_characters": 720.1875,
+      "mean_latency_seconds": 1.6858083109376214,
+      "max_peak_gpu_memory_mib": 4016.1904296875,
+      "by_question_type": {
+        "findings": {
+          "rows": 16,
+          "token_f1": 0.1872048975750002,
+          "structured_output_valid_rate": 0.0
+        },
+        "impression": {
+          "rows": 16,
+          "token_f1": 0.08692514735020734,
+          "structured_output_valid_rate": 0.0
+        },
+        "acute": {
+          "rows": 16,
+          "token_f1": 0.14976315598260204,
+          "structured_output_valid_rate": 0.0
+        }
+      }
+    },
+    "sentence_only": {
+      "row_count": 48,
+      "case_count": 16,
+      "token_f1_all_rows": 0.163207886373998,
+      "token_f1_non_proxy_questions": 0.13263764320100493,
+      "structured_output_valid_rate": 0.0,
+      "raw_json_valid_rate": 0.0,
+      "parser_repaired_rate": 0.0,
+      "normalized_output_usable_rate": 0.0,
+      "answer_only_contract_valid_rate": 1.0,
+      "evidence_provenance_valid_rate": 1.0,
+      "abstention_rate": 0.0,
+      "token_ceiling_rate": 0.08333333333333333,
+      "mean_input_tokens": 614.0416666666666,
+      "mean_output_tokens": 52.645833333333336,
+      "mean_evidence_units": 8.875,
+      "mean_evidence_characters": 372.8958333333333,
+      "mean_latency_seconds": 1.6536563026038493,
+      "max_peak_gpu_memory_mib": 4016.1904296875,
+      "by_question_type": {
+        "findings": {
+          "rows": 16,
+          "token_f1": 0.20471709063735435,
+          "structured_output_valid_rate": 0.0
+        },
+        "impression": {
+          "rows": 16,
+          "token_f1": 0.060558195764655515,
+          "structured_output_valid_rate": 0.0
+        },
+        "acute": {
+          "rows": 16,
+          "token_f1": 0.22434837271998417,
+          "structured_output_valid_rate": 0.0
+        }
+      }
+    },
+    "case_to_fact": {
+      "row_count": 48,
+      "case_count": 16,
+      "token_f1_all_rows": 0.1656661434218914,
+      "token_f1_non_proxy_questions": 0.14691213722103091,
+      "structured_output_valid_rate": 0.0,
+      "raw_json_valid_rate": 0.0,
+      "parser_repaired_rate": 0.0,
+      "normalized_output_usable_rate": 0.0,
+      "answer_only_contract_valid_rate": 1.0,
+      "evidence_provenance_valid_rate": 1.0,
+      "abstention_rate": 0.0,
+      "token_ceiling_rate": 0.125,
+      "mean_input_tokens": 548.1458333333334,
+      "mean_output_tokens": 52.708333333333336,
+      "mean_evidence_units": 6.0,
+      "mean_evidence_characters": 262.7083333333333,
+      "mean_latency_seconds": 1.6463574385415995,
+      "max_peak_gpu_memory_mib": 4016.1904296875,
+      "by_question_type": {
+        "findings": {
+          "rows": 16,
+          "token_f1": 0.20738453405294335,
+          "structured_output_valid_rate": 0.0
+        },
+        "impression": {
+          "rows": 16,
+          "token_f1": 0.0864397403891185,
+          "structured_output_valid_rate": 0.0
+        },
+        "acute": {
+          "rows": 16,
+          "token_f1": 0.20317415582361234,
+          "structured_output_valid_rate": 0.0
+        }
+      }
+    }
+  },
+  "generation_rows_sha256": "590562d4192ba04e6e867b020d12c6054b0b40328055c346bf74b07132f9cd5c",
+  "runtime": {
+    "elapsed_seconds_this_run": 225.6506032999896,
+    "max_peak_gpu_memory_mib": 4016.1904296875,
+    "batch_size": 4,
+    "max_new_tokens": 96
+  },
+  "output_mode": "answer_only_generation_plus_deterministic_provenance",
+  "claim_boundary": "Development-only answer-contract and same-source report-reference diagnostics; not clinical correctness, safety, human review, or external validation."
+}

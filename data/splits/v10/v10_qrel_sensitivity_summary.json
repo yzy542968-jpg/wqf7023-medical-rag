@@ -1,0 +1,488 @@
+{
+  "bootstrap": {
+    "iterations": 10000,
+    "seed": 7051
+  },
+  "candidate_bank_count": 2510,
+  "claim_boundary": "This is a post-hoc sensitivity audit of frozen rankings. It does not alter the V10 combined-qrel result, establish physician-adjudicated relevance, or establish clinical correctness.",
+  "development_system_not_in_confirmation_rows": [
+    "r3_fixed_multimodal"
+  ],
+  "evaluated_case_count": 568,
+  "excluded_case_ids_from_frozen_ranking_rows": [
+    "CXR1293",
+    "CXR1297",
+    "CXR1615",
+    "CXR2601",
+    "CXR2765",
+    "CXR894"
+  ],
+  "frozen_v10_results_unchanged": true,
+  "input_sha256": {
+    "cases": "56e367190396011d4d67f43e7e733389a8346890bf8729e82fb4326d063bbd68",
+    "radgraph": "631aa3e11cc52005656ee8a66de3de1ee5d3411a2f271a3c5f8a14de39b51599",
+    "rows": "68a1e5db7db21a0de258e30cb9f9c6f9cee892d89576c707b81ffb63a7617c91",
+    "split": "b4c1b091c3dbff0399d07c8350f4d8d68ce8ce52e0157dcc96f46af8c8baa7b3"
+  },
+  "metrics": {
+    "combined_0.6_label_0.4_fact": {
+      "r5_minus_r4": {
+        "ci95_case_bootstrap": [
+          0.007698414472823937,
+          0.014455421267838183
+        ],
+        "difference": 0.011025415437130355,
+        "interpretation": "confirmed_positive_under_this_qrel",
+        "n_cases": 568
+      },
+      "r5_minus_r4_by_report_index_class": {
+        "abnormal": {
+          "ci95_case_bootstrap": [
+            -0.0012852036369441734,
+            0.005595037784049612
+          ],
+          "difference": 0.0021529026003872533,
+          "interpretation": "numerical_only_under_this_qrel",
+          "n_cases": 359
+        },
+        "indeterminate": {
+          "ci95_case_bootstrap": [
+            -0.0023071277579239102,
+            0.057431044988512626
+          ],
+          "difference": 0.025726217749101686,
+          "interpretation": "numerical_only_under_this_qrel",
+          "n_cases": 14
+        },
+        "normal": {
+          "ci95_case_bootstrap": [
+            0.01981511485021326,
+            0.03297207825333144
+          ],
+          "difference": 0.026304496852633818,
+          "interpretation": "confirmed_positive_under_this_qrel",
+          "n_cases": 195
+        }
+      },
+      "systems": {
+        "r0_bm25": {
+          "by_report_index_class": {
+            "abnormal": {
+              "n_cases": 359,
+              "ndcg@10": 0.14810790170967067
+            },
+            "indeterminate": {
+              "n_cases": 14,
+              "ndcg@10": 0.13062977820317515
+            },
+            "normal": {
+              "n_cases": 195,
+              "ndcg@10": 0.1279712219905106
+            }
+          },
+          "n_cases": 568,
+          "ndcg@10": 0.14076398221261582
+        },
+        "r1_image_image": {
+          "by_report_index_class": {
+            "abnormal": {
+              "n_cases": 359,
+              "ndcg@10": 0.2243995715714867
+            },
+            "indeterminate": {
+              "n_cases": 14,
+              "ndcg@10": 0.456126078472079
+            },
+            "normal": {
+              "n_cases": 195,
+              "ndcg@10": 0.529493678457297
+            }
+          },
+          "n_cases": 568,
+          "ndcg@10": 0.33485295526751013
+        },
+        "r2_image_report": {
+          "by_report_index_class": {
+            "abnormal": {
+              "n_cases": 359,
+              "ndcg@10": 0.2668583236448311
+            },
+            "indeterminate": {
+              "n_cases": 14,
+              "ndcg@10": 0.27387015412071974
+            },
+            "normal": {
+              "n_cases": 195,
+              "ndcg@10": 0.4141596531538876
+            }
+          },
+          "n_cases": 568,
+          "ndcg@10": 0.31760114913942344
+        },
+        "r4_nine_feature": {
+          "by_report_index_class": {
+            "abnormal": {
+              "n_cases": 359,
+              "ndcg@10": 0.23716650352113638
+            },
+            "indeterminate": {
+              "n_cases": 14,
+              "ndcg@10": 0.4774892474924811
+            },
+            "normal": {
+              "n_cases": 195,
+              "ndcg@10": 0.5458051604795519
+            }
+          },
+          "n_cases": 568,
+          "ndcg@10": 0.3490486452860833
+        },
+        "r5_fact_attention": {
+          "by_report_index_class": {
+            "abnormal": {
+              "n_cases": 359,
+              "ndcg@10": 0.23931940612152364
+            },
+            "indeterminate": {
+              "n_cases": 14,
+              "ndcg@10": 0.5032154652415828
+            },
+            "normal": {
+              "n_cases": 195,
+              "ndcg@10": 0.5721096573321857
+            }
+          },
+          "n_cases": 568,
+          "ndcg@10": 0.3600740607232137
+        }
+      }
+    },
+    "fact_only": {
+      "r5_minus_r4": {
+        "ci95_case_bootstrap": [
+          0.01749505239646721,
+          0.024224941306472913
+        ],
+        "difference": 0.020837489941999434,
+        "interpretation": "confirmed_positive_under_this_qrel",
+        "n_cases": 568
+      },
+      "r5_minus_r4_by_report_index_class": {
+        "abnormal": {
+          "ci95_case_bootstrap": [
+            0.016859546869015665,
+            0.02540821498625077
+          ],
+          "difference": 0.021038755595799312,
+          "interpretation": "confirmed_positive_under_this_qrel",
+          "n_cases": 359
+        },
+        "indeterminate": {
+          "ci95_case_bootstrap": [
+            0.0049291231965880224,
+            0.028888035114255962
+          ],
+          "difference": 0.016693566703027542,
+          "interpretation": "confirmed_positive_under_this_qrel",
+          "n_cases": 14
+        },
+        "normal": {
+          "ci95_case_bootstrap": [
+            0.015145697278328416,
+            0.026455328782487766
+          ],
+          "difference": 0.020764467150365843,
+          "interpretation": "confirmed_positive_under_this_qrel",
+          "n_cases": 195
+        }
+      },
+      "systems": {
+        "r0_bm25": {
+          "by_report_index_class": {
+            "abnormal": {
+              "n_cases": 359,
+              "ndcg@10": 0.22974493713412739
+            },
+            "indeterminate": {
+              "n_cases": 14,
+              "ndcg@10": 0.20370517886798906
+            },
+            "normal": {
+              "n_cases": 195,
+              "ndcg@10": 0.2044323811094331
+            }
+          },
+          "n_cases": 568,
+          "ndcg@10": 0.22041306206275182
+        },
+        "r1_image_image": {
+          "by_report_index_class": {
+            "abnormal": {
+              "n_cases": 359,
+              "ndcg@10": 0.31058662947905197
+            },
+            "indeterminate": {
+              "n_cases": 14,
+              "ndcg@10": 0.28526834429864223
+            },
+            "normal": {
+              "n_cases": 195,
+              "ndcg@10": 0.2849422191795907
+            }
+          },
+          "n_cases": 568,
+          "ndcg@10": 0.30115860835067043
+        },
+        "r2_image_report": {
+          "by_report_index_class": {
+            "abnormal": {
+              "n_cases": 359,
+              "ndcg@10": 0.2905923778225041
+            },
+            "indeterminate": {
+              "n_cases": 14,
+              "ndcg@10": 0.21615416886008748
+            },
+            "normal": {
+              "n_cases": 195,
+              "ndcg@10": 0.23949361908647565
+            }
+          },
+          "n_cases": 568,
+          "ndcg@10": 0.2712149255707446
+        },
+        "r4_nine_feature": {
+          "by_report_index_class": {
+            "abnormal": {
+              "n_cases": 359,
+              "ndcg@10": 0.3210965461888767
+            },
+            "indeterminate": {
+              "n_cases": 14,
+              "ndcg@10": 0.29679027060468804
+            },
+            "normal": {
+              "n_cases": 195,
+              "ndcg@10": 0.2927235267566603
+            }
+          },
+          "n_cases": 568,
+          "ndcg@10": 0.31075671054193854
+        },
+        "r5_fact_attention": {
+          "by_report_index_class": {
+            "abnormal": {
+              "n_cases": 359,
+              "ndcg@10": 0.342135301784676
+            },
+            "indeterminate": {
+              "n_cases": 14,
+              "ndcg@10": 0.3134838373077156
+            },
+            "normal": {
+              "n_cases": 195,
+              "ndcg@10": 0.31348799390702614
+            }
+          },
+          "n_cases": 568,
+          "ndcg@10": 0.33159420048393806
+        }
+      }
+    },
+    "label_only": {
+      "r5_minus_r4": {
+        "ci95_case_bootstrap": [
+          0.0009640187008598345,
+          0.0095112321726438
+        ],
+        "difference": 0.005169221441109931,
+        "interpretation": "confirmed_positive_under_this_qrel",
+        "n_cases": 568
+      },
+      "r5_minus_r4_by_report_index_class": {
+        "abnormal": {
+          "ci95_case_bootstrap": [
+            -0.010915678366359767,
+            -0.0038083163893951927
+          ],
+          "difference": -0.007330512602662763,
+          "interpretation": "no_positive_difference_under_this_qrel",
+          "n_cases": 359
+        },
+        "indeterminate": {
+          "ci95_case_bootstrap": [
+            -0.01024111953768464,
+            0.07343061089764202
+          ],
+          "difference": 0.02820153073443415,
+          "interpretation": "numerical_only_under_this_qrel",
+          "n_cases": 14
+        },
+        "normal": {
+          "ci95_case_bootstrap": [
+            0.017662917871520294,
+            0.03563345857363312
+          ],
+          "difference": 0.026527950628842535,
+          "interpretation": "confirmed_positive_under_this_qrel",
+          "n_cases": 195
+        }
+      },
+      "systems": {
+        "r0_bm25": {
+          "by_report_index_class": {
+            "abnormal": {
+              "n_cases": 359,
+              "ndcg@10": 0.07060624643942319
+            },
+            "indeterminate": {
+              "n_cases": 14,
+              "ndcg@10": 0.10878301613129314
+            },
+            "normal": {
+              "n_cases": 195,
+              "ndcg@10": 0.10425981599654244
+            }
+          },
+          "n_cases": 568,
+          "ndcg@10": 0.0831008253818958
+        },
+        "r1_image_image": {
+          "by_report_index_class": {
+            "abnormal": {
+              "n_cases": 359,
+              "ndcg@10": 0.1254323037677843
+            },
+            "indeterminate": {
+              "n_cases": 14,
+              "ndcg@10": 0.55217579727906
+            },
+            "normal": {
+              "n_cases": 195,
+              "ndcg@10": 0.6695523632673185
+            }
+          },
+          "n_cases": 568,
+          "ndcg@10": 0.3227524103022333
+        },
+        "r2_image_report": {
+          "by_report_index_class": {
+            "abnormal": {
+              "n_cases": 359,
+              "ndcg@10": 0.1902115901200366
+            },
+            "indeterminate": {
+              "n_cases": 14,
+              "ndcg@10": 0.3199008089872069
+            },
+            "normal": {
+              "n_cases": 195,
+              "ndcg@10": 0.5192032090501248
+            }
+          },
+          "n_cases": 568,
+          "ndcg@10": 0.30635422173184573
+        },
+        "r4_nine_feature": {
+          "by_report_index_class": {
+            "abnormal": {
+              "n_cases": 359,
+              "ndcg@10": 0.136237881707196
+            },
+            "indeterminate": {
+              "n_cases": 14,
+              "ndcg@10": 0.5770259872794823
+            },
+            "normal": {
+              "n_cases": 195,
+              "ndcg@10": 0.6901177383234778
+            }
+          },
+          "n_cases": 568,
+          "ndcg@10": 0.33725479283076454
+        },
+        "r5_fact_attention": {
+          "by_report_index_class": {
+            "abnormal": {
+              "n_cases": 359,
+              "ndcg@10": 0.12890736910453324
+            },
+            "indeterminate": {
+              "n_cases": 14,
+              "ndcg@10": 0.6052275180139164
+            },
+            "normal": {
+              "n_cases": 195,
+              "ndcg@10": 0.7166456889523202
+            }
+          },
+          "n_cases": 568,
+          "ndcg@10": 0.3424240142718745
+        }
+      }
+    }
+  },
+  "observed_systems": [
+    "r0_bm25",
+    "r1_image_image",
+    "r2_image_report",
+    "r4_nine_feature",
+    "r5_fact_attention"
+  ],
+  "qrel_structure_by_class": {
+    "abnormal": {
+      "fact_empty_cases": 0,
+      "label_empty_cases": 0,
+      "mean_candidates_with_combined_gain_ge_0.5": 9.356545961002785,
+      "mean_combined_gain": 0.08158835085383863,
+      "mean_fact_gain": 0.1591903196549183,
+      "mean_label_gain": 0.02985370294875167,
+      "n_cases": 359
+    },
+    "indeterminate": {
+      "fact_empty_cases": 0,
+      "label_empty_cases": 14,
+      "mean_candidates_with_combined_gain_ge_0.5": 968.0,
+      "mean_combined_gain": 0.31109827969755444,
+      "mean_fact_gain": 0.19925962494952337,
+      "mean_label_gain": 0.3856573700904846,
+      "n_cases": 14
+    },
+    "normal": {
+      "fact_empty_cases": 0,
+      "label_empty_cases": 195,
+      "mean_candidates_with_combined_gain_ge_0.5": 968.0,
+      "mean_combined_gain": 0.3146044682997924,
+      "mean_fact_gain": 0.20802509274739678,
+      "mean_label_gain": 0.3856573700904846,
+      "n_cases": 195
+    }
+  },
+  "qrel_variants": {
+    "combined_0.6_label_0.4_fact": {
+      "active_label_weight": 0.6,
+      "radgraph_fact_weight": 0.4
+    },
+    "fact_only": {
+      "active_label_weight": 0.0,
+      "radgraph_fact_weight": 1.0
+    },
+    "label_only": {
+      "active_label_weight": 1.0,
+      "radgraph_fact_weight": 0.0
+    }
+  },
+  "question_types": [
+    "acute",
+    "findings",
+    "impression"
+  ],
+  "report_index_class_counts": {
+    "abnormal": 359,
+    "indeterminate": 14,
+    "normal": 195
+  },
+  "status": "post_hoc_exploratory_complete",
+  "study": "V10 post-hoc qrel construct and spectrum sensitivity audit",
+  "test_case_count": 574
+}

@@ -16,7 +16,7 @@ not imply that the rejected fine-grained context policy was used.
 
 ## Automated report-reference consistency
 
-| Condition | Token-F1 | Findings F1 | Impression F1 | Evidence withheld | Schema valid | Citation valid |
+| Condition | Token-F1 | Findings F1 | Impression F1 | Evidence withheld | Schema valid | Provenance valid |
 |---|---:|---:|---:|---:|---:|---:|
 | G0 target image | 0.149416 | 0.211218 | 0.087615 | 1.000000 | 1.000 | 1.000 |
 | G1 R4 whole-report RAG | 0.207524 | 0.274844 | 0.140204 | 0.000000 | 1.000 | 1.000 |
@@ -40,7 +40,7 @@ aggregate Token-F1. It must not be described as a clinical safety mechanism.
 
 ## Structured-output result and remaining truncation
 
-All four systems achieved 100% assembled-schema and citation validity. This
+All four systems achieved 100% assembled-schema and provenance integrity. This
 directly resolves V9's failure mode in which long, model-generated JSON became
 unparseable: MedGemma now generates answer text, while deterministic code adds
 bounded fields and provenance.

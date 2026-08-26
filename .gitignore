@@ -79,3 +79,8 @@ experiments/v10_publication/*.json
 experiments/v10_publication/*.jsonl
 experiments/v10_publication/*.csv
 experiments/v10_publication/clinical_review/
+
+# V11 local per-row qrel and generation outputs; aggregate summaries are safe
+# to publish when they contain no report text or image pixels.
+data/splits/v11/*_rows.jsonl
+experiments/v11_development/*.csv

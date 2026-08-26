@@ -1,0 +1,105 @@
+{
+  "study": "v11_development_evidence_ablation",
+  "status": "development_only_no_confirmation",
+  "inputs": {
+    "cases": "data\\processed\\openi_cases.jsonl",
+    "facts": "data\\processed\\v9_radgraph_modern_xl.jsonl",
+    "split": "data\\splits\\v10\\v10_cluster_disjoint_split.json",
+    "train_case_count": 2510,
+    "validation_case_count": 384,
+    "train_case_ids_sha256": "f0e7f609e3373bdc7aa1984608d92f594ae80609ec76dd9e55303af7bf57dd6a",
+    "validation_case_ids_sha256": "62d0aaa08fb207a2cfaae49c46d09dcb59bea0e408ce95355a6c5b0f3e3913f8"
+  },
+  "counts": {
+    "rows": 1152,
+    "questions_per_case": 3,
+    "shortlist_k": 100
+  },
+  "proxy_metrics": {
+    "top1_qrel_v2": 0.3270815314320933,
+    "top3_mean_qrel_v2": 0.32292468589069473,
+    "full_bank_qrel_ndcg10": 0.5537438030744712,
+    "proxy_relevant_in_top100_rate": 0.5512152777777778,
+    "proxy_relevant_recall_at100": 0.12000200780211008,
+    "proxy_relevant_outside_top100_rate": 0.796875,
+    "mean_proxy_relevant_count": 25.575520833333332,
+    "mean_qrel_v2_availability_fraction_top100": 0.7298828125,
+    "mean_qrel_v2_available_normalized_top1": 0.4482208677900979
+  },
+  "evidence_compression": {
+    "whole_report": {
+      "unit_count": 17.33159722222222,
+      "character_count": 790.5182291666666,
+      "provenance_complete_rate": 1.0,
+      "duplicate_text_rate": 0.12012782480773282
+    },
+    "case_to_fact": {
+      "unit_count": 5.979166666666667,
+      "character_count": 316.28993055555554,
+      "provenance_complete_rate": 1.0,
+      "duplicate_text_rate": 0.11785300925925928
+    },
+    "character_reduction_fraction": 0.5998954623867738
+  },
+  "planner_intent_counts": {
+    "presence": 384,
+    "summary": 768
+  },
+  "selective_gate": {
+    "fit": {
+      "threshold": 0.7142591215182613,
+      "proxy_precision": 0.5521739130434783,
+      "coverage": 0.9982638888888888,
+      "minimum_coverage": 0.8,
+      "selection_basis": "development_proxy_relevance_only"
+    },
+    "risk_coverage_curve": [
+      {
+        "coverage": 0.09114583333333333,
+        "proxy_precision": 0.5714285714285714
+      },
+      {
+        "coverage": 0.1814236111111111,
+        "proxy_precision": 0.5358851674641149
+      },
+      {
+        "coverage": 0.2725694444444444,
+        "proxy_precision": 0.5254777070063694
+      },
+      {
+        "coverage": 0.3637152777777778,
+        "proxy_precision": 0.5155131264916468
+      },
+      {
+        "coverage": 0.4548611111111111,
+        "proxy_precision": 0.517175572519084
+      },
+      {
+        "coverage": 0.5451388888888888,
+        "proxy_precision": 0.5286624203821656
+      },
+      {
+        "coverage": 0.6362847222222222,
+        "proxy_precision": 0.5252387448840382
+      },
+      {
+        "coverage": 0.7274305555555556,
+        "proxy_precision": 0.5262529832935561
+      },
+      {
+        "coverage": 0.8185763888888888,
+        "proxy_precision": 0.528101802757158
+      },
+      {
+        "coverage": 0.9088541666666666,
+        "proxy_precision": 0.5348615090735435
+      },
+      {
+        "coverage": 1.0,
+        "proxy_precision": 0.5512152777777778
+      }
+    ],
+    "accepted_rate": 0.9982638888888888
+  },
+  "interpretation_boundary": "All qrel and selective labels are report-derived development proxies; no clinical correctness, safety, human review, or external validation is claimed."
+}

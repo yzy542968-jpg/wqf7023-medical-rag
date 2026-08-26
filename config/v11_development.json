@@ -1,0 +1,102 @@
+{
+  "study": "v11_qrel_corrected_hierarchical_case_to_fact_rag",
+  "status": "development_only_not_confirmation",
+  "frozen_v10_unchanged": true,
+  "source": "data/processed/openi_cases.jsonl",
+  "radgraph": "data/processed/v9_radgraph_modern_xl.jsonl",
+  "split": "data/splits/v10/v10_cluster_disjoint_split.json",
+  "development_partition": "train",
+  "validation_partition": "validation",
+  "confirmation_case_ids": "not_instantiated_in_v11_development",
+  "qrel_v2": {
+    "components": {
+      "lesion_type": 0.25,
+      "anatomy": 0.20,
+      "severity": 0.10,
+      "polarity": 0.15,
+      "uncertainty": 0.10,
+      "indication": 0.10,
+      "report_label": 0.10
+    },
+    "empty_component_similarity": 0.0,
+    "interpretation": "structured_report_derived_proxy_not_clinical_gold",
+    "sensitivity_modes": ["qrel_v2_full", "qrel_v2_fact_only", "qrel_v2_label_only"]
+  },
+  "case_retrieval": {
+    "candidate_pool": "development_cases_only_for_development_run",
+    "shortlist_k": 100,
+    "evidence_cases": 3,
+    "target_outside_shortlist_policy": "retain_as_retrieval_failure; do_not_train_pairwise_on_missing_positive"
+  },
+  "fact_selection": {
+    "maximum_units_per_case": 2,
+    "maximum_total_units": 6,
+    "maximum_characters": 1200,
+    "provenance_required": true,
+    "policies": ["whole_report", "sentence_top3", "case_to_fact_v11"]
+  },
+  "planner": {
+    "implementation": "deterministic_rule_planner",
+    "intents": ["presence", "location", "severity", "comparison", "device", "uncertainty", "insufficient_information", "summary"],
+    "human_validation": "future_work"
+  },
+  "generation": {
+    "model_status": "frozen_medgemma_backbone_development_diagnostic",
+    "schema": "answer_only_generation_plus_deterministic_provenance",
+    "diagnostic_alternative_schema": "compact_answer_uncertainty_abstain_evidence",
+    "maximum_complete_sentences": 2,
+    "development_script": "scripts/run_v11_medgemma_development.py",
+    "provenance_assembly": "deterministic",
+    "malformed_output": "parse_and_mark_invalid_not_silently_accept"
+  },
+  "selective_prediction": {
+    "features": ["top_score", "top1_top2_margin", "component_agreement", "evidence_coverage", "ensemble_dispersion"],
+    "threshold_fit": "validation_only_using_report_derived_proxy_relevance",
+    "risk_coverage": true,
+    "clinical_risk_calibration": "not_claimed_without_human_labels"
+  },
+  "planned_ablation": [
+    "case_whole_report",
+    "case_sentence_only",
+    "case_to_fact",
+    "case_to_fact_plus_selective_gate"
+  ],
+  "candidate_generation_audit": {
+    "script": "scripts/audit_v11_candidate_generation.py",
+    "systems": ["bm25", "medcpt_text", "medsiglip_image", "rrf_union"],
+    "source_top_k": 100,
+    "budgets_evaluated": [100, 200],
+    "rrf_constant": 60,
+    "selection_rule": "development_only; no confirmation promotion without a new protocol"
+  },
+  "planner_benchmark": {
+    "path": "data/splits/v11/v11_question_planner_benchmark.json",
+    "labels": "author_defined_intent_labels",
+    "not_blinded": true,
+    "not_clinical_validation": true
+  },
+  "uncertainty_audit": {
+    "script": "scripts/bootstrap_v10_fact_attention_2x2.py",
+    "resampling_unit": "case-level mean over fixed question rows",
+    "repetitions": 10000,
+    "seed": 2026
+  },
+  "generation_diagnostic": {
+    "completed_subset_summary": "data/splits/v11/v11_medgemma_generation_completed_summary.json",
+    "complete_case_count": 17,
+    "incomplete_case_count": 1,
+    "clean_48_summary": "data/splits/v11/v11_medgemma_generation_48_clean_summary.json",
+    "clean_48_rows": "experiments/v11_development/v11_medgemma_generation_48_clean_rows.jsonl",
+    "clean_48_case_count": 48,
+    "clean_48_row_count": 432,
+    "clean_48_report_indexed_normal_count": 24,
+    "clean_48_report_indexed_abnormal_count": 24,
+    "clean_48_policies": ["whole_report", "sentence_only", "case_to_fact"],
+    "clean_48_validation_case_ids_sha256": "1049d6d40cdd9d5a9afa8471fe8fab75db77bc5300c963b5ef85cce3afe4dcdd",
+    "clean_48_generation_rows_sha256": "2b08a50e98d1ee5bf42b3ef01a98e56e4b6843c338fc115586e471b314c24fc5",
+    "clean_48_status": "complete_development_only_not_inferential_estimate"
+  },
+  "stopping_rule": "no_confirmation_or_claim_of_superiority_from_development_proxy_only",
+  "human_review": "future_work",
+  "external_validation": "future_work"
+}

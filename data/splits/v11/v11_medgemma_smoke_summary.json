@@ -1,0 +1,182 @@
+{
+  "study": "v11_medgemma_generation_development",
+  "status": "development_only_no_confirmation",
+  "inputs": {
+    "cases_sha256": "56e367190396011d4d67f43e7e733389a8346890bf8729e82fb4326d063bbd68",
+    "facts_sha256": "631aa3e11cc52005656ee8a66de3de1ee5d3411a2f271a3c5f8a14de39b51599",
+    "split_sha256": "b4c1b091c3dbff0399d07c8350f4d8d68ce8ce52e0157dcc96f46af8c8baa7b3",
+    "train_case_count": 2510,
+    "validation_case_count": 1,
+    "validation_case_ids_sha256": "2511fc1b4bc5a16e62242959bb658f897e1b6a964f1f61f5ce130cf12821bdfd",
+    "selective_threshold_source": "data\\splits\\v11\\v11_development_evidence_ablation_summary.json"
+  },
+  "counts": {
+    "rows": 12,
+    "questions_per_case": 3,
+    "policies": [
+      "whole_report",
+      "sentence_only",
+      "case_to_fact",
+      "case_to_fact_plus_selective_gate"
+    ]
+  },
+  "metrics": {
+    "whole_report": {
+      "row_count": 3,
+      "case_count": 1,
+      "token_f1_all_rows": 0.12232415902140674,
+      "token_f1_non_proxy_questions": 0.09174311926605505,
+      "structured_output_valid_rate": 0.0,
+      "raw_json_valid_rate": 0.0,
+      "parser_repaired_rate": 0.0,
+      "normalized_output_usable_rate": 0.0,
+      "answer_only_contract_valid_rate": 1.0,
+      "evidence_provenance_valid_rate": 1.0,
+      "abstention_rate": 0.0,
+      "token_ceiling_rate": 0.3333333333333333,
+      "mean_input_tokens": 720.6666666666666,
+      "mean_output_tokens": 55.0,
+      "mean_evidence_units": 13.0,
+      "mean_evidence_characters": 507.0,
+      "mean_latency_seconds": 6.55137349999859,
+      "max_peak_gpu_memory_mib": 3305.4921875,
+      "by_question_type": {
+        "findings": {
+          "rows": 1,
+          "token_f1": 0.0,
+          "structured_output_valid_rate": 0.0
+        },
+        "impression": {
+          "rows": 1,
+          "token_f1": 0.1834862385321101,
+          "structured_output_valid_rate": 0.0
+        },
+        "acute": {
+          "rows": 1,
+          "token_f1": 0.1834862385321101,
+          "structured_output_valid_rate": 0.0
+        }
+      }
+    },
+    "sentence_only": {
+      "row_count": 3,
+      "case_count": 1,
+      "token_f1_all_rows": 0.09889792856730716,
+      "token_f1_non_proxy_questions": 0.05660377358490567,
+      "structured_output_valid_rate": 0.0,
+      "raw_json_valid_rate": 0.0,
+      "parser_repaired_rate": 0.0,
+      "normalized_output_usable_rate": 0.0,
+      "answer_only_contract_valid_rate": 1.0,
+      "evidence_provenance_valid_rate": 1.0,
+      "abstention_rate": 0.0,
+      "token_ceiling_rate": 0.3333333333333333,
+      "mean_input_tokens": 618.3333333333334,
+      "mean_output_tokens": 64.66666666666667,
+      "mean_evidence_units": 9.0,
+      "mean_evidence_characters": 282.0,
+      "mean_latency_seconds": 6.401005700007469,
+      "max_peak_gpu_memory_mib": 3305.4921875,
+      "by_question_type": {
+        "findings": {
+          "rows": 1,
+          "token_f1": 0.0,
+          "structured_output_valid_rate": 0.0
+        },
+        "impression": {
+          "rows": 1,
+          "token_f1": 0.11320754716981134,
+          "structured_output_valid_rate": 0.0
+        },
+        "acute": {
+          "rows": 1,
+          "token_f1": 0.1834862385321101,
+          "structured_output_valid_rate": 0.0
+        }
+      }
+    },
+    "case_to_fact": {
+      "row_count": 3,
+      "case_count": 1,
+      "token_f1_all_rows": 0.13017136922277997,
+      "token_f1_non_proxy_questions": 0.09433962264150943,
+      "structured_output_valid_rate": 0.0,
+      "raw_json_valid_rate": 0.0,
+      "parser_repaired_rate": 0.0,
+      "normalized_output_usable_rate": 0.0,
+      "answer_only_contract_valid_rate": 1.0,
+      "evidence_provenance_valid_rate": 1.0,
+      "abstention_rate": 0.0,
+      "token_ceiling_rate": 0.0,
+      "mean_input_tokens": 548.6666666666666,
+      "mean_output_tokens": 26.333333333333332,
+      "mean_evidence_units": 6.0,
+      "mean_evidence_characters": 185.0,
+      "mean_latency_seconds": 3.361396133337015,
+      "max_peak_gpu_memory_mib": 3305.4921875,
+      "by_question_type": {
+        "findings": {
+          "rows": 1,
+          "token_f1": 0.0,
+          "structured_output_valid_rate": 0.0
+        },
+        "impression": {
+          "rows": 1,
+          "token_f1": 0.18867924528301885,
+          "structured_output_valid_rate": 0.0
+        },
+        "acute": {
+          "rows": 1,
+          "token_f1": 0.2018348623853211,
+          "structured_output_valid_rate": 0.0
+        }
+      }
+    },
+    "case_to_fact_plus_selective_gate": {
+      "row_count": 3,
+      "case_count": 1,
+      "token_f1_all_rows": 0.13017136922277997,
+      "token_f1_non_proxy_questions": 0.09433962264150943,
+      "structured_output_valid_rate": 0.0,
+      "raw_json_valid_rate": 0.0,
+      "parser_repaired_rate": 0.0,
+      "normalized_output_usable_rate": 0.0,
+      "answer_only_contract_valid_rate": 1.0,
+      "evidence_provenance_valid_rate": 1.0,
+      "abstention_rate": 0.0,
+      "token_ceiling_rate": 0.0,
+      "mean_input_tokens": 548.6666666666666,
+      "mean_output_tokens": 26.333333333333332,
+      "mean_evidence_units": 6.0,
+      "mean_evidence_characters": 185.0,
+      "mean_latency_seconds": 3.311308933334658,
+      "max_peak_gpu_memory_mib": 3305.4921875,
+      "by_question_type": {
+        "findings": {
+          "rows": 1,
+          "token_f1": 0.0,
+          "structured_output_valid_rate": 0.0
+        },
+        "impression": {
+          "rows": 1,
+          "token_f1": 0.18867924528301885,
+          "structured_output_valid_rate": 0.0
+        },
+        "acute": {
+          "rows": 1,
+          "token_f1": 0.2018348623853211,
+          "structured_output_valid_rate": 0.0
+        }
+      }
+    }
+  },
+  "generation_rows_sha256": "e3f1a1c6fad26f303ad716b7016871df840f0ea0013aad246364c4b5924435cb",
+  "runtime": {
+    "elapsed_seconds_this_run": 191.23959849998937,
+    "max_peak_gpu_memory_mib": 3305.4921875,
+    "batch_size": 1,
+    "max_new_tokens": 96
+  },
+  "output_mode": "answer_only_generation_plus_deterministic_provenance",
+  "claim_boundary": "Development-only answer-contract and same-source report-reference diagnostics; not clinical correctness, safety, human review, or external validation."
+}

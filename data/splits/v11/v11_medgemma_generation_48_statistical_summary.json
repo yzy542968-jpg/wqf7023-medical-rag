@@ -1,0 +1,222 @@
+{
+  "claim_boundary": "F1RadGraph and Token-F1 are automated report-reference consistency metrics. This Validation-only audit is not physician-adjudicated correctness, clinical safety, or independent confirmation.",
+  "counts": {
+    "cases": 48,
+    "empty_reference_rows": 57,
+    "rows": 432,
+    "scoreable_reference_rows": 375
+  },
+  "empty_reference_policy": "Rows with an empty report reference are retained and assigned zero automated overlap; they are not removed after outcome inspection.",
+  "metric_rows": {
+    "committed_to_public_repository": false,
+    "path": "experiments/v11_development/v11_medgemma_generation_48_metric_rows.csv",
+    "sha256": "ce66a9201d1a689c94b7bc850bd6a55095f3514332bb59590093b30586b5d93f"
+  },
+  "model_type": "modern-radgraph-xl",
+  "policies": {
+    "case_to_fact": {
+      "case_count": 48,
+      "metrics": {
+        "f1_radgraph_complete": {
+          "case_count": 48,
+          "ci_95_high": 0.10294500732857706,
+          "ci_95_low": 0.060070338475141476,
+          "iterations": 10000,
+          "mean": 0.08089290572439978,
+          "seed": 7134
+        },
+        "f1_radgraph_entity": {
+          "case_count": 48,
+          "ci_95_high": 0.1454756614532843,
+          "ci_95_low": 0.08894131503298167,
+          "iterations": 10000,
+          "mean": 0.11634970572982829,
+          "seed": 7132
+        },
+        "f1_radgraph_entity_relation": {
+          "case_count": 48,
+          "ci_95_high": 0.12212775800558996,
+          "ci_95_low": 0.07514763214079496,
+          "iterations": 10000,
+          "mean": 0.09795869329808445,
+          "seed": 7133
+        },
+        "token_f1": {
+          "case_count": 48,
+          "ci_95_high": 0.18142069350367873,
+          "ci_95_low": 0.12599310294652152,
+          "iterations": 10000,
+          "mean": 0.1531213687691203,
+          "seed": 7131
+        }
+      },
+      "nonempty_reference_rows": 125,
+      "row_count": 144
+    },
+    "sentence_only": {
+      "case_count": 48,
+      "metrics": {
+        "f1_radgraph_complete": {
+          "case_count": 48,
+          "ci_95_high": 0.11206497980721863,
+          "ci_95_low": 0.05974086080673146,
+          "iterations": 10000,
+          "mean": 0.08452306766694151,
+          "seed": 7124
+        },
+        "f1_radgraph_entity": {
+          "case_count": 48,
+          "ci_95_high": 0.14829340182224407,
+          "ci_95_low": 0.08676947288086354,
+          "iterations": 10000,
+          "mean": 0.11590847374846473,
+          "seed": 7122
+        },
+        "f1_radgraph_entity_relation": {
+          "case_count": 48,
+          "ci_95_high": 0.1276754759454177,
+          "ci_95_low": 0.07456597773247843,
+          "iterations": 10000,
+          "mean": 0.1004686168673549,
+          "seed": 7123
+        },
+        "token_f1": {
+          "case_count": 48,
+          "ci_95_high": 0.1756836370787905,
+          "ci_95_low": 0.11649036096707875,
+          "iterations": 10000,
+          "mean": 0.14510850120905014,
+          "seed": 7121
+        }
+      },
+      "nonempty_reference_rows": 125,
+      "row_count": 144
+    },
+    "whole_report": {
+      "case_count": 48,
+      "metrics": {
+        "f1_radgraph_complete": {
+          "case_count": 48,
+          "ci_95_high": 0.08833102619739254,
+          "ci_95_low": 0.047007858823613684,
+          "iterations": 10000,
+          "mean": 0.06693981822880142,
+          "seed": 7114
+        },
+        "f1_radgraph_entity": {
+          "case_count": 48,
+          "ci_95_high": 0.12727634036971064,
+          "ci_95_low": 0.07163600935946023,
+          "iterations": 10000,
+          "mean": 0.09865840198697828,
+          "seed": 7112
+        },
+        "f1_radgraph_entity_relation": {
+          "case_count": 48,
+          "ci_95_high": 0.11115368373681271,
+          "ci_95_low": 0.06032253980539249,
+          "iterations": 10000,
+          "mean": 0.0853580217731274,
+          "seed": 7113
+        },
+        "token_f1": {
+          "case_count": 48,
+          "ci_95_high": 0.16120918220698222,
+          "ci_95_low": 0.10332664503777021,
+          "iterations": 10000,
+          "mean": 0.13116745728041804,
+          "seed": 7111
+        }
+      },
+      "nonempty_reference_rows": 125,
+      "row_count": 144
+    }
+  },
+  "primary_case_to_fact_minus_whole_report": {
+    "f1_radgraph_complete": {
+      "case_count": 48,
+      "ci_95_high": 0.034420048848196966,
+      "ci_95_low": -0.006908609395082173,
+      "ci_excludes_zero": false,
+      "iterations": 10000,
+      "mean_difference": 0.013953087495598359,
+      "probability_greater_than_zero": 0.8993,
+      "seed": 7214
+    },
+    "f1_radgraph_entity": {
+      "case_count": 48,
+      "ci_95_high": 0.04500631292756369,
+      "ci_95_low": -0.009150144447685346,
+      "ci_excludes_zero": false,
+      "iterations": 10000,
+      "mean_difference": 0.017691303742850013,
+      "probability_greater_than_zero": 0.8965,
+      "seed": 7212
+    },
+    "f1_radgraph_entity_relation": {
+      "case_count": 48,
+      "ci_95_high": 0.03737667252238156,
+      "ci_95_low": -0.012647257496442372,
+      "ci_excludes_zero": false,
+      "iterations": 10000,
+      "mean_difference": 0.012600671524957046,
+      "probability_greater_than_zero": 0.8372,
+      "seed": 7213
+    },
+    "token_f1": {
+      "case_count": 48,
+      "ci_95_high": 0.043021876909392645,
+      "ci_95_low": -0.0002626713753872087,
+      "ci_excludes_zero": false,
+      "iterations": 10000,
+      "mean_difference": 0.021953911488702262,
+      "probability_greater_than_zero": 0.9737,
+      "seed": 7211
+    }
+  },
+  "secondary_sentence_only_minus_whole_report": {
+    "f1_radgraph_complete": {
+      "case_count": 48,
+      "ci_95_high": 0.04451174286171766,
+      "ci_95_low": -0.00765181761559046,
+      "ci_excludes_zero": false,
+      "iterations": 10000,
+      "mean_difference": 0.01758324943814008,
+      "probability_greater_than_zero": 0.9151,
+      "seed": 7314
+    },
+    "f1_radgraph_entity": {
+      "case_count": 48,
+      "ci_95_high": 0.04854701338143735,
+      "ci_95_low": -0.011771035788017623,
+      "ci_excludes_zero": false,
+      "iterations": 10000,
+      "mean_difference": 0.01725007176148646,
+      "probability_greater_than_zero": 0.8757,
+      "seed": 7312
+    },
+    "f1_radgraph_entity_relation": {
+      "case_count": 48,
+      "ci_95_high": 0.04339556735254919,
+      "ci_95_low": -0.01201805420423926,
+      "ci_excludes_zero": false,
+      "iterations": 10000,
+      "mean_difference": 0.0151105950942275,
+      "probability_greater_than_zero": 0.8632,
+      "seed": 7313
+    },
+    "token_f1": {
+      "case_count": 48,
+      "ci_95_high": 0.03699316187287113,
+      "ci_95_low": -0.007480228787147764,
+      "ci_excludes_zero": false,
+      "iterations": 10000,
+      "mean_difference": 0.013941043928632097,
+      "probability_greater_than_zero": 0.8969,
+      "seed": 7311
+    }
+  },
+  "source_generation_rows_sha256": "2b08a50e98d1ee5bf42b3ef01a98e56e4b6843c338fc115586e471b314c24fc5",
+  "status": "development_only_complete_no_retuning",
+  "study": "V11 clean 48-case MedGemma generation statistical audit"
+}

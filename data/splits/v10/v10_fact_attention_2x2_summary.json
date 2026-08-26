@@ -1,0 +1,33 @@
+{
+  "study": "V10 facts x image-view 2x2 attribution audit",
+  "status": "development_only_test_not_run",
+  "conditions": {
+    "r4": "frozen non-fact-aware reranker",
+    "r5": "frozen fact-aware reranker",
+    "mean": "mean image embedding",
+    "attention": "frozen learned multi-view attention embedding"
+  },
+  "inputs": {
+    "cases_sha256": "56e367190396011d4d67f43e7e733389a8346890bf8729e82fb4326d063bbd68",
+    "radgraph_sha256": "631aa3e11cc52005656ee8a66de3de1ee5d3411a2f271a3c5f8a14de39b51599",
+    "split_sha256": "b4c1b091c3dbff0399d07c8350f4d8d68ce8ce52e0157dcc96f46af8c8baa7b3",
+    "r4_checkpoint_sha256": "3245fd37e0fd44a7f1617a5869518bf2b4f8e4af3478b6324c9a459abcf0150f",
+    "embedding_signature": "8e5b69370462df61b75f8aea125441db49f8fb356ea026b442aae71bfaa8b526"
+  },
+  "counts": {
+    "candidate_bank": 2506,
+    "validation_cases": 376,
+    "validation_rows": 1128
+  },
+  "validation_ndcg@10": {
+    "r4_mean": 0.340255433205988,
+    "r4_attention": 0.34620557530615675,
+    "r5_mean": 0.3539093679342802,
+    "r5_attention": 0.3585402599198427
+  },
+  "main_effect_fact_aware_reranker": 0.012994309670989024,
+  "main_effect_attention_view": 0.00529051704286565,
+  "interaction_fact_x_attention": -0.001319250114606263,
+  "rows_sha256": "1ad444427828d8997593bcb8afee4ecbcca8503b05db5bc3dd0d525adfe1f4f9",
+  "claim_boundary": "Validation attribution audit over frozen checkpoints; no causal claim beyond this fixed 2x2 comparison and no test outcome inspected."
+}

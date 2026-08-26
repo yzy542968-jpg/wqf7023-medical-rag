@@ -57,11 +57,12 @@ def encode_queries(
     batch_size: int = 16,
     device: str | None = None,
     max_length: int = 64,
+    local_files_only: bool = False,
 ) -> np.ndarray:
     torch, AutoModel, AutoTokenizer = _require_transformer_stack()
     selected_device = device or ("cuda" if torch.cuda.is_available() else "cpu")
-    tokenizer = AutoTokenizer.from_pretrained(model_name)
-    model = AutoModel.from_pretrained(model_name).to(selected_device)
+    tokenizer = AutoTokenizer.from_pretrained(model_name, local_files_only=local_files_only)
+    model = AutoModel.from_pretrained(model_name, local_files_only=local_files_only).to(selected_device)
     model.eval()
 
     vectors: list[np.ndarray] = []
@@ -182,4 +183,3 @@ class MedCPTRetriever:
                 }
             )
         return results
-

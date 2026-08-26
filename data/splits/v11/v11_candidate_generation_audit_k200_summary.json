@@ -1,0 +1,53 @@
+{
+  "study": "V11 first-stage candidate generation audit",
+  "status": "development_only_no_confirmation",
+  "inputs": {
+    "cases": "data\\processed\\openi_cases.jsonl",
+    "facts": "data\\processed\\v9_radgraph_modern_xl.jsonl",
+    "split": "data\\splits\\v10\\v10_cluster_disjoint_split.json",
+    "medcpt_index": "data\\processed\\openi_medcpt_full.npz",
+    "medsiglip": "data\\processed\\v10_medsiglip_embeddings.npz",
+    "cases_sha256": "56e367190396011d4d67f43e7e733389a8346890bf8729e82fb4326d063bbd68",
+    "facts_sha256": "631aa3e11cc52005656ee8a66de3de1ee5d3411a2f271a3c5f8a14de39b51599",
+    "split_sha256": "b4c1b091c3dbff0399d07c8350f4d8d68ce8ce52e0157dcc96f46af8c8baa7b3",
+    "medcpt_index_sha256": "eb7cbf3b98dc2f5c7f9810abfc45f33c692697a0e511dcaaf32daa03cbaf4177",
+    "medsiglip_sha256": "f81f4629a8f6eb10dc6b35d868f719384adb40903e19d165f9fba2039fce8867",
+    "train_case_count": 2510,
+    "validation_case_count": 384
+  },
+  "design": {
+    "source_top_k": 100,
+    "pool_k": 200,
+    "rrf_constant": 60,
+    "query": "indication + fixed question",
+    "qrel": "full-bank report-derived qrel-v2; threshold=0.5",
+    "target_outside_pool_policy": "retain as first-stage retrieval failure"
+  },
+  "metrics": {
+    "bm25": {
+      "ndcg10": 0.5537438030744712,
+      "relevant_recall_at_k": 0.18575980059277686,
+      "has_relevant_in_pool": 0.6145833333333334,
+      "relevant_outside_pool": 0.7873263888888888
+    },
+    "medcpt_text": {
+      "ndcg10": 0.5414148920871575,
+      "relevant_recall_at_k": 0.16832965219455134,
+      "has_relevant_in_pool": 0.5755208333333334,
+      "relevant_outside_pool": 0.8055555555555556
+    },
+    "medsiglip_image": {
+      "ndcg10": 0.5189921628896472,
+      "relevant_recall_at_k": 0.13504836559175726,
+      "has_relevant_in_pool": 0.6588541666666666,
+      "relevant_outside_pool": 0.7994791666666666
+    },
+    "rrf_union": {
+      "ndcg10": 0.5866796647842432,
+      "relevant_recall_at_k": 0.19111044389876544,
+      "has_relevant_in_pool": 0.6571180555555556,
+      "relevant_outside_pool": 0.7916666666666666
+    }
+  },
+  "interpretation_boundary": "All relevance and candidate labels are report-derived development proxies; no clinical correctness, safety, human review, external validation or confirmation claim is made."
+}

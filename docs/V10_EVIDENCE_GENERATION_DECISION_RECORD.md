@@ -8,7 +8,7 @@ The prompt-only two-stage JSON attempt failed technically and was terminated
 after 144 rows. Revision 1 generated all 2,256 planned Validation rows using an
 answer-first interface and deterministic provenance/schema assembly. The
 previous V9 structured-output failure mode was removed: all three evidence
-conditions achieved 100% assembled-schema validity, 100% citation validity,
+conditions achieved 100% assembled-schema validity, 100% provenance integrity,
 and 100% nonempty answer-stage validity.
 
 The raw Revision 1 rows have SHA-256
@@ -19,7 +19,7 @@ SHA-256
 
 ## Validation policy result
 
-| Evidence policy | Token-F1 | Mean evidence characters | Assembled valid | Citation valid |
+| Evidence policy | Token-F1 | Mean evidence characters | Assembled valid | Provenance valid |
 |---|---:|---:|---:|---:|
 | E0 whole findings + impression | **0.204190** | 748.0 | 1.000 | 1.000 |
 | E1 Top-3 sentences per case | 0.185220 | 415.5 | 1.000 | 1.000 |
@@ -50,4 +50,3 @@ structured record and that bounded answer extraction is deterministic.
 No later stage may change the evidence policy, prompt, answer ceiling, stop
 token, normalization, provenance rule, or selection criterion in response to
 Calibration or Test outcomes.
-

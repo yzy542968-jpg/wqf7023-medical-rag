@@ -1,6 +1,6 @@
 # V10 Independent Clinical Review Package Status
 
-Status: package complete; independent clinical review pending.
+Status: package complete; independent clinical review retained as Future Work.
 
 The deterministic builder produced 100 unique Test cases and 400 blinded
 answer presentations. Findings and impression each contribute 50 cases. The
@@ -17,9 +17,10 @@ Local files:
   reviewer qualification and completion metadata.
 
 All six reviewer fields are blank in all 400 rows. The repository therefore
-does not report clinical-review scores or imply that review occurred. A future
-qualified reviewer must complete the public package without access to the
-private key; metadata, exclusions, and missingness must then be completed
+does not report clinical-review scores or imply that review occurred. The
+package is retained as a reproducible Future Work asset. If a qualified
+reviewer later uses it, the public package must be completed without access to
+the private key; metadata, exclusions, and missingness must then be completed
 before unblinding and analysis.
 
 ## Artifact hashes

@@ -1,0 +1,38 @@
+{
+  "study": "V10 facts x attention 2x2 case-grouped bootstrap",
+  "status": "validation_only_test_not_run",
+  "input_rows_sha256": "1ad444427828d8997593bcb8afee4ecbcca8503b05db5bc3dd0d525adfe1f4f9",
+  "row_count": 1128,
+  "case_count": 376,
+  "unit_of_resampling": "case-level mean over the three fixed question rows",
+  "effects": {
+    "fact_main_effect": {
+      "estimate": 0.012994309670989057,
+      "ci_95_low": 0.008830756669027318,
+      "ci_95_high": 0.01729302613122075,
+      "probability_greater_than_zero": 1.0,
+      "group_count": 376,
+      "repetitions": 10000,
+      "seed": 2026
+    },
+    "attention_main_effect": {
+      "estimate": 0.005290517042865625,
+      "ci_95_low": -0.001003056093410637,
+      "ci_95_high": 0.011626048729480525,
+      "probability_greater_than_zero": 0.9492,
+      "group_count": 376,
+      "repetitions": 10000,
+      "seed": 2026
+    },
+    "fact_attention_interaction": {
+      "estimate": -0.0013192501146062014,
+      "ci_95_low": -0.004838586232889104,
+      "ci_95_high": 0.0022121353380470518,
+      "probability_greater_than_zero": 0.2307,
+      "group_count": 376,
+      "repetitions": 10000,
+      "seed": 2026
+    }
+  },
+  "claim_boundary": "Uncertainty estimates describe the fixed Validation checkpoint comparison; they do not establish causal effects, clinical correctness, safety or external validity."
+}
