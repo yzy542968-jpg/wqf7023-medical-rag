@@ -17,6 +17,25 @@ class CandidateBankAudit:
     post_filter_same_study_count: int
     post_filter_same_patient_count: int | None
     patient_level_exclusion_verified: bool
+    patient_identity_basis: str
+    identifier_verified_patient_level_exclusion: bool
+    source_design_patient_separation_supported: bool
+
+
+def _patient_identity_basis(
+    query: PairedCase, source_cases: Sequence[PairedCase]
+) -> str:
+    cases = (query, *source_cases)
+    bases = {
+        str(case.metadata.get("patient_key_basis", "provided_patient_identifier"))
+        for case in cases
+        if case.patient_id is not None
+    }
+    if not bases:
+        return "unavailable"
+    if len(bases) > 1:
+        return "mixed"
+    return bases.pop()
 
 
 def _assert_unique_studies(cases: Sequence[PairedCase]) -> None:
@@ -70,6 +89,21 @@ def build_candidate_bank(
             if case.patient_id is not None
         )
 
+    patient_identity_basis = _patient_identity_basis(query, source_cases)
+    complete_patient_keys = query.patient_id is not None and all(
+        case.patient_id is not None for case in source_cases
+    )
+    no_same_patient_after_filter = post_same_patient == 0
+    identifier_verified = (
+        complete_patient_keys
+        and no_same_patient_after_filter
+        and patient_identity_basis != "source_design_one_study_per_patient"
+    )
+    source_design_supported = (
+        complete_patient_keys
+        and no_same_patient_after_filter
+        and patient_identity_basis == "source_design_one_study_per_patient"
+    )
     audit = CandidateBankAudit(
         query_study_id=query.study_id,
         query_patient_id=query.patient_id,
@@ -79,11 +113,12 @@ def build_candidate_bank(
         eligible_candidate_count=len(eligible),
         post_filter_same_study_count=post_same_study,
         post_filter_same_patient_count=post_same_patient,
-        patient_level_exclusion_verified=(
-            query.patient_id is not None
-            and all(case.patient_id is not None for case in source_cases)
-            and post_same_patient == 0
-        ),
+        # Retained for compatibility; this now means identifier-verified rather
+        # than separation inferred from a source-design surrogate.
+        patient_level_exclusion_verified=identifier_verified,
+        patient_identity_basis=patient_identity_basis,
+        identifier_verified_patient_level_exclusion=identifier_verified,
+        source_design_patient_separation_supported=source_design_supported,
     )
     if audit.post_filter_same_study_count:
         raise AssertionError("Target study remained in the candidate bank.")

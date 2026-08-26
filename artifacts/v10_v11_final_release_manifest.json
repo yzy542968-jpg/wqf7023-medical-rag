@@ -18,7 +18,7 @@
     },
     "python_compileall": "passed"
   },
-  "claim_boundary": "V10 reports automated within-source retrieval and report-reference-consistency metrics. V11 is development-only. Neither establishes physician-adjudicated diagnostic correctness, clinical safety, treatment utility, deployment performance, or external patient-level generalization.",
+  "claim_boundary": "V10 reports automated within-source retrieval and report-reference-consistency metrics. OpenI patient separation is supported by the published one-study-per-patient source design but is not identifier-verified. V11 is development-only. Neither establishes physician-adjudicated diagnostic correctness, clinical safety, treatment utility, deployment performance, or external patient-level generalization.",
   "development_extension": "V11 Train/Validation only",
   "files": {
     "defence_pptx": {
@@ -28,22 +28,34 @@
       "sha256": "9c7f072da1cf440ad90773b9027a04ca89f6a13c59d969be6abcd617fe5e02fb"
     },
     "manuscript_docx": {
-      "bytes": 99432,
+      "bytes": 99661,
       "hash_mode": "raw_bytes",
       "path": "deliverables/22097191_ZHANG_YUE_Final_Research_Project.docx",
-      "sha256": "e09b14bf691730d84c7be73bd749968e680845f23bb1cd8c3e2f841a0817005c"
+      "sha256": "db5439ded62a92e56b4d9f1e66439071f9852eca05d0cb0da8f59db42d743ac7"
     },
     "manuscript_markdown": {
-      "bytes": 156033,
+      "bytes": 156758,
       "hash_mode": "canonical_utf8_lf",
       "path": "docs/P2_V10_V11_FINAL_MANUSCRIPT.md",
-      "sha256": "a23e71be2358513d2c0873fc02fe274f19ddbb6f8745fadc958c045e9e114989"
+      "sha256": "0c7e8e9dddc3fa98ac916c1aec8200bc374559cd11f91dc51ceafd1bc3e81c19"
     },
     "manuscript_pdf": {
-      "bytes": 660901,
+      "bytes": 662088,
       "hash_mode": "raw_bytes",
       "path": "deliverables/22097191_ZHANG_YUE_Final_Research_Project.pdf",
-      "sha256": "337637e4a027b86dc6c131e081f59867bf84ff9c15aae85c06a77960f6325d26"
+      "sha256": "754572db08e5db3c3844739359dab7b51c55d0a611d9f4d4474577ddd3b4052e"
+    },
+    "openi_patient_separation_audit": {
+      "bytes": 2842,
+      "hash_mode": "canonical_utf8_lf",
+      "path": "docs/OPENI_PATIENT_SEPARATION_AUDIT.md",
+      "sha256": "c3af059fe6ecab15f1a3e4d566e208f1217e49d40eb0327f483467f9f89b9562"
+    },
+    "openi_patient_separation_audit_json": {
+      "bytes": 2065,
+      "hash_mode": "canonical_utf8_lf",
+      "path": "experiments/post_freeze_audits/openi_patient_separation_audit.json",
+      "sha256": "0a00363878275baad0dd27736a748117ed1c97cca8c5fdde31a710f9077ebb02"
     },
     "prompt_registry": {
       "bytes": 5033,
@@ -52,22 +64,22 @@
       "sha256": "eca72bd41222f75b2edbfda975ac34e8075bdcc47e878273f8de2785f08343a6"
     },
     "readme": {
-      "bytes": 27238,
+      "bytes": 27562,
       "hash_mode": "canonical_utf8_lf",
       "path": "README.md",
-      "sha256": "4153f9cee7b0a7e008b2233a2ef13726fd5b7107888811f8c9a6f7123a089f34"
+      "sha256": "937c297724684c5d21701631eb5e7da51d0a12542e2c81406f79674f9e7f3dc7"
     },
     "release_audit": {
-      "bytes": 5879,
+      "bytes": 6158,
       "hash_mode": "canonical_utf8_lf",
       "path": "docs/V10_V11_FINAL_RELEASE_AUDIT.md",
-      "sha256": "4e80394f507b808f566bdcfd7c2e053319795472b61bc8761b9c838b908ff41a"
+      "sha256": "076bbfdd4b508c979f716cf41e2646b8d6b0a137f94432ad25faff80cc2cedb8"
     },
     "result_registry": {
-      "bytes": 5423,
+      "bytes": 5512,
       "hash_mode": "canonical_utf8_lf",
       "path": "docs/FINAL_RESULTS_REGISTRY.md",
-      "sha256": "62e473da14af516318b67c8c2c016ad4df0cf41ff39e33fd5eb5a08051be88da"
+      "sha256": "fbd547bd11e261824bb96ee34c4df3523246515ad0d2055351d08252505be1c0"
     },
     "v10_clinical_review_status": {
       "bytes": 1788,
@@ -94,10 +106,10 @@
       "sha256": "267911076779b7fe5df5ab54ccc584ef480388386b3f4aea78ecc2c8659d19eb"
     },
     "v10_freeze": {
-      "bytes": 9310,
+      "bytes": 9789,
       "hash_mode": "canonical_utf8_lf",
       "path": "docs/V10_TECHNICAL_FREEZE.md",
-      "sha256": "363909ce4288317c168e3dec3d9a89d0980883437850c2d58fd9639ec62b26fe"
+      "sha256": "7b096b7bfeb204698d521603d1f9d870d58eee54695c8707587ca4de5648d472"
     },
     "v10_qa_summary": {
       "bytes": 2897,

@@ -112,7 +112,7 @@ Interpretation: V11 supports efficiency, auditability and planner wording robust
 ## Final Evidence Boundary
 
 - Independent radiologist review: Future Work; no scores are reported.
-- Authorized external patient-level validation: Future Work; the adapter/runbook exists but no result is claimed.
+- Authorized external patient-level validation: Future Work; the MIMIC-CXR adapter/runbook exists, but the multi-terabyte source was not downloaded and no result is claimed.
 - Retrieval confidence: report-derived research signal, not diagnostic confidence.
-- Patient-level independence: not verified because reliable patient identifiers were unavailable in the processed OpenI artifact.
+- OpenI patient separation: supported by the source design of no more than one study per patient, but not independently re-verified from released identifiers.
 - Clinical safety, treatment utility and deployment performance: outside the completed evidence.

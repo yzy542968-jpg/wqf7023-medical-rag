@@ -27,7 +27,7 @@ The study concludes that correctly paired images can improve report-derived simi
 
 ## Declaration of evidence boundary
 
-All reported primary and development metrics are automated and retrospective. The processed OpenI source supports case-ID and duplicate-cluster separation but does not expose a reliable patient identifier for independent patient-level verification. Independent radiologist review and external validation remain Future Work. No reviewer ratings or external results are fabricated.
+All reported primary and development metrics are automated and retrospective. Patient separation is supported by the original OpenI collection design, which included no more than one study per patient, and V10 additionally verifies case-ID and duplicate-cluster separation. Released subject identifiers are unavailable, so patient separation cannot be independently re-verified from identifiers. Independent radiologist review and external validation remain Future Work. No reviewer ratings or external results are fabricated.
 """
 
 
@@ -57,7 +57,7 @@ The fourth contribution is an evaluation and reproducibility framework that pres
 
 SCOPE_FRAMEWORK = r"""## 1.7 Scope and Boundaries
 
-The completed research is restricted to chest radiographs and reports from OpenI/IU-Xray. It is a retrospective technical study, not a prospective clinical trial. The source design describes one study per patient, but reliable released subject identifiers are unavailable in the processed artifact. The thesis therefore claims case-ID and duplicate-cluster disjointness, not independently verified patient-level separation.
+The completed research is restricted to chest radiographs and reports from OpenI/IU-Xray. It is a retrospective technical study, not a prospective clinical trial. The source publication states that the collection included no more than one study per patient. The thesis therefore reports source-design-supported patient separation together with verified case-ID and duplicate-cluster disjointness, but not identifier-verified patient separation because reliable released subject identifiers are unavailable.
 
 Report-indexed normal and abnormal strata are derived from the dataset `problems` field and are not new clinical labels. Graded relevance is constructed from report labels, hidden report sections and RadGraph facts. These signals support controlled ranking comparisons but are not physician judgments of clinical similarity. Token-F1 and F1RadGraph measure automated consistency with hidden report text and do not establish diagnosis, safety or patient benefit.
 
@@ -129,7 +129,7 @@ Multimodal improvement can be misattributed when clinical text already identifie
 
 V10 uses 100 deterministic unique fixed-point-free image assignments. Each Test case receives the complete view set of another Test case while its indication, question and evaluation reference remain unchanged. Visual similarities, normalized features, multiview state and R5 scores are recomputed. The plus-one Monte Carlo p-value avoids reporting zero from a finite control set.
 
-Benchmark construction can introduce additional shortcuts. Generic repeated questions make text retrieval weakly identified, indications can encode disease hints, and near-duplicate reports can leak across partitions. V10 clusters exact and near-duplicate reports before allocation, uses a common Train-only bank and reports image-only, image-report and BM25 components separately. Patient-level separation remains unverifiable because reliable subject identifiers are absent from the processed source.
+Benchmark construction can introduce additional shortcuts. Generic repeated questions make text retrieval weakly identified, indications can encode disease hints, and near-duplicate reports can leak across partitions. V10 clusters exact and near-duplicate reports before allocation, uses a common Train-only bank and reports image-only, image-report and BM25 components separately. The source design supports one study per patient, but this property cannot be independently re-verified from released subject identifiers.
 
 The relevance construct is another validity boundary. Report labels and RadGraph facts enable deterministic graded qrels, but they are not physician judgments. Post-hoc sensitivity across combined, label-only and fact-only definitions is therefore reported as a construct audit rather than a replacement endpoint.
 """
@@ -203,7 +203,7 @@ The source was the public OpenI/IU-Xray chest-radiograph collection. The process
 
 Normality strata were operational. `problems == normal` was classified as report-indexed normal. Non-empty clinical problem values excluding `normal` and `no indexing` were classified as report-indexed abnormal. `no indexing` was treated as report-index indeterminate. These labels were used for spectrum description and deterministic sampling, not as physician-adjudicated disease status.
 
-The processed artifact did not expose a reliable subject identifier. Case-ID disjointness could be verified, and duplicate report clusters could be kept within one partition. Patient-level independence could not be independently verified. This limitation is stated consistently in the protocol, Results, Discussion and release documentation.
+The processed artifact did not expose a reliable subject identifier. Case-ID disjointness could be verified, and duplicate report clusters could be kept within one partition. The original source design supports patient separation by including no more than one study per patient, but identifier-based re-verification was impossible. This distinction is stated consistently in the Results, Discussion and release documentation.
 
 ## 3.4 Duplicate-Clustering and Frozen Split
 
@@ -297,7 +297,7 @@ CHAPTER_4 = r"""# Chapter 4: Results
 
 The 3,851 source cases formed 3,013 exact or near-duplicate report clusters. Cluster-level allocation produced 2,510 Train, 383 Calibration, 384 Validation and 574 Test cases. No duplicate cluster crossed partitions. Six frozen Test identities failed the predefined usable-report/RadGraph integrity requirement and were excluded without replacement, leaving 568 technically eligible Test cases.
 
-This split directly addresses the strongest weakness observed in the earlier full-source study, where 187 of 752 Test reports had cosine similarity at least 0.95 to a Train report. The V10 result is therefore not merely a sensitivity analysis after evaluation; duplicate control is built into the partition itself. Patient-level independence remains unverifiable because the processed source lacks reliable subject IDs.
+This split directly addresses the strongest weakness observed in the earlier full-source study, where 187 of 752 Test reports had cosine similarity at least 0.95 to a Train report. The V10 result is therefore not merely a sensitivity analysis after evaluation; duplicate control is built into the partition itself. Patient separation is source-design-supported rather than identifier-verified because the processed source lacks reliable subject IDs.
 
 ## 4.2 Retrieval Baselines
 
@@ -471,7 +471,7 @@ For engineering, the project demonstrates that a complete multimodal RAG pipelin
 
 ## 5.9 Limitations
 
-The first limitation is source scope. All primary and development results come from OpenI/IU-Xray. Duplicate clustering strengthens internal validity but does not establish external generalization. The processed artifact lacks reliable subject identifiers, so patient-level independence cannot be proven.
+The first limitation is source scope. All primary and development results come from OpenI/IU-Xray. Duplicate clustering strengthens internal validity but does not establish external generalization. The source collection was designed with no more than one study per patient, but the processed artifact lacks reliable subject identifiers; patient separation is therefore source-design-supported, not identifier-verified.
 
 The second limitation is evaluation reference. Relevance, Token-F1 and F1RadGraph are derived from reports. The retrieval model and qrel also share RadGraph-derived information, creating feature-metric coupling. Empty active-label sets make the frozen qrel unusually broad for report-indexed normal and indeterminate cases, and label-only abnormal sensitivity did not support an R5 gain. These proxies are not physician judgments of similarity, correctness, harmfulness or clinical usefulness. Independent blind review remains unexecuted and is not replaced by author interpretation.
 
@@ -485,7 +485,7 @@ The fifth limitation is confidence. The calibrator targets an operational report
 
 The highest-priority next step is independent radiologist review of a prespecified sample. Reviewers should score historical-case similarity, target-image consistency, usefulness of the cited historical evidence and potentially harmful content. The protocol and blank packages can be preserved now, but results must not be reported until real reviewers complete them.
 
-The second priority is external patient-level validation on an authorized dataset such as MIMIC-CXR-JPG. A smaller prespecified subset is sufficient if subject/study identifiers, licensing and local model execution are respected. The external protocol must be frozen before outcome inspection.
+The second priority is external patient-level validation on an authorized dataset such as MIMIC-CXR-JPG. The complete source is multi-terabyte in scale and is outside the completed thesis scope. A future study may use a smaller prespecified authorized subset if subject/study identifiers, licensing and local model execution are respected. The external protocol must be frozen before outcome inspection.
 
 The third priority is stronger candidate generation. K=200 RRF, learned sparse-dense fusion or modern medical retrieval encoders can be compared on a new development/confirmation design. Success should include relevant-item recall, nDCG, latency, memory and downstream QA rather than one ranking metric.
 
@@ -627,6 +627,14 @@ def build() -> None:
     appendices = appendices.replace(
         "They are formative evidence and do not replace the V9 primary study.",
         "They are formative evidence and do not replace the V10 primary study.",
+    )
+    appendices = appendices.replace(
+        "The processed source records did not contain a stable patient or subject identifier, so patient-level independence could not be verified.",
+        "The processed source records did not contain a released patient or subject identifier. The source collection included no more than one study per patient, so separation was supported by source design but could not be independently re-verified from identifiers.",
+    )
+    appendices = appendices.replace(
+        "a stable patient identifier was not available for verification.",
+        "a released patient identifier was not available for independent re-verification.",
     )
     for old, new in (("Table 4.1", "Table H.1"), ("Table 4.2", "Table H.2"), ("Table 4.3", "Table H.3")):
         appendices = appendices.replace(old, new)

@@ -21,6 +21,8 @@ FILES = {
     "result_registry": "docs/FINAL_RESULTS_REGISTRY.md",
     "prompt_registry": "docs/PROMPT_TEMPLATES.md",
     "release_audit": "docs/V10_V11_FINAL_RELEASE_AUDIT.md",
+    "openi_patient_separation_audit": "docs/OPENI_PATIENT_SEPARATION_AUDIT.md",
+    "openi_patient_separation_audit_json": "experiments/post_freeze_audits/openi_patient_separation_audit.json",
     "v10_freeze": "docs/V10_TECHNICAL_FREEZE.md",
     "v10_config": "config/v10_confirmation.json",
     "v10_split_freeze": "data/splits/v10/v10_cluster_disjoint_split_freeze.json",
@@ -74,7 +76,9 @@ def main() -> None:
         },
         "claim_boundary": (
             "V10 reports automated within-source retrieval and report-reference-consistency "
-            "metrics. V11 is development-only. Neither establishes physician-adjudicated "
+            "metrics. OpenI patient separation is supported by the published one-study-per-patient "
+            "source design but is not identifier-verified. V11 is development-only. Neither "
+            "establishes physician-adjudicated "
             "diagnostic correctness, clinical safety, treatment utility, deployment performance, "
             "or external patient-level generalization."
         ),

@@ -18,7 +18,7 @@ V10 uses a cluster-disjoint OpenI split formed before confirmation outcomes:
 2,510 Train, 383 Calibration, 384 Validation, and 574 Test cases. Exact and
 near-duplicate report links were clustered before allocation. Reliable patient
 identifiers were unavailable in the processed OpenI data, so the study claims
-case-ID and duplicate-cluster disjointness, not patient-level independence.
+case-ID and duplicate-cluster disjointness, plus source-design-supported patient separation rather than identifier-verified patient separation.
 
 The primary retrieval comparison is the frozen R5 fact-attention ensemble
 against the R4 nine-feature reranker. Relevance is report-derived from active
@@ -81,7 +81,7 @@ labels.
 
 - Relevance is report-derived and the normal/indeterminate qrel has broad
   empty-label agreement; physician-adjudicated similarity is unavailable.
-- Patient-level independence cannot be verified from the processed OpenI data.
+- OpenI patient separation is supported by the published one-study-per-patient source design, but cannot be independently re-verified from released subject identifiers.
 - The R5 Test gain combines fact-aware features and learned multiview attention.
   A separate frozen-checkpoint 2x2 audit on Validation provides descriptive
   component contrasts, but it is not a causal attribution and does not inspect
@@ -92,7 +92,7 @@ labels.
 - The six technical exclusions were not replaced, and the retrieval/QA
   confirmation uses 568 eligible Test cases.
 - No independent clinical reviewer has supplied ratings.
-- No authorized external MIMIC-CXR result is available.
+- No authorized external MIMIC-CXR result is available; the multi-terabyte source remains a Future Work extension rather than a thesis requirement.
 
 ## Future Work
 

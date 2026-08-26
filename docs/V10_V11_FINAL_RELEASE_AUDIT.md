@@ -12,19 +12,20 @@
 
 The final thesis models a new chest-radiograph case whose report is unavailable at inference. The input is one or two target images, an available indication and a question. The system retrieves other-patient historical image-report pairs, performs fact-aware reranking and case-scoped evidence selection, produces a bounded target-image answer and attaches deterministic case/section/fact provenance.
 
-V10 is the final primary study. V11 is a development-only extension and did not instantiate a confirmation cohort. The release does not claim physician-adjudicated diagnostic correctness, patient-level independence, clinical safety, treatment utility, external generalization or deployment performance.
+V10 is the final primary study. V11 is a development-only extension and did not instantiate a confirmation cohort. OpenI patient separation is supported by the published one-study-per-patient source design but is not identifier-verified. The release does not claim physician-adjudicated diagnostic correctness, clinical safety, treatment utility, external generalization or deployment performance.
 
 ## Final artifacts
 
 | Artifact | Status |
 |---|---|
-| `docs/P2_V10_V11_FINAL_MANUSCRIPT.md` | six chapters, 21,010 whitespace-delimited words |
+| `docs/P2_V10_V11_FINAL_MANUSCRIPT.md` | six chapters, 21,113 whitespace-delimited words |
 | `deliverables/22097191_ZHANG_YUE_Final_Research_Project.docx` | generated and rendered |
 | `deliverables/22097191_ZHANG_YUE_Final_Research_Project.pdf` | 58 A4 pages |
 | `deliverables/22097191_ZHANG_YUE_Final_Defence.pptx` | 15 slides |
 | `README.md` | V10/V11 scope and results synchronized |
 | `docs/FINAL_RESULTS_REGISTRY.md` | V1/V2 historical, V9 historical, V10 primary and V11 development results separated |
 | `docs/PROMPT_TEMPLATES.md` | final target/history separation and provenance contract recorded |
+| `docs/OPENI_PATIENT_SEPARATION_AUDIT.md` | source-design support and identifier-verification boundary recorded |
 
 Every public artifact listed above is fingerprinted in the JSON release manifest. Large source data, image pixels, model weights, private reviewer keys and per-generation rows remain local under repository policy.
 Text artifacts use UTF-8/LF canonicalized payload hashes so their fingerprints remain stable across Git line-ending conversion; DOCX, PDF and PPTX artifacts retain raw-byte hashes.
@@ -53,7 +54,7 @@ Text artifacts use UTF-8/LF canonicalized payload hashes so their fingerprints r
 
 ## Document and presentation verification
 
-- The DOCX was rendered through LibreOffice and Poppler using the repository Windows QA wrapper.
+- The DOCX was rendered through Microsoft Word and Poppler using the repository Windows QA wrapper.
 - All 58 PDF pages were inspected in contact sheets; the title page, contents, tables, chapter starts, references and appendices were also checked at full size.
 - A blank page caused by an explicit Word page-break paragraph was removed by using heading-level `page_break_before`.
 - Actual chapter page numbers were extracted from the rendered PDF and synchronized with the static contents page.
@@ -62,7 +63,7 @@ Text artifacts use UTF-8/LF canonicalized payload hashes so their fingerprints r
 
 ## Human and external evaluation disposition
 
-Independent radiologist review remains Future Work. The prepared blinded package retains empty rating fields and is not counted as completed evaluation. Authorized external patient-level validation also remains Future Work; the MIMIC-CXR adapter/runbook does not constitute an external result.
+Independent radiologist review remains Future Work. The prepared blinded package retains empty rating fields and is not counted as completed evaluation. Authorized external patient-level validation also remains Future Work; the MIMIC-CXR adapter/runbook does not constitute an external result, and the multi-terabyte source was not downloaded for this thesis.
 
 ## Acceptance decision
 

@@ -26,7 +26,7 @@ The source contained 3,851 OpenI/IU-Xray cases. Exact and near-duplicate report 
 
 No duplicate cluster crosses partitions. The retrieval bank contains 2,506 technically eligible Train cases. The final Test evaluation contains 568 technically eligible cases. Six frozen Test identities (`CXR894`, `CXR1293`, `CXR1297`, `CXR1615`, `CXR2601`, and `CXR2765`) had empty-report RadGraph records and were excluded under the frozen data-integrity rule without replacement.
 
-The processed OpenI source lacks a reliable independent patient identifier. V10 therefore proves case and duplicate-cluster disjointness, not independently verified patient-level separation.
+The processed OpenI source lacks a reliable released patient identifier. The original collection design states that no more than one study was included per patient. V10 therefore combines source-design-supported patient separation with verified case-ID and duplicate-cluster disjointness, but does not claim identifier-verified patient separation.
 
 ## Frozen systems
 
@@ -105,7 +105,13 @@ Raw answer token ceilings nevertheless remained frequent: `91.55%` for G0, `64.7
 
 The blinded clinical package contains 100 cases and 400 presentation rows, balanced between findings and impression questions. Rating fields are blank, system identities are stored separately, and `reviewer_ratings_fabricated=false`. Status is `pending_independent_review`.
 
-The MIMIC-CXR adapter and patient-level split utility are implemented and tested, but authorized MIMIC-CXR inputs were absent. External-validation status is `adapter_ready_authorized_data_absent`; no external metric or generalization claim is reported.
+The MIMIC-CXR adapter and patient-level split utility are implemented and tested, but authorized MIMIC-CXR inputs were absent and the multi-terabyte source was not downloaded. External-validation status is `adapter_ready_authorized_data_absent`; this remains Future Work and no external metric or generalization claim is reported.
+
+## Post-freeze patient-separation clarification
+
+The post-freeze audit in `docs/OPENI_PATIENT_SEPARATION_AUDIT.md` distinguishes
+source-design support from identifier verification. It changes no V10 model,
+split, output, metric or conclusion.
 
 ## Reproducibility fingerprints
 

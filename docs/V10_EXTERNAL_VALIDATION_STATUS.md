@@ -4,7 +4,7 @@
 
 Status: `adapter_ready_authorized_data_absent`
 
-No authorized MIMIC-CXR record list, report archive, split table, or JPG tree was present in the local research workspace when the V10 publication extension was frozen. Therefore, this repository reports no external-validation cohort, metric, comparison, or clinical generalization claim.
+No authorized MIMIC-CXR record list, report archive, split table, or JPG tree was present in the local research workspace when the V10 publication extension was frozen. The complete image source is multi-terabyte in scale and was not downloaded for this thesis. Therefore, this repository reports no external-validation cohort, metric, comparison, or clinical generalization claim.
 
 This is a resource boundary, not a failed statistical result. OpenI/IU-Xray remains the only source used for V10 model development and confirmation.
 
@@ -32,6 +32,6 @@ A smaller external subset is acceptable only if its deterministic patient-level 
 
 ## Permitted manuscript statement
 
-> A patient-aware MIMIC-CXR adapter and deterministic external-validation protocol were implemented, but authorized MIMIC-CXR data were not available in the study environment. Consequently, external generalization was not evaluated and remains future work.
+> A patient-aware MIMIC-CXR adapter and deterministic external-validation protocol were implemented, but the authorized multi-terabyte MIMIC-CXR source was not downloaded for the completed thesis. Consequently, external generalization was not evaluated and remains Future Work. A future study may prespecify a smaller authorized patient-disjoint subset.
 
 The manuscript must not describe the adapter, synthetic tests, or runbook as completed external validation.

@@ -87,6 +87,9 @@ def test_candidate_bank_excludes_target_study_and_same_patient() -> None:
     assert audit.excluded_same_patient_count == 1
     assert audit.post_filter_same_patient_count == 0
     assert audit.patient_level_exclusion_verified is True
+    assert audit.identifier_verified_patient_level_exclusion is True
+    assert audit.source_design_patient_separation_supported is False
+    assert audit.patient_identity_basis == "provided_patient_identifier"
 
 
 def test_candidate_bank_requires_patient_ids_for_formal_use() -> None:
@@ -394,9 +397,13 @@ def test_openi_formal_mode_uses_source_design_patient_keys() -> None:
     assert rows[0].source == "openi_iu_xray_primary_source"
     assert rows[0].metadata["released_patient_identifier_available"] is False
     assert rows[0].metadata["source_collection_one_study_per_patient"] is True
+    assert rows[0].metadata["source_collection_design_doi"] == "10.1093/jamia/ocv080"
     bank, audit = build_candidate_bank(rows[0], rows, require_patient_ids=True)
     assert [case.study_id for case in bank] == ["CXR2"]
-    assert audit.patient_level_exclusion_verified is True
+    assert audit.patient_level_exclusion_verified is False
+    assert audit.identifier_verified_patient_level_exclusion is False
+    assert audit.source_design_patient_separation_supported is True
+    assert audit.patient_identity_basis == "source_design_one_study_per_patient"
 
 
 def test_openi_normal_and_unindexed_reports_are_not_conflated() -> None:

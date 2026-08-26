@@ -70,7 +70,9 @@ def main() -> None:
         "source_collection_one_study_per_patient": True,
         "patient_identity_claim": "source-design patient uniqueness",
         "patient_identity_evidence_doi": "10.1093/jamia/ocv080",
-        "case_disjointness_operationalizes_patient_disjointness": True,
+        "source_design_patient_separation_supported": True,
+        "identifier_verified_patient_separation": False,
+        "case_disjointness_operationalizes_source_design_patient_separation": True,
         "report_index_class_counts": report_index_counts,
         "report_index_qrel_frame_count": len(qrel_frame),
         "report_index_qrel_frame_sha256": sha256_identifiers(

@@ -1,0 +1,40 @@
+{
+  "audit_type": "post_freeze_evidence_boundary_audit",
+  "changes_frozen_results": false,
+  "source_collection": "OpenI/IU-Xray",
+  "source_design_evidence": {
+    "claim": "The source collection included no more than one study per patient.",
+    "doi": "10.1093/jamia/ocv080",
+    "source_design_patient_separation_supported": true
+  },
+  "local_provenance": {
+    "raw_report_count": 3851,
+    "raw_report_uid_unique_count": 3851,
+    "projection_count": 7466,
+    "projection_uid_unique_count": 3851,
+    "processed_case_count": 3851,
+    "processed_case_id_unique_count": 3851,
+    "raw_uid_to_processed_case_id_exact_set_match": true,
+    "exposed_patient_identifier_fields": []
+  },
+  "fingerprints": {
+    "raw_reports_sha256": "cd7257716f7be4aaf46e55a9ea266b69095372a2f23dc0e19e32a95b0f02e2e6",
+    "raw_projections_sha256": "7af9c8a6b4f8ae695c654ecd4208edd193a37892a5607b7cb9e609dc997e6b7a",
+    "processed_cases_sha256": "56e367190396011d4d67f43e7e733389a8346890bf8729e82fb4326d063bbd68",
+    "raw_report_uids_sha256": "c5d191ffe0f2dc22a4ce669f3230022caaf70544f84d410f2b155891d3c7657a",
+    "processed_case_ids_sha256": "186461bd6ab1e611c92fc128be93ff762c089ab4965e5f9e72a9eb8b8478f5fc"
+  },
+  "claim_boundary": {
+    "case_id_disjointness_verified": true,
+    "duplicate_cluster_disjointness_verified_in_v10": true,
+    "source_design_patient_separation_supported": true,
+    "identifier_verified_patient_separation": false,
+    "external_patient_level_generalization": false,
+    "recommended_wording": "Patient separation was supported by the OpenI collection design, which included no more than one study per patient, but could not be independently re-verified from released subject identifiers."
+  },
+  "future_work": {
+    "dataset": "MIMIC-CXR/MIMIC-CXR-JPG",
+    "status": "future_work_only_authorized_data_not_downloaded",
+    "reason": "Identifier-verified external patient-level validation requires authorized subject/study identifiers and a separately frozen protocol; the multi-terabyte source is outside the completed thesis scope."
+  }
+}

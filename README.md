@@ -129,7 +129,8 @@ The consolidated interpretation is in `docs/V9_SUPPLEMENTAL_VALIDITY_RESULTS.md`
 - Complete F1RadGraph improved from `0.08265` without history to `0.11053` with R5 whole-report historical RAG. The R5-minus-R4 complete-score interval was marginally above zero, while entity and entity-relation intervals crossed zero.
 - Deterministic assembly achieved `100%` schema and provenance integrity, but raw answer token-ceiling rates remained high. This is disclosed as a generator limitation rather than hidden by reparsing.
 - A blinded 100-case, 400-row clinical-review package is prepared with empty rating fields and a separate private key. It is retained as Future Work; no reviewer result is claimed or fabricated.
-- The MIMIC-CXR adapter and patient-level external-validation runbook are implemented, but no authorized external dataset was present for this release. No external result is claimed.
+- The MIMIC-CXR adapter and patient-level external-validation runbook are implemented, but the authorized multi-terabyte source was not downloaded for this thesis. External patient-level validation remains Future Work; no external result is claimed.
+- OpenI patient separation is supported by the source collection's one-study-per-patient design. Released subject identifiers are unavailable, so this is not described as identifier-verified patient separation; see `docs/OPENI_PATIENT_SEPARATION_AUDIT.md`.
 
 V10 strengthens internal validity and traceability. Its automated metrics measure retrieval relevance and report-reference consistency, not physician-adjudicated diagnostic correctness, safety, or clinical utility.
 

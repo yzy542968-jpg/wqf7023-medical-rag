@@ -195,6 +195,8 @@ def read_chexpert_plus_cases(
                     "label_annotation_available": bool(labels),
                     "radgraph_annotation_available": radgraph_available,
                     "view_count": len(set(group["image_paths"])),
+                    "released_patient_identifier_available": True,
+                    "patient_key_basis": "released_patient_identifier",
                 },
             )
         )

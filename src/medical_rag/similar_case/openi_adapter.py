@@ -84,6 +84,7 @@ def openi_row_to_paired_case(
             ),
             "released_patient_identifier_available": False,
             "source_collection_one_study_per_patient": source_unique_patient,
+            "source_collection_design_doi": "10.1093/jamia/ocv080",
             "patient_key_basis": (
                 "source_design_one_study_per_patient"
                 if source_unique_patient
