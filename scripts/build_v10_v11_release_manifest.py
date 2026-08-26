@@ -10,6 +10,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / "artifacts" / "v10_v11_final_release_manifest.json"
+CANONICAL_TEXT_SUFFIXES = {".json", ".md", ".txt", ".toml", ".yaml", ".yml"}
 
 FILES = {
     "manuscript_markdown": "docs/P2_V10_V11_FINAL_MANUSCRIPT.md",
@@ -42,12 +43,12 @@ FILES = {
 }
 
 
-def sha256(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
+def release_payload(path: Path) -> tuple[bytes, str]:
+    if path.suffix.lower() in CANONICAL_TEXT_SUFFIXES:
+        text = path.read_text(encoding="utf-8")
+        canonical = text.replace("\r\n", "\n").replace("\r", "\n").encode("utf-8")
+        return canonical, "canonical_utf8_lf"
+    return path.read_bytes(), "raw_bytes"
 
 
 def main() -> None:
@@ -81,10 +82,12 @@ def main() -> None:
     }
     for key, relative in FILES.items():
         path = ROOT / relative
+        payload, hash_mode = release_payload(path)
         manifest["files"][key] = {
             "path": relative.replace("\\", "/"),
-            "bytes": path.stat().st_size,
-            "sha256": sha256(path),
+            "bytes": len(payload),
+            "sha256": hashlib.sha256(payload).hexdigest(),
+            "hash_mode": hash_mode,
         }
 
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)

@@ -27,6 +27,7 @@ V10 is the final primary study. V11 is a development-only extension and did not 
 | `docs/PROMPT_TEMPLATES.md` | final target/history separation and provenance contract recorded |
 
 Every public artifact listed above is fingerprinted in the JSON release manifest. Large source data, image pixels, model weights, private reviewer keys and per-generation rows remain local under repository policy.
+Text artifacts use UTF-8/LF canonicalized payload hashes so their fingerprints remain stable across Git line-ending conversion; DOCX, PDF and PPTX artifacts retain raw-byte hashes.
 
 ## Numerical audit
 

@@ -14,12 +14,12 @@ DOCX = ROOT / "deliverables" / "22097191_ZHANG_YUE_Final_Research_Project.docx"
 MANIFEST = ROOT / "artifacts" / "v10_v11_final_release_manifest.json"
 
 
-def _sha256(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
+def _release_payload(path: Path, hash_mode: str) -> bytes:
+    if hash_mode == "canonical_utf8_lf":
+        text = path.read_text(encoding="utf-8")
+        return text.replace("\r\n", "\n").replace("\r", "\n").encode("utf-8")
+    assert hash_mode == "raw_bytes"
+    return path.read_bytes()
 
 
 def _docx_text(path: Path) -> str:
@@ -80,8 +80,9 @@ def test_release_manifest_hashes_all_registered_files() -> None:
     for record in manifest["files"].values():
         path = ROOT / record["path"]
         assert path.is_file(), record["path"]
-        assert path.stat().st_size == record["bytes"], record["path"]
-        assert _sha256(path) == record["sha256"], record["path"]
+        payload = _release_payload(path, record["hash_mode"])
+        assert len(payload) == record["bytes"], record["path"]
+        assert hashlib.sha256(payload).hexdigest() == record["sha256"], record["path"]
 
 
 def test_public_labels_do_not_misstate_the_frozen_evidence_policy() -> None:
