@@ -9,6 +9,7 @@ from medical_rag.evaluation.chexbert_pathology import (
     logits_to_rrg_binary,
     metrics_from_case_statistics,
     paired_case_bootstrap,
+    random_control_case_bootstrap,
 )
 
 
@@ -49,4 +50,24 @@ def test_paired_case_bootstrap_is_deterministic_and_paired() -> None:
     assert first == second
     assert first["micro_f1_14"]["mean_difference"] == pytest.approx(1.0)
     assert first["micro_f1_14"]["ci_95_low"] == pytest.approx(1.0)
+
+
+def test_random_control_bootstrap_averages_assignments_before_inference() -> None:
+    references = np.zeros((4, 14), dtype=np.int8)
+    references[:, 1] = 1
+    selected = references.copy()
+    weak = np.zeros((4, 14), dtype=np.int8)
+    medium = references.copy()
+    medium[::2, 1] = 0
+    case_ids = ["A", "A", "B", "B"]
+    result = random_control_case_bootstrap(
+        build_case_statistics(case_ids, references, selected),
+        [
+            build_case_statistics(case_ids, references, weak),
+            build_case_statistics(case_ids, references, medium),
+        ],
+        iterations=100,
+        seed=21,
+    )
+    assert result["micro_f1_14"]["mean_difference"] == pytest.approx(2.0 / 3.0)
 

@@ -311,6 +311,51 @@ def paired_case_bootstrap(
     }
 
 
+def random_control_case_bootstrap(
+    selected_history: CaseStatistics,
+    random_history_assignments: Sequence[CaseStatistics],
+    *,
+    iterations: int,
+    seed: int,
+) -> dict[str, dict[str, float]]:
+    if not random_history_assignments:
+        raise ValueError("At least one random-history assignment is required")
+    if iterations < 1:
+        raise ValueError("iterations must be positive")
+    if any(
+        assignment.case_ids != selected_history.case_ids
+        for assignment in random_history_assignments
+    ):
+        raise ValueError("Random-control bootstrap requires identical ordered case IDs")
+    rng = np.random.default_rng(seed)
+    differences = {metric: np.empty(iterations, dtype=np.float64) for metric in METRIC_NAMES}
+    case_count = len(selected_history.case_ids)
+    for iteration in range(iterations):
+        sample = rng.integers(0, case_count, size=case_count)
+        selected_metrics = metrics_from_case_statistics(selected_history, sample)
+        random_metrics = [
+            metrics_from_case_statistics(assignment, sample)
+            for assignment in random_history_assignments
+        ]
+        for metric in METRIC_NAMES:
+            differences[metric][iteration] = float(selected_metrics[metric]) - float(
+                np.mean([float(values[metric]) for values in random_metrics])
+            )
+    selected_point = metrics_from_case_statistics(selected_history)
+    random_points = [
+        metrics_from_case_statistics(assignment) for assignment in random_history_assignments
+    ]
+    return {
+        metric: {
+            "mean_difference": float(selected_point[metric])
+            - float(np.mean([float(values[metric]) for values in random_points])),
+            "ci_95_low": float(np.quantile(samples, 0.025)),
+            "ci_95_high": float(np.quantile(samples, 0.975)),
+        }
+        for metric, samples in differences.items()
+    }
+
+
 def case_bootstrap_intervals(
     statistics: CaseStatistics,
     *,
@@ -336,4 +381,3 @@ def case_bootstrap_intervals(
         }
         for metric, samples in values.items()
     }
-
