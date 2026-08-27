@@ -96,6 +96,7 @@ def build_retrieval_state(
     *,
     leave_one_out: bool,
     term_cache: dict[str, tuple[np.ndarray, int]],
+    precomputed_qrels: dict[str, float] | None = None,
 ) -> dict[str, Any]:
     query_text = "\n".join(part for part in (query.indication, QUESTIONS[question_type]) if part)
     bm25 = np.asarray(runtime.bm25.score_all(query_text), dtype=np.float32)
@@ -145,7 +146,9 @@ def build_retrieval_state(
         "r5_full_rank": r5_full_rank,
         "rrf_r5_rank": rrf_r5_rank,
         "features_by_index": r5,
-        "qrels": {
+        "qrels": precomputed_qrels
+        if precomputed_qrels is not None
+        else {
             candidate_id: float(
                 qrel_v2_profile_prepared(
                     prepared_by_case[query_id],
