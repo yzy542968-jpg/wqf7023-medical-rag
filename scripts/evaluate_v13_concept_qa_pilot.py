@@ -300,6 +300,23 @@ def main() -> None:
         }
         for condition in CONDITIONS
     }
+    concept_rows_by_case = {
+        str(row["case_id"]): row
+        for row in enriched
+        if row["condition"] == "concept_on" and row["question_type"] == "findings"
+    }
+    concept_counts = [len(row["predicted_concepts"]) for row in concept_rows_by_case.values()]
+    label_counts: dict[str, int] = defaultdict(int)
+    for row in concept_rows_by_case.values():
+        for concept in row["predicted_concepts"]:
+            label_counts[str(concept["label"])] += 1
+    concept_distribution = {
+        "case_count": len(concept_rows_by_case),
+        "cases_without_passing_concept": sum(count == 0 for count in concept_counts),
+        "mean_concepts_per_case": statistics.fmean(concept_counts),
+        "maximum_concepts_per_case": max(concept_counts),
+        "label_case_counts": dict(sorted(label_counts.items())),
+    }
     all_scope = scopes["all"]
     promotion = {
         "five_observation_micro_f1_ci_above_zero": (
@@ -327,6 +344,7 @@ def main() -> None:
         "counts": {"cases": 96, "questions_per_case": 2, "rows": len(rows)},
         "scopes": scopes,
         "integrity": integrity,
+        "concept_distribution": concept_distribution,
         "promotion_diagnostics": promotion,
         "runtime": {
             "bootstrap_iterations": args.bootstrap_iterations,
@@ -355,4 +373,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
