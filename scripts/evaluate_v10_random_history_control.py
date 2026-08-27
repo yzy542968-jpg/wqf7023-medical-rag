@@ -25,6 +25,7 @@ from medical_rag.evaluation.chexbert_pathology import (  # noqa: E402
     METRIC_NAMES as CHEXBERT_METRICS,
     build_case_statistics,
     metrics_from_case_statistics,
+    paired_case_bootstrap,
     random_control_case_bootstrap,
 )
 from medical_rag.similar_case.v10_split import file_sha256  # noqa: E402
@@ -192,6 +193,19 @@ def select_scope(rows: Sequence[dict[str, Any]], scope: str) -> list[dict[str, A
     if scope == "all":
         return list(rows)
     return [row for row in rows if row["question_type"] == scope]
+
+
+def invert_bootstrap_differences(
+    values: Mapping[str, Mapping[str, float]],
+) -> dict[str, dict[str, float]]:
+    return {
+        metric: {
+            "mean_difference": -float(interval["mean_difference"]),
+            "ci_95_low": -float(interval["ci_95_high"]),
+            "ci_95_high": -float(interval["ci_95_low"]),
+        }
+        for metric, interval in values.items()
+    }
 
 
 def main() -> None:
@@ -362,7 +376,21 @@ def main() -> None:
                 random_stats,
                 iterations=args.bootstrap_iterations,
                 seed=args.bootstrap_seed + 60 + scope_index * 100,
-            )
+            ),
+            "gr_minus_g0": invert_bootstrap_differences(
+                random_control_case_bootstrap(
+                    g0_stats,
+                    random_stats,
+                    iterations=args.bootstrap_iterations,
+                    seed=args.bootstrap_seed + 70 + scope_index * 100,
+                )
+            ),
+            "g2_minus_g0": paired_case_bootstrap(
+                g2_stats,
+                g0_stats,
+                iterations=args.bootstrap_iterations,
+                seed=args.bootstrap_seed + 80 + scope_index * 100,
+            ),
         }
         scopes[scope] = {
             "linear_metrics": linear_systems,
