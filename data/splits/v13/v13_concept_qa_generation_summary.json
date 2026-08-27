@@ -1,0 +1,54 @@
+{
+  "study": "V13 paired concept-on/off QA generation",
+  "status": "validation_generation_complete_no_retuning",
+  "test_outcomes_inspected": false,
+  "counts": {
+    "cases": 96,
+    "questions_per_case": 2,
+    "rows": 384
+  },
+  "conditions": [
+    "concept_off",
+    "concept_on"
+  ],
+  "metrics": {
+    "concept_off": {
+      "rows": 192,
+      "cases": 96,
+      "token_f1": 0.19925515263914007,
+      "answer_contract_valid_rate": 1.0,
+      "citation_valid_rate": 1.0,
+      "token_ceiling_rate": 0.046875,
+      "mean_input_tokens": 780.25,
+      "mean_output_tokens": 38.833333333333336
+    },
+    "concept_on": {
+      "rows": 192,
+      "cases": 96,
+      "token_f1": 0.182733031334145,
+      "answer_contract_valid_rate": 1.0,
+      "citation_valid_rate": 1.0,
+      "token_ceiling_rate": 0.046875,
+      "mean_input_tokens": 808.1145833333334,
+      "mean_output_tokens": 40.875
+    }
+  },
+  "model": {
+    "generator": "google/medgemma-1.5-4b-it",
+    "revision": "91850547d9f0b2fdd21aa7c5f4f3d1a8a52c243b",
+    "max_new_tokens": 96,
+    "concept_checkpoint_sha256": "9cccfe79a451f357cd6e69e21d3661f0317c7917d83f3f0177d71df310916c5f"
+  },
+  "runtime": {
+    "elapsed_seconds_this_run": 995.8669014000334,
+    "peak_gpu_memory_allocated_mib": 3683.1416015625,
+    "batch_size": 2
+  },
+  "artifacts": {
+    "manifest_sha256": "50396135e0bfd73fb44328aa114bddfed021d0ec437e5368f7e70c1f1fc8435e",
+    "ranking_rows_sha256": "48ce1f198d2c102fd57635d8ae97de22f0e863bcc927cc673751039bd59786fd",
+    "output_rows_sha256": "904c80dc093fb76314e3a401bf9ab499af2875898ff21cdd6904eb762e2b3ec1",
+    "script_sha256": "da235ce928ff1efd9de585981a287c00c06c37e42c1fc6d4d293e297c6ebf8ef"
+  },
+  "claim_boundary": "Validation-only automated answer-reference consistency; not diagnostic accuracy, clinical safety, physician utility, or confirmation evidence."
+}
