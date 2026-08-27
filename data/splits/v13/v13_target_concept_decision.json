@@ -1,0 +1,868 @@
+{
+  "study": "V13 target-image pathology concept development",
+  "status": "train_calibration_selection_complete_validation_not_evaluated",
+  "protocol_commit": "72d5af1",
+  "validation_outcomes_inspected": false,
+  "counts": {
+    "train": 2510,
+    "calibration": 383,
+    "labels": 14,
+    "train_empty_report_text": 4,
+    "calibration_empty_report_text": 7
+  },
+  "partition_fingerprints": {
+    "train_case_ids_sha256": "f0e7f609e3373bdc7aa1984608d92f594ae80609ec76dd9e55303af7bf57dd6a",
+    "calibration_case_ids_sha256": "0d6f1c47c4ab20596220f3c487cc9214cd2abffbee2a36716c3e56aaa10e4e4c"
+  },
+  "candidate_models": [
+    {
+      "name": "train_prevalence",
+      "type": "baseline",
+      "calibration_macro_auprc": 0.07888847444983216
+    },
+    {
+      "name": "linear_c_0.01",
+      "type": "linear",
+      "c": 0.01,
+      "calibration_macro_auprc": 0.29245635677173254
+    },
+    {
+      "name": "linear_c_0.1",
+      "type": "linear",
+      "c": 0.1,
+      "calibration_macro_auprc": 0.3118767801277774
+    },
+    {
+      "name": "linear_c_1",
+      "type": "linear",
+      "c": 1.0,
+      "calibration_macro_auprc": 0.33251597278851314
+    },
+    {
+      "name": "linear_c_10",
+      "type": "linear",
+      "c": 10.0,
+      "calibration_macro_auprc": 0.33168156985841074
+    },
+    {
+      "name": "mlp_1152_256_14",
+      "type": "mlp",
+      "calibration_macro_auprc": 0.32105030005179463,
+      "best_epoch": 24,
+      "best_calibration_macro_auprc": 0.32105030005179463,
+      "epochs_run": 34
+    }
+  ],
+  "selection_rule": {
+    "metric": "calibration_macro_auprc",
+    "linear_preference_tolerance": 0.005,
+    "selected": {
+      "name": "linear_c_1",
+      "type": "linear",
+      "c": 1.0,
+      "calibration_macro_auprc": 0.33251597278851314
+    }
+  },
+  "calibration_metrics": {
+    "case_count": 383,
+    "supported_label_count": 14,
+    "macro_auroc": 0.8108204295894786,
+    "macro_auprc": 0.33251597278851314,
+    "micro_auroc": 0.8523155068669924,
+    "micro_auprc": 0.34382023836771425,
+    "micro_f1_14": 0.48873483535528595,
+    "macro_f1_14": 0.3826567003523452,
+    "micro_f1_5": 0.5257142857142857,
+    "macro_f1_5": 0.4864296107719239,
+    "exact_set_accuracy_14": 0.3263707571801567,
+    "brier_score": 0.14391324214044127,
+    "expected_calibration_error": 0.25231015514517974,
+    "risk_coverage": [
+      {
+        "coverage": 0.1,
+        "case_count": 39,
+        "risk_hamming_loss": 0.08974358974358974,
+        "minimum_confidence": 0.6859271093182822
+      },
+      {
+        "coverage": 0.2,
+        "case_count": 77,
+        "risk_hamming_loss": 0.08998144712430427,
+        "minimum_confidence": 0.641906981411901
+      },
+      {
+        "coverage": 0.30000000000000004,
+        "case_count": 115,
+        "risk_hamming_loss": 0.07888198757763973,
+        "minimum_confidence": 0.5957300152222086
+      },
+      {
+        "coverage": 0.4,
+        "case_count": 154,
+        "risk_hamming_loss": 0.08441558441558442,
+        "minimum_confidence": 0.551046136020829
+      },
+      {
+        "coverage": 0.5,
+        "case_count": 192,
+        "risk_hamming_loss": 0.08779761904761903,
+        "minimum_confidence": 0.5147144171778468
+      },
+      {
+        "coverage": 0.6,
+        "case_count": 230,
+        "risk_hamming_loss": 0.09534161490683228,
+        "minimum_confidence": 0.47813833886992896
+      },
+      {
+        "coverage": 0.7000000000000001,
+        "case_count": 269,
+        "risk_hamming_loss": 0.09904407859798194,
+        "minimum_confidence": 0.44606092708373185
+      },
+      {
+        "coverage": 0.8,
+        "case_count": 307,
+        "risk_hamming_loss": 0.10237319683573753,
+        "minimum_confidence": 0.4054631540539716
+      },
+      {
+        "coverage": 0.9,
+        "case_count": 345,
+        "risk_hamming_loss": 0.10600414078674948,
+        "minimum_confidence": 0.3741661721511398
+      },
+      {
+        "coverage": 1.0,
+        "case_count": 383,
+        "risk_hamming_loss": 0.11003356956359567,
+        "minimum_confidence": 0.22657508257302925
+      }
+    ],
+    "per_label": {
+      "Enlarged Cardiomediastinum": {
+        "supported": true,
+        "positive_count": 29,
+        "auroc": 0.7106954997077731,
+        "auprc": 0.13175796067193418,
+        "f1": 0.2331288343558282
+      },
+      "Cardiomegaly": {
+        "supported": true,
+        "positive_count": 51,
+        "auroc": 0.9252893928655799,
+        "auprc": 0.7312685560925271,
+        "f1": 0.651685393258427
+      },
+      "Lung Opacity": {
+        "supported": true,
+        "positive_count": 58,
+        "auroc": 0.8261538461538461,
+        "auprc": 0.5609546376361724,
+        "f1": 0.5413533834586466
+      },
+      "Lung Lesion": {
+        "supported": true,
+        "positive_count": 22,
+        "auroc": 0.746789221858474,
+        "auprc": 0.2360894287533171,
+        "f1": 0.34782608695652173
+      },
+      "Edema": {
+        "supported": true,
+        "positive_count": 13,
+        "auroc": 0.9297297297297297,
+        "auprc": 0.335073245505336,
+        "f1": 0.47058823529411764
+      },
+      "Consolidation": {
+        "supported": true,
+        "positive_count": 5,
+        "auroc": 0.7851851851851852,
+        "auprc": 0.09549346851978431,
+        "f1": 0.21052631578947367
+      },
+      "Pneumonia": {
+        "supported": true,
+        "positive_count": 9,
+        "auroc": 0.7430184194890077,
+        "auprc": 0.19360161998920003,
+        "f1": 0.2222222222222222
+      },
+      "Atelectasis": {
+        "supported": true,
+        "positive_count": 44,
+        "auroc": 0.8783856261732368,
+        "auprc": 0.5133197279829411,
+        "f1": 0.5230769230769231
+      },
+      "Pneumothorax": {
+        "supported": true,
+        "positive_count": 4,
+        "auroc": 0.7183377308707124,
+        "auprc": 0.03845169807151374,
+        "f1": 0.10526315789473684
+      },
+      "Pleural Effusion": {
+        "supported": true,
+        "positive_count": 20,
+        "auroc": 0.9016528925619833,
+        "auprc": 0.5918277753400099,
+        "f1": 0.576271186440678
+      },
+      "Pleural Other": {
+        "supported": true,
+        "positive_count": 7,
+        "auroc": 0.7610182370820668,
+        "auprc": 0.1117535621147178,
+        "f1": 0.2222222222222222
+      },
+      "Fracture": {
+        "supported": true,
+        "positive_count": 13,
+        "auroc": 0.8222453222453222,
+        "auprc": 0.21544854369432567,
+        "f1": 0.2608695652173913
+      },
+      "Support Devices": {
+        "supported": true,
+        "positive_count": 16,
+        "auroc": 0.7913828337874659,
+        "auprc": 0.2568158772733528,
+        "f1": 0.32142857142857145
+      },
+      "No Finding": {
+        "supported": true,
+        "positive_count": 132,
+        "auroc": 0.8116020765423155,
+        "auprc": 0.6433675173940514,
+        "f1": 0.6707317073170732
+      }
+    }
+  },
+  "thresholds": [
+    {
+      "condition": "Enlarged Cardiomediastinum",
+      "supported": true,
+      "positive_count": 29,
+      "negative_count": 354,
+      "threshold": 0.5,
+      "calibration_f1": 0.2331288343558282
+    },
+    {
+      "condition": "Cardiomegaly",
+      "supported": true,
+      "positive_count": 51,
+      "negative_count": 332,
+      "threshold": 0.8,
+      "calibration_f1": 0.651685393258427
+    },
+    {
+      "condition": "Lung Opacity",
+      "supported": true,
+      "positive_count": 58,
+      "negative_count": 325,
+      "threshold": 0.6500000000000001,
+      "calibration_f1": 0.5413533834586466
+    },
+    {
+      "condition": "Lung Lesion",
+      "supported": true,
+      "positive_count": 22,
+      "negative_count": 361,
+      "threshold": 0.7000000000000001,
+      "calibration_f1": 0.34782608695652173
+    },
+    {
+      "condition": "Edema",
+      "supported": true,
+      "positive_count": 13,
+      "negative_count": 370,
+      "threshold": 0.8,
+      "calibration_f1": 0.47058823529411764
+    },
+    {
+      "condition": "Consolidation",
+      "supported": true,
+      "positive_count": 5,
+      "negative_count": 378,
+      "threshold": 0.55,
+      "calibration_f1": 0.21052631578947367
+    },
+    {
+      "condition": "Pneumonia",
+      "supported": true,
+      "positive_count": 9,
+      "negative_count": 374,
+      "threshold": 0.9000000000000001,
+      "calibration_f1": 0.2222222222222222
+    },
+    {
+      "condition": "Atelectasis",
+      "supported": true,
+      "positive_count": 44,
+      "negative_count": 339,
+      "threshold": 0.55,
+      "calibration_f1": 0.5230769230769231
+    },
+    {
+      "condition": "Pneumothorax",
+      "supported": true,
+      "positive_count": 4,
+      "negative_count": 379,
+      "threshold": 0.7500000000000001,
+      "calibration_f1": 0.10526315789473684
+    },
+    {
+      "condition": "Pleural Effusion",
+      "supported": true,
+      "positive_count": 20,
+      "negative_count": 363,
+      "threshold": 0.6500000000000001,
+      "calibration_f1": 0.576271186440678
+    },
+    {
+      "condition": "Pleural Other",
+      "supported": true,
+      "positive_count": 7,
+      "negative_count": 376,
+      "threshold": 0.9000000000000001,
+      "calibration_f1": 0.2222222222222222
+    },
+    {
+      "condition": "Fracture",
+      "supported": true,
+      "positive_count": 13,
+      "negative_count": 370,
+      "threshold": 0.7500000000000001,
+      "calibration_f1": 0.2608695652173913
+    },
+    {
+      "condition": "Support Devices",
+      "supported": true,
+      "positive_count": 16,
+      "negative_count": 367,
+      "threshold": 0.7000000000000001,
+      "calibration_f1": 0.32142857142857145
+    },
+    {
+      "condition": "No Finding",
+      "supported": true,
+      "positive_count": 132,
+      "negative_count": 251,
+      "threshold": 0.45,
+      "calibration_f1": 0.6707317073170732
+    }
+  ],
+  "prevalence_baseline": {
+    "calibration_metrics": {
+      "case_count": 383,
+      "supported_label_count": 14,
+      "macro_auroc": 0.5,
+      "macro_auprc": 0.07888847444983216,
+      "micro_auroc": 0.7725111609867332,
+      "micro_auprc": 0.2269333451989971,
+      "micro_f1_14": 0.2686056458511548,
+      "macro_f1_14": 0.09696776010386822,
+      "micro_f1_5": 0.21134593993325917,
+      "macro_f1_5": 0.08822240688977864,
+      "exact_set_accuracy_14": 0.0,
+      "brier_score": 0.06558064530108967,
+      "expected_calibration_error": 0.007256984742863692,
+      "risk_coverage": [
+        {
+          "coverage": 0.1,
+          "case_count": 39,
+          "risk_hamming_loss": 0.3186813186813188,
+          "minimum_confidence": 0.8427433124644281
+        },
+        {
+          "coverage": 0.2,
+          "case_count": 77,
+          "risk_hamming_loss": 0.3256029684601113,
+          "minimum_confidence": 0.8427433124644281
+        },
+        {
+          "coverage": 0.30000000000000004,
+          "case_count": 115,
+          "risk_hamming_loss": 0.3198757763975154,
+          "minimum_confidence": 0.8427433124644281
+        },
+        {
+          "coverage": 0.4,
+          "case_count": 154,
+          "risk_hamming_loss": 0.3177179962894248,
+          "minimum_confidence": 0.8427433124644281
+        },
+        {
+          "coverage": 0.5,
+          "case_count": 192,
+          "risk_hamming_loss": 0.31659226190476186,
+          "minimum_confidence": 0.8427433124644281
+        },
+        {
+          "coverage": 0.6,
+          "case_count": 230,
+          "risk_hamming_loss": 0.3180124223602484,
+          "minimum_confidence": 0.8427433124644281
+        },
+        {
+          "coverage": 0.7000000000000001,
+          "case_count": 269,
+          "risk_hamming_loss": 0.3183749336165692,
+          "minimum_confidence": 0.8427433124644281
+        },
+        {
+          "coverage": 0.8,
+          "case_count": 307,
+          "risk_hamming_loss": 0.32084690553745926,
+          "minimum_confidence": 0.8427433124644281
+        },
+        {
+          "coverage": 0.9,
+          "case_count": 345,
+          "risk_hamming_loss": 0.3198757763975155,
+          "minimum_confidence": 0.8427433124644281
+        },
+        {
+          "coverage": 1.0,
+          "case_count": 383,
+          "risk_hamming_loss": 0.31891085415889586,
+          "minimum_confidence": 0.8427433124644281
+        }
+      ],
+      "per_label": {
+        "Enlarged Cardiomediastinum": {
+          "supported": true,
+          "positive_count": 29,
+          "auroc": 0.5,
+          "auprc": 0.07571801566579635,
+          "f1": 0.1407766990291262
+        },
+        "Cardiomegaly": {
+          "supported": true,
+          "positive_count": 51,
+          "auroc": 0.5,
+          "auprc": 0.13315926892950392,
+          "f1": 0.2350230414746544
+        },
+        "Lung Opacity": {
+          "supported": true,
+          "positive_count": 58,
+          "auroc": 0.5,
+          "auprc": 0.1514360313315927,
+          "f1": 0.26303854875283444
+        },
+        "Lung Lesion": {
+          "supported": true,
+          "positive_count": 22,
+          "auroc": 0.5,
+          "auprc": 0.057441253263707574,
+          "f1": 0.0
+        },
+        "Edema": {
+          "supported": true,
+          "positive_count": 13,
+          "auroc": 0.5,
+          "auprc": 0.033942558746736295,
+          "f1": 0.0
+        },
+        "Consolidation": {
+          "supported": true,
+          "positive_count": 5,
+          "auroc": 0.5,
+          "auprc": 0.013054830287206266,
+          "f1": 0.0
+        },
+        "Pneumonia": {
+          "supported": true,
+          "positive_count": 9,
+          "auroc": 0.5,
+          "auprc": 0.02349869451697128,
+          "f1": 0.0
+        },
+        "Atelectasis": {
+          "supported": true,
+          "positive_count": 44,
+          "auroc": 0.5,
+          "auprc": 0.11488250652741515,
+          "f1": 0.20608899297423888
+        },
+        "Pneumothorax": {
+          "supported": true,
+          "positive_count": 4,
+          "auroc": 0.5,
+          "auprc": 0.010443864229765013,
+          "f1": 0.0
+        },
+        "Pleural Effusion": {
+          "supported": true,
+          "positive_count": 20,
+          "auroc": 0.5,
+          "auprc": 0.05221932114882506,
+          "f1": 0.0
+        },
+        "Pleural Other": {
+          "supported": true,
+          "positive_count": 7,
+          "auroc": 0.5,
+          "auprc": 0.018276762402088774,
+          "f1": 0.0
+        },
+        "Fracture": {
+          "supported": true,
+          "positive_count": 13,
+          "auroc": 0.5,
+          "auprc": 0.033942558746736295,
+          "f1": 0.0
+        },
+        "Support Devices": {
+          "supported": true,
+          "positive_count": 16,
+          "auroc": 0.5,
+          "auprc": 0.04177545691906005,
+          "f1": 0.0
+        },
+        "No Finding": {
+          "supported": true,
+          "positive_count": 132,
+          "auroc": 0.5,
+          "auprc": 0.34464751958224543,
+          "f1": 0.512621359223301
+        }
+      }
+    },
+    "thresholds": [
+      {
+        "condition": "Enlarged Cardiomediastinum",
+        "supported": true,
+        "positive_count": 29,
+        "negative_count": 354,
+        "threshold": 0.05,
+        "calibration_f1": 0.1407766990291262
+      },
+      {
+        "condition": "Cardiomegaly",
+        "supported": true,
+        "positive_count": 51,
+        "negative_count": 332,
+        "threshold": 0.1,
+        "calibration_f1": 0.2350230414746544
+      },
+      {
+        "condition": "Lung Opacity",
+        "supported": true,
+        "positive_count": 58,
+        "negative_count": 325,
+        "threshold": 0.1,
+        "calibration_f1": 0.26303854875283444
+      },
+      {
+        "condition": "Lung Lesion",
+        "supported": true,
+        "positive_count": 22,
+        "negative_count": 361,
+        "threshold": 0.9500000000000001,
+        "calibration_f1": 0.0
+      },
+      {
+        "condition": "Edema",
+        "supported": true,
+        "positive_count": 13,
+        "negative_count": 370,
+        "threshold": 0.9500000000000001,
+        "calibration_f1": 0.0
+      },
+      {
+        "condition": "Consolidation",
+        "supported": true,
+        "positive_count": 5,
+        "negative_count": 378,
+        "threshold": 0.9500000000000001,
+        "calibration_f1": 0.0
+      },
+      {
+        "condition": "Pneumonia",
+        "supported": true,
+        "positive_count": 9,
+        "negative_count": 374,
+        "threshold": 0.9500000000000001,
+        "calibration_f1": 0.0
+      },
+      {
+        "condition": "Atelectasis",
+        "supported": true,
+        "positive_count": 44,
+        "negative_count": 339,
+        "threshold": 0.05,
+        "calibration_f1": 0.20608899297423888
+      },
+      {
+        "condition": "Pneumothorax",
+        "supported": true,
+        "positive_count": 4,
+        "negative_count": 379,
+        "threshold": 0.9500000000000001,
+        "calibration_f1": 0.0
+      },
+      {
+        "condition": "Pleural Effusion",
+        "supported": true,
+        "positive_count": 20,
+        "negative_count": 363,
+        "threshold": 0.9500000000000001,
+        "calibration_f1": 0.0
+      },
+      {
+        "condition": "Pleural Other",
+        "supported": true,
+        "positive_count": 7,
+        "negative_count": 376,
+        "threshold": 0.9500000000000001,
+        "calibration_f1": 0.0
+      },
+      {
+        "condition": "Fracture",
+        "supported": true,
+        "positive_count": 13,
+        "negative_count": 370,
+        "threshold": 0.9500000000000001,
+        "calibration_f1": 0.0
+      },
+      {
+        "condition": "Support Devices",
+        "supported": true,
+        "positive_count": 16,
+        "negative_count": 367,
+        "threshold": 0.9500000000000001,
+        "calibration_f1": 0.0
+      },
+      {
+        "condition": "No Finding",
+        "supported": true,
+        "positive_count": 132,
+        "negative_count": 251,
+        "threshold": 0.35000000000000003,
+        "calibration_f1": 0.512621359223301
+      }
+    ]
+  },
+  "train_prevalence": {
+    "Enlarged Cardiomediastinum": 0.06892430278884462,
+    "Cardiomegaly": 0.1362549800796813,
+    "Lung Opacity": 0.14621513944223108,
+    "Lung Lesion": 0.042629482071713146,
+    "Edema": 0.026693227091633465,
+    "Consolidation": 0.008366533864541833,
+    "Pneumonia": 0.034661354581673305,
+    "Atelectasis": 0.09641434262948208,
+    "Pneumothorax": 0.007569721115537849,
+    "Pleural Effusion": 0.0450199203187251,
+    "Pleural Other": 0.0199203187250996,
+    "Fracture": 0.03187250996015936,
+    "Support Devices": 0.042629482071713146,
+    "No Finding": 0.39362549800796814
+  },
+  "mlp_training": {
+    "best_epoch": 24,
+    "best_calibration_macro_auprc": 0.32105030005179463,
+    "epochs_run": 34,
+    "history": [
+      {
+        "epoch": 1,
+        "train_loss": 1.2402875214815139,
+        "calibration_macro_auprc": 0.24891778698473196
+      },
+      {
+        "epoch": 2,
+        "train_loss": 1.0781490921974182,
+        "calibration_macro_auprc": 0.23922221813038988
+      },
+      {
+        "epoch": 3,
+        "train_loss": 0.9822137221693993,
+        "calibration_macro_auprc": 0.2549532823188377
+      },
+      {
+        "epoch": 4,
+        "train_loss": 0.9510938972234726,
+        "calibration_macro_auprc": 0.2691444267251225
+      },
+      {
+        "epoch": 5,
+        "train_loss": 0.9330711111426353,
+        "calibration_macro_auprc": 0.2822810527876401
+      },
+      {
+        "epoch": 6,
+        "train_loss": 0.9146184101700783,
+        "calibration_macro_auprc": 0.28751819687608915
+      },
+      {
+        "epoch": 7,
+        "train_loss": 0.8886830523610115,
+        "calibration_macro_auprc": 0.2985357601417081
+      },
+      {
+        "epoch": 8,
+        "train_loss": 0.8794034332036972,
+        "calibration_macro_auprc": 0.30418400769036996
+      },
+      {
+        "epoch": 9,
+        "train_loss": 0.85822092294693,
+        "calibration_macro_auprc": 0.3059441975397677
+      },
+      {
+        "epoch": 10,
+        "train_loss": 0.852051031589508,
+        "calibration_macro_auprc": 0.30907190538075546
+      },
+      {
+        "epoch": 11,
+        "train_loss": 0.8369914919137955,
+        "calibration_macro_auprc": 0.30988540460864533
+      },
+      {
+        "epoch": 12,
+        "train_loss": 0.8310017868876457,
+        "calibration_macro_auprc": 0.31104286115791613
+      },
+      {
+        "epoch": 13,
+        "train_loss": 0.824366107583046,
+        "calibration_macro_auprc": 0.3133548148872988
+      },
+      {
+        "epoch": 14,
+        "train_loss": 0.8073580138385296,
+        "calibration_macro_auprc": 0.3149705186274934
+      },
+      {
+        "epoch": 15,
+        "train_loss": 0.7979534432291985,
+        "calibration_macro_auprc": 0.3157327336851848
+      },
+      {
+        "epoch": 16,
+        "train_loss": 0.8040186643600464,
+        "calibration_macro_auprc": 0.31999936081658387
+      },
+      {
+        "epoch": 17,
+        "train_loss": 0.7955374777317047,
+        "calibration_macro_auprc": 0.31823931174145365
+      },
+      {
+        "epoch": 18,
+        "train_loss": 0.7916937589645385,
+        "calibration_macro_auprc": 0.319358554253013
+      },
+      {
+        "epoch": 19,
+        "train_loss": 0.7852355659008026,
+        "calibration_macro_auprc": 0.32029083187077845
+      },
+      {
+        "epoch": 20,
+        "train_loss": 0.7892016232013702,
+        "calibration_macro_auprc": 0.3207472192773852
+      },
+      {
+        "epoch": 21,
+        "train_loss": 0.7785864368081092,
+        "calibration_macro_auprc": 0.3199469428077409
+      },
+      {
+        "epoch": 22,
+        "train_loss": 0.7681874796748162,
+        "calibration_macro_auprc": 0.31837217652144306
+      },
+      {
+        "epoch": 23,
+        "train_loss": 0.7633222714066505,
+        "calibration_macro_auprc": 0.31998645562144695
+      },
+      {
+        "epoch": 24,
+        "train_loss": 0.7613297060132027,
+        "calibration_macro_auprc": 0.32105030005179463
+      },
+      {
+        "epoch": 25,
+        "train_loss": 0.7491289578378201,
+        "calibration_macro_auprc": 0.3204332231448814
+      },
+      {
+        "epoch": 26,
+        "train_loss": 0.7420693978667259,
+        "calibration_macro_auprc": 0.31904825133062004
+      },
+      {
+        "epoch": 27,
+        "train_loss": 0.7468087211251259,
+        "calibration_macro_auprc": 0.3193374934670802
+      },
+      {
+        "epoch": 28,
+        "train_loss": 0.7325348496437073,
+        "calibration_macro_auprc": 0.3204235506273968
+      },
+      {
+        "epoch": 29,
+        "train_loss": 0.7341222763061523,
+        "calibration_macro_auprc": 0.32103690925487427
+      },
+      {
+        "epoch": 30,
+        "train_loss": 0.741341932117939,
+        "calibration_macro_auprc": 0.32049301656920953
+      },
+      {
+        "epoch": 31,
+        "train_loss": 0.7343827039003372,
+        "calibration_macro_auprc": 0.3193086848008746
+      },
+      {
+        "epoch": 32,
+        "train_loss": 0.7257267966866493,
+        "calibration_macro_auprc": 0.3178755641623786
+      },
+      {
+        "epoch": 33,
+        "train_loss": 0.7092264637351036,
+        "calibration_macro_auprc": 0.3171936573259921
+      },
+      {
+        "epoch": 34,
+        "train_loss": 0.7087578132748604,
+        "calibration_macro_auprc": 0.31665702999785245
+      }
+    ]
+  },
+  "selected_checkpoint": {
+    "path": "experiments/v13_target_concept/models/v13_selected_linear.npz",
+    "sha256": "9cccfe79a451f357cd6e69e21d3661f0317c7917d83f3f0177d71df310916c5f",
+    "committed": false
+  },
+  "inputs": {
+    "cases_sha256": "56e367190396011d4d67f43e7e733389a8346890bf8729e82fb4326d063bbd68",
+    "split_sha256": "b4c1b091c3dbff0399d07c8350f4d8d68ce8ce52e0157dcc96f46af8c8baa7b3",
+    "embeddings_sha256": "f81f4629a8f6eb10dc6b35d868f719384adb40903e19d165f9fba2039fce8867",
+    "chexbert_checkpoint_sha256": "6550703c92d640e1e04d8105a7a185d76ece0f25fcbf033d292785bf22c0fde1",
+    "chexbert_cache_sha256": "a77db8fba9888e751db33098defa5d8829a9e770584dffe7d0ccfad46f234700",
+    "script_sha256": "1e9920d36f447660b0d57690c54b2b54fb5e66c9a2d31205121bf14a96aaefbb",
+    "embedding_dimension": 1152,
+    "embedding_norm_min": 0.9999998807907104,
+    "embedding_norm_max": 1.0000001192092896
+  },
+  "runtime": {
+    "python": "3.12.13",
+    "numpy": "2.5.2",
+    "torch": "2.11.0+cu128",
+    "scikit_learn": "1.9.0",
+    "f1chexbert": "0.0.2",
+    "device": "cuda"
+  },
+  "claim_boundary": "Train/Calibration development on automated report-derived labels; not clinical diagnostic accuracy or confirmation evidence."
+}
