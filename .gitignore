@@ -84,6 +84,9 @@ experiments/v12_optimization/retrieval/v12_qwen3_v10_embeddings.npz
 experiments/v12_optimization/retrieval/v12_medcpt_query_embeddings.npz
 experiments/v12_optimization/retrieval/v12_medsiglip_runtime_embeddings.npz
 
+# V13 local report-label caches and concept checkpoints
+experiments/v13_target_concept/
+
 # V10 local per-query rows, shuffled mappings, generations, and review packages
 experiments/v10_publication/*.json
 experiments/v10_publication/*.jsonl
