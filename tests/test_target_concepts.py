@@ -4,12 +4,17 @@ import numpy as np
 import pytest
 
 from medical_rag.evaluation.target_concepts import (
+    case_id_fingerprint,
     expected_calibration_error,
     logistic_probabilities,
     macro_auprc,
     multilabel_metrics,
     select_f1_thresholds,
 )
+
+
+def test_case_id_fingerprint_is_order_and_duplicate_invariant() -> None:
+    assert case_id_fingerprint(["B", "A", "A"]) == case_id_fingerprint(["A", "B"])
 
 
 def test_threshold_selection_prefers_higher_threshold_on_exact_tie() -> None:

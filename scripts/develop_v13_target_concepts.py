@@ -25,6 +25,7 @@ from evaluate_v10_pathology_utility import (  # noqa: E402
 )
 from medical_rag.evaluation.chexbert_pathology import CHEXBERT_LABELS  # noqa: E402
 from medical_rag.evaluation.target_concepts import (  # noqa: E402
+    case_id_fingerprint,
     logistic_probabilities,
     macro_auprc,
     multilabel_metrics,
@@ -354,6 +355,17 @@ def main() -> None:
             "train": len(train_ids),
             "calibration": len(calibration_ids),
             "labels": len(CHEXBERT_LABELS),
+            "train_empty_report_text": sum(
+                not bool(report_text(cases_by_id[case_id]).strip()) for case_id in train_ids
+            ),
+            "calibration_empty_report_text": sum(
+                not bool(report_text(cases_by_id[case_id]).strip())
+                for case_id in calibration_ids
+            ),
+        },
+        "partition_fingerprints": {
+            "train_case_ids_sha256": case_id_fingerprint(train_ids),
+            "calibration_case_ids_sha256": case_id_fingerprint(calibration_ids),
         },
         "candidate_models": candidates,
         "selection_rule": {
@@ -387,6 +399,19 @@ def main() -> None:
             "chexbert_checkpoint_sha256": file_sha256(checkpoint),
             "chexbert_cache_sha256": file_sha256(args.cache),
             "script_sha256": file_sha256(Path(__file__)),
+            "embedding_dimension": int(train_x.shape[1]),
+            "embedding_norm_min": float(
+                min(
+                    np.linalg.norm(train_x, axis=1).min(),
+                    np.linalg.norm(calibration_x, axis=1).min(),
+                )
+            ),
+            "embedding_norm_max": float(
+                max(
+                    np.linalg.norm(train_x, axis=1).max(),
+                    np.linalg.norm(calibration_x, axis=1).max(),
+                )
+            ),
         },
         "runtime": {
             "python": sys.version.split()[0],

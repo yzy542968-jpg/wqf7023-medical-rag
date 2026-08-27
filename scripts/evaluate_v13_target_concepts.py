@@ -23,6 +23,7 @@ from develop_v13_target_concepts import (  # noqa: E402
 from evaluate_v10_pathology_utility import resolve_checkpoint  # noqa: E402
 from medical_rag.evaluation.chexbert_pathology import CHEXBERT_LABELS  # noqa: E402
 from medical_rag.evaluation.target_concepts import (  # noqa: E402
+    case_id_fingerprint,
     logistic_probabilities,
     macro_auprc,
     multilabel_metrics,
@@ -175,6 +176,7 @@ def main() -> None:
             "abnormal": spectra.count("abnormal"),
             "indeterminate": spectra.count("indeterminate"),
         },
+        "validation_case_ids_sha256": case_id_fingerprint(validation_ids),
         "selected_model": {
             "type": model_type,
             "checkpoint_sha256": file_sha256(checkpoint_path),

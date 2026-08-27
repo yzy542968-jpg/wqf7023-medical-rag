@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 from collections.abc import Mapping, Sequence
 from typing import Any
 
@@ -11,6 +12,13 @@ from sklearn.metrics import (
 )
 
 from medical_rag.evaluation.chexbert_pathology import CHEXBERT_FIVE_INDICES, CHEXBERT_LABELS
+
+
+def case_id_fingerprint(case_ids: Sequence[object]) -> str:
+    canonical = sorted({str(case_id).strip() for case_id in case_ids})
+    if any(not value for value in canonical):
+        raise ValueError("case IDs must be non-empty")
+    return hashlib.sha256("\n".join(canonical).encode("utf-8")).hexdigest()
 
 
 def supported_label_indices(labels: np.ndarray) -> np.ndarray:
@@ -235,6 +243,7 @@ def spectrum_metrics(
 
 
 __all__ = [
+    "case_id_fingerprint",
     "expected_calibration_error",
     "logistic_probabilities",
     "macro_auprc",
