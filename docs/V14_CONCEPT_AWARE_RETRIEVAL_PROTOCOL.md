@@ -95,7 +95,8 @@ Primary ranking metric is case-grouped mean nDCG@10 under qrel-v2. Report:
 
 - overall, report-indexed normal, abnormal, and indeterminate nDCG@10;
 - label-only and fact-only nDCG@10 sensitivity analyses;
-- Hit@1, Hit@5, relevant-case presence, and target-outside-RRF-Top-200 rate;
+- Hit@1, Hit@5, relevant-case presence in RRF Top-200, and relevant-item
+  recall at the frozen `qrel-v2 >= 0.5` threshold;
 - paired case-grouped bootstrap intervals for `concept_23 - base_17`;
 - latency, peak memory when available, and model size.
 
@@ -125,3 +126,11 @@ patient benefit, physician utility, external generalization, or patient-level
 independence. Independent radiologist review and external data remain Future
 Work.
 
+## Protocol correction before implementation
+
+The initial protocol commit named `target-outside-RRF-Top-200 rate`. That
+metric is invalid for the final similar-case task because the target case is
+intentionally absent from the Train historical bank. Before implementation or
+V14 outcome inspection, it was replaced by relevant-case presence and
+relevant-item recall at the existing `qrel-v2 >= 0.5` development threshold.
+This correction changes no cohort, feature, model, or observed result.
