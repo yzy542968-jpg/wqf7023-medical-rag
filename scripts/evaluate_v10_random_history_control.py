@@ -249,6 +249,11 @@ def main() -> None:
         row["prediction_labels"] = np.asarray(
             labels_by_hash[text_sha256(str(row.get("answer") or ""))], dtype=np.int8
         )
+    labeled_random_rows = [
+        row for row in combined_for_labels if row.get("system") == "gr_random_history"
+    ]
+    if len(labeled_random_rows) != len(random_rows):
+        raise RuntimeError("CheXbert-labeled random-history coverage is incomplete")
 
     frozen_radgraph_summary = read_json(args.frozen_radgraph_summary)
     if (
@@ -276,7 +281,7 @@ def main() -> None:
     }
     random_by_key = {
         (str(row["case_id"]), str(row["question_type"]), int(row["assignment"])): dict(row)
-        for row in random_rows
+        for row in labeled_random_rows
     }
     for key, values in frozen_radgraph.items():
         if key in frozen_by_key:
