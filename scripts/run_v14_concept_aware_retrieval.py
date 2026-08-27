@@ -259,19 +259,31 @@ def main() -> None:
     }
     radgraph = read_radgraph_case_records(args.radgraph)
     split = read_json(args.split)
-    partition_ids = {
+    source_partition_ids = {
         name: [str(case_id) for case_id in split["partitions"][name]["case_ids"]]
         for name in ("train", "calibration", "validation")
     }
-    if any(set(partition_ids[left]) & set(partition_ids[right]) for left, right in (("train", "calibration"), ("train", "validation"), ("calibration", "validation"))):
+    if any(set(source_partition_ids[left]) & set(source_partition_ids[right]) for left, right in (("train", "calibration"), ("train", "validation"), ("calibration", "validation"))):
         raise RuntimeError("V14 source partitions overlap")
-    all_ids = sum(partition_ids.values(), [])
-    if any(case_id not in formal or radgraph[case_id].status != "ok" for case_id in all_ids):
-        raise RuntimeError("V14 source partition lacks a formal case or RadGraph annotation")
-
+    exclusions = {
+        name: [
+            case_id
+            for case_id in source_partition_ids[name]
+            if case_id not in formal
+            or case_id not in radgraph
+            or radgraph[case_id].status != "ok"
+        ]
+        for name in source_partition_ids
+    }
+    partition_ids = {
+        name: [case_id for case_id in source_partition_ids[name] if case_id not in set(exclusions[name])]
+        for name in source_partition_ids
+    }
+    train_source_ids = source_partition_ids["train"]
     train_ids = partition_ids["train"]
     calibration_ids = partition_ids["calibration"]
     validation_ids = partition_ids["validation"]
+    all_ids = train_ids + calibration_ids + validation_ids
     facts_by_case = {case_id: tuple(radgraph[case_id].facts) for case_id in all_ids}
     prepared_by_case = {
         case_id: prepare_qrel_case(raw_cases[case_id], facts_by_case)
@@ -292,7 +304,10 @@ def main() -> None:
     train_medcpt = np.stack([medcpt_by_id[case_id] for case_id in train_ids])
 
     chexbert_checkpoint = resolve_checkpoint()
-    train_and_calibration = [raw_cases[case_id] for case_id in train_ids + calibration_ids]
+    train_and_calibration = [
+        raw_cases[case_id]
+        for case_id in train_source_ids + source_partition_ids["calibration"]
+    ]
     train_calibration_labels = label_cases(
         train_and_calibration,
         cache_path=args.train_label_cache,
@@ -300,15 +315,16 @@ def main() -> None:
         device=args.device,
         batch_size=128,
     )
-    train_label_matrix = train_calibration_labels[: len(train_ids)]
-    candidate_labels_by_id = dict(zip(train_ids, train_label_matrix, strict=True))
+    train_label_matrix = train_calibration_labels[: len(train_source_ids)]
+    train_labels_by_id = dict(zip(train_source_ids, train_label_matrix, strict=True))
+    candidate_labels_by_id = {case_id: train_labels_by_id[case_id] for case_id in train_ids}
 
     cluster_mapping = case_to_cluster(split)
-    fold_assignments = cluster_fold_assignments(train_ids, cluster_mapping)
+    fold_assignments = cluster_fold_assignments(train_source_ids, cluster_mapping)
     oof_by_id, oof_records = oof_concept_probabilities(
-        train_ids,
+        train_source_ids,
         image_by_id,
-        candidate_labels_by_id,
+        train_labels_by_id,
         fold_assignments,
         cache_path=args.oof_cache,
     )
@@ -561,11 +577,22 @@ def main() -> None:
         "calibration": calibration_summary,
         "validation": validation_summary,
         "counts": {
+            "source_train": len(train_source_ids),
             "historical_bank": len(train_ids),
             "fit_cases": len(fit_ids),
             "internal_cases": len(internal_ids),
+            "source_calibration": len(source_partition_ids["calibration"]),
             "calibration_cases": len(calibration_ids),
+            "source_validation": len(source_partition_ids["validation"]),
             "validation_cases": len(validation_ids) if promoted else 0,
+        },
+        "eligibility_exclusions": {
+            name: {
+                "count": len(case_ids),
+                "case_ids_sha256": case_id_fingerprint(case_ids) if case_ids else None,
+                "reason": "missing successful RadGraph annotation or formal paired case",
+            }
+            for name, case_ids in exclusions.items()
         },
         "inputs": {
             "cases_sha256": file_sha256(args.cases),
