@@ -1,0 +1,435 @@
+{
+  "study": "V13 paired concept-on/off QA evaluation",
+  "status": "validation_evaluation_complete_no_retuning",
+  "test_outcomes_inspected": false,
+  "counts": {
+    "cases": 96,
+    "questions_per_case": 2,
+    "rows": 384
+  },
+  "scopes": {
+    "all": {
+      "linear_metrics": {
+        "token_f1": {
+          "concept_off": 0.19925515263914007,
+          "concept_on": 0.182733031334145
+        },
+        "f1_radgraph_entity": {
+          "concept_off": 0.15630706243230796,
+          "concept_on": 0.1389295352734066
+        },
+        "f1_radgraph_entity_relation": {
+          "concept_off": 0.14054507641400873,
+          "concept_on": 0.1249862894720253
+        },
+        "f1_radgraph_complete": {
+          "concept_off": 0.12179919369966406,
+          "concept_on": 0.10671514959723549
+        }
+      },
+      "concept_on_minus_off": {
+        "token_f1": {
+          "case_count": 96,
+          "mean_difference": -0.016522121304995023,
+          "ci_95_low": -0.028243238989302363,
+          "ci_95_high": -0.005327708224039278
+        },
+        "f1_radgraph_entity": {
+          "case_count": 96,
+          "mean_difference": -0.01737752715890138,
+          "ci_95_low": -0.030818067335697613,
+          "ci_95_high": -0.004655204770671808
+        },
+        "f1_radgraph_entity_relation": {
+          "case_count": 96,
+          "mean_difference": -0.01555878694198344,
+          "ci_95_low": -0.028876692216067805,
+          "ci_95_high": -0.002803640725736544
+        },
+        "f1_radgraph_complete": {
+          "case_count": 96,
+          "mean_difference": -0.015084044102428562,
+          "ci_95_low": -0.027278929593700662,
+          "ci_95_high": -0.0036279589123242874
+        }
+      },
+      "chexbert_metrics": {
+        "micro_f1_14": {
+          "concept_off": 0.5721153846153846,
+          "concept_on": 0.5707434052757794
+        },
+        "macro_f1_14": {
+          "concept_off": 0.13731087593574953,
+          "concept_on": 0.13558981325269154
+        },
+        "micro_f1_5": {
+          "concept_off": 0.38095238095238093,
+          "concept_on": 0.3655913978494624
+        },
+        "macro_f1_5": {
+          "concept_off": 0.17547568710359407,
+          "concept_on": 0.16914893617021276
+        },
+        "exact_set_accuracy_5": {
+          "concept_off": 0.796875,
+          "concept_on": 0.7864583333333334
+        },
+        "mean_reference_positive_recall": {
+          "concept_off": 0.691358024691358,
+          "concept_on": 0.6923868312757202
+        },
+        "mean_predicted_positive_precision": {
+          "concept_off": 0.6040540540540541,
+          "concept_on": 0.6048387096774194
+        },
+        "positive_label_hamming_agreement": {
+          "concept_off": 0.9337797619047619,
+          "concept_on": 0.9334077380952381
+        }
+      },
+      "chexbert_concept_on_minus_off": {
+        "micro_f1_14": {
+          "mean_difference": -0.0013719793396052005,
+          "ci_95_low": -0.01911486866650914,
+          "ci_95_high": 0.016217414886437825
+        },
+        "macro_f1_14": {
+          "mean_difference": -0.0017210626830579945,
+          "ci_95_low": -0.012707745093871075,
+          "ci_95_high": 0.00966788950930227
+        },
+        "micro_f1_5": {
+          "mean_difference": -0.015360983102918557,
+          "ci_95_low": -0.06910082596179923,
+          "ci_95_high": 0.047374686716791924
+        },
+        "macro_f1_5": {
+          "mean_difference": -0.006326750933381309,
+          "ci_95_low": -0.025238721804511293,
+          "ci_95_high": 0.014738080378812628
+        },
+        "exact_set_accuracy_5": {
+          "mean_difference": -0.01041666666666663,
+          "ci_95_low": -0.03645833333333337,
+          "ci_95_high": 0.015625
+        },
+        "mean_reference_positive_recall": {
+          "mean_difference": 0.0010288065843622185,
+          "ci_95_low": -0.017491065627030646,
+          "ci_95_high": 0.01979290674603182
+        },
+        "mean_predicted_positive_precision": {
+          "mean_difference": 0.0007846556233652713,
+          "ci_95_low": -0.019321455380262458,
+          "ci_95_high": 0.020330388618432175
+        },
+        "positive_label_hamming_agreement": {
+          "mean_difference": -0.00037202380952372494,
+          "ci_95_low": -0.0037202380952380265,
+          "ci_95_high": 0.0029761904761904656
+        }
+      }
+    },
+    "findings": {
+      "linear_metrics": {
+        "token_f1": {
+          "concept_off": 0.29223401002298327,
+          "concept_on": 0.26982189023030806
+        },
+        "f1_radgraph_entity": {
+          "concept_off": 0.25148079559403175,
+          "concept_on": 0.2294925215628569
+        },
+        "f1_radgraph_entity_relation": {
+          "concept_off": 0.2309430828715435,
+          "concept_on": 0.2094125273875502
+        },
+        "f1_radgraph_complete": {
+          "concept_off": 0.19866027260526956,
+          "concept_on": 0.18060410191393936
+        }
+      },
+      "concept_on_minus_off": {
+        "token_f1": {
+          "case_count": 96,
+          "mean_difference": -0.02241211979267523,
+          "ci_95_low": -0.04063984016463732,
+          "ci_95_high": -0.005824751638349073
+        },
+        "f1_radgraph_entity": {
+          "case_count": 96,
+          "mean_difference": -0.021988274031174853,
+          "ci_95_low": -0.043811345254549036,
+          "ci_95_high": -0.00044216586161860053
+        },
+        "f1_radgraph_entity_relation": {
+          "case_count": 96,
+          "mean_difference": -0.0215305554839933,
+          "ci_95_low": -0.043514386296577647,
+          "ci_95_high": 8.034796737268583e-05
+        },
+        "f1_radgraph_complete": {
+          "case_count": 96,
+          "mean_difference": -0.01805617069133023,
+          "ci_95_low": -0.03796563399971625,
+          "ci_95_high": 0.00030423137544522793
+        }
+      },
+      "chexbert_metrics": {
+        "micro_f1_14": {
+          "concept_off": 0.49504950495049505,
+          "concept_on": 0.5
+        },
+        "macro_f1_14": {
+          "concept_off": 0.12694837694837696,
+          "concept_on": 0.1295022264314965
+        },
+        "micro_f1_5": {
+          "concept_off": 0.4,
+          "concept_on": 0.40816326530612246
+        },
+        "macro_f1_5": {
+          "concept_off": 0.1585185185185185,
+          "concept_on": 0.16493506493506493
+        },
+        "exact_set_accuracy_5": {
+          "concept_off": 0.7916666666666666,
+          "concept_on": 0.8020833333333334
+        },
+        "mean_reference_positive_recall": {
+          "concept_off": 0.6261261261261261,
+          "concept_on": 0.6396396396396395
+        },
+        "mean_predicted_positive_precision": {
+          "concept_off": 0.5054347826086957,
+          "concept_on": 0.5116487455197133
+        },
+        "positive_label_hamming_agreement": {
+          "concept_off": 0.9241071428571429,
+          "concept_on": 0.9241071428571429
+        }
+      },
+      "chexbert_concept_on_minus_off": {
+        "micro_f1_14": {
+          "mean_difference": 0.004950495049504955,
+          "ci_95_low": -0.012126662363425496,
+          "ci_95_high": 0.029556650246305438
+        },
+        "macro_f1_14": {
+          "mean_difference": 0.0025538494831195413,
+          "ci_95_low": -0.005622124965586524,
+          "ci_95_high": 0.013541674177808242
+        },
+        "micro_f1_5": {
+          "mean_difference": 0.008163265306122436,
+          "ci_95_low": -0.05383062589584335,
+          "ci_95_high": 0.09883317016312868
+        },
+        "macro_f1_5": {
+          "mean_difference": 0.006416546416546431,
+          "ci_95_low": -0.013333333333333308,
+          "ci_95_high": 0.032198142414860687
+        },
+        "exact_set_accuracy_5": {
+          "mean_difference": 0.01041666666666674,
+          "ci_95_low": -0.02083333333333337,
+          "ci_95_high": 0.05208333333333326
+        },
+        "mean_reference_positive_recall": {
+          "mean_difference": 0.013513513513513487,
+          "ci_95_low": 0.0,
+          "ci_95_high": 0.042857142857142816
+        },
+        "mean_predicted_positive_precision": {
+          "mean_difference": 0.006213962911017612,
+          "ci_95_low": -0.013847106820897181,
+          "ci_95_high": 0.033333333333333326
+        },
+        "positive_label_hamming_agreement": {
+          "mean_difference": 0.0,
+          "ci_95_low": -0.0037202380952381375,
+          "ci_95_high": 0.004464285714285698
+        }
+      }
+    },
+    "impression": {
+      "linear_metrics": {
+        "token_f1": {
+          "concept_off": 0.1062762952552968,
+          "concept_on": 0.095644172437982
+        },
+        "f1_radgraph_entity": {
+          "concept_off": 0.06113332927058417,
+          "concept_on": 0.04836654898395628
+        },
+        "f1_radgraph_entity_relation": {
+          "concept_off": 0.05014706995647398,
+          "concept_on": 0.04056005155650041
+        },
+        "f1_radgraph_complete": {
+          "concept_off": 0.044938114794058535,
+          "concept_on": 0.03282619728053165
+        }
+      },
+      "concept_on_minus_off": {
+        "token_f1": {
+          "case_count": 96,
+          "mean_difference": -0.010632122817314826,
+          "ci_95_low": -0.02591866000054835,
+          "ci_95_high": 0.0033630945354389532
+        },
+        "f1_radgraph_entity": {
+          "case_count": 96,
+          "mean_difference": -0.0127667802866279,
+          "ci_95_low": -0.02607940694714059,
+          "ci_95_high": -0.0024055590855962513
+        },
+        "f1_radgraph_entity_relation": {
+          "case_count": 96,
+          "mean_difference": -0.009587018399973573,
+          "ci_95_low": -0.02302359822416358,
+          "ci_95_high": 0.0008147706854121094
+        },
+        "f1_radgraph_complete": {
+          "case_count": 96,
+          "mean_difference": -0.012111917513526888,
+          "ci_95_low": -0.025703187354796726,
+          "ci_95_high": -0.0015684910912338406
+        }
+      },
+      "chexbert_metrics": {
+        "micro_f1_14": {
+          "concept_off": 0.6448598130841121,
+          "concept_on": 0.6384976525821596
+        },
+        "macro_f1_14": {
+          "concept_off": 0.14562127667968597,
+          "concept_on": 0.13763323143022393
+        },
+        "micro_f1_5": {
+          "concept_off": 0.358974358974359,
+          "concept_on": 0.3181818181818182
+        },
+        "macro_f1_5": {
+          "concept_off": 0.19166666666666665,
+          "concept_on": 0.16680161943319838
+        },
+        "exact_set_accuracy_5": {
+          "concept_off": 0.8020833333333334,
+          "concept_on": 0.7708333333333334
+        },
+        "mean_reference_positive_recall": {
+          "concept_off": 0.7462121212121211,
+          "concept_on": 0.7367424242424242
+        },
+        "mean_predicted_positive_precision": {
+          "concept_off": 0.7016129032258065,
+          "concept_on": 0.6980286738351255
+        },
+        "positive_label_hamming_agreement": {
+          "concept_off": 0.9434523809523809,
+          "concept_on": 0.9427083333333334
+        }
+      },
+      "chexbert_concept_on_minus_off": {
+        "micro_f1_14": {
+          "mean_difference": -0.006362160501952485,
+          "ci_95_low": -0.035739281414836746,
+          "ci_95_high": 0.01851851851851849
+        },
+        "macro_f1_14": {
+          "mean_difference": -0.007988045249462034,
+          "ci_95_low": -0.030414201432534173,
+          "ci_95_high": 0.012903601354688278
+        },
+        "micro_f1_5": {
+          "mean_difference": -0.0407925407925408,
+          "ci_95_low": -0.1061018385156316,
+          "ci_95_high": 0.014112903225806439
+        },
+        "macro_f1_5": {
+          "mean_difference": -0.024865047233468274,
+          "ci_95_low": -0.05904761904761904,
+          "ci_95_high": 0.001498291740938784
+        },
+        "exact_set_accuracy_5": {
+          "mean_difference": -0.03125,
+          "ci_95_low": -0.07291666666666674,
+          "ci_95_high": 0.01041666666666674
+        },
+        "mean_reference_positive_recall": {
+          "mean_difference": -0.009469696969696906,
+          "ci_95_low": -0.03875968992248058,
+          "ci_95_high": 0.012820512820512775
+        },
+        "mean_predicted_positive_precision": {
+          "mean_difference": -0.0035842293906810374,
+          "ci_95_low": -0.037207580125707865,
+          "ci_95_high": 0.027053804955697203
+        },
+        "positive_label_hamming_agreement": {
+          "mean_difference": -0.0007440476190475609,
+          "ci_95_low": -0.005952380952380931,
+          "ci_95_high": 0.0037202380952381375
+        }
+      }
+    }
+  },
+  "integrity": {
+    "concept_off": {
+      "answer_contract_valid_rate": 1.0,
+      "citation_valid_rate": 1.0,
+      "token_ceiling_rate": 0.046875,
+      "mean_input_tokens": 780.25
+    },
+    "concept_on": {
+      "answer_contract_valid_rate": 1.0,
+      "citation_valid_rate": 1.0,
+      "token_ceiling_rate": 0.046875,
+      "mean_input_tokens": 808.1145833333334
+    }
+  },
+  "concept_distribution": {
+    "case_count": 96,
+    "cases_without_passing_concept": 6,
+    "mean_concepts_per_case": 1.5729166666666667,
+    "maximum_concepts_per_case": 5,
+    "label_case_counts": {
+      "Atelectasis": 18,
+      "Cardiomegaly": 5,
+      "Consolidation": 4,
+      "Edema": 3,
+      "Enlarged Cardiomediastinum": 29,
+      "Fracture": 6,
+      "Lung Lesion": 3,
+      "Lung Opacity": 11,
+      "No Finding": 48,
+      "Pleural Effusion": 8,
+      "Pleural Other": 3,
+      "Pneumonia": 2,
+      "Pneumothorax": 5,
+      "Support Devices": 6
+    }
+  },
+  "promotion_diagnostics": {
+    "five_observation_micro_f1_ci_above_zero": false,
+    "token_f1_point_difference_nonnegative": false,
+    "complete_radgraph_point_difference_nonnegative": false,
+    "contract_and_citation_not_lower": true
+  },
+  "runtime": {
+    "bootstrap_iterations": 10000,
+    "bootstrap_seed": 7145,
+    "radgraph_model": "modern-radgraph-xl",
+    "f1chexbert_version": "0.0.2",
+    "f1chexbert_checkpoint_sha256": "6550703c92d640e1e04d8105a7a185d76ece0f25fcbf033d292785bf22c0fde1"
+  },
+  "artifacts": {
+    "qa_rows_sha256": "904c80dc093fb76314e3a401bf9ab499af2875898ff21cdd6904eb762e2b3ec1",
+    "generation_summary_sha256": "d12392e6d106c1bff8e1206789dd36fa9695c46a32c7ac1d7f65c8df01586c05",
+    "chexbert_cache_sha256": "9675ca7169efef838ccd5b6b0c92bc28aed601622fdb0765a23c42a6ed1ea77e",
+    "radgraph_rows_sha256": "e736afa9b6c43e42552c1fcec60a3131b6f67c5550ec51f7585bf14ed4f3f16c",
+    "script_sha256": "f8562f5f651a151c38f6ba6d4424a767a0dbc0093aee11ddad8a031c34884e86"
+  },
+  "claim_boundary": "Validation-only automated answer-reference consistency; not diagnostic accuracy, clinical safety, physician utility, or confirmation evidence."
+}
