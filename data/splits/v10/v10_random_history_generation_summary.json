@@ -1,0 +1,82 @@
+{
+  "study": "V10 post-hoc random-history negative control generation",
+  "status": "posthoc_control_generation_complete_no_retuning",
+  "protocol_commit": "183c5e8",
+  "counts": {
+    "train_bank_cases": 2506,
+    "test_cases": 568,
+    "assignments": 5,
+    "rows": 5680
+  },
+  "selection": {
+    "seed": 7131,
+    "domain": "v10-random-history",
+    "reports_per_query": 3,
+    "excluded_formal_retrieval_depth_per_system": 10,
+    "selection_fingerprint": "96b490b5a9038f2e2e4b9360cec7db0b099caecaa2e57d8b6ec53b166ac4fd9c"
+  },
+  "generator": {
+    "model": "google/medgemma-1.5-4b-it",
+    "batch_size": 8,
+    "answer_max_new_tokens": 64,
+    "maximum_complete_sentences": 2,
+    "stop_token": "<end_of_turn>",
+    "provenance_assembly": "deterministic",
+    "revision": "91850547d9f0b2fdd21aa7c5f4f3d1a8a52c243b"
+  },
+  "assignment_metrics": {
+    "0": {
+      "row_count": 1136,
+      "case_count": 568,
+      "token_f1": 0.1842286492476363,
+      "answer_token_ceiling_rate": 0.8661971830985915,
+      "answer_contract_valid_rate": 1.0,
+      "citation_valid_rate": 1.0
+    },
+    "1": {
+      "row_count": 1136,
+      "case_count": 568,
+      "token_f1": 0.18260603043110898,
+      "answer_token_ceiling_rate": 0.8661971830985915,
+      "answer_contract_valid_rate": 1.0,
+      "citation_valid_rate": 1.0
+    },
+    "2": {
+      "row_count": 1136,
+      "case_count": 568,
+      "token_f1": 0.18446221572066746,
+      "answer_token_ceiling_rate": 0.823943661971831,
+      "answer_contract_valid_rate": 1.0,
+      "citation_valid_rate": 1.0
+    },
+    "3": {
+      "row_count": 1136,
+      "case_count": 568,
+      "token_f1": 0.17886114315723656,
+      "answer_token_ceiling_rate": 0.8450704225352113,
+      "answer_contract_valid_rate": 1.0,
+      "citation_valid_rate": 1.0
+    },
+    "4": {
+      "row_count": 1136,
+      "case_count": 568,
+      "token_f1": 0.1837560121338539,
+      "answer_token_ceiling_rate": 0.8169014084507042,
+      "answer_contract_valid_rate": 1.0,
+      "citation_valid_rate": 1.0
+    }
+  },
+  "runtime": {
+    "elapsed_seconds_this_run": 7833.329788499977,
+    "peak_gpu_memory_allocated_mib": 5877.15673828125
+  },
+  "source_hashes": {
+    "config": "d8533b46e7791da9dce6ab250121495abac13e1fe390d0415c0960a1f9edcb25",
+    "split": "b4c1b091c3dbff0399d07c8350f4d8d68ce8ce52e0157dcc96f46af8c8baa7b3",
+    "retrieval_rows": "68a1e5db7db21a0de258e30cb9f9c6f9cee892d89576c707b81ffb63a7617c91",
+    "qa_rows": "0e82b3cf5d3913fdac82f49b6742451cf095849cad88caa2c5bedb070f793944",
+    "output_rows": "d2590dfd51a3a983da1d8ee9f71ff2c66a6417368922415bc3f357d202da6631",
+    "script": "248225a0570525e9853847b435c9a7efcfd2f56bac3b5974cde004986953e8b6"
+  },
+  "claim_boundary": "Post-hoc automated random-history control; not physician-adjudicated clinical utility."
+}
