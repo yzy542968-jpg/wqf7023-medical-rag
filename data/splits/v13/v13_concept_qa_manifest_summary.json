@@ -1,0 +1,28 @@
+{
+  "study": "V13 concept-on/off QA manifest",
+  "status": "selection_frozen_before_generation",
+  "seed": 7143,
+  "selection_domain": "v13-concept-qa",
+  "eligibility": "V10 Validation cases with both formal V12 ranking rows, three available rrf_lambdamart historical cases per question, and a readable primary image",
+  "eligible_counts": {
+    "abnormal": 239,
+    "indeterminate": 9,
+    "normal": 128
+  },
+  "selected_counts": {
+    "normal": 48,
+    "abnormal": 48,
+    "total": 96
+  },
+  "selected_case_ids_sha256": "809630156f74450aa2ee4bd2f2e3968bf29c28a0350da971372a4641d0eb3840",
+  "artifacts": {
+    "cases_sha256": "56e367190396011d4d67f43e7e733389a8346890bf8729e82fb4326d063bbd68",
+    "split_sha256": "b4c1b091c3dbff0399d07c8350f4d8d68ce8ce52e0157dcc96f46af8c8baa7b3",
+    "ranking_rows_sha256": "48ce1f198d2c102fd57635d8ae97de22f0e863bcc927cc673751039bd59786fd",
+    "v13_validation_sha256": "3213031e6c49cdb18188cb74e477f2bf5e1d95ee0cd194e7c7d9e2c6bce2211c",
+    "manifest_rows_sha256": "50396135e0bfd73fb44328aa114bddfed021d0ec437e5368f7e70c1f1fc8435e",
+    "script_sha256": "f5e879d048f0e4082519d03b0c206e77f40b969615f5370fc419d37f8b64a3b9"
+  },
+  "test_outcomes_inspected": false,
+  "claim_boundary": "Validation-only automated QA pilot; no V10 Test evaluation."
+}
