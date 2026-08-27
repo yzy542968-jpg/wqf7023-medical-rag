@@ -338,7 +338,7 @@ def main() -> None:
         torch.save(
             {
                 "state_dict": mlp.state_dict(),
-                "thresholds": thresholds.astype(np.float32),
+                "thresholds": torch.from_numpy(thresholds.astype(np.float32)),
                 "labels": list(CHEXBERT_LABELS),
                 "architecture": "1152-256-14-gelu-dropout0.20",
             },

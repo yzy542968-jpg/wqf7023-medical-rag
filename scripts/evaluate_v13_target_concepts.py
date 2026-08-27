@@ -61,7 +61,7 @@ def predict(
         model = ConceptMLP().to(device)
         model.load_state_dict(payload["state_dict"])
         probabilities = mlp_probabilities(model, embeddings, device=device)
-        thresholds = np.asarray(payload["thresholds"], dtype=np.float64)
+        thresholds = np.asarray(payload["thresholds"].cpu(), dtype=np.float64)
         labels = tuple(map(str, payload["labels"]))
         model_type = "mlp"
     else:
