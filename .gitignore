@@ -90,6 +90,9 @@ experiments/v13_target_concept/
 # V14 local OOF probabilities, per-query rows, and learned checkpoints
 experiments/v14_concept_retrieval/
 
+# V15 local paired generations and frozen metric caches
+experiments/v15_retrieval_transfer/
+
 # V10 local per-query rows, shuffled mappings, generations, and review packages
 experiments/v10_publication/*.json
 experiments/v10_publication/*.jsonl
