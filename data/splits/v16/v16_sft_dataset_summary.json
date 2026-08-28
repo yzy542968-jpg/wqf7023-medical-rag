@@ -1,0 +1,42 @@
+{
+  "study": "V16 leakage-controlled multimodal SFT dataset",
+  "status": "train_only_examples",
+  "source_cases_sha256": "56e367190396011d4d67f43e7e733389a8346890bf8729e82fb4326d063bbd68",
+  "split_sha256": "b4c1b091c3dbff0399d07c8350f4d8d68ce8ce52e0157dcc96f46af8c8baa7b3",
+  "embeddings_sha256": "f81f4629a8f6eb10dc6b35d868f719384adb40903e19d165f9fba2039fce8867",
+  "source_partition": "train",
+  "case_count": 2510,
+  "question_types": [
+    "findings",
+    "impression"
+  ],
+  "conditions": [
+    "no_history",
+    "retrieved_history",
+    "random_history"
+  ],
+  "example_count": 14112,
+  "available_target_sections_by_question": {
+    "findings": 2201,
+    "impression": 2503
+  },
+  "skipped_pair_count": 316,
+  "skipped_pairs_sha256": "b072bcb5d62354baa22c047c8f9972c33062b5062d134c02407d58427f1adae5",
+  "examples_by_condition": {
+    "no_history": 4704,
+    "retrieved_history": 4704,
+    "random_history": 4704
+  },
+  "historical_units_by_condition": {
+    "no_history": 0,
+    "retrieved_history": 14112,
+    "random_history": 14112
+  },
+  "selection_seed": 1617,
+  "rrf_source_top_k": 100,
+  "rrf_output_k": 200,
+  "history_top_k": 3,
+  "case_ids_sha256": "f0e7f609e3373bdc7aa1984608d92f594ae80609ec76dd9e55303af7bf57dd6a",
+  "output_sha256": "7f5f1be77d3c384ceb7dc51d0c8172a862ac8f1ba32456ffa3f2be1f1211e807",
+  "claim_boundary": "Train supervision only; no clinical labels or independent patient validation."
+}

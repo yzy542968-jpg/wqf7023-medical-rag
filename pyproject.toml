@@ -31,6 +31,7 @@ models = [
   "torch>=2.3",
   "transformers>=4.45,<5",
   "open_clip_torch>=2.23,<4",
+  "peft>=0.20,<1",
   "qwen-vl-utils>=0.0.8,<1",
   "hi-ml-multimodal==0.2.2",
 ]
@@ -51,6 +52,7 @@ all = [
   "torch>=2.3",
   "transformers>=4.45,<5",
   "open_clip_torch>=2.23,<4",
+  "peft>=0.20,<1",
   "qwen-vl-utils>=0.0.8,<1",
   "hi-ml-multimodal==0.2.2",
 ]

@@ -1,0 +1,44 @@
+{
+  "study": "V16 QLoRA paired generation pilot",
+  "status": "validation_generation_complete_no_retuning",
+  "model_arm": "base",
+  "no_test_evaluation": true,
+  "counts": {
+    "cases": 12,
+    "rows": 72,
+    "conditions": [
+      "no_history",
+      "retrieved_history",
+      "random_history"
+    ]
+  },
+  "inputs": {
+    "cases_sha256": "56e367190396011d4d67f43e7e733389a8346890bf8729e82fb4326d063bbd68",
+    "split_sha256": "b4c1b091c3dbff0399d07c8350f4d8d68ce8ce52e0157dcc96f46af8c8baa7b3",
+    "selection_rows_sha256": "93b9d7be97bf2ad3c667dff54fcc8eb0040d7895ec8edd609739769f77637bdd",
+    "selected_case_ids_sha256": "ff712d3bfa766e29127fb98f1da045b0136dd90e081819638fac59f76bdb70be",
+    "ranking_rows_sha256": "b2a9960fb6e2892a17df0725701bfb2a0b76475100f035149a2631930be83b4c",
+    "model_revision": "91850547d9f0b2fdd21aa7c5f4f3d1a8a52c243b",
+    "adapter_config_sha256": null
+  },
+  "configuration": {
+    "conditions": [
+      "no_history",
+      "retrieved_history",
+      "random_history"
+    ],
+    "question_types": [
+      "findings",
+      "impression"
+    ],
+    "history_top_k": 1,
+    "max_new_tokens": 96,
+    "selection_seed": 1617
+  },
+  "runtime": {
+    "elapsed_seconds": 223.50375800000074,
+    "peak_gpu_memory_mib": 3377.150390625
+  },
+  "rows_sha256": "f1d7a42afb9c80c4b0ae615bb03b9878f2f2b84a92ba0a57e898d95d91b5d180",
+  "claim_boundary": "Validation-only automated answer-reference consistency; not diagnostic accuracy, clinical safety, physician utility, or external validation."
+}

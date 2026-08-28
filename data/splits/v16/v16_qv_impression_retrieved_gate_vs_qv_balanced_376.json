@@ -1,0 +1,270 @@
+{
+  "study": "V16 paired row evaluation",
+  "status": "validation_evaluation_complete_no_retuning",
+  "no_test_evaluation": true,
+  "counts": {
+    "cases": 376,
+    "rows_per_arm": 2256
+  },
+  "arms": {
+    "qv_impression_retrieved_gate": {
+      "no_history": {
+        "row_count": 752,
+        "case_count": 376,
+        "token_f1": 0.16214271523439347,
+        "answer_only_contract_valid_rate": 1.0,
+        "provenance_valid_rate": 1.0,
+        "token_ceiling_rate": 0.39095744680851063,
+        "mean_input_tokens": 398.90159574468083,
+        "mean_output_tokens": 66.0997340425532,
+        "by_question_type": {
+          "findings": {
+            "token_f1": 0.23790816755666866,
+            "token_ceiling_rate": 0.42819148936170215,
+            "rows": 376
+          },
+          "impression": {
+            "token_f1": 0.0863772629121183,
+            "token_ceiling_rate": 0.3537234042553192,
+            "rows": 376
+          }
+        }
+      },
+      "random_history": {
+        "row_count": 752,
+        "case_count": 376,
+        "token_f1": 0.18662879801748286,
+        "answer_only_contract_valid_rate": 1.0,
+        "provenance_valid_rate": 1.0,
+        "token_ceiling_rate": 0.3337765957446808,
+        "mean_input_tokens": 604.2646276595744,
+        "mean_output_tokens": 66.80319148936171,
+        "by_question_type": {
+          "findings": {
+            "token_f1": 0.2592014063688447,
+            "token_ceiling_rate": 0.3537234042553192,
+            "rows": 376
+          },
+          "impression": {
+            "token_f1": 0.11405618966612105,
+            "token_ceiling_rate": 0.31382978723404253,
+            "rows": 376
+          }
+        }
+      },
+      "retrieved_history": {
+        "row_count": 752,
+        "case_count": 376,
+        "token_f1": 0.259584514474015,
+        "answer_only_contract_valid_rate": 1.0,
+        "provenance_valid_rate": 1.0,
+        "token_ceiling_rate": 0.2247340425531915,
+        "mean_input_tokens": 576.8484042553191,
+        "mean_output_tokens": 47.159574468085104,
+        "by_question_type": {
+          "findings": {
+            "token_f1": 0.2652726359336391,
+            "token_ceiling_rate": 0.42819148936170215,
+            "rows": 376
+          },
+          "impression": {
+            "token_f1": 0.2538963930143909,
+            "token_ceiling_rate": 0.02127659574468085,
+            "rows": 376
+          }
+        }
+      }
+    },
+    "qv_balanced": {
+      "no_history": {
+        "row_count": 752,
+        "case_count": 376,
+        "token_f1": 0.14822832126765426,
+        "answer_only_contract_valid_rate": 1.0,
+        "provenance_valid_rate": 1.0,
+        "token_ceiling_rate": 0.03723404255319149,
+        "mean_input_tokens": 398.90159574468083,
+        "mean_output_tokens": 30.988031914893618,
+        "by_question_type": {
+          "findings": {
+            "token_f1": 0.21874605326430535,
+            "token_ceiling_rate": 0.023936170212765957,
+            "rows": 376
+          },
+          "impression": {
+            "token_f1": 0.07771058927100313,
+            "token_ceiling_rate": 0.05053191489361702,
+            "rows": 376
+          }
+        }
+      },
+      "random_history": {
+        "row_count": 752,
+        "case_count": 376,
+        "token_f1": 0.2066468672241632,
+        "answer_only_contract_valid_rate": 1.0,
+        "provenance_valid_rate": 1.0,
+        "token_ceiling_rate": 0.03590425531914894,
+        "mean_input_tokens": 604.2646276595744,
+        "mean_output_tokens": 31.13031914893617,
+        "by_question_type": {
+          "findings": {
+            "token_f1": 0.2311612597719332,
+            "token_ceiling_rate": 0.05053191489361702,
+            "rows": 376
+          },
+          "impression": {
+            "token_f1": 0.18213247467639318,
+            "token_ceiling_rate": 0.02127659574468085,
+            "rows": 376
+          }
+        }
+      },
+      "retrieved_history": {
+        "row_count": 752,
+        "case_count": 376,
+        "token_f1": 0.24450208991413655,
+        "answer_only_contract_valid_rate": 1.0,
+        "provenance_valid_rate": 1.0,
+        "token_ceiling_rate": 0.022606382978723406,
+        "mean_input_tokens": 576.8484042553191,
+        "mean_output_tokens": 27.668882978723403,
+        "by_question_type": {
+          "findings": {
+            "token_f1": 0.23510778681388225,
+            "token_ceiling_rate": 0.023936170212765957,
+            "rows": 376
+          },
+          "impression": {
+            "token_f1": 0.2538963930143909,
+            "token_ceiling_rate": 0.02127659574468085,
+            "rows": 376
+          }
+        }
+      }
+    }
+  },
+  "qv_impression_retrieved_gate_minus_qv_balanced": {
+    "token_f1": {
+      "no_history": {
+        "case_count": 376,
+        "mean_difference": 0.013914393966739227,
+        "ci_95_low": 0.008024736688993178,
+        "ci_95_high": 0.020112578162957286,
+        "ci_excludes_zero": true,
+        "iterations": 10000,
+        "seed": 1619
+      },
+      "retrieved_history": {
+        "case_count": 376,
+        "mean_difference": 0.015082424559878403,
+        "ci_95_low": 0.009293943817764121,
+        "ci_95_high": 0.020907481170964966,
+        "ci_excludes_zero": true,
+        "iterations": 10000,
+        "seed": 1619
+      },
+      "random_history": {
+        "case_count": 376,
+        "mean_difference": -0.020018069206680332,
+        "ci_95_low": -0.0324982958761909,
+        "ci_95_high": -0.007809841711584908,
+        "ci_excludes_zero": true,
+        "iterations": 10000,
+        "seed": 1619
+      }
+    },
+    "answer_only_contract_valid": {
+      "no_history": {
+        "case_count": 376,
+        "mean_difference": 0.0,
+        "ci_95_low": 0.0,
+        "ci_95_high": 0.0,
+        "ci_excludes_zero": false,
+        "iterations": 10000,
+        "seed": 1719
+      },
+      "retrieved_history": {
+        "case_count": 376,
+        "mean_difference": 0.0,
+        "ci_95_low": 0.0,
+        "ci_95_high": 0.0,
+        "ci_excludes_zero": false,
+        "iterations": 10000,
+        "seed": 1719
+      },
+      "random_history": {
+        "case_count": 376,
+        "mean_difference": 0.0,
+        "ci_95_low": 0.0,
+        "ci_95_high": 0.0,
+        "ci_excludes_zero": false,
+        "iterations": 10000,
+        "seed": 1719
+      }
+    },
+    "evidence_provenance_valid": {
+      "no_history": {
+        "case_count": 376,
+        "mean_difference": 0.0,
+        "ci_95_low": 0.0,
+        "ci_95_high": 0.0,
+        "ci_excludes_zero": false,
+        "iterations": 10000,
+        "seed": 1819
+      },
+      "retrieved_history": {
+        "case_count": 376,
+        "mean_difference": 0.0,
+        "ci_95_low": 0.0,
+        "ci_95_high": 0.0,
+        "ci_excludes_zero": false,
+        "iterations": 10000,
+        "seed": 1819
+      },
+      "random_history": {
+        "case_count": 376,
+        "mean_difference": 0.0,
+        "ci_95_low": 0.0,
+        "ci_95_high": 0.0,
+        "ci_excludes_zero": false,
+        "iterations": 10000,
+        "seed": 1819
+      }
+    },
+    "hit_token_ceiling": {
+      "no_history": {
+        "case_count": 376,
+        "mean_difference": 0.3537234042553192,
+        "ci_95_low": 0.3151595744680851,
+        "ci_95_high": 0.39361702127659576,
+        "ci_excludes_zero": true,
+        "iterations": 10000,
+        "seed": 1919
+      },
+      "retrieved_history": {
+        "case_count": 376,
+        "mean_difference": 0.20212765957446807,
+        "ci_95_low": 0.17553191489361702,
+        "ci_95_high": 0.22872340425531915,
+        "ci_excludes_zero": true,
+        "iterations": 10000,
+        "seed": 1919
+      },
+      "random_history": {
+        "case_count": 376,
+        "mean_difference": 0.2978723404255319,
+        "ci_95_low": 0.2646276595744681,
+        "ci_95_high": 0.3324468085106383,
+        "ci_excludes_zero": true,
+        "iterations": 10000,
+        "seed": 1919
+      }
+    }
+  },
+  "runtime": {
+    "bootstrap_iterations": 10000,
+    "bootstrap_seed": 1619
+  },
+  "claim_boundary": "Automated Validation answer-reference consistency only; no diagnosis, clinical correctness, clinical safety, or external validation claim."
+}

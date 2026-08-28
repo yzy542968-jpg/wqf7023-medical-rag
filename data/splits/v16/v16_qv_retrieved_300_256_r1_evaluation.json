@@ -1,0 +1,298 @@
+{
+  "study": "V16 QLoRA paired generation pilot evaluation",
+  "status": "validation_evaluation_complete_no_retuning",
+  "no_test_evaluation": true,
+  "counts": {
+    "cases": 48,
+    "rows_per_arm": 288
+  },
+  "arms": {
+    "base": {
+      "no_history": {
+        "row_count": 96,
+        "case_count": 48,
+        "token_f1": 0.18919343023460355,
+        "answer_only_contract_valid_rate": 1.0,
+        "provenance_valid_rate": 1.0,
+        "token_ceiling_rate": 0.3854166666666667,
+        "mean_input_tokens": 397.5416666666667,
+        "mean_output_tokens": 65.95833333333333,
+        "by_question_type": {
+          "findings": {
+            "token_f1": 0.2557700139158892,
+            "rows": 48
+          },
+          "impression": {
+            "token_f1": 0.1226168465533179,
+            "rows": 48
+          }
+        }
+      },
+      "random_history": {
+        "row_count": 96,
+        "case_count": 48,
+        "token_f1": 0.1796558492419149,
+        "answer_only_contract_valid_rate": 1.0,
+        "provenance_valid_rate": 1.0,
+        "token_ceiling_rate": 0.22916666666666666,
+        "mean_input_tokens": 600.25,
+        "mean_output_tokens": 61.28125,
+        "by_question_type": {
+          "findings": {
+            "token_f1": 0.2595266984877656,
+            "rows": 48
+          },
+          "impression": {
+            "token_f1": 0.09978499999606427,
+            "rows": 48
+          }
+        }
+      },
+      "retrieved_history": {
+        "row_count": 96,
+        "case_count": 48,
+        "token_f1": 0.22231915700429153,
+        "answer_only_contract_valid_rate": 1.0,
+        "provenance_valid_rate": 1.0,
+        "token_ceiling_rate": 0.34375,
+        "mean_input_tokens": 563.09375,
+        "mean_output_tokens": 65.53125,
+        "by_question_type": {
+          "findings": {
+            "token_f1": 0.2757492823768001,
+            "rows": 48
+          },
+          "impression": {
+            "token_f1": 0.16888903163178295,
+            "rows": 48
+          }
+        }
+      }
+    },
+    "qlora": {
+      "no_history": {
+        "row_count": 96,
+        "case_count": 48,
+        "token_f1": 0.1585220438908264,
+        "answer_only_contract_valid_rate": 1.0,
+        "provenance_valid_rate": 1.0,
+        "token_ceiling_rate": 0.03125,
+        "mean_input_tokens": 398.5416666666667,
+        "mean_output_tokens": 32.072916666666664,
+        "by_question_type": {
+          "findings": {
+            "token_f1": 0.21798250672550748,
+            "rows": 48
+          },
+          "impression": {
+            "token_f1": 0.09906158105614532,
+            "rows": 48
+          }
+        }
+      },
+      "random_history": {
+        "row_count": 96,
+        "case_count": 48,
+        "token_f1": 0.21610645752534,
+        "answer_only_contract_valid_rate": 1.0,
+        "provenance_valid_rate": 1.0,
+        "token_ceiling_rate": 0.010416666666666666,
+        "mean_input_tokens": 601.25,
+        "mean_output_tokens": 28.302083333333332,
+        "by_question_type": {
+          "findings": {
+            "token_f1": 0.22005697047879588,
+            "rows": 48
+          },
+          "impression": {
+            "token_f1": 0.21215594457188414,
+            "rows": 48
+          }
+        }
+      },
+      "retrieved_history": {
+        "row_count": 96,
+        "case_count": 48,
+        "token_f1": 0.29208136983984817,
+        "answer_only_contract_valid_rate": 1.0,
+        "provenance_valid_rate": 1.0,
+        "token_ceiling_rate": 0.020833333333333332,
+        "mean_input_tokens": 564.09375,
+        "mean_output_tokens": 27.0625,
+        "by_question_type": {
+          "findings": {
+            "token_f1": 0.21424721165716507,
+            "rows": 48
+          },
+          "impression": {
+            "token_f1": 0.3699155280225313,
+            "rows": 48
+          }
+        }
+      }
+    }
+  },
+  "qlora_minus_base": {
+    "token_f1": {
+      "no_history": {
+        "case_count": 48,
+        "mean_difference": -0.03067138634377717,
+        "ci_95_low": -0.047999885005142406,
+        "ci_95_high": -0.014185048995467063,
+        "ci_excludes_zero": true,
+        "iterations": 10000,
+        "seed": 1619
+      },
+      "retrieved_history": {
+        "case_count": 48,
+        "mean_difference": 0.06976221283555666,
+        "ci_95_low": 0.012410441568486886,
+        "ci_95_high": 0.12955145500779117,
+        "ci_excludes_zero": true,
+        "iterations": 10000,
+        "seed": 1619
+      },
+      "random_history": {
+        "case_count": 48,
+        "mean_difference": 0.036450608283425084,
+        "ci_95_low": -0.0034584020805424696,
+        "ci_95_high": 0.07998652460540202,
+        "ci_excludes_zero": false,
+        "iterations": 10000,
+        "seed": 1619
+      }
+    },
+    "answer_only_contract_valid": {
+      "no_history": {
+        "case_count": 48,
+        "mean_difference": 0.0,
+        "ci_95_low": 0.0,
+        "ci_95_high": 0.0,
+        "ci_excludes_zero": false,
+        "iterations": 10000,
+        "seed": 1719
+      },
+      "retrieved_history": {
+        "case_count": 48,
+        "mean_difference": 0.0,
+        "ci_95_low": 0.0,
+        "ci_95_high": 0.0,
+        "ci_excludes_zero": false,
+        "iterations": 10000,
+        "seed": 1719
+      },
+      "random_history": {
+        "case_count": 48,
+        "mean_difference": 0.0,
+        "ci_95_low": 0.0,
+        "ci_95_high": 0.0,
+        "ci_excludes_zero": false,
+        "iterations": 10000,
+        "seed": 1719
+      }
+    },
+    "evidence_provenance_valid": {
+      "no_history": {
+        "case_count": 48,
+        "mean_difference": 0.0,
+        "ci_95_low": 0.0,
+        "ci_95_high": 0.0,
+        "ci_excludes_zero": false,
+        "iterations": 10000,
+        "seed": 1819
+      },
+      "retrieved_history": {
+        "case_count": 48,
+        "mean_difference": 0.0,
+        "ci_95_low": 0.0,
+        "ci_95_high": 0.0,
+        "ci_excludes_zero": false,
+        "iterations": 10000,
+        "seed": 1819
+      },
+      "random_history": {
+        "case_count": 48,
+        "mean_difference": 0.0,
+        "ci_95_low": 0.0,
+        "ci_95_high": 0.0,
+        "ci_excludes_zero": false,
+        "iterations": 10000,
+        "seed": 1819
+      }
+    },
+    "hit_token_ceiling": {
+      "no_history": {
+        "case_count": 48,
+        "mean_difference": -0.3541666666666667,
+        "ci_95_low": -0.4583333333333333,
+        "ci_95_high": -0.25,
+        "ci_excludes_zero": true,
+        "iterations": 10000,
+        "seed": 1919
+      },
+      "retrieved_history": {
+        "case_count": 48,
+        "mean_difference": -0.3229166666666667,
+        "ci_95_low": -0.40625,
+        "ci_95_high": -0.23958333333333334,
+        "ci_excludes_zero": true,
+        "iterations": 10000,
+        "seed": 1919
+      },
+      "random_history": {
+        "case_count": 48,
+        "mean_difference": -0.21875,
+        "ci_95_low": -0.3020833333333333,
+        "ci_95_high": -0.13541666666666666,
+        "ci_excludes_zero": true,
+        "iterations": 10000,
+        "seed": 1919
+      }
+    }
+  },
+  "history_transfer_token_f1": {
+    "base": {
+      "case_count": 48,
+      "mean_difference": 0.03312572676968797,
+      "ci_95_low": 0.004530013324567012,
+      "ci_95_high": 0.06257984967339823,
+      "ci_excludes_zero": true,
+      "iterations": 10000,
+      "seed": 2619
+    },
+    "qlora": {
+      "case_count": 48,
+      "mean_difference": 0.13355932594902178,
+      "ci_95_low": 0.07406779098303505,
+      "ci_95_high": 0.19595091982670212,
+      "ci_excludes_zero": true,
+      "iterations": 10000,
+      "seed": 2620
+    }
+  },
+  "retrieved_minus_random_token_f1": {
+    "base": {
+      "case_count": 48,
+      "mean_difference": 0.04266330776237661,
+      "ci_95_low": 0.015676838455400226,
+      "ci_95_high": 0.07000948485766127,
+      "ci_excludes_zero": true,
+      "iterations": 10000,
+      "seed": 3619
+    },
+    "qlora": {
+      "case_count": 48,
+      "mean_difference": 0.07597491231450819,
+      "ci_95_low": 0.017079119963650084,
+      "ci_95_high": 0.13608647876822272,
+      "ci_excludes_zero": true,
+      "iterations": 10000,
+      "seed": 3620
+    }
+  },
+  "runtime": {
+    "bootstrap_iterations": 10000,
+    "bootstrap_seed": 1619
+  },
+  "claim_boundary": "Automated Validation answer-reference consistency only; no diagnosis, clinical correctness, clinical safety, or external validation claim."
+}

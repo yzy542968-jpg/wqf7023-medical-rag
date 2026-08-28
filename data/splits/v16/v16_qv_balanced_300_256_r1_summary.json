@@ -1,0 +1,68 @@
+{
+  "study": "V16 MedGemma QLoRA development",
+  "status": "development_qv_balanced_300_256_r1",
+  "model": {
+    "name": "google/medgemma-1.5-4b-it",
+    "revision": "91850547d9f0b2fdd21aa7c5f4f3d1a8a52c243b"
+  },
+  "inputs": {
+    "examples_path": "C:\\Users\\yz542_dntjhas\\Documents\\New project\\wqf7023-medical-rag\\experiments\\v16_adaptation\\v16_sft_examples.jsonl",
+    "examples_sha256": "7f5f1be77d3c384ceb7dc51d0c8172a862ac8f1ba32456ffa3f2be1f1211e807",
+    "row_count": 1683,
+    "case_count": 300,
+    "train_row_count": 1512,
+    "internal_row_count": 171,
+    "train_case_count": 269,
+    "internal_case_count": 31,
+    "frozen_parameter_count": 2490222960,
+    "internal_cases_sha256": "f1229d39caee8ff7e1969a21a2cf8edd0832ec5527515d0c041176d63c76634d",
+    "skipped_training_row_count": 0,
+    "skipped_training_rows_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "skipped_internal_row_count": 0,
+    "skipped_internal_rows_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "configuration": {
+    "seed": 1616,
+    "internal_split_seed": 1618,
+    "internal_fraction": 0.1,
+    "conditions": [
+      "no_history",
+      "retrieved_history",
+      "random_history"
+    ],
+    "max_sequence_length": 768,
+    "epochs": 1,
+    "max_steps": 256,
+    "learning_rate": 5e-05,
+    "gradient_accumulation": 16,
+    "quantization": "4bit_nf4_double_quant_bfloat16",
+    "lora_rank": 8,
+    "lora_alpha": 16,
+    "lora_dropout": 0.05,
+    "target_profile": "qv",
+    "target_suffixes": [
+      "q_proj",
+      "v_proj"
+    ]
+  },
+  "model_statistics": {
+    "target_module_count": 68,
+    "trainable_parameter_count": 2228224,
+    "total_parameter_count": 2492451184,
+    "trainable_fraction": 0.0008939890234576405
+  },
+  "training": {
+    "optimizer_steps": 16,
+    "forward_steps": 256,
+    "mean_tail_loss": 2.3427574598789214,
+    "internal_loss_mean": 2.297736778855324,
+    "internal_eval_examples": 16,
+    "peak_gpu_memory_mib": 8241.02392578125,
+    "elapsed_seconds": 510.4518332000007
+  },
+  "artifacts": {
+    "adapter_dir": "C:\\Users\\yz542_dntjhas\\Documents\\New project\\wqf7023-medical-rag\\experiments\\v16_adaptation\\qlora_qv_balanced_300_256_r1\\adapter",
+    "adapter_config_sha256": "bfe3ca8233e7d1433644525d4aa31998bba0814a99bd452cb90ef56af60f2b22"
+  },
+  "claim_boundary": "Train/internal loss smoke or development evidence only; no clinical accuracy claim."
+}

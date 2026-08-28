@@ -1,0 +1,59 @@
+{
+  "study": "V16 MedGemma QLoRA development",
+  "status": "smoke_complete",
+  "model": {
+    "name": "google/medgemma-1.5-4b-it",
+    "revision": "91850547d9f0b2fdd21aa7c5f4f3d1a8a52c243b"
+  },
+  "inputs": {
+    "examples_path": "C:\\Users\\yz542_dntjhas\\Documents\\New project\\wqf7023-medical-rag\\experiments\\v16_adaptation\\v16_sft_examples.jsonl",
+    "examples_sha256": "7f5f1be77d3c384ceb7dc51d0c8172a862ac8f1ba32456ffa3f2be1f1211e807",
+    "row_count": 564,
+    "case_count": 100,
+    "train_row_count": 510,
+    "internal_row_count": 54,
+    "train_case_count": 91,
+    "internal_case_count": 9,
+    "frozen_parameter_count": 2490222960,
+    "internal_cases_sha256": "d16da97f55132a3779daa24230e2e01d3b3e6a16415aaf6d797d9cb1ac568baf"
+  },
+  "configuration": {
+    "seed": 1616,
+    "internal_split_seed": 1618,
+    "internal_fraction": 0.1,
+    "conditions": [
+      "no_history",
+      "retrieved_history",
+      "random_history"
+    ],
+    "max_sequence_length": 768,
+    "epochs": 1,
+    "max_steps": 64,
+    "learning_rate": 0.0002,
+    "gradient_accumulation": 16,
+    "quantization": "4bit_nf4_double_quant_bfloat16",
+    "lora_rank": 8,
+    "lora_alpha": 16,
+    "lora_dropout": 0.05
+  },
+  "model_statistics": {
+    "target_module_count": 238,
+    "trainable_parameter_count": 14901248,
+    "total_parameter_count": 2505124208,
+    "trainable_fraction": 0.005948307054961005
+  },
+  "training": {
+    "optimizer_steps": 4,
+    "forward_steps": 64,
+    "mean_tail_loss": 2.3413889463990927,
+    "internal_loss_mean": 1.8369772732257843,
+    "internal_eval_examples": 8,
+    "peak_gpu_memory_mib": 8425.57275390625,
+    "elapsed_seconds": 347.85624540000026
+  },
+  "artifacts": {
+    "adapter_dir": "C:\\Users\\yz542_dntjhas\\Documents\\New project\\wqf7023-medical-rag\\experiments\\v16_adaptation\\qlora_pilot_100\\adapter",
+    "adapter_config_sha256": "eaa0e492bfadf3e0f340fe4f9d70aeeb4a9ac96142decf75dc5f2a2284d84830"
+  },
+  "claim_boundary": "Train/internal loss smoke or development evidence only; no clinical accuracy claim."
+}

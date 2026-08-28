@@ -1,0 +1,62 @@
+{
+  "study": "V16 retrieval-copy diagnostic",
+  "status": "validation_only_no_test_evaluation",
+  "baseline_type": "The answer is copied from the question-matched section of the saved V12 Top-1 historical ranking. This is an extractive report-transfer diagnostic, not a generative or clinical-diagnosis system.",
+  "counts": {
+    "cases": 48,
+    "rows": 96,
+    "target_top1_leak_count": 0,
+    "same_cluster_top1_count": 0,
+    "missing_target_reference_count": 10
+  },
+  "metrics": {
+    "row_count": 96,
+    "case_count": 48,
+    "reference_available_row_count": 86,
+    "reference_available_rate": 0.8958333333333334,
+    "token_f1": 0.4015480369862601,
+    "answer_only_contract_valid_rate": 1.0,
+    "evidence_provenance_valid_rate": 1.0,
+    "same_cluster_top1_rate": 0.0,
+    "by_question_type": {
+      "findings": {
+        "row_count": 38,
+        "token_f1": 0.40167465951150244
+      },
+      "impression": {
+        "row_count": 48,
+        "token_f1": 0.4014477941537767
+      }
+    }
+  },
+  "comparison_with_frozen_base_retrieved_generator": {
+    "comparison_rows": "experiments/v16_adaptation/generation_base_batched.jsonl",
+    "token_f1_copy_minus_generator": {
+      "case_count": 48,
+      "mean_difference": 0.1181101237324562,
+      "ci_95_low": 0.04266870186231942,
+      "ci_95_high": 0.19218346317244758,
+      "ci_excludes_zero": true,
+      "iterations": 10000,
+      "seed": 1919
+    }
+  },
+  "inputs": {
+    "cases_sha256": "56e367190396011d4d67f43e7e733389a8346890bf8729e82fb4326d063bbd68",
+    "split_sha256": "b4c1b091c3dbff0399d07c8350f4d8d68ce8ce52e0157dcc96f46af8c8baa7b3",
+    "selection_rows_sha256": "93b9d7be97bf2ad3c667dff54fcc8eb0040d7895ec8edd609739769f77637bdd",
+    "ranking_rows_sha256": "b2a9960fb6e2892a17df0725701bfb2a0b76475100f035149a2631930be83b4c",
+    "base_rows_sha256": "3512107957b46f5e50204c3cd97d76923afc0e4c1408a0598c8ebfd0f6785ed4",
+    "selected_case_ids_sha256": "ff712d3bfa766e29127fb98f1da045b0136dd90e081819638fac59f76bdb70be",
+    "ranking_name": "rrf_lambdamart"
+  },
+  "outputs": {
+    "rows": "experiments/v16_adaptation/generation_extractive_copy_top1_rows.jsonl",
+    "rows_sha256": "9512e419bdbea87703d65d6234a3a039064a70806c6f0acbca1ca1c675e9d36a"
+  },
+  "runtime": {
+    "bootstrap_iterations": 10000,
+    "bootstrap_seed": 1919
+  },
+  "claim_boundary": "The copied historical section is evidence-transfer diagnostic only. It does not establish that the historical case matches the target patient, clinical diagnostic accuracy, clinical safety, physician agreement, or external validation."
+}

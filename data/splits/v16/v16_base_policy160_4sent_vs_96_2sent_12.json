@@ -1,0 +1,270 @@
+{
+  "study": "V16 paired row evaluation",
+  "status": "validation_evaluation_complete_no_retuning",
+  "no_test_evaluation": true,
+  "counts": {
+    "cases": 12,
+    "rows_per_arm": 72
+  },
+  "arms": {
+    "base_policy160_4sent": {
+      "no_history": {
+        "row_count": 24,
+        "case_count": 12,
+        "token_f1": 0.2142532424789406,
+        "answer_only_contract_valid_rate": 1.0,
+        "provenance_valid_rate": 1.0,
+        "token_ceiling_rate": 0.4166666666666667,
+        "mean_input_tokens": 395.8333333333333,
+        "mean_output_tokens": 97.16666666666667,
+        "by_question_type": {
+          "findings": {
+            "token_f1": 0.3125869322233929,
+            "token_ceiling_rate": 0.5,
+            "rows": 12
+          },
+          "impression": {
+            "token_f1": 0.11591955273448827,
+            "token_ceiling_rate": 0.3333333333333333,
+            "rows": 12
+          }
+        }
+      },
+      "random_history": {
+        "row_count": 24,
+        "case_count": 12,
+        "token_f1": 0.21850898710968927,
+        "answer_only_contract_valid_rate": 1.0,
+        "provenance_valid_rate": 1.0,
+        "token_ceiling_rate": 0.3333333333333333,
+        "mean_input_tokens": 606.7083333333334,
+        "mean_output_tokens": 90.20833333333333,
+        "by_question_type": {
+          "findings": {
+            "token_f1": 0.2979032078409526,
+            "token_ceiling_rate": 0.3333333333333333,
+            "rows": 12
+          },
+          "impression": {
+            "token_f1": 0.13911476637842593,
+            "token_ceiling_rate": 0.3333333333333333,
+            "rows": 12
+          }
+        }
+      },
+      "retrieved_history": {
+        "row_count": 24,
+        "case_count": 12,
+        "token_f1": 0.22997760300784917,
+        "answer_only_contract_valid_rate": 1.0,
+        "provenance_valid_rate": 1.0,
+        "token_ceiling_rate": 0.4166666666666667,
+        "mean_input_tokens": 540.2916666666666,
+        "mean_output_tokens": 97.95833333333333,
+        "by_question_type": {
+          "findings": {
+            "token_f1": 0.3174759043686466,
+            "token_ceiling_rate": 0.5,
+            "rows": 12
+          },
+          "impression": {
+            "token_f1": 0.14247930164705175,
+            "token_ceiling_rate": 0.3333333333333333,
+            "rows": 12
+          }
+        }
+      }
+    },
+    "base_96_2sent": {
+      "no_history": {
+        "row_count": 24,
+        "case_count": 12,
+        "token_f1": 0.18899040895837604,
+        "answer_only_contract_valid_rate": 1.0,
+        "provenance_valid_rate": 1.0,
+        "token_ceiling_rate": 0.375,
+        "mean_input_tokens": 395.8333333333333,
+        "mean_output_tokens": 66.20833333333333,
+        "by_question_type": {
+          "findings": {
+            "token_f1": 0.26294004934530407,
+            "token_ceiling_rate": 0.5833333333333334,
+            "rows": 12
+          },
+          "impression": {
+            "token_f1": 0.11504076857144807,
+            "token_ceiling_rate": 0.16666666666666666,
+            "rows": 12
+          }
+        }
+      },
+      "random_history": {
+        "row_count": 24,
+        "case_count": 12,
+        "token_f1": 0.18448652914191357,
+        "answer_only_contract_valid_rate": 1.0,
+        "provenance_valid_rate": 1.0,
+        "token_ceiling_rate": 0.125,
+        "mean_input_tokens": 606.7083333333334,
+        "mean_output_tokens": 57.708333333333336,
+        "by_question_type": {
+          "findings": {
+            "token_f1": 0.26379155983682484,
+            "token_ceiling_rate": 0.16666666666666666,
+            "rows": 12
+          },
+          "impression": {
+            "token_f1": 0.10518149844700232,
+            "token_ceiling_rate": 0.08333333333333333,
+            "rows": 12
+          }
+        }
+      },
+      "retrieved_history": {
+        "row_count": 24,
+        "case_count": 12,
+        "token_f1": 0.23990529787983098,
+        "answer_only_contract_valid_rate": 1.0,
+        "provenance_valid_rate": 1.0,
+        "token_ceiling_rate": 0.3333333333333333,
+        "mean_input_tokens": 540.2916666666666,
+        "mean_output_tokens": 65.33333333333333,
+        "by_question_type": {
+          "findings": {
+            "token_f1": 0.33281936293711656,
+            "token_ceiling_rate": 0.5833333333333334,
+            "rows": 12
+          },
+          "impression": {
+            "token_f1": 0.1469912328225454,
+            "token_ceiling_rate": 0.08333333333333333,
+            "rows": 12
+          }
+        }
+      }
+    }
+  },
+  "base_policy160_4sent_minus_base_96_2sent": {
+    "token_f1": {
+      "no_history": {
+        "case_count": 12,
+        "mean_difference": 0.02526283352056453,
+        "ci_95_low": -0.0103008370705961,
+        "ci_95_high": 0.06169835028410991,
+        "ci_excludes_zero": false,
+        "iterations": 10000,
+        "seed": 1619
+      },
+      "retrieved_history": {
+        "case_count": 12,
+        "mean_difference": -0.009927694871981823,
+        "ci_95_low": -0.043355406657036445,
+        "ci_95_high": 0.022812446590974086,
+        "ci_excludes_zero": false,
+        "iterations": 10000,
+        "seed": 1619
+      },
+      "random_history": {
+        "case_count": 12,
+        "mean_difference": 0.034022457967775685,
+        "ci_95_low": -0.005839617065194208,
+        "ci_95_high": 0.07132839857576775,
+        "ci_excludes_zero": false,
+        "iterations": 10000,
+        "seed": 1619
+      }
+    },
+    "answer_only_contract_valid": {
+      "no_history": {
+        "case_count": 12,
+        "mean_difference": 0.0,
+        "ci_95_low": 0.0,
+        "ci_95_high": 0.0,
+        "ci_excludes_zero": false,
+        "iterations": 10000,
+        "seed": 1719
+      },
+      "retrieved_history": {
+        "case_count": 12,
+        "mean_difference": 0.0,
+        "ci_95_low": 0.0,
+        "ci_95_high": 0.0,
+        "ci_excludes_zero": false,
+        "iterations": 10000,
+        "seed": 1719
+      },
+      "random_history": {
+        "case_count": 12,
+        "mean_difference": 0.0,
+        "ci_95_low": 0.0,
+        "ci_95_high": 0.0,
+        "ci_excludes_zero": false,
+        "iterations": 10000,
+        "seed": 1719
+      }
+    },
+    "evidence_provenance_valid": {
+      "no_history": {
+        "case_count": 12,
+        "mean_difference": 0.0,
+        "ci_95_low": 0.0,
+        "ci_95_high": 0.0,
+        "ci_excludes_zero": false,
+        "iterations": 10000,
+        "seed": 1819
+      },
+      "retrieved_history": {
+        "case_count": 12,
+        "mean_difference": 0.0,
+        "ci_95_low": 0.0,
+        "ci_95_high": 0.0,
+        "ci_excludes_zero": false,
+        "iterations": 10000,
+        "seed": 1819
+      },
+      "random_history": {
+        "case_count": 12,
+        "mean_difference": 0.0,
+        "ci_95_low": 0.0,
+        "ci_95_high": 0.0,
+        "ci_excludes_zero": false,
+        "iterations": 10000,
+        "seed": 1819
+      }
+    },
+    "hit_token_ceiling": {
+      "no_history": {
+        "case_count": 12,
+        "mean_difference": 0.041666666666666664,
+        "ci_95_low": -0.125,
+        "ci_95_high": 0.20833333333333334,
+        "ci_excludes_zero": false,
+        "iterations": 10000,
+        "seed": 1919
+      },
+      "retrieved_history": {
+        "case_count": 12,
+        "mean_difference": 0.08333333333333333,
+        "ci_95_low": -0.08333333333333333,
+        "ci_95_high": 0.25,
+        "ci_excludes_zero": false,
+        "iterations": 10000,
+        "seed": 1919
+      },
+      "random_history": {
+        "case_count": 12,
+        "mean_difference": 0.20833333333333334,
+        "ci_95_low": 0.041666666666666664,
+        "ci_95_high": 0.375,
+        "ci_excludes_zero": true,
+        "iterations": 10000,
+        "seed": 1919
+      }
+    }
+  },
+  "runtime": {
+    "bootstrap_iterations": 10000,
+    "bootstrap_seed": 1619
+  },
+  "claim_boundary": "Automated Validation answer-reference consistency only; no diagnosis, clinical correctness, clinical safety, or external validation claim."
+}

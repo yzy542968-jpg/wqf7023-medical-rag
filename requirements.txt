@@ -15,6 +15,7 @@ sentence-transformers>=5,<6
 sentencepiece>=0.2,<1
 qwen-vl-utils>=0.0.8,<1
 hi-ml-multimodal==0.2.2
+peft>=0.20,<1
 
 # Reproducibility, manuscript build, and frozen clinical metric
 pytest>=8,<10

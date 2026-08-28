@@ -1,0 +1,26 @@
+{
+  "study": "V16 broader Validation generation manifest",
+  "status": "derived_from_frozen_v12_validation_rankings",
+  "no_test_evaluation": true,
+  "counts": {
+    "v10_validation_partition_cases": 384,
+    "ranking_cases": 376,
+    "manifest_cases": 376,
+    "ranking_rows": 1128
+  },
+  "inputs": {
+    "cases_sha256": "56e367190396011d4d67f43e7e733389a8346890bf8729e82fb4326d063bbd68",
+    "split_sha256": "b4c1b091c3dbff0399d07c8350f4d8d68ce8ce52e0157dcc96f46af8c8baa7b3",
+    "ranking_rows_sha256": "b2a9960fb6e2892a17df0725701bfb2a0b76475100f035149a2631930be83b4c"
+  },
+  "configuration": {
+    "seed": 1616,
+    "selection_digest_domain": "v16-validation-selection",
+    "question_types_required": [
+      "findings",
+      "impression"
+    ]
+  },
+  "output_sha256": "14cd9b32440e9c5095aa40dc02a75f738f0fb3b193bf001fd184746a4fb0f122",
+  "claim_boundary": "Manifest construction only; no generated answer, Test outcome, or model result was inspected for case selection."
+}

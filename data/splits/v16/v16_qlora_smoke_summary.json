@@ -1,0 +1,53 @@
+{
+  "study": "V16 MedGemma QLoRA development",
+  "status": "smoke_complete",
+  "model": {
+    "name": "google/medgemma-1.5-4b-it",
+    "revision": "91850547d9f0b2fdd21aa7c5f4f3d1a8a52c243b"
+  },
+  "inputs": {
+    "examples_path": "C:\\Users\\yz542_dntjhas\\Documents\\New project\\wqf7023-medical-rag\\experiments\\v16_adaptation\\v16_sft_examples.jsonl",
+    "examples_sha256": "7f5f1be77d3c384ceb7dc51d0c8172a862ac8f1ba32456ffa3f2be1f1211e807",
+    "row_count": 111,
+    "case_count": 20,
+    "train_row_count": 105,
+    "internal_row_count": 6,
+    "train_case_count": 19,
+    "internal_case_count": 1,
+    "internal_cases_sha256": "3cc75b79cf6b2e91e84690427962c7bfc45a4d1b2abe951c880162e2e8aa3d62"
+  },
+  "configuration": {
+    "seed": 1616,
+    "internal_split_seed": 1618,
+    "internal_fraction": 0.1,
+    "max_sequence_length": 768,
+    "epochs": 1,
+    "max_steps": 1,
+    "learning_rate": 0.0002,
+    "gradient_accumulation": 16,
+    "quantization": "4bit_nf4_double_quant_bfloat16",
+    "lora_rank": 8,
+    "lora_alpha": 16,
+    "lora_dropout": 0.05
+  },
+  "model_statistics": {
+    "target_module_count": 238,
+    "trainable_parameter_count": 14901248,
+    "total_parameter_count": 2505124208,
+    "trainable_fraction": 0.005948307054961005
+  },
+  "training": {
+    "optimizer_steps": 0,
+    "forward_steps": 1,
+    "mean_tail_loss": 3.8180527687072754,
+    "internal_loss_mean": 2.4437570571899414,
+    "internal_eval_examples": 1,
+    "peak_gpu_memory_mib": 12188.8193359375,
+    "elapsed_seconds": 136.7187875999998
+  },
+  "artifacts": {
+    "adapter_dir": "C:\\Users\\yz542_dntjhas\\Documents\\New project\\wqf7023-medical-rag\\experiments\\v16_adaptation\\qlora_smoke\\adapter",
+    "adapter_config_sha256": "abba74c4ebce1fb6fd73dde953b19afb13459619d65dc26c7159b6ffcf8ee625"
+  },
+  "claim_boundary": "Train/internal loss smoke or development evidence only; no clinical accuracy claim."
+}

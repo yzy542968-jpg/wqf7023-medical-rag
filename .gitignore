@@ -93,6 +93,18 @@ experiments/v14_concept_retrieval/
 # V15 local paired generations and frozen metric caches
 experiments/v15_retrieval_transfer/
 
+# V16 local adaptation rows, metric caches, and learned model assets
+# Aggregate summaries under data/splits/v16 remain publishable when they
+# contain no report text or image pixels.
+experiments/v16_adaptation/**/*.jsonl
+experiments/v16_adaptation/**/*.json
+experiments/v16_adaptation/**/*.csv
+experiments/v16_adaptation/**/*.npz
+experiments/v16_adaptation/**/*.pt
+experiments/v16_adaptation/**/*.safetensors
+experiments/v16_adaptation/**/adapter/
+experiments/v16_adaptation/**/processor/
+
 # V10 local per-query rows, shuffled mappings, generations, and review packages
 experiments/v10_publication/*.json
 experiments/v10_publication/*.jsonl

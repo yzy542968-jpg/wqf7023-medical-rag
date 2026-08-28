@@ -1,0 +1,270 @@
+{
+  "study": "V16 paired row evaluation",
+  "status": "validation_evaluation_complete_no_retuning",
+  "no_test_evaluation": true,
+  "counts": {
+    "cases": 12,
+    "rows_per_arm": 72
+  },
+  "arms": {
+    "qv_impression_route": {
+      "no_history": {
+        "row_count": 24,
+        "case_count": 12,
+        "token_f1": 0.1824754768440884,
+        "answer_only_contract_valid_rate": 1.0,
+        "provenance_valid_rate": 1.0,
+        "token_ceiling_rate": 0.2916666666666667,
+        "mean_input_tokens": 395.8333333333333,
+        "mean_output_tokens": 49.5,
+        "by_question_type": {
+          "findings": {
+            "token_f1": 0.26294004934530407,
+            "token_ceiling_rate": 0.5833333333333334,
+            "rows": 12
+          },
+          "impression": {
+            "token_f1": 0.10201090434287279,
+            "token_ceiling_rate": 0.0,
+            "rows": 12
+          }
+        }
+      },
+      "random_history": {
+        "row_count": 24,
+        "case_count": 12,
+        "token_f1": 0.19119588885087432,
+        "answer_only_contract_valid_rate": 1.0,
+        "provenance_valid_rate": 1.0,
+        "token_ceiling_rate": 0.08333333333333333,
+        "mean_input_tokens": 606.7083333333334,
+        "mean_output_tokens": 39.416666666666664,
+        "by_question_type": {
+          "findings": {
+            "token_f1": 0.26379155983682484,
+            "token_ceiling_rate": 0.16666666666666666,
+            "rows": 12
+          },
+          "impression": {
+            "token_f1": 0.11860021786492375,
+            "token_ceiling_rate": 0.0,
+            "rows": 12
+          }
+        }
+      },
+      "retrieved_history": {
+        "row_count": 24,
+        "case_count": 12,
+        "token_f1": 0.37840676584138183,
+        "answer_only_contract_valid_rate": 1.0,
+        "provenance_valid_rate": 1.0,
+        "token_ceiling_rate": 0.2916666666666667,
+        "mean_input_tokens": 540.2916666666666,
+        "mean_output_tokens": 47.041666666666664,
+        "by_question_type": {
+          "findings": {
+            "token_f1": 0.33281936293711656,
+            "token_ceiling_rate": 0.5833333333333334,
+            "rows": 12
+          },
+          "impression": {
+            "token_f1": 0.423994168745647,
+            "token_ceiling_rate": 0.0,
+            "rows": 12
+          }
+        }
+      }
+    },
+    "base": {
+      "no_history": {
+        "row_count": 24,
+        "case_count": 12,
+        "token_f1": 0.18899040895837604,
+        "answer_only_contract_valid_rate": 1.0,
+        "provenance_valid_rate": 1.0,
+        "token_ceiling_rate": 0.375,
+        "mean_input_tokens": 395.8333333333333,
+        "mean_output_tokens": 66.20833333333333,
+        "by_question_type": {
+          "findings": {
+            "token_f1": 0.26294004934530407,
+            "token_ceiling_rate": 0.5833333333333334,
+            "rows": 12
+          },
+          "impression": {
+            "token_f1": 0.11504076857144807,
+            "token_ceiling_rate": 0.16666666666666666,
+            "rows": 12
+          }
+        }
+      },
+      "random_history": {
+        "row_count": 24,
+        "case_count": 12,
+        "token_f1": 0.18448652914191357,
+        "answer_only_contract_valid_rate": 1.0,
+        "provenance_valid_rate": 1.0,
+        "token_ceiling_rate": 0.125,
+        "mean_input_tokens": 606.7083333333334,
+        "mean_output_tokens": 57.708333333333336,
+        "by_question_type": {
+          "findings": {
+            "token_f1": 0.26379155983682484,
+            "token_ceiling_rate": 0.16666666666666666,
+            "rows": 12
+          },
+          "impression": {
+            "token_f1": 0.10518149844700232,
+            "token_ceiling_rate": 0.08333333333333333,
+            "rows": 12
+          }
+        }
+      },
+      "retrieved_history": {
+        "row_count": 24,
+        "case_count": 12,
+        "token_f1": 0.23990529787983098,
+        "answer_only_contract_valid_rate": 1.0,
+        "provenance_valid_rate": 1.0,
+        "token_ceiling_rate": 0.3333333333333333,
+        "mean_input_tokens": 540.2916666666666,
+        "mean_output_tokens": 65.33333333333333,
+        "by_question_type": {
+          "findings": {
+            "token_f1": 0.33281936293711656,
+            "token_ceiling_rate": 0.5833333333333334,
+            "rows": 12
+          },
+          "impression": {
+            "token_f1": 0.1469912328225454,
+            "token_ceiling_rate": 0.08333333333333333,
+            "rows": 12
+          }
+        }
+      }
+    }
+  },
+  "qv_impression_route_minus_base": {
+    "token_f1": {
+      "no_history": {
+        "case_count": 12,
+        "mean_difference": -0.00651493211428765,
+        "ci_95_low": -0.028800171073755283,
+        "ci_95_high": 0.012044932572939057,
+        "ci_excludes_zero": false,
+        "iterations": 10000,
+        "seed": 1619
+      },
+      "retrieved_history": {
+        "case_count": 12,
+        "mean_difference": 0.1385014679615508,
+        "ci_95_low": 0.05242777035523067,
+        "ci_95_high": 0.23283940287267568,
+        "ci_excludes_zero": true,
+        "iterations": 10000,
+        "seed": 1619
+      },
+      "random_history": {
+        "case_count": 12,
+        "mean_difference": 0.00670935970896071,
+        "ci_95_low": -0.0414818611185959,
+        "ci_95_high": 0.07559263692557126,
+        "ci_excludes_zero": false,
+        "iterations": 10000,
+        "seed": 1619
+      }
+    },
+    "answer_only_contract_valid": {
+      "no_history": {
+        "case_count": 12,
+        "mean_difference": 0.0,
+        "ci_95_low": 0.0,
+        "ci_95_high": 0.0,
+        "ci_excludes_zero": false,
+        "iterations": 10000,
+        "seed": 1719
+      },
+      "retrieved_history": {
+        "case_count": 12,
+        "mean_difference": 0.0,
+        "ci_95_low": 0.0,
+        "ci_95_high": 0.0,
+        "ci_excludes_zero": false,
+        "iterations": 10000,
+        "seed": 1719
+      },
+      "random_history": {
+        "case_count": 12,
+        "mean_difference": 0.0,
+        "ci_95_low": 0.0,
+        "ci_95_high": 0.0,
+        "ci_excludes_zero": false,
+        "iterations": 10000,
+        "seed": 1719
+      }
+    },
+    "evidence_provenance_valid": {
+      "no_history": {
+        "case_count": 12,
+        "mean_difference": 0.0,
+        "ci_95_low": 0.0,
+        "ci_95_high": 0.0,
+        "ci_excludes_zero": false,
+        "iterations": 10000,
+        "seed": 1819
+      },
+      "retrieved_history": {
+        "case_count": 12,
+        "mean_difference": 0.0,
+        "ci_95_low": 0.0,
+        "ci_95_high": 0.0,
+        "ci_excludes_zero": false,
+        "iterations": 10000,
+        "seed": 1819
+      },
+      "random_history": {
+        "case_count": 12,
+        "mean_difference": 0.0,
+        "ci_95_low": 0.0,
+        "ci_95_high": 0.0,
+        "ci_excludes_zero": false,
+        "iterations": 10000,
+        "seed": 1819
+      }
+    },
+    "hit_token_ceiling": {
+      "no_history": {
+        "case_count": 12,
+        "mean_difference": -0.08333333333333333,
+        "ci_95_low": -0.20833333333333334,
+        "ci_95_high": 0.0,
+        "ci_excludes_zero": false,
+        "iterations": 10000,
+        "seed": 1919
+      },
+      "retrieved_history": {
+        "case_count": 12,
+        "mean_difference": -0.041666666666666664,
+        "ci_95_low": -0.125,
+        "ci_95_high": 0.0,
+        "ci_excludes_zero": false,
+        "iterations": 10000,
+        "seed": 1919
+      },
+      "random_history": {
+        "case_count": 12,
+        "mean_difference": -0.041666666666666664,
+        "ci_95_low": -0.125,
+        "ci_95_high": 0.0,
+        "ci_excludes_zero": false,
+        "iterations": 10000,
+        "seed": 1919
+      }
+    }
+  },
+  "runtime": {
+    "bootstrap_iterations": 10000,
+    "bootstrap_seed": 1619
+  },
+  "claim_boundary": "Automated Validation answer-reference consistency only; no diagnosis, clinical correctness, clinical safety, or external validation claim."
+}
