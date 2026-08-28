@@ -1,0 +1,186 @@
+{
+  "study": "V14 concept-aware retrieval development",
+  "status": "stopped_after_calibration",
+  "protocol_commit": "e80531f",
+  "test_loaded_or_evaluated": false,
+  "promotion": {
+    "calibration_combined_minimum": 0.005,
+    "calibration_fact_only_floor": -0.005,
+    "observed_combined_difference": 9.492860461502128e-05,
+    "observed_fact_only_difference": -0.002988735035357445,
+    "promoted_to_validation": false
+  },
+  "features": {
+    "base": 17,
+    "concept": 23,
+    "appended": [
+      "soft_agreement",
+      "soft_positive_recall",
+      "soft_candidate_precision",
+      "soft_cosine",
+      "no_finding_agreement",
+      "query_concept_confidence"
+    ]
+  },
+  "ranker_configuration": {
+    "name": "deeper",
+    "n_estimators": 300,
+    "learning_rate": 0.03,
+    "num_leaves": 31,
+    "min_child_samples": 40,
+    "reg_lambda": 1.0,
+    "random_state": 2026
+  },
+  "oof": {
+    "folds": 5,
+    "seed": 7145,
+    "case_count": 2510,
+    "case_ids_sha256": "f0e7f609e3373bdc7aa1984608d92f594ae80609ec76dd9e55303af7bf57dd6a",
+    "records": [
+      {
+        "fold": 0,
+        "held_out": 543,
+        "cached": true
+      },
+      {
+        "fold": 1,
+        "held_out": 516,
+        "cached": true
+      },
+      {
+        "fold": 2,
+        "held_out": 507,
+        "cached": true
+      },
+      {
+        "fold": 3,
+        "held_out": 529,
+        "cached": true
+      },
+      {
+        "fold": 4,
+        "held_out": 415,
+        "cached": true
+      }
+    ],
+    "cache_sha256": "a659797dd2ccd844d96fe984572aa2f52d94dfeebb69be39e75f736f12e4cc6e"
+  },
+  "rankers": {
+    "base_17": {
+      "best_iteration": 280,
+      "model_sha256": "85c0f8250bc0bd331828b1977ef52a5cd0c28edca02fb18a95eae4c2f6d6d444"
+    },
+    "concept_23": {
+      "best_iteration": 192,
+      "model_sha256": "a3996e104a542f10fac3d6160bab1325cb083df3148af36236085f67345b248a"
+    }
+  },
+  "calibration": {
+    "query_count": 1128,
+    "systems": {
+      "base_17": {
+        "combined_ndcg10": 0.6215727203837813,
+        "label_only_ndcg10": 0.06366258704194008,
+        "fact_only_ndcg10": 0.6131515097550501,
+        "hit1": 0.08776595744680851,
+        "hit5": 0.18262411347517732,
+        "normal_combined_ndcg10": 0.6742000445562891,
+        "abnormal_combined_ndcg10": 0.5920351696364461,
+        "indeterminate_combined_ndcg10": 0.666610721434
+      },
+      "concept_23": {
+        "combined_ndcg10": 0.6216676489883963,
+        "label_only_ndcg10": 0.07434816079123796,
+        "fact_only_ndcg10": 0.6101627747196925,
+        "hit1": 0.08687943262411348,
+        "hit5": 0.18173758865248227,
+        "normal_combined_ndcg10": 0.6728812422609061,
+        "abnormal_combined_ndcg10": 0.5933810025504012,
+        "indeterminate_combined_ndcg10": 0.6532975156006314
+      }
+    },
+    "bootstrap": {
+      "combined_ndcg10": {
+        "difference": 9.492860461502128e-05,
+        "ci95_low": -0.004781151736887434,
+        "ci95_high": 0.0050039380878975385,
+        "case_count": 376
+      },
+      "label_only_ndcg10": {
+        "difference": 0.010685573749297881,
+        "ci95_low": 0.0047368507535269205,
+        "ci95_high": 0.016852955999406057,
+        "case_count": 376
+      },
+      "fact_only_ndcg10": {
+        "difference": -0.002988735035357445,
+        "ci95_low": -0.007995428361475924,
+        "ci95_high": 0.0018902177685812893,
+        "case_count": 376
+      },
+      "hit1": {
+        "difference": -0.0008865248226950359,
+        "ci95_low": -0.01950354609929078,
+        "ci95_high": 0.017730496453900707,
+        "case_count": 376
+      },
+      "hit5": {
+        "difference": -0.0008865248226950323,
+        "ci95_low": -0.019503546099290777,
+        "ci95_high": 0.017730496453900707,
+        "case_count": 376
+      }
+    },
+    "candidate_frame": {
+      "relevant_presence": 0.650709219858156,
+      "relevant_recall": 0.14604798302717337
+    }
+  },
+  "validation": null,
+  "counts": {
+    "source_train": 2510,
+    "historical_bank": 2506,
+    "fit_cases": 1811,
+    "internal_cases": 366,
+    "source_calibration": 383,
+    "calibration_cases": 376,
+    "source_validation": 384,
+    "validation_cases": 0
+  },
+  "eligibility_exclusions": {
+    "train": {
+      "count": 4,
+      "case_ids_sha256": "41bf5953612ee8fa304ee60bf4fed744357122d85ff2f6105d86aeccb2a56692",
+      "reason": "missing successful RadGraph annotation or formal paired case"
+    },
+    "calibration": {
+      "count": 7,
+      "case_ids_sha256": "f3ceab5ce7d6b362ff927ed44427a918e82583b217a826348dedd964ff048eb0",
+      "reason": "missing successful RadGraph annotation or formal paired case"
+    },
+    "validation": {
+      "count": 8,
+      "case_ids_sha256": "1f00c37fa71ad8a6920f252d08f6f6a35f351cf62b848d9e3531fe68558a0ff8",
+      "reason": "missing successful RadGraph annotation or formal paired case"
+    }
+  },
+  "inputs": {
+    "cases_sha256": "56e367190396011d4d67f43e7e733389a8346890bf8729e82fb4326d063bbd68",
+    "radgraph_sha256": "631aa3e11cc52005656ee8a66de3de1ee5d3411a2f271a3c5f8a14de39b51599",
+    "split_sha256": "b4c1b091c3dbff0399d07c8350f4d8d68ce8ce52e0157dcc96f46af8c8baa7b3",
+    "roles_sha256": "de48453b6ec9acad4c1a6f22de07a25a88d3ed6158b0803a5213ce6cf5335669",
+    "embeddings_sha256": "f81f4629a8f6eb10dc6b35d868f719384adb40903e19d165f9fba2039fce8867",
+    "medcpt_sha256": "eb7cbf3b98dc2f5c7f9810abfc45f33c692697a0e511dcaaf32daa03cbaf4177",
+    "v13_checkpoint_sha256": "9cccfe79a451f357cd6e69e21d3661f0317c7917d83f3f0177d71df310916c5f",
+    "chexbert_checkpoint_sha256": "6550703c92d640e1e04d8105a7a185d76ece0f25fcbf033d292785bf22c0fde1",
+    "model_type": "linear"
+  },
+  "artifacts": {
+    "rows": "experiments/v14_concept_retrieval/v14_deeper_retrieval_rows.jsonl",
+    "rows_sha256": "4e4a0b1204dc73ec13c864f7b5576155aa2458721cd46fd140fc94b2663c2fa7",
+    "base_model": "experiments/v14_concept_retrieval/models/deeper/v14_deeper_base_17.txt",
+    "concept_model": "experiments/v14_concept_retrieval/models/deeper/v14_deeper_concept_23.txt"
+  },
+  "runtime_seconds": 338.5750200000002,
+  "claim_boundary": "Train/Calibration/Validation development using automated report-derived relevance and concept proxies; not clinical diagnosis, safety, external validation, physician utility, or patient-level independence."
+}

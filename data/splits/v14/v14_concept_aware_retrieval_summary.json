@@ -1,0 +1,247 @@
+{
+  "study": "V14 concept-aware retrieval development",
+  "status": "validation_evaluated",
+  "protocol_commit": "e80531f",
+  "test_loaded_or_evaluated": false,
+  "promotion": {
+    "calibration_combined_minimum": 0.005,
+    "calibration_fact_only_floor": -0.005,
+    "observed_combined_difference": 0.02316551539074707,
+    "observed_fact_only_difference": 0.015535273655248687,
+    "promoted_to_validation": true
+  },
+  "features": {
+    "base": 17,
+    "concept": 23,
+    "appended": [
+      "soft_agreement",
+      "soft_positive_recall",
+      "soft_candidate_precision",
+      "soft_cosine",
+      "no_finding_agreement",
+      "query_concept_confidence"
+    ]
+  },
+  "oof": {
+    "folds": 5,
+    "seed": 7145,
+    "case_count": 2510,
+    "case_ids_sha256": "f0e7f609e3373bdc7aa1984608d92f594ae80609ec76dd9e55303af7bf57dd6a",
+    "records": [
+      {
+        "fold": 0,
+        "fit": 1967,
+        "held_out": 543,
+        "held_out_case_ids_sha256": "ff614847c5c16f34fad70cf7b0753454d5e6d58a09341336d6c05823303b4814",
+        "cached": false
+      },
+      {
+        "fold": 1,
+        "fit": 1994,
+        "held_out": 516,
+        "held_out_case_ids_sha256": "ec3d140a4e527185ef72de0a99e3122da97aaf7b0592033811896c87452ad165",
+        "cached": false
+      },
+      {
+        "fold": 2,
+        "fit": 2003,
+        "held_out": 507,
+        "held_out_case_ids_sha256": "357269bd2f8001f6f418bb6a2cc8b524c6eab9ab791f02c74ae98d0bed43f2c0",
+        "cached": false
+      },
+      {
+        "fold": 3,
+        "fit": 1981,
+        "held_out": 529,
+        "held_out_case_ids_sha256": "28f36b61303e51d90f1db90e895aed177ce1b3253b99ef02eab4f763c2818990",
+        "cached": false
+      },
+      {
+        "fold": 4,
+        "fit": 2095,
+        "held_out": 415,
+        "held_out_case_ids_sha256": "9ebce23786037d750caf4162ded8cd08e7dbcffc51960a0003d023b8082337f6",
+        "cached": false
+      }
+    ],
+    "cache_sha256": "a659797dd2ccd844d96fe984572aa2f52d94dfeebb69be39e75f736f12e4cc6e"
+  },
+  "rankers": {
+    "base_17": {
+      "best_iteration": 2,
+      "model_sha256": "71d95a2b72bcfa027cf9dc9f9c3b86e604d34aa721fc02a586179b58850bd7d9"
+    },
+    "concept_23": {
+      "best_iteration": 124,
+      "model_sha256": "d8a2adc0ec47831d022ca195d718c7ccc1f23c8ebaf960b10b6c985d68eca36f"
+    }
+  },
+  "calibration": {
+    "query_count": 1128,
+    "systems": {
+      "base_17": {
+        "combined_ndcg10": 0.5981512448172701,
+        "label_only_ndcg10": 0.05911812919449161,
+        "fact_only_ndcg10": 0.5945305551288446,
+        "hit1": 0.05585106382978723,
+        "hit5": 0.15336879432624115,
+        "normal_combined_ndcg10": 0.6527898522564464,
+        "abnormal_combined_ndcg10": 0.568382254264971,
+        "indeterminate_combined_ndcg10": 0.6209795323479833
+      },
+      "concept_23": {
+        "combined_ndcg10": 0.6213167602080172,
+        "label_only_ndcg10": 0.07114019909139441,
+        "fact_only_ndcg10": 0.6100658287840932,
+        "hit1": 0.07890070921985816,
+        "hit5": 0.1870567375886525,
+        "normal_combined_ndcg10": 0.6746891771875336,
+        "abnormal_combined_ndcg10": 0.5923083565489925,
+        "indeterminate_combined_ndcg10": 0.6417300848488339
+      }
+    },
+    "bootstrap": {
+      "combined_ndcg10": {
+        "difference": 0.02316551539074707,
+        "ci95_low": 0.016930277558956666,
+        "ci95_high": 0.029575590924071343,
+        "case_count": 376
+      },
+      "label_only_ndcg10": {
+        "difference": 0.01202206989690281,
+        "ci95_low": 0.00456238206184223,
+        "ci95_high": 0.019706707012650915,
+        "case_count": 376
+      },
+      "fact_only_ndcg10": {
+        "difference": 0.015535273655248687,
+        "ci95_low": 0.009320103611613699,
+        "ci95_high": 0.021999882989254062,
+        "case_count": 376
+      },
+      "hit1": {
+        "difference": 0.02304964539007092,
+        "ci95_low": -1.1810883240693154e-18,
+        "ci95_high": 0.04609929078014184,
+        "case_count": 376
+      },
+      "hit5": {
+        "difference": 0.03368794326241134,
+        "ci95_low": 0.006205673758865248,
+        "ci95_high": 0.061170212765957445,
+        "case_count": 376
+      }
+    },
+    "candidate_frame": {
+      "relevant_presence": 0.650709219858156,
+      "relevant_recall": 0.14604798302717337
+    }
+  },
+  "validation": {
+    "query_count": 1128,
+    "systems": {
+      "base_17": {
+        "combined_ndcg10": 0.5982651383915852,
+        "label_only_ndcg10": 0.056856484444939515,
+        "fact_only_ndcg10": 0.5936067830942988,
+        "hit1": 0.05851063829787234,
+        "hit5": 0.16312056737588654,
+        "normal_combined_ndcg10": 0.6506253183221952,
+        "abnormal_combined_ndcg10": 0.570699788468811,
+        "indeterminate_combined_ndcg10": 0.585600205105474
+      },
+      "concept_23": {
+        "combined_ndcg10": 0.6163450456448261,
+        "label_only_ndcg10": 0.07129660706494653,
+        "fact_only_ndcg10": 0.601893631943171,
+        "hit1": 0.08333333333333333,
+        "hit5": 0.19592198581560283,
+        "normal_combined_ndcg10": 0.6684415795617804,
+        "abnormal_combined_ndcg10": 0.5895103484499661,
+        "indeterminate_combined_ndcg10": 0.588026855444976
+      }
+    },
+    "bootstrap": {
+      "combined_ndcg10": {
+        "difference": 0.018079907253240705,
+        "ci95_low": 0.012203260463509254,
+        "ci95_high": 0.024008162644698263,
+        "case_count": 376
+      },
+      "label_only_ndcg10": {
+        "difference": 0.014440122620007012,
+        "ci95_low": 0.007593406893976272,
+        "ci95_high": 0.021768878266770722,
+        "case_count": 376
+      },
+      "fact_only_ndcg10": {
+        "difference": 0.008286848848872274,
+        "ci95_low": 0.00231689072295398,
+        "ci95_high": 0.014292108637686058,
+        "case_count": 376
+      },
+      "hit1": {
+        "difference": 0.02482269503546099,
+        "ci95_low": 0.0008643617021276776,
+        "ci95_high": 0.04964539007092198,
+        "case_count": 376
+      },
+      "hit5": {
+        "difference": 0.03280141843971631,
+        "ci95_low": 0.004432624113475177,
+        "ci95_high": 0.06028368794326241,
+        "case_count": 376
+      }
+    },
+    "candidate_frame": {
+      "relevant_presence": 0.6409574468085106,
+      "relevant_recall": 0.14966127768424228
+    }
+  },
+  "counts": {
+    "source_train": 2510,
+    "historical_bank": 2506,
+    "fit_cases": 1811,
+    "internal_cases": 366,
+    "source_calibration": 383,
+    "calibration_cases": 376,
+    "source_validation": 384,
+    "validation_cases": 376
+  },
+  "eligibility_exclusions": {
+    "train": {
+      "count": 4,
+      "case_ids_sha256": "41bf5953612ee8fa304ee60bf4fed744357122d85ff2f6105d86aeccb2a56692",
+      "reason": "missing successful RadGraph annotation or formal paired case"
+    },
+    "calibration": {
+      "count": 7,
+      "case_ids_sha256": "f3ceab5ce7d6b362ff927ed44427a918e82583b217a826348dedd964ff048eb0",
+      "reason": "missing successful RadGraph annotation or formal paired case"
+    },
+    "validation": {
+      "count": 8,
+      "case_ids_sha256": "1f00c37fa71ad8a6920f252d08f6f6a35f351cf62b848d9e3531fe68558a0ff8",
+      "reason": "missing successful RadGraph annotation or formal paired case"
+    }
+  },
+  "inputs": {
+    "cases_sha256": "56e367190396011d4d67f43e7e733389a8346890bf8729e82fb4326d063bbd68",
+    "radgraph_sha256": "631aa3e11cc52005656ee8a66de3de1ee5d3411a2f271a3c5f8a14de39b51599",
+    "split_sha256": "b4c1b091c3dbff0399d07c8350f4d8d68ce8ce52e0157dcc96f46af8c8baa7b3",
+    "roles_sha256": "de48453b6ec9acad4c1a6f22de07a25a88d3ed6158b0803a5213ce6cf5335669",
+    "embeddings_sha256": "f81f4629a8f6eb10dc6b35d868f719384adb40903e19d165f9fba2039fce8867",
+    "medcpt_sha256": "eb7cbf3b98dc2f5c7f9810abfc45f33c692697a0e511dcaaf32daa03cbaf4177",
+    "v13_checkpoint_sha256": "9cccfe79a451f357cd6e69e21d3661f0317c7917d83f3f0177d71df310916c5f",
+    "chexbert_checkpoint_sha256": "6550703c92d640e1e04d8105a7a185d76ece0f25fcbf033d292785bf22c0fde1",
+    "model_type": "linear"
+  },
+  "artifacts": {
+    "rows": "experiments/v14_concept_retrieval/v14_retrieval_rows.jsonl",
+    "rows_sha256": "325df933b23a34c20019428cb7d630f0315f325e7ce3012ad93b805355d8f17c",
+    "base_model": "experiments/v14_concept_retrieval/models/v14_base_17.txt",
+    "concept_model": "experiments/v14_concept_retrieval/models/v14_concept_23.txt"
+  },
+  "runtime_seconds": 397.74300290003885,
+  "claim_boundary": "Train/Calibration/Validation development using automated report-derived relevance and concept proxies; not clinical diagnosis, safety, external validation, physician utility, or patient-level independence."
+}
