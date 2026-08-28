@@ -636,10 +636,10 @@ def main() -> None:
             "model_type": model_type,
         },
         "artifacts": {
-            "rows": str(args.rows.relative_to(ROOT).as_posix()),
+            "rows": str(args.rows.resolve().relative_to(ROOT).as_posix()),
             "rows_sha256": file_sha256(args.rows),
-            "base_model": str(base_model_path.relative_to(ROOT).as_posix()),
-            "concept_model": str(concept_model_path.relative_to(ROOT).as_posix()),
+            "base_model": str(base_model_path.resolve().relative_to(ROOT).as_posix()),
+            "concept_model": str(concept_model_path.resolve().relative_to(ROOT).as_posix()),
         },
         "runtime_seconds": time.perf_counter() - started,
         "claim_boundary": (
