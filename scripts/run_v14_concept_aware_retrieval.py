@@ -55,6 +55,22 @@ FACT_WEIGHTS = {
     "polarity": 0.15,
     "uncertainty": 0.10,
 }
+RANKER_CONFIGS = {
+    "default": {
+        "n_estimators": 300,
+        "learning_rate": 0.05,
+        "num_leaves": 15,
+        "min_child_samples": 40,
+        "reg_lambda": 1.0,
+    },
+    "deeper": {
+        "n_estimators": 300,
+        "learning_rate": 0.03,
+        "num_leaves": 31,
+        "min_child_samples": 40,
+        "reg_lambda": 1.0,
+    },
+}
 
 
 def read_json(path: Path) -> dict[str, Any]:
@@ -175,16 +191,15 @@ def fit_ranker(
     x_internal: np.ndarray,
     y_internal: np.ndarray,
     groups_internal: Sequence[int],
+    *,
+    config_name: str,
 ) -> LGBMRanker:
+    config = RANKER_CONFIGS[config_name]
     ranker = LGBMRanker(
         objective="lambdarank",
         metric="ndcg",
         eval_at=[10],
-        n_estimators=300,
-        learning_rate=0.05,
-        num_leaves=15,
-        min_child_samples=40,
-        reg_lambda=1.0,
+        **config,
         random_state=2026,
         verbosity=-1,
     )
@@ -246,6 +261,7 @@ def main() -> None:
     parser.add_argument("--rows", type=Path, default=ROOT / "experiments/v14_concept_retrieval/v14_retrieval_rows.jsonl")
     parser.add_argument("--model-dir", type=Path, default=ROOT / "experiments/v14_concept_retrieval/models")
     parser.add_argument("--device", choices=("cpu", "cuda"), default="cuda")
+    parser.add_argument("--ranker-config", choices=tuple(RANKER_CONFIGS), default="default")
     args = parser.parse_args()
 
     started = time.perf_counter()
@@ -448,7 +464,15 @@ def main() -> None:
         raise RuntimeError("Base and concept fit groups differ")
     if not np.array_equal(y_internal, y_internal_concept) or groups_internal != groups_internal_concept:
         raise RuntimeError("Base and concept internal groups differ")
-    base_ranker = fit_ranker(x_fit_base, y_fit, groups_fit, x_internal_base, y_internal, groups_internal)
+    base_ranker = fit_ranker(
+        x_fit_base,
+        y_fit,
+        groups_fit,
+        x_internal_base,
+        y_internal,
+        groups_internal,
+        config_name=args.ranker_config,
+    )
     concept_ranker = fit_ranker(
         x_fit_concept,
         y_fit_concept,
@@ -456,6 +480,7 @@ def main() -> None:
         x_internal_concept,
         y_internal_concept,
         groups_internal_concept,
+        config_name=args.ranker_config,
     )
 
     def rank(state: dict[str, Any], ranker: LGBMRanker, *, concept: bool) -> list[str]:
@@ -531,8 +556,8 @@ def main() -> None:
         validation_rows, validation_summary = evaluate(validation_states, "validation")
 
     args.model_dir.mkdir(parents=True, exist_ok=True)
-    base_model_path = args.model_dir / "v14_base_17.txt"
-    concept_model_path = args.model_dir / "v14_concept_23.txt"
+    base_model_path = args.model_dir / f"v14_{args.ranker_config}_base_17.txt"
+    concept_model_path = args.model_dir / f"v14_{args.ranker_config}_concept_23.txt"
     base_ranker.booster_.save_model(str(base_model_path))
     concept_ranker.booster_.save_model(str(concept_model_path))
     args.rows.parent.mkdir(parents=True, exist_ok=True)
@@ -556,6 +581,11 @@ def main() -> None:
             "promoted_to_validation": promoted,
         },
         "features": {"base": 17, "concept": 23, "appended": list(FEATURE_NAMES)},
+        "ranker_configuration": {
+            "name": args.ranker_config,
+            **RANKER_CONFIGS[args.ranker_config],
+            "random_state": 2026,
+        },
         "oof": {
             "folds": 5,
             "seed": 7145,
