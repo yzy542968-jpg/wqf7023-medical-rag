@@ -1,0 +1,26 @@
+{
+  "base_question_count": 600,
+  "base_question_strata": {
+    "binary_no": 160,
+    "binary_yes": 160,
+    "fixed_choice": 30,
+    "multi_choice": 180,
+    "single_choice_nonbinary": 70
+  },
+  "boundary": "Train/Calibration pilot only; no Validation or Test access and no guaranteed positive result",
+  "case_count": 477,
+  "embedding_signature": "8e5b69370462df61b75f8aea125441db49f8fb356ea026b442aae71bfaa8b526",
+  "example_count": 1800,
+  "examples_by_condition": {
+    "no_history": 600,
+    "random_history": 600,
+    "relevant_fact_history": 600
+  },
+  "historical_bank_case_count": 2348,
+  "output_local_only": "experiments\\final_qa_development\\final_qa_qlora_pilot_examples.jsonl",
+  "output_sha256": "44ec84dfe9e1b85e47149874de32f56bcaa6846001295d699410ab973b855ff3",
+  "same_cluster_history_count": 0,
+  "status": "train_only_sft_dataset_complete",
+  "study": "Final QA MedGemma QLoRA balanced-history pilot",
+  "target_report_prompt_leakage_count": 0
+}
