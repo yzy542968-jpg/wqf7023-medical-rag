@@ -1,0 +1,57 @@
+{
+  "study": "Final QA MedGemma QLoRA balanced-history pilot",
+  "status": "frozen_before_sft_dataset_and_training",
+  "protocol_commit": "ba5ac18",
+  "seed": 7023,
+  "source_role": "Train only",
+  "base_question_sampling": {
+    "method": "SHA-256 deterministic within prespecified strata",
+    "binary_yes": 160,
+    "binary_no": 160,
+    "single_choice_nonbinary": 70,
+    "multi_choice": 180,
+    "fixed_choice": 30,
+    "total": 600
+  },
+  "conditions_per_question": [
+    "no_history",
+    "random_history",
+    "relevant_fact_history"
+  ],
+  "expected_example_count": 1800,
+  "history": {
+    "bank": "mapped V10 Train cases",
+    "target_duplicate_cluster_excluded": true,
+    "random": "SHA-256 deterministic other-cluster report",
+    "relevant": "Top-3 MedSigLIP image neighbors with at most 6 V11 question-conditioned sentence/RadGraph units",
+    "gold_historical_vectors_visible": false
+  },
+  "supervision": {
+    "target": "compact JSON option-index array",
+    "gold_answer_in_prompt": false,
+    "gold_prior_answer_history_in_prompt": false,
+    "target_report_in_prompt": false
+  },
+  "training": {
+    "base_model": "google/medgemma-1.5-4b-it",
+    "revision": "91850547d9f0b2fdd21aa7c5f4f3d1a8a52c243b",
+    "quantization": "NF4",
+    "lora_target_profile": "qv",
+    "rank": 8,
+    "alpha": 16,
+    "dropout": 0.05,
+    "learning_rate": 0.0002,
+    "gradient_accumulation": 16,
+    "maximum_forward_steps": 192,
+    "internal_case_fraction": 0.1,
+    "maximum_sequence_length": 768
+  },
+  "pilot_evaluation": {
+    "role": "Calibration",
+    "rows": 256,
+    "conditions": ["b3_no_history", "p1_relevant_fact_history"],
+    "comparison": "same rows and parser under frozen base versus adapter",
+    "promotion_rule": "adapter must improve option micro-F1 in both conditions without materially reducing contract validity"
+  },
+  "boundary": "Train/Calibration pilot only; no Validation or Test access and no guaranteed positive result"
+}
