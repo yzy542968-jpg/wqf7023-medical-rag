@@ -1,0 +1,52 @@
+{
+  "study": "Final QA paired report-text RAG Calibration pilot",
+  "status": "frozen_before_rag_generation",
+  "protocol_commit": "ba5ac18",
+  "source_question_selection": "config/final_qa_medgemma_contract_pilot_r1.json",
+  "seed": 7023,
+  "role": "calibration_only",
+  "conditions": [
+    "b3_no_history_r2",
+    "b4_deterministic_random_history",
+    "b6_top1_image_neighbor_whole_report",
+    "p1_top3_image_neighbors_question_conditioned_evidence"
+  ],
+  "retrieval": {
+    "bank": "mapped V10 Train cases with readable reports and RadGraph records",
+    "query": "frozen MedSigLIP target case-image embedding",
+    "same_duplicate_cluster_excluded": true,
+    "random_history": "SHA-256 deterministic other-cluster Train case",
+    "b6_top_k": 1,
+    "p1_top_k": 3
+  },
+  "evidence": {
+    "whole_report_sections": ["findings", "impression"],
+    "p1_selector": "V11 deterministic question planner plus within-case TF-IDF sentence/RadGraph-fact ranking",
+    "maximum_units_per_case": 2,
+    "maximum_total_units": 6,
+    "maximum_characters": 1200,
+    "provenance_fields": ["case_id", "section", "unit_type", "unit_index", "source_sha256"]
+  },
+  "generation": {
+    "model": "google/medgemma-1.5-4b-it",
+    "revision": "91850547d9f0b2fdd21aa7c5f4f3d1a8a52c243b",
+    "quantization": "NF4",
+    "batch_size": 8,
+    "max_new_tokens": 32,
+    "stop_token": "<end_of_turn>",
+    "wrapper_normalizer": "frozen bounded repair from config/final_qa_medgemma_parser_audit.json",
+    "decoding": "greedy"
+  },
+  "selection_outcomes": [
+    "exact_answer_set_accuracy",
+    "option_micro_f1",
+    "answer_type_accuracy",
+    "contract_valid_rate",
+    "negative_transfer_from_b3",
+    "input_tokens",
+    "output_tokens",
+    "elapsed_seconds",
+    "peak_vram_mb"
+  ],
+  "boundary": "Calibration mechanism pilot only; historical reports are other-patient analogies; no Test, clinical-accuracy or external-validation claim"
+}
