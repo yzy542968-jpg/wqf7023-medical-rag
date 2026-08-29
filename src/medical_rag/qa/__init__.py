@@ -16,6 +16,10 @@ from .structured_metrics import (
     structured_qa_metrics,
 )
 from .radrestruct_hierarchy import RadReStructHierarchy
+from .structured_decoding import (
+    decode_answer_probabilities,
+    knn_answer_probabilities,
+)
 
 __all__ = [
     "RadReStructCase",
@@ -30,4 +34,6 @@ __all__ = [
     "stack_answer_vectors",
     "structured_qa_metrics",
     "RadReStructHierarchy",
+    "decode_answer_probabilities",
+    "knn_answer_probabilities",
 ]
