@@ -1,4 +1,4 @@
-"""Build the V12 MedCPT query cache in a clean process."""
+"""Build a V12 MedCPT query cache for a frozen split partition."""
 
 from __future__ import annotations
 
@@ -38,6 +38,7 @@ def main() -> None:
     parser.add_argument("--radgraph", type=Path, default=ROOT / "data/processed/v9_radgraph_modern_xl.jsonl")
     parser.add_argument("--split", type=Path, default=ROOT / "data/splits/v10/v10_cluster_disjoint_split.json")
     parser.add_argument("--output", type=Path, default=ROOT / "experiments/v12_optimization/retrieval/v12_medcpt_query_embeddings.npz")
+    parser.add_argument("--query-partition", choices=("validation", "test"), default="validation")
     parser.add_argument("--device", choices=("cpu", "cuda"), default=None)
     parser.add_argument("--batch-size", type=int, default=32)
     args = parser.parse_args()
@@ -49,11 +50,11 @@ def main() -> None:
     radgraph = read_radgraph_case_records(args.radgraph)
     split = read_json(args.split)
     train_ids = [str(value) for value in split["partitions"]["train"]["case_ids"]]
-    validation_ids = [str(value) for value in split["partitions"]["validation"]["case_ids"]]
-    eligible = {case_id for case_id in train_ids + validation_ids if case_id in formal and radgraph[case_id].status == "ok"}
+    query_ids = [str(value) for value in split["partitions"][args.query_partition]["case_ids"]]
+    eligible = {case_id for case_id in train_ids + query_ids if case_id in formal and radgraph[case_id].status == "ok"}
     train_ids = [case_id for case_id in train_ids if case_id in eligible]
-    validation_ids = [case_id for case_id in validation_ids if case_id in eligible]
-    all_ids = train_ids + validation_ids
+    query_ids = [case_id for case_id in query_ids if case_id in eligible]
+    all_ids = train_ids + query_ids
     query_keys = [f"{case_id}:{question_type}" for case_id in all_ids for question_type in QUESTIONS]
     query_texts = [
         "\n".join(part for part in (formal[case_id].indication, QUESTIONS[question_type]) if part)
@@ -97,7 +98,8 @@ def main() -> None:
         "sha256": file_sha256(args.output),
         "shape": list(embeddings.shape),
         "train_case_count": len(train_ids),
-        "validation_case_count": len(validation_ids),
+        "query_partition": args.query_partition,
+        "query_case_count": len(query_ids),
         "device": device,
         "elapsed_seconds": time.perf_counter() - started,
     }, indent=2), flush=True)

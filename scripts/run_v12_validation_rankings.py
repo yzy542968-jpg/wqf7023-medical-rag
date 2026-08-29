@@ -1,4 +1,4 @@
-"""Evaluate the saved V12 LambdaMART pilot on Validation only."""
+"""Evaluate a saved V12 LambdaMART model on a frozen query partition."""
 
 from __future__ import annotations
 
@@ -77,6 +77,7 @@ def main() -> None:
     parser.add_argument("--query-cache", type=Path, default=ROOT / "experiments/v12_optimization/retrieval/v12_medcpt_query_embeddings.npz")
     parser.add_argument("--checkpoints", type=Path, default=ROOT / "experiments/v10_publication/reranker_checkpoints")
     parser.add_argument("--output", type=Path, default=ROOT / "experiments/v12_optimization/retrieval/v12_validation_rankings.json")
+    parser.add_argument("--query-partition", choices=("validation", "test"), default="validation")
     parser.add_argument("--device", choices=("cpu", "cuda"), default=None)
     args = parser.parse_args()
 
@@ -86,12 +87,12 @@ def main() -> None:
     radgraph = read_radgraph_case_records(args.radgraph)
     split = read_json(args.split)
     train_ids = [str(case_id) for case_id in split["partitions"]["train"]["case_ids"]]
-    validation_ids = [str(case_id) for case_id in split["partitions"]["validation"]["case_ids"]]
-    eligible = {case_id for case_id in train_ids + validation_ids if case_id in formal and radgraph[case_id].status == "ok"}
+    query_ids = [str(case_id) for case_id in split["partitions"][args.query_partition]["case_ids"]]
+    eligible = {case_id for case_id in train_ids + query_ids if case_id in formal and radgraph[case_id].status == "ok"}
     train_ids = [case_id for case_id in train_ids if case_id in eligible]
-    validation_ids = [case_id for case_id in validation_ids if case_id in eligible]
-    facts_by_case = {case_id: tuple(radgraph[case_id].facts) for case_id in train_ids + validation_ids}
-    prepared_by_case = {case_id: prepare_qrel_case(raw_cases[case_id], facts_by_case) for case_id in train_ids + validation_ids}
+    query_ids = [case_id for case_id in query_ids if case_id in eligible]
+    facts_by_case = {case_id: tuple(radgraph[case_id].facts) for case_id in train_ids + query_ids}
+    prepared_by_case = {case_id: prepare_qrel_case(raw_cases[case_id], facts_by_case) for case_id in train_ids + query_ids}
 
     with np.load(args.embeddings, allow_pickle=False) as encoded:
         image_ids = [str(case_id) for case_id in encoded["case_ids"].tolist()]
@@ -106,8 +107,7 @@ def main() -> None:
     medcpt_by_id = {case_id: medcpt_matrix[index] for index, case_id in enumerate(medcpt_ids)}
     train_medcpt = np.stack([medcpt_by_id[case_id] for case_id in train_ids])
 
-    query_ids = validation_ids
-    cache_query_ids = train_ids + validation_ids
+    cache_query_ids = train_ids + query_ids
     query_texts = [
         "\n".join(part for part in (formal[case_id].indication, QUESTIONS[question_type]) if part)
         for case_id in cache_query_ids
@@ -161,7 +161,7 @@ def main() -> None:
     model = lgb.Booster(model_file=str(args.model))
     term_cache: dict[str, tuple[np.ndarray, int]] = {}
     rows: list[dict[str, Any]] = []
-    for position, case_id in enumerate(validation_ids, start=1):
+    for position, case_id in enumerate(query_ids, start=1):
         for question_type in QUESTIONS:
             state = build_retrieval_state(
                 runtime,
@@ -223,7 +223,7 @@ def main() -> None:
             }
             rows.append(row)
         if position % 50 == 0:
-            print(f"validation_rankings={position}/{len(validation_ids)}", flush=True)
+            print(f"{args.query_partition}_rankings={position}/{len(query_ids)}", flush=True)
 
     systems = (
         "r5_full_bank",
@@ -237,16 +237,21 @@ def main() -> None:
     args.output = args.output.resolve()
     rows_path = args.output.with_name(args.output.stem + "_rows.jsonl").resolve()
     summary: dict[str, Any] = {
-        "study": "V12 validation ranking and qrel sensitivity",
-        "status": "validation_only_development",
-        "no_test_evaluation": True,
+        "study": f"V12 {args.query_partition} ranking and qrel sensitivity",
+        "status": (
+            "validation_only_development"
+            if args.query_partition == "validation"
+            else "v16_confirmation_test_ranking_complete_no_retuning"
+        ),
+        "no_test_evaluation": args.query_partition != "test",
         "inputs": {
             "cases_sha256": file_sha256(args.cases),
             "radgraph_sha256": file_sha256(args.radgraph),
             "split_sha256": file_sha256(args.split),
             "model_sha256": file_sha256(args.model),
             "train_case_count": len(train_ids),
-            "validation_case_count": len(validation_ids),
+            "query_partition": args.query_partition,
+            "query_case_count": len(query_ids),
         },
         "metrics": {},
         "bootstrap_vs_r5": {},

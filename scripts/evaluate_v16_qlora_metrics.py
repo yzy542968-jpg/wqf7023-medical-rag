@@ -284,8 +284,8 @@ def run(args: argparse.Namespace) -> None:
 
     output = {
         "study": "V16 paired QLoRA generation metrics",
-        "status": "validation_evaluation_complete_no_retuning",
-        "no_test_evaluation": True,
+        "status": f"{args.evaluation_scope}_evaluation_complete_no_retuning",
+        "no_test_evaluation": args.evaluation_scope != "confirmation",
         "counts": {
             "cases": len({str(row["case_id"]) for row in base}),
             "rows_per_arm": len(base),
@@ -305,7 +305,7 @@ def run(args: argparse.Namespace) -> None:
             "qlora_rows_sha256": file_sha256(args.qlora_rows),
         },
         "claim_boundary": (
-            "Validation-only automated report-reference consistency; CheXbert and "
+            f"{args.evaluation_scope.capitalize()} automated report-reference consistency; CheXbert and "
             "RadGraph are not clinical diagnosis accuracy, safety, physician agreement, "
             "or external validation."
         ),
@@ -329,6 +329,7 @@ def main() -> None:
     parser.add_argument("--cuda", type=int, default=0)
     parser.add_argument("--bootstrap-iterations", type=int, default=10000)
     parser.add_argument("--bootstrap-seed", type=int, default=1620)
+    parser.add_argument("--evaluation-scope", choices=("validation", "confirmation"), default="validation")
     args = parser.parse_args()
     run(args)
 

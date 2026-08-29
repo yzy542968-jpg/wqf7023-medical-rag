@@ -272,6 +272,7 @@ def build_tasks(
     max_new_tokens: int,
     history_top_k: int,
     answer_sentence_limit: int,
+    random_history_domain: str,
 ) -> list[dict[str, Any]]:
     if history_top_k < 1:
         raise ValueError("history_top_k must be positive")
@@ -305,7 +306,7 @@ def build_tasks(
             ][:history_top_k]
             random_ids = stable_rank(
                 eligible_random,
-                "v16-validation-random-history",
+                random_history_domain,
                 str(SELECTION_SEED),
                 case_id,
                 question_type,
@@ -387,6 +388,7 @@ def run(args: argparse.Namespace) -> None:
         max_new_tokens=args.max_new_tokens,
         history_top_k=args.history_top_k,
         answer_sentence_limit=args.answer_sentence_limit,
+        random_history_domain=f"v16-{args.evaluation_scope}-random-history",
     )
     if args.max_cases is not None:
         keep = set(selected_case_ids[: args.max_cases])
@@ -468,9 +470,9 @@ def run(args: argparse.Namespace) -> None:
         raise RuntimeError("V16 generation rows are incomplete or duplicated")
     summary = {
         "study": "V16 QLoRA paired generation pilot",
-        "status": "validation_generation_complete_no_retuning",
+        "status": f"{args.evaluation_scope}_generation_complete_no_retuning",
         "model_arm": arm,
-        "no_test_evaluation": True,
+        "no_test_evaluation": args.evaluation_scope != "confirmation",
         "counts": {
             "cases": len({str(row["case_id"]) for row in rows}),
             "rows": len(rows),
@@ -497,6 +499,8 @@ def run(args: argparse.Namespace) -> None:
             "max_new_tokens": args.max_new_tokens,
             "answer_sentence_limit": args.answer_sentence_limit,
             "selection_seed": SELECTION_SEED,
+            "evaluation_scope": args.evaluation_scope,
+            "random_history_domain": f"v16-{args.evaluation_scope}-random-history",
             "expected_case_count": expected_case_count,
         },
         "runtime": {
@@ -509,7 +513,7 @@ def run(args: argparse.Namespace) -> None:
         },
         "rows_sha256": file_sha256(args.rows_output),
         "claim_boundary": (
-            "Validation-only automated answer-reference consistency; not diagnostic "
+            f"{args.evaluation_scope.capitalize()} automated answer-reference consistency; not diagnostic "
             "accuracy, clinical safety, physician utility, or external validation."
         ),
     }
@@ -533,6 +537,7 @@ def main() -> None:
     parser.add_argument("--batch-size", type=int, default=2)
     parser.add_argument("--history-top-k", type=int, default=HISTORY_TOP_K)
     parser.add_argument("--answer-sentence-limit", type=int, default=2)
+    parser.add_argument("--evaluation-scope", choices=("validation", "confirmation"), default="validation")
     parser.add_argument("--max-cases", type=int, default=None)
     parser.add_argument(
         "--expected-case-count",

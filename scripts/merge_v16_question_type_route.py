@@ -77,6 +77,7 @@ def main() -> None:
         help="Optional condition gate; use the specialist only for this condition.",
     )
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--evaluation-scope", choices=("validation", "confirmation"), default="validation")
     args = parser.parse_args()
 
     fallback = load_rows(args.fallback_rows)
@@ -94,7 +95,8 @@ def main() -> None:
             handle.write(json.dumps(row, ensure_ascii=False, sort_keys=True) + "\n")
 
     summary = {
-        "status": "validation_exploratory_route_created",
+        "status": f"{args.evaluation_scope}_route_created_no_retuning",
+        "evaluation_scope": args.evaluation_scope,
         "fallback_rows": str(args.fallback_rows),
         "specialist_rows": str(args.specialist_rows),
         "specialist_question_type": args.specialist_question_type,
@@ -102,7 +104,9 @@ def main() -> None:
         "row_count": len(routed),
         "specialist_row_count": specialist_count,
         "fallback_row_count": len(routed) - specialist_count,
-        "claim_boundary": "Exploratory validation routing; no test or clinical claim.",
+        "claim_boundary": (
+            f"{args.evaluation_scope.capitalize()} automated routing; no clinical claim."
+        ),
     }
     summary_path = args.output.with_suffix(args.output.suffix + ".summary.json")
     summary_path.write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
