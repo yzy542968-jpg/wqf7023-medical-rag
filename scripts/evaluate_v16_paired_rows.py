@@ -81,6 +81,12 @@ def summarize(rows: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
     return result
 
 
+def select_case_ids(
+    rows: Sequence[Mapping[str, Any]], case_ids: set[str]
+) -> list[Mapping[str, Any]]:
+    return [row for row in rows if str(row["case_id"]) in case_ids]
+
+
 def paired_bootstrap(
     left: Sequence[Mapping[str, Any]],
     right: Sequence[Mapping[str, Any]],
@@ -119,6 +125,12 @@ def run(args: argparse.Namespace) -> None:
     validate(right, args.right_label)
     if {row_key(row) for row in left} != {row_key(row) for row in right}:
         raise RuntimeError("Paired row matrices differ")
+    manifest = read_jsonl(args.manifest) if args.manifest else []
+    spectrum_case_ids: dict[str, set[str]] = defaultdict(set)
+    for row in manifest:
+        spectrum_case_ids[str(row.get("spectrum", "indeterminate"))].add(str(row["case_id"]))
+    if manifest and set().union(*spectrum_case_ids.values()) != {str(row["case_id"]) for row in left}:
+        raise RuntimeError("Manifest cases differ from generation rows")
     metrics = (
         "token_f1",
         "answer_only_contract_valid",
@@ -139,8 +151,8 @@ def run(args: argparse.Namespace) -> None:
         }
     output = {
         "study": "V16 paired row evaluation",
-        "status": "validation_evaluation_complete_no_retuning",
-        "no_test_evaluation": True,
+        "status": f"{args.evaluation_scope}_evaluation_complete_no_retuning",
+        "evaluation_scope": args.evaluation_scope,
         "counts": {
             "cases": len({str(row["case_id"]) for row in left}),
             "rows_per_arm": len(left),
@@ -150,12 +162,35 @@ def run(args: argparse.Namespace) -> None:
             args.right_label: summarize(right),
         },
         f"{args.left_label}_minus_{args.right_label}": comparisons,
+        "spectrum_sensitivity": {
+            spectrum: {
+                "case_count": len(case_ids),
+                "arms": {
+                    args.left_label: summarize(select_case_ids(left, case_ids)),
+                    args.right_label: summarize(select_case_ids(right, case_ids)),
+                },
+                f"{args.left_label}_minus_{args.right_label}": {
+                    metric: {
+                        condition: paired_bootstrap(
+                            [row for row in select_case_ids(left, case_ids) if str(row["condition"]) == condition],
+                            [row for row in select_case_ids(right, case_ids) if str(row["condition"]) == condition],
+                            metric,
+                            iterations=args.bootstrap_iterations,
+                            seed=args.bootstrap_seed + 1000 + spectrum_index * 100 + metric_index * 10 + condition_index,
+                        )
+                        for condition_index, condition in enumerate(("no_history", "retrieved_history", "random_history"))
+                    }
+                    for metric_index, metric in enumerate(metrics)
+                },
+            }
+            for spectrum_index, (spectrum, case_ids) in enumerate(sorted(spectrum_case_ids.items()))
+        },
         "runtime": {
             "bootstrap_iterations": args.bootstrap_iterations,
             "bootstrap_seed": args.bootstrap_seed,
         },
         "claim_boundary": (
-            "Automated Validation answer-reference consistency only; no diagnosis, "
+            f"Automated {args.evaluation_scope} answer-reference consistency only; no diagnosis, "
             "clinical correctness, clinical safety, or external validation claim."
         ),
     }
@@ -171,6 +206,8 @@ def main() -> None:
     parser.add_argument("--left-label", default="left")
     parser.add_argument("--right-label", default="right")
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--manifest", type=Path)
+    parser.add_argument("--evaluation-scope", choices=("validation", "confirmation"), default="validation")
     parser.add_argument("--bootstrap-iterations", type=int, default=10000)
     parser.add_argument("--bootstrap-seed", type=int, default=1619)
     run(parser.parse_args())
