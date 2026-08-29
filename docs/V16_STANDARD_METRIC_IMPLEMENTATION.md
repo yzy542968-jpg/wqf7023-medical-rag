@@ -17,6 +17,11 @@ The following exact local packages are used:
 - `bert-score==0.3.13` with `roberta-large`, baseline rescaling enabled, and
   the package-reported model hash retained in the result JSON.
 
+The single local `roberta-large/model.safetensors` evaluation weight has
+SHA-256 `047c85f0b96269cd62e6f732644f067004eebd95af5b5d35965ae2528f13bf38`.
+The cache is machine-local and excluded from Git; its identity is public here
+and will also be written into the final metric summary.
+
 The local machine does not provide a Java runtime. The Java-backed COCO METEOR
 implementation is therefore not used or silently approximated. NLTK METEOR is
 reported by name and version so that it is not conflated with values produced
