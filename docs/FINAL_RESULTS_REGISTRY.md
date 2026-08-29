@@ -1,6 +1,6 @@
 # Final Results Registry
 
-Generated from locked artifacts and development summaries on 2026-08-26.
+Generated from locked artifacts and development summaries on 2026-08-29.
 
 ## Dataset
 
@@ -109,10 +109,43 @@ Interpretation: correctly aligned images improved report-derived similar-case re
 
 Interpretation: V11 supports efficiency, auditability and planner wording robustness. Both primary 48-case quality intervals cross zero, so V11 does not claim confirmed generation superiority. It did not instantiate a confirmation cohort and did not modify V10.
 
+## V12 Retrieval Method, Confirmed in V16
+
+| Measure | Frozen value |
+|---|---:|
+| Test queries / Train historical cases | 568 / 2,506 |
+| V10 R5 combined-qrel nDCG@10 | 0.55313 |
+| V12 RRF Top-200 plus LambdaMART nDCG@10 | **0.61590** |
+| V12 minus R5, 95% CI | **+0.06277 [0.05460, 0.07082]** |
+| Label-only V12 minus R5, 95% CI | +0.03928 [0.02450, 0.05443] |
+| Fact-only V12 minus R5, 95% CI | +0.01326 [0.00405, 0.02243] |
+
+Interpretation: the Validation-selected multi-source candidate frame plus learned reranking transferred to the existing cluster-disjoint Test partition under three automated qrel definitions. Candidate RRF alone and full-bank LambdaMART were negative controls. The result concerns automated report-derived relevance, not physician-rated clinical similarity.
+
+## V16 Final Integrated Generation Study
+
+| Measure | Frozen value |
+|---|---:|
+| Confirmation cases / rows per arm | 568 / 3,408 |
+| Base retrieved-history Token-F1 | 0.20570 |
+| Impression-gated QLoRA route Token-F1 | **0.25591** |
+| Route minus base, 95% CI | **+0.05020 [0.03973, 0.06108]** |
+| No-history / random-history Token-F1 | 0.16922 / 0.19608 |
+| Route RadGraph complete F1 | **0.14251** |
+| RadGraph complete difference, 95% CI | **+0.02687 [0.01833, 0.03562]** |
+| CheXbert micro-F1 difference, 95% CI | -0.00545 [-0.01389, 0.00276] |
+| CheXbert reference-positive recall difference, 95% CI | **-0.01081 [-0.02021, -0.00170]** |
+| Base / routed token-ceiling rate | 0.87852 / **0.56602** |
+| Contract / provenance validity | 100% / 100% |
+| Empty Findings-reference rows / affected cases | 243 / 81 |
+| Non-empty-reference route minus base, 95% CI | +0.04571 [0.03371, 0.05763] |
+
+All six prespecified standard NLG metric intervals favored the V16 route in the retrieved-history condition. The routed method also exceeded no history and random history. CheXbert remained mixed, including a small supported decline in reference-positive recall; this negative secondary result is retained. A post-run protocol audit found 81 cases with empty Findings references. The frozen primary denominator was retained, and a non-empty-reference sensitivity remained positive. Interpretation is limited to automated same-source report-reference consistency and structured fact overlap.
+
 ## Final Evidence Boundary
 
 - Independent radiologist review: Future Work; no scores are reported.
 - Authorized external patient-level validation: Future Work; the MIMIC-CXR adapter/runbook exists, but the multi-terabyte source was not downloaded and no result is claimed.
 - Retrieval confidence: report-derived research signal, not diagnostic confidence.
-- OpenI patient separation: supported by the source design of no more than one study per patient, but not independently re-verified from released identifiers.
+- OpenI patient separation: case-ID and duplicate-cluster disjointness were verified, but identifier-based patient independence could not be verified from the processed release and is not claimed.
 - Clinical safety, treatment utility and deployment performance: outside the completed evidence.

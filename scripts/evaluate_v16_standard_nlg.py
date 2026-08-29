@@ -155,6 +155,14 @@ def run(args: argparse.Namespace) -> None:
         validate(rows, label)
     if {row_key(row) for row in arms[args.left_label]} != {row_key(row) for row in arms[args.right_label]}:
         raise RuntimeError("Paired generation matrices differ")
+    left_by_key = {row_key(row): row for row in arms[args.left_label]}
+    right_by_key = {row_key(row): row for row in arms[args.right_label]}
+    if any(
+        str(left_by_key[key].get("reference_answer") or "")
+        != str(right_by_key[key].get("reference_answer") or "")
+        for key in left_by_key
+    ):
+        raise RuntimeError("Paired generation references differ")
 
     row_scores: dict[str, dict[tuple[str, str, str], dict[str, float]]] = {}
     summaries: dict[str, Any] = {}
@@ -242,6 +250,29 @@ def run(args: argparse.Namespace) -> None:
         "study": "V16 standard NLG confirmation evaluation",
         "status": "confirmation_evaluation_no_retuning",
         "counts": {"cases": len({key[0] for key in row_scores[args.left_label]}), "rows_per_arm": len(arms[args.left_label])},
+        "reference_completeness": {
+            "nonempty_reference_rows": sum(
+                bool(str(row.get("reference_answer") or "").strip())
+                for row in arms[args.left_label]
+            ),
+            "empty_reference_rows": sum(
+                not str(row.get("reference_answer") or "").strip()
+                for row in arms[args.left_label]
+            ),
+            "affected_case_count": len({
+                str(row["case_id"])
+                for row in arms[args.left_label]
+                if not str(row.get("reference_answer") or "").strip()
+            }),
+            "empty_by_question_type": {
+                question_type: sum(
+                    str(row["question_type"]) == question_type
+                    and not str(row.get("reference_answer") or "").strip()
+                    for row in arms[args.left_label]
+                )
+                for question_type in QUESTION_TYPES
+            },
+        },
         "arms": summaries,
         f"{args.left_label}_minus_{args.right_label}": comparisons,
         "implementation": {

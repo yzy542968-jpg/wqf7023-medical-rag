@@ -24,6 +24,7 @@ def write_rows(path: Path, offset: float) -> None:
                     "hit_token_ceiling": 0.0,
                     "input_tokens": 10,
                     "output_tokens": 5,
+                    "reference_answer": "" if case_id == "CXR1" and question_type == "findings" else "reference",
                 })
     path.write_text("".join(json.dumps(row) + "\n" for row in rows), encoding="utf-8")
 
@@ -62,3 +63,6 @@ def test_confirmation_scope_and_spectrum_manifest(tmp_path: Path) -> None:
     assert summary["evaluation_scope"] == "confirmation"
     assert summary["spectrum_sensitivity"]["normal"]["case_count"] == 1
     assert summary["route_minus_base"]["token_f1"]["retrieved_history"]["mean_difference"] > 0
+    assert summary["reference_completeness"]["empty_reference_rows"] == 3
+    assert summary["reference_completeness"]["affected_case_count"] == 1
+    assert summary["nonempty_reference_sensitivity"]["route_minus_base"]["retrieved_history"]["mean_difference"] > 0

@@ -13,6 +13,12 @@ The target report is hidden from the system and used only as an automated
 reference. These results do **not** establish diagnostic accuracy, physician
 agreement, clinical safety, or external validity.
 
+The post-run freeze audit found a protocol-implementation deviation: 81 cases
+had empty Findings references, yielding 243 empty-reference rows per arm across
+the three evidence conditions. The frozen 568-case primary denominator is
+retained. A post-hoc non-empty-reference sensitivity is reported below and in
+`V16_PROTOCOL_DEVIATION_REFERENCE_COMPLETENESS.md`.
+
 ## Frozen generation matrix
 
 Each of 568 cases contributes two question types (`findings` and `impression`)
@@ -72,10 +78,20 @@ the V16 route and have case-grouped 95% confidence intervals above zero.
 | CIDEr | 0.07902 | **0.31849** | **+0.23947** | [+0.17606, +0.30897] |
 | BERTScore F1, baseline-rescaled | -0.13898 | **-0.08802** | **+0.05096** | [+0.04179, +0.06020] |
 
-Negative absolute BERTScore values are possible after baseline rescaling. Empty
-reference sections were retained rather than deleted, and BERTScore assigned raw
-zero scores to those rows as documented by its implementation. The paired
-difference, not the absolute sign, is the relevant comparison.
+Negative absolute BERTScore values are possible after baseline rescaling. The
+243 empty Findings-reference rows were retained rather than deleted, and
+BERTScore assigned raw zero scores to them as documented by its implementation.
+The paired difference, not the absolute sign, is the relevant comparison.
+
+## Reference-completeness sensitivity
+
+Across each 3,408-row arm, 3,165 rows have non-empty references. The 243 empty
+rows correspond to Findings for the same 81 cases under all three history
+conditions; every Impression reference is non-empty. When only empty-reference
+rows are excluded, retrieved-history Token-F1 row means are 0.22150 for base and
+0.27555 for the route. The case-grouped paired difference remains positive at
+**+0.04571**, 95% CI **[+0.03371, +0.05763]**. This is a post-hoc sensitivity,
+not a replacement primary analysis.
 
 ## Clinical-structure metrics
 
@@ -149,9 +165,9 @@ external-dataset generalization remain unverified.
 | Base generation rows | `9f026288281174ceb9ec59a219cd08f8a2841edbb6d0baef015884f2c345fb6f` |
 | QLoRA generation rows | `177a7358ea95b52a32d4ada2f47bd53bf90288c2d7543a8ce0f8f37b8b039ddb3` |
 | Impression-gated generation rows | `e9871a21abc381797af7dc0649a0d29c017ab9da7a7b14ef2ee93c36d56b35ce8` |
-| Paired primary evaluation JSON | `e7eb6123f19507f8dfcd51fa8440faf0cc3b58fdec1590161a768204f4b83cab` |
+| Paired primary evaluation JSON with completeness audit | `7a8ba6f03ad514ae3d4e66476cb293ea2439a01a4418875aae02363c33e8425e` |
 | Clinical-metric evaluation JSON | `95461571c2e5ddb3961d7bc91611673c89cd1b10a30ddd598c40ca8284acd462` |
-| Standard-NLG evaluation JSON | `8bd79651c49d75d8f6ab7490ca116c28dbe56bba42f099d446ff4b6855aaffa1` |
+| Standard-NLG evaluation JSON with completeness audit | `10f539a36f6c9459537395e798cfddf1be961d52e4ac9276a6d913604479d826` |
 | BERTScore `roberta-large` weights | `047c85f0b96269cd62e6f732644f067004eebd95af5b5d35965ae2528f13bf38` |
 | BERTScore rescaling baseline | `08e2248310d0c25d8e22ef65e0a6be15060269f1a9084e560c258f09a9e122ae` |
 

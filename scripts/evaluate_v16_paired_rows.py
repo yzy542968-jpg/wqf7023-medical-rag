@@ -87,6 +87,28 @@ def select_case_ids(
     return [row for row in rows if str(row["case_id"]) in case_ids]
 
 
+def has_reference(row: Mapping[str, Any]) -> bool:
+    return bool(str(row.get("reference_answer") or "").strip())
+
+
+def reference_completeness(rows: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
+    empty = [row for row in rows if not has_reference(row)]
+    return {
+        "rows": len(rows),
+        "nonempty_reference_rows": len(rows) - len(empty),
+        "empty_reference_rows": len(empty),
+        "affected_case_count": len({str(row["case_id"]) for row in empty}),
+        "empty_by_question_type": {
+            question_type: sum(str(row["question_type"]) == question_type for row in empty)
+            for question_type in ("findings", "impression")
+        },
+        "empty_by_condition": {
+            condition: sum(str(row["condition"]) == condition for row in empty)
+            for condition in ("no_history", "retrieved_history", "random_history")
+        },
+    }
+
+
 def paired_bootstrap(
     left: Sequence[Mapping[str, Any]],
     right: Sequence[Mapping[str, Any]],
@@ -125,6 +147,10 @@ def run(args: argparse.Namespace) -> None:
     validate(right, args.right_label)
     if {row_key(row) for row in left} != {row_key(row) for row in right}:
         raise RuntimeError("Paired row matrices differ")
+    for key, left_row in {row_key(row): row for row in left}.items():
+        right_row = {row_key(row): row for row in right}[key]
+        if str(left_row.get("reference_answer") or "") != str(right_row.get("reference_answer") or ""):
+            raise RuntimeError(f"Paired references differ for {key}")
     manifest = read_jsonl(args.manifest) if args.manifest else []
     spectrum_case_ids: dict[str, set[str]] = defaultdict(set)
     for row in manifest:
@@ -157,11 +183,30 @@ def run(args: argparse.Namespace) -> None:
             "cases": len({str(row["case_id"]) for row in left}),
             "rows_per_arm": len(left),
         },
+        "reference_completeness": reference_completeness(left),
         "arms": {
             args.left_label: summarize(left),
             args.right_label: summarize(right),
         },
         f"{args.left_label}_minus_{args.right_label}": comparisons,
+        "nonempty_reference_sensitivity": {
+            "status": "posthoc_protocol_deviation_sensitivity",
+            "policy": "Retain the frozen 568-case primary analysis; exclude only empty-reference rows for this sensitivity.",
+            "arms": {
+                args.left_label: summarize([row for row in left if has_reference(row)]),
+                args.right_label: summarize([row for row in right if has_reference(row)]),
+            },
+            f"{args.left_label}_minus_{args.right_label}": {
+                condition: paired_bootstrap(
+                    [row for row in left if str(row["condition"]) == condition and has_reference(row)],
+                    [row for row in right if str(row["condition"]) == condition and has_reference(row)],
+                    "token_f1",
+                    iterations=args.bootstrap_iterations,
+                    seed=args.bootstrap_seed + 500 + condition_index,
+                )
+                for condition_index, condition in enumerate(("no_history", "retrieved_history", "random_history"))
+            },
+        },
         "spectrum_sensitivity": {
             spectrum: {
                 "case_count": len(case_ids),
