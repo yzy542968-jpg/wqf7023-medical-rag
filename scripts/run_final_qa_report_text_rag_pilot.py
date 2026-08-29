@@ -181,13 +181,36 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
 
     existing = _existing_rows(args.rows_output)
     generator = MedGemmaImageGenerator(cache_dir=args.cache_dir, local_files_only=True)
+    arm = "base"
+    if args.adapter_dir is not None:
+        from peft import PeftModel
+
+        adapter_config = args.adapter_dir / "adapter_config.json"
+        if not adapter_config.is_file():
+            raise FileNotFoundError(adapter_config)
+        generator.model = PeftModel.from_pretrained(
+            generator.model,
+            str(args.adapter_dir),
+            is_trainable=False,
+        )
+        generator.model.eval()
+        arm = "qlora"
+    active_conditions = list(args.conditions or config["conditions"])
+    unknown = sorted(set(active_conditions) - set(config["conditions"]))
+    if unknown:
+        raise ValueError(f"Unknown RAG pilot conditions: {unknown}")
+
+    def result_key(condition: str, row: dict[str, Any]) -> str:
+        base_key = f"{condition}|{row['case_id']}|{row['question_index']}"
+        return base_key if arm == "base" else f"{arm}|{base_key}"
+
     torch.cuda.reset_peak_memory_stats()
     started = time.perf_counter()
-    for condition in config["conditions"]:
+    for condition in active_conditions:
         pending = [
             row
             for row in selected
-            if f"{condition}|{row['case_id']}|{row['question_index']}" not in existing
+            if result_key(condition, row) not in existing
         ]
         for offset in range(0, len(pending), int(config["generation"]["batch_size"])):
             batch = pending[offset : offset + int(config["generation"]["batch_size"])]
@@ -226,9 +249,10 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
                     for index, option in enumerate(row["options"])
                     if option in set(row["gold_answers"])
                 ]
-                run_key = f"{condition}|{row['case_id']}|{row['question_index']}"
+                run_key = result_key(condition, row)
                 record = {
                     "run_key": run_key,
+                    "model_arm": arm,
                     "condition": condition,
                     "case_id": row["case_id"],
                     "question_index": row["question_index"],
@@ -252,12 +276,12 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
 
     elapsed = time.perf_counter() - started
     expected_keys = {
-        f"{condition}|{row['case_id']}|{row['question_index']}"
-        for condition in config["conditions"]
+        result_key(condition, row)
+        for condition in active_conditions
         for row in selected
     }
     rows = [existing[key] for key in sorted(expected_keys)]
-    if len(rows) != len(selected) * len(config["conditions"]):
+    if len(rows) != len(selected) * len(active_conditions):
         raise RuntimeError("RAG pilot rows are incomplete")
     conditions = {
         condition: {
@@ -269,14 +293,14 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
                 np.mean([row["provenance_complete"] for row in rows if row["condition"] == condition])
             ),
         }
-        for condition in config["conditions"]
+        for condition in active_conditions
     }
     baseline = {
         (row["case_id"], row["question_index"]): set(row["predicted_indices"]) == set(row["gold_indices"])
         for row in rows
         if row["condition"] == "b3_no_history_r2"
     }
-    for condition in config["conditions"]:
+    for condition in active_conditions:
         if condition == "b3_no_history_r2":
             conditions[condition]["negative_transfer_from_b3"] = 0.0
             continue
@@ -293,6 +317,8 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     summary = {
         "study": config["study"],
         "status": "calibration_rag_pilot_complete_no_validation_no_test",
+        "model_arm": arm,
+        "adapter_dir": str(args.adapter_dir.resolve()) if args.adapter_dir is not None else None,
         "config": "config/final_qa_report_text_rag_pilot.json",
         "embedding_signature": embedding_signature,
         "selected_row_count": len(selected),
@@ -320,6 +346,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--radgraph", type=Path, default=ROOT / "data/processed/v9_radgraph_modern_xl.jsonl")
     parser.add_argument("--image-root", type=Path, default=ROOT / "data/raw/openi_official_images")
     parser.add_argument("--cache-dir", type=Path, default=ROOT / ".hf_cache")
+    parser.add_argument("--adapter-dir", type=Path, default=None)
+    parser.add_argument("--conditions", nargs="+", default=None)
     parser.add_argument("--rows-output", type=Path, default=ROOT / "experiments/final_qa_development/report_text_rag_pilot_rows.jsonl")
     parser.add_argument("--summary-output", type=Path, default=ROOT / "experiments/final_qa_development/report_text_rag_pilot_summary.json")
     return parser.parse_args()
