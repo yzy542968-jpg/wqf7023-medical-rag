@@ -367,7 +367,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         "status": "calibration_rag_pilot_complete_no_validation_no_test",
         "model_arm": arm,
         "adapter_dir": str(args.adapter_dir.resolve()) if args.adapter_dir is not None else None,
-        "config": "config/final_qa_report_text_rag_pilot.json",
+        "config": str(args.config.resolve().relative_to(ROOT)),
         "embedding_signature": embedding_signature,
         "selected_row_count": len(selected),
         "historical_bank_case_count": len(bank_case_ids),

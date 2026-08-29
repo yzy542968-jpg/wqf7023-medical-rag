@@ -1,0 +1,52 @@
+{
+  "adapter_dir": "C:\\Users\\yz542_dntjhas\\Documents\\New project\\wqf7023-medical-rag\\experiments\\final_qa_development\\final_qa_qlora_384\\adapter",
+  "boundary": "Calibration retrieval-policy development only; no Validation, Test, clinical-accuracy, or external-validation claim",
+  "conditions": {
+    "b3_no_history_r2": {
+      "contract_valid_rate": 1.0,
+      "exact_answer_set_accuracy": 0.73046875,
+      "fixed_choice_accuracy": 1.0,
+      "mean_evidence_units": 0.0,
+      "mean_input_tokens": 417.5703125,
+      "mean_output_tokens": 4.375,
+      "multi_choice_exact_accuracy": 0.328125,
+      "negative_transfer_from_b3": 0.0,
+      "option_micro_f1": 0.7323420074349443,
+      "provenance_complete_rate": 1.0,
+      "row_count": 256,
+      "single_choice_accuracy": 0.8609625668449198
+    },
+    "p1_v12_lambdamart_top3_question_conditioned_evidence": {
+      "baseline_correct_denominator": 187,
+      "contract_valid_rate": 1.0,
+      "exact_answer_set_accuracy": 0.73828125,
+      "fixed_choice_accuracy": 1.0,
+      "mean_evidence_units": 6.0,
+      "mean_input_tokens": 554.0625,
+      "mean_output_tokens": 4.9375,
+      "multi_choice_exact_accuracy": 0.328125,
+      "negative_transfer_count": 9,
+      "negative_transfer_from_b3": 0.0481283422459893,
+      "option_micro_f1": 0.7352941176470589,
+      "provenance_complete_rate": 1.0,
+      "row_count": 256,
+      "single_choice_accuracy": 0.8716577540106952
+    }
+  },
+  "config": "config\\final_qa_v12_history_calibration.json",
+  "elapsed_seconds_this_invocation": 0.0002623000182211399,
+  "embedding_signature": "8e5b69370462df61b75f8aea125441db49f8fb356ea026b442aae71bfaa8b526",
+  "historical_bank_case_count": 2348,
+  "model_arm": "qlora",
+  "peak_vram_mb_this_invocation": 3093.61572265625,
+  "rows_output_local_only": "experiments\\final_qa_development\\final_qa_qlora_384_calibration_rows.jsonl",
+  "selected_row_count": 256,
+  "status": "calibration_rag_pilot_complete_no_validation_no_test",
+  "study": "Final QA V12 LambdaMART history Calibration pilot",
+  "v12_ranking_coverage": {
+    "image_only_fallback_target_count": 2,
+    "image_only_fallback_target_ids_sha256": "ca6cc1c41d2a8f5dc3d084f18900ca2b9c2947285a0ddde754fd07cae6bdec7f",
+    "requested": true,
+    "target_count": 164
+  }
+}
