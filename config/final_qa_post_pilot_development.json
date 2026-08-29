@@ -1,0 +1,32 @@
+{
+  "study": "Final QA post-pilot Calibration development",
+  "status": "frozen_before_extended_training_and_v12_calibration_rankings",
+  "seed": 7023,
+  "roles": {
+    "parameter_fitting": "Train only",
+    "selection": "Calibration only",
+    "validation_access": false,
+    "test_access": false
+  },
+  "adapter_duration": {
+    "candidates_forward_steps": [192, 384, 576],
+    "sequential": true,
+    "minimum_mean_micro_f1_gain": 0.01,
+    "maximum_per_condition_micro_f1_decrease": 0.005,
+    "maximum_contract_validity_decrease": 0.01,
+    "tie_break": "shorter_adapter"
+  },
+  "retrieval_candidate": {
+    "baseline": "MedSigLIP image-only Top-3 plus question-conditioned facts",
+    "candidate": "frozen V12 LambdaMART findings-view Top-3 plus the same question-conditioned facts",
+    "historical_bank": "V10 Train",
+    "selection_role": "V10 Calibration mapped to Rad-ReStruct",
+    "target_report_visible": false,
+    "advancement": {
+      "option_micro_f1": "strictly_higher",
+      "maximum_contract_validity_decrease": 0.01,
+      "negative_transfer": "must_not_increase"
+    }
+  },
+  "boundary": "Calibration development only; no Validation, Test, clinical accuracy, patient independence, or external validation claim"
+}
