@@ -21,6 +21,7 @@ from .structured_decoding import (
     knn_answer_probabilities,
 )
 from .question_vectorizer import RadReStructQuestionVectorizer
+from .medgemma_contract import build_compact_qa_prompt, parse_option_indices
 
 __all__ = [
     "RadReStructCase",
@@ -38,4 +39,6 @@ __all__ = [
     "decode_answer_probabilities",
     "knn_answer_probabilities",
     "RadReStructQuestionVectorizer",
+    "build_compact_qa_prompt",
+    "parse_option_indices",
 ]
