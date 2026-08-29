@@ -1,0 +1,48 @@
+{
+  "study": "Final QA MedGemma compact-answer contract pilot",
+  "status": "frozen_before_pilot_generation",
+  "protocol_commit": "ba5ac18",
+  "seed": 7023,
+  "role": "calibration_only",
+  "conditions": [
+    "b1_question_options_only",
+    "b3_target_image_indication_question_no_history"
+  ],
+  "sampling": {
+    "method": "SHA-256 domain-separated deterministic stratification",
+    "domain": "final-qa-medgemma-contract-pilot",
+    "single_choice": 176,
+    "multi_choice": 64,
+    "fixed_choice": 16,
+    "total": 256
+  },
+  "model": {
+    "id": "google/medgemma-1.5-4b-it",
+    "revision": "91850547d9f0b2fdd21aa7c5f4f3d1a8a52c243b",
+    "quantization": "NF4",
+    "decoding": "greedy",
+    "batch_size": 8,
+    "max_new_tokens": 16,
+    "local_files_only": true
+  },
+  "answer_contract": {
+    "format": "JSON array of zero-based option indices only",
+    "example": "[0,2]",
+    "invalid_output": "empty prediction retained as contract failure",
+    "gold_history_visible": false,
+    "target_report_visible": false
+  },
+  "outcomes": [
+    "exact_answer_set_accuracy",
+    "option_micro_f1",
+    "single_choice_accuracy",
+    "multi_choice_exact_accuracy",
+    "fixed_choice_accuracy",
+    "contract_valid_rate",
+    "mean_input_tokens",
+    "mean_output_tokens",
+    "elapsed_seconds",
+    "peak_vram_mb"
+  ],
+  "boundary": "format and signal preflight only; no Test access and no confirmatory claim"
+}
