@@ -1,0 +1,34 @@
+{
+  "boundary": "format and signal preflight only; no Test access and no confirmatory claim",
+  "conditions": {
+    "b1_question_options_only": {
+      "contract_valid_rate": 0.0,
+      "exact_answer_set_accuracy": 0.0,
+      "fixed_choice_accuracy": 0.0,
+      "mean_input_tokens": 151.890625,
+      "mean_output_tokens": 14.34375,
+      "multi_choice_exact_accuracy": 0.0,
+      "option_micro_f1": 0.0,
+      "row_count": 256,
+      "single_choice_accuracy": 0.0
+    },
+    "b3_target_image_indication_question_no_history": {
+      "contract_valid_rate": 0.0,
+      "exact_answer_set_accuracy": 0.0,
+      "fixed_choice_accuracy": 0.0,
+      "mean_input_tokens": 417.5703125,
+      "mean_output_tokens": 6.15625,
+      "multi_choice_exact_accuracy": 0.0,
+      "option_micro_f1": 0.0,
+      "row_count": 256,
+      "single_choice_accuracy": 0.0
+    }
+  },
+  "config": "config/final_qa_medgemma_contract_pilot_r1.json",
+  "elapsed_seconds_this_invocation": 188.1823052999971,
+  "peak_vram_mb_this_invocation": 4031.4091796875,
+  "rows_output_local_only": "experiments\\final_qa_development\\medgemma_contract_pilot_rows.jsonl",
+  "selected_row_count": 256,
+  "status": "calibration_contract_pilot_complete_no_test",
+  "study": "Final QA MedGemma compact-answer contract pilot revision 1"
+}
