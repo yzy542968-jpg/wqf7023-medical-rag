@@ -1,0 +1,16 @@
+{
+  "study": "Final QA selective history Calibration gate",
+  "status": "frozen_before_score_outcome_join",
+  "role": "Calibration only",
+  "score": "MedSigLIP Top-1 eligible historical-case image cosine",
+  "quantile_grid": [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9],
+  "high_confidence_action": "use B6 Top-1 image-neighbour whole-report answer",
+  "low_confidence_action": "use B3 no-history answer",
+  "selection_metric": "option_micro_f1",
+  "tie_break": "lower_threshold_higher_coverage",
+  "advancement": {
+    "minimum_micro_f1_gain_over_ungated_b6": 0.005,
+    "negative_transfer_must_not_increase": true
+  },
+  "boundary": "Calibration development only; no Validation, Test, clinical-accuracy, patient-independence, or external-validation claim"
+}
