@@ -250,7 +250,7 @@ def add_cover(doc: Document) -> None:
     p = doc.add_paragraph()
     p.alignment = WD_ALIGN_PARAGRAPH.CENTER
     p.paragraph_format.space_after = Pt(36)
-    r = p.add_run("Final V10 Primary Study with V11 Development Extension")
+    r = p.add_run("Final Integrated V16 Study with V10 Methodological Foundation")
     apply_font(r, size=14, italic=True, color=MUTED)
 
     for label, value in (
@@ -280,12 +280,12 @@ def add_cover(doc: Document) -> None:
         ("Abstract", 3),
         ("Chapter 1: Introduction", 5),
         ("Chapter 2: Literature Review", 10),
-        ("Chapter 3: Methodology", 18),
-        ("Chapter 4: Results", 24),
-        ("Chapter 5: Discussion", 29),
-        ("Chapter 6: Conclusion", 33),
-        ("References", 35),
-        ("Appendices", 37),
+        ("Chapter 3: Methodology", 17),
+        ("Chapter 4: Results", 23),
+        ("Chapter 5: Discussion", 26),
+        ("Chapter 6: Conclusion", 30),
+        ("References", 32),
+        ("Appendices", 34),
     ):
         p = doc.add_paragraph()
         p.paragraph_format.left_indent = Inches(0.2)
@@ -306,7 +306,7 @@ def add_running_furniture(doc: Document) -> None:
     p = header.paragraphs[0]
     p.alignment = WD_ALIGN_PARAGRAPH.LEFT
     p.paragraph_format.space_after = Pt(0)
-    apply_font(p.add_run("V10/V11 FINAL RESEARCH MANUSCRIPT"), size=8.5, color=MUTED, bold=True)
+    apply_font(p.add_run("FINAL RESEARCH MANUSCRIPT"), size=8.5, color=MUTED, bold=True)
     footer = section.footer
     p = footer.paragraphs[0]
     p.alignment = WD_ALIGN_PARAGRAPH.RIGHT

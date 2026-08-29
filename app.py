@@ -198,6 +198,9 @@ V11_QREL_SUMMARY_PATH = ROOT / "data" / "splits" / "v11" / "v11_development_evid
 V11_GENERATION_SUMMARY_PATH = ROOT / "data" / "splits" / "v11" / "v11_medgemma_generation_48_clean_summary.json"
 V11_GENERATION_STATISTICS_PATH = ROOT / "data" / "splits" / "v11" / "v11_medgemma_generation_48_statistical_summary.json"
 V11_PLANNER_RESERVED_SUMMARY_PATH = ROOT / "data" / "splits" / "v11" / "v11_question_planner_reserved_summary.json"
+V16_RETRIEVAL_SUMMARY_PATH = ROOT / "experiments" / "v16_confirmation" / "v16_test_rankings.json"
+V16_GENERATION_SUMMARY_PATH = ROOT / "data" / "splits" / "v16" / "v16_impression_gate_vs_base_confirmation.json"
+V16_STANDARD_NLG_PATH = ROOT / "data" / "splits" / "v16" / "v16_impression_gate_standard_nlg_confirmation.json"
 MODEL_OPTIONS = {
     "Qwen2.5-1.5B (full experiment)": "Qwen/Qwen2.5-1.5B-Instruct",
     "Qwen2.5-0.5B (faster demo)": "Qwen/Qwen2.5-0.5B-Instruct",
@@ -966,6 +969,82 @@ def render_results() -> None:
         json.loads(V11_PLANNER_RESERVED_SUMMARY_PATH.read_text(encoding="utf-8"))
         if V11_PLANNER_RESERVED_SUMMARY_PATH.is_file()
         else None
+    )
+
+    v16_retrieval = json.loads(V16_RETRIEVAL_SUMMARY_PATH.read_text(encoding="utf-8"))
+    v16_generation = json.loads(V16_GENERATION_SUMMARY_PATH.read_text(encoding="utf-8"))
+    v16_standard_nlg = json.loads(V16_STANDARD_NLG_PATH.read_text(encoding="utf-8"))
+
+    st.subheader("Final V12/V16 integrated confirmation")
+    st.caption(
+        "Frozen offline aggregate results. The interactive workflow below remains the V10 "
+        "demonstration path and is not presented as a live deployment of the final V12/V16 stack."
+    )
+    final_columns = st.columns(6)
+    final_columns[0].metric("Test cases", v16_retrieval["inputs"]["query_case_count"])
+    final_columns[1].metric(
+        "V10 R5 nDCG@10",
+        f"{v16_retrieval['metrics']['r5_full_bank']['qrel_v2']['ndcg10']:.3f}",
+    )
+    final_columns[2].metric(
+        "V12 nDCG@10",
+        f"{v16_retrieval['metrics']['rrf_lambdamart']['qrel_v2']['ndcg10']:.3f}",
+        delta=f"{v16_retrieval['bootstrap_vs_r5']['rrf_lambdamart']['qrel_v2']['difference']:+.3f}",
+    )
+    final_columns[3].metric(
+        "Base retrieved F1",
+        f"{v16_generation['arms']['base']['retrieved_history']['token_f1']:.3f}",
+    )
+    final_columns[4].metric(
+        "V16 routed F1",
+        f"{v16_generation['arms']['impression_gate']['retrieved_history']['token_f1']:.3f}",
+        delta=f"{v16_generation['impression_gate_minus_base']['token_f1']['retrieved_history']['mean_difference']:+.3f}",
+    )
+    final_columns[5].metric(
+        "Provenance",
+        f"{v16_generation['arms']['impression_gate']['retrieved_history']['provenance_valid_rate']:.0%}",
+    )
+    final_retrieval_ci = v16_retrieval["bootstrap_vs_r5"]["rrf_lambdamart"]["qrel_v2"]
+    final_generation_ci = v16_generation["impression_gate_minus_base"]["token_f1"]["retrieved_history"]
+    st.success(
+        "V12 minus R5 nDCG@10 95% CI "
+        f"[{final_retrieval_ci['ci95_low']:+.3f}, {final_retrieval_ci['ci95_high']:+.3f}]; "
+        "V16 route minus base retrieved-history Token-F1 95% CI "
+        f"[{final_generation_ci['ci_95_low']:+.3f}, {final_generation_ci['ci_95_high']:+.3f}]."
+    )
+    final_frame = pd.DataFrame(
+        [
+            {
+                "Generation condition": "No history",
+                "Token-F1": v16_generation["arms"]["impression_gate"]["no_history"]["token_f1"],
+                "Token-ceiling rate": f"{v16_generation['arms']['impression_gate']['no_history']['token_ceiling_rate']:.1%}",
+            },
+            {
+                "Generation condition": "Deterministic random history",
+                "Token-F1": v16_generation["arms"]["impression_gate"]["random_history"]["token_f1"],
+                "Token-ceiling rate": f"{v16_generation['arms']['impression_gate']['random_history']['token_ceiling_rate']:.1%}",
+            },
+            {
+                "Generation condition": "V12 retrieved history + V16 route",
+                "Token-F1": v16_generation["arms"]["impression_gate"]["retrieved_history"]["token_f1"],
+                "Token-ceiling rate": f"{v16_generation['arms']['impression_gate']['retrieved_history']['token_ceiling_rate']:.1%}",
+            },
+        ]
+    )
+    st.dataframe(
+        final_frame,
+        width="stretch",
+        hide_index=True,
+        column_config={
+            "Token-F1": st.column_config.NumberColumn(format="%.3f"),
+        },
+    )
+    st.warning(
+        "Evidence boundary: report-derived qrels and references are automated proxies. "
+        f"The completeness audit retained {v16_generation['reference_completeness']['empty_reference_rows']} "
+        "empty Findings-reference rows per arm. CheXbert was mixed even though the standard "
+        f"language metrics were positive ({len(v16_standard_nlg['impression_gate_minus_base'])} metric groups). "
+        "No physician rating, diagnostic-accuracy claim, patient-level independence claim, or external result is shown."
     )
 
     st.subheader("V10 publication extension: cluster-disjoint similar-case RAG")

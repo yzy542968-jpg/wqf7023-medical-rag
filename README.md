@@ -2,14 +2,15 @@
 
 **Research title:** Retrieval-Augmented Medical Question Answering over Paired Radiology Images and Reports
 
-This repository contains the reproducible implementation and frozen evidence for Zhang Yue's WQF7023 Artificial Intelligence Research Project. V9 established the new-patient similar-case task: the target chest image, pre-report indication, and question retrieve other-patient image-report pairs from a fixed historical bank, then a local multimodal generator answers with bounded historical support. The final primary V10 study adds duplicate-cluster-disjoint evaluation, fact-aware multiview reranking, fact-level evidence provenance, calibrated retrieval abstention, compact deterministic output assembly, and publication-oriented validity packages. It is not a diagnostic model, a clinically validated tool, or an authenticated clinical deployment.
+This repository contains the reproducible implementation and frozen evidence for Zhang Yue's WQF7023 Artificial Intelligence Research Project. The final task uses a new target chest image, pre-report indication, and question to retrieve other-case historical image-report evidence from a Train-only bank, then produces a concise answer with deterministic provenance. V10 establishes the duplicate-cluster-disjoint task and image-alignment control, V12 supplies the final multi-source Top-200 plus LambdaMART retriever, and V16 supplies the final section-aware MedGemma/QLoRA generation confirmation. It is not a diagnostic model, a clinically validated tool, or an authenticated clinical deployment.
 
 **Repository:** https://github.com/yzy542968-jpg/wqf7023-medical-rag  
 - **Historical submission release:** `p2-submission`
 - **Preserved thesis release:** `v9-final-research-freeze`
 - **Publication-extension release:** `v10-publication-freeze`
 - **Final thesis package:** `v10-v11-final-thesis-freeze`
-- **Current status:** V10 automated confirmation and software integration complete; V11 technical development extension audited on Train/Validation only; independent clinical review and authorized external validation remain pending
+- **Final integrated release:** `v16-final-thesis-freeze`
+- **Current status:** V16 automated confirmation, final manuscript, software audit, and repository integration complete; independent clinical review and authorized external validation remain Future Work
 
 ## Study Structure
 
@@ -26,10 +27,25 @@ The final study deliberately separates two different tasks instead of treating t
 9. **V9 new-patient other-patient similar-case RAG:** reallocates the complete 3,851-case OpenI source, trains an 865-parameter multimodal reranker on a 2,608-case historical bank, confirms retrieval on 752 Test cases, and evaluates target-image QA on 685 complete-reference Test cases. The target report is hidden at inference and is never retrieved as evidence.
 10. **V10 publication extension:** clusters exact and near-duplicate reports before splitting, trains only on cluster-disjoint Train cases, evaluates a fact-aware multiview R5 ensemble on untouched Test cases, calibrates a no-reliable-history option, and separates target-image answers from deterministic case/section/fact provenance.
 11. **V11 development extension:** adds a structured report-derived qrel-v2 audit, deterministic question-intent planning, hierarchical case-to-fact evidence selection, compact provenance-safe output validation, selective historical-evidence gating, and shortlist-safe training helpers. V11 remains development-only and has no confirmation result; quality intervals from its clean 48-case generation audit cross zero.
+12. **V12 final retrieval method:** fuses BM25, MedCPT, and MedSigLIP rankings, retains the Top-200 union, and applies a frozen 17-feature LambdaMART reranker selected on Validation.
+13. **V13-V15 mechanism development:** explores concept prediction, transfer, and generation adaptation on non-Test data without replacing the frozen confirmation path.
+14. **V16 final integrated confirmation:** applies V12 retrieval and a Validation-selected section-aware QLoRA route once to the 568-case executable Test frame, with no post-Test retuning.
 
 The demonstrated Agent follows explicit `scope`, `retrieve`, `generate`, `audit`, and `review/abstain` states. Routing rules are deterministic, and the verifier is a risk signal rather than a clinical correctness label.
 
 ## Frozen Results
+
+### Final Integrated V16 Confirmation
+
+- Source: 3,851 OpenI/IU-Xray cases; duplicate-cluster allocation 2,510 Train / 383 Calibration / 384 Validation / 574 Test; 568 Test cases were executable.
+- Final V12 retrieval nDCG@10: `0.61590` versus recomputed V10 R5 `0.55313`; paired difference `+0.06277`, 95% case-bootstrap CI `[+0.05460,+0.07082]`.
+- Retrieval gains remained positive under label-only (`+0.03928`) and fact-only (`+0.01326`) report-derived relevance sensitivities. RRF order alone and full-bank LambdaMART were negative mechanism controls.
+- Retrieved-history Token-F1: frozen base MedGemma `0.20570`; final V16 impression-gated route `0.25591`; paired difference `+0.05020`, 95% CI `[+0.03973,+0.06108]`.
+- The final route also exceeded no history (`0.16922`) and deterministic random history (`0.19608`), retained `100%` answer-contract and provenance validity, and reduced token-ceiling events from `87.85%` to `56.60%`.
+- BLEU-1, BLEU-4, ROUGE-L, METEOR, CIDEr, BERTScore, and RadGraph supported the routed comparison. CheXbert was mixed: micro-F1 was inconclusive and reference-positive recall decreased slightly.
+- A post-run completeness audit found 81 cases with empty Findings references, producing 243 zero-reference rows per arm. The frozen 568-case denominator was retained; a non-empty-reference sensitivity remained positive at `+0.04571`, 95% CI `[+0.03371,+0.05763]`.
+
+These are automated same-source results under report-derived references and qrels. They do not establish physician-rated similarity, diagnostic accuracy, clinical safety, verified patient-level independence, or external generalization. See `docs/V16_FINAL_TECHNICAL_FREEZE.md` and `docs/FINAL_RESULTS_REGISTRY.md`.
 
 ### V1 Open-Corpus Stress Test
 
@@ -100,7 +116,7 @@ V4.2 demonstrates that pixels can improve paired evidence retrieval when used fo
 - Learned minus fixed multimodal QA was only numerical: `+0.00571`, CI `[-0.00096,+0.01228]`.
 - The bounded agent reduced automated unsupported historical-support rows from `16.42%` to `0%` through one backup route or removal of the historical-support field; it did not verify target-image diagnoses.
 
-V9 is retained as the task-reframing and historical comparison study. It models a new patient whose report is unavailable, retrieves other-patient analogies, and separates target-image answers from historical support. V10 is the final primary confirmation study. Neither establishes physician-adjudicated similarity, clinical diagnostic accuracy, safety, external generalization, or deployment utility.
+V9 is retained as the task-reframing and historical comparison study. It models a new patient whose report is unavailable, retrieves other-patient analogies, and separates target-image answers from historical support. V10 is the methodological foundation for the final V12/V16 confirmation chain. None of these studies establishes physician-adjudicated similarity, clinical diagnostic accuracy, safety, external generalization, or deployment utility.
 
 ### V9 Supplemental Validity and Robustness Audits
 
@@ -152,23 +168,22 @@ The deterministic planner was also evaluated once on a separately committed 96-i
 
 ## Submission Status
 
-Automated V1-V10 experiments, supplemental validity audits, and Dashboard integration are complete in the corresponding repository history. The V9 researcher accepted all 24 assistant-proposed exploratory labels without modification; this was not independent clinical adjudication. V10 retains a separate blinded clinical package as Future Work and leaves every rating blank.
+Automated V1-V16 experiments, supplemental validity audits, and Dashboard integration are complete in the corresponding repository history. The V9 researcher accepted all 24 assistant-proposed exploratory labels without modification; this was not independent clinical adjudication. The blinded clinical package remains Future Work and every independent-review rating remains blank.
 
-The current V10/V11 reporting artifacts are:
+The current final reporting artifacts are:
 
 ```text
 deliverables/22097191_ZHANG_YUE_Final_Research_Project.docx
 deliverables/22097191_ZHANG_YUE_Final_Research_Project.pdf
-deliverables/22097191_ZHANG_YUE_Final_Defence.pptx
+docs/P2_FINAL_DEFENCE_SLIDE_OUTLINE.md
 ```
 
-The release-level acceptance audit and SHA-256 inventory are in
-`docs/V10_V11_FINAL_RELEASE_AUDIT.md` and
-`artifacts/v10_v11_final_release_manifest.json`.
+The final technical identity and aggregate result inventory are in
+`docs/V16_FINAL_TECHNICAL_FREEZE.md` and `docs/FINAL_RESULTS_REGISTRY.md`.
 
-Earlier P2/V9 reports and decks remain historical artifacts. They should not be used as the current result summary.
+Earlier P2/V9 reports and decks remain historical artifacts. They should not be used as the current result summary. No final PPTX is generated by this repository; the page-by-page outline is the maintained defence deliverable.
 
-The decision is recorded in `config/submission_decisions.json` and propagated into the result registry, manuscript, deck, and release audit. The blinded packages and rating interface are preserved for Future Work; they are not evidence for the submitted study.
+The human-evaluation disposition is recorded in `config/submission_decisions.json` and propagated into the result registry, manuscript, outline, and release audit. The blinded packages and rating interface are preserved for Future Work; they are not evidence for the submitted study.
 
 ## Repository Layout
 
@@ -228,7 +243,16 @@ Reproduce the V10 publication-extension software and lightweight checks with:
 & ".\.venv\Scripts\python.exe" -m pytest -q --basetemp outputs/pytest-v10
 ```
 
-The final full local-data suite contains **276 passing tests**; the earlier V10 freeze recorded 252. In a clean clone, **272 tests pass and four historical source-integrity checks are explicitly skipped** because the large `openi_cases.jsonl` source artifact is intentionally not committed. The clean 48-case MedGemma development diagnostic is not a confirmation result. Model-backed confirmation commands require the pinned local snapshots and non-public large artifacts documented by the V10 protocols; aggregate summaries remain versioned for inspection.
+Inspect or rebuild the final V12/V16 aggregate evaluations and manuscript with:
+
+```powershell
+& ".\.venv\Scripts\python.exe" scripts\evaluate_v16_paired_rows.py --help
+& ".\.venv\Scripts\python.exe" scripts\evaluate_v16_standard_nlg.py --help
+& ".\.venv\Scripts\python.exe" scripts\build_final_v16_manuscript.py
+& ".\.venv\Scripts\python.exe" scripts\build_final_docx.py
+```
+
+The final full local-data suite contains **315 passing tests**. Model-backed confirmation commands require the pinned local snapshots and large local artifacts documented by the V16 protocols; aggregate summaries remain versioned for inspection. The clean 48-case V11 MedGemma diagnostic remains development evidence rather than confirmation.
 
 The manifest command verifies required files, locked SHA-256 values, tracked-file exclusions, file-size limits, the declared human-evaluation disposition, repository publication, and conditional V3 status. Use `--strict` only for the final submission gate; it exits unsuccessfully while external requirements such as the remote repository remain pending.
 
@@ -252,7 +276,7 @@ Launch the system-blinded rating interface separately:
 & ".\.venv\Scripts\python.exe" -m streamlit run human_evaluation_app.py --server.port 8502
 ```
 
-The main Dashboard exposes report workflows, frozen result tables, the earlier paired demos, and both V9 and V10 workflows. In V10 Full Mode, one or two uploaded chest X-ray views, an indication, and a question retrieve Top-3 reports from the 2,506-case cluster-disjoint Train bank with the frozen R5 ensemble. The interface displays calibrated retrieval confidence, abstains from claiming reliable history below the frozen threshold, and preserves case/section/fact provenance. The optional local MedGemma path produces a bounded target-image answer before deterministic support assembly. The rating application does not load the system-identity keys.
+The main Dashboard exposes the frozen V12/V16 aggregate result chain, historical result tables, and interactive V9/V10 workflows. The live V10 Full Mode remains a demonstration pipeline: one or two uploaded chest X-ray views, an indication, and a question retrieve Top-3 reports from the 2,506-case cluster-disjoint Train bank with the frozen R5 ensemble. The final V12/V16 panel is explicitly offline and aggregate; it does not pretend that the final LambdaMART and QLoRA confirmation stack is a deployed clinical service. The rating application does not load the system-identity keys.
 
 For an editable install, use `python -m pip install -e ".[all]"`. Exact direct versions from the audited machine are recorded in `requirements-lock.txt`. GitHub Actions runs compilation and the fresh-clone test suite without downloading model weights; source-integrity checks that require the intentionally untracked OpenI JSONL are reported as skips rather than silently treated as passes.
 
@@ -264,6 +288,6 @@ Official RadQA files, when legally obtained, belong at `data/raw/radqa/train.jso
 
 Do not commit raw radiology files, image pixels, model weights, caches, generated prompt packs, secrets, or virtual environments. The MIT license covers project-authored code, not third-party datasets or model weights. See `docs/DATA_USE_AND_LICENSING.md`, `docs/REPOSITORY_RELEASE_POLICY.md`, and the generated `experiments/final_submission/submission_manifest.json` before publishing.
 
-Post-submission improvements and explicitly deferred independent clinical evaluation are documented in `docs/POST_SUBMISSION_RESEARCH_ROADMAP.md`. V5-V8 remain frozen historical studies. The V9 thesis result is frozen in `docs/V9_TECHNICAL_FREEZE.md`; the completed researcher review and post-hoc validity audits are separately versioned and did not modify that freeze. V10 is a separate publication extension governed by its own development, confirmation, deviation, metrics, review-status, external-validation, and technical-freeze records.
+Post-submission improvements and explicitly deferred independent clinical evaluation are documented in `docs/POST_SUBMISSION_RESEARCH_ROADMAP.md`. V5-V9 remain frozen historical or formative studies. V10 is the frozen methodological foundation and alignment study; V11 and V13-V15 are development/mechanism evidence; V12 is the final learned retriever; V16 is the final integrated held-out method confirmation. The reference-completeness deviation is disclosed in `docs/V16_PROTOCOL_DEVIATION_REFERENCE_COMPLETENESS.md` rather than repaired after outcome inspection.
 
 Methods and results for the v2.1 hard benchmark, two reserved wording-transfer tests, frozen v2.2 semantic planner, preregistered v2.3 hybrid planner, and 300-case locked replication are in `docs/POST_SUBMISSION_EXPERIMENTS.md`. V2.3 preserves the original result and improves transfer Macro F1, but raises false-answer risk on the second wording set; it is therefore reported as a robustness/safety trade-off rather than promoted as an unqualified replacement.

@@ -1,0 +1,151 @@
+{
+  "acceptance": {
+    "defence_slide_outline": "complete",
+    "docx_all_pages_visually_inspected": true,
+    "docx_pdf_pages": 56,
+    "external_validation": "future_work_no_result_claimed",
+    "final_pptx_generated": false,
+    "human_review": "future_work_no_independent_scores_claimed",
+    "pytest": {
+      "errors": 0,
+      "failed": 0,
+      "passed": 315
+    },
+    "python_compileall": "passed"
+  },
+  "claim_boundary": "Automated within-source retrieval and report-reference-consistency results only. Patient-level independence was not identifier-verified. The release does not establish physician-adjudicated similarity, diagnostic correctness, clinical safety, treatment utility, deployment performance, or external generalization.",
+  "files": {
+    "dashboard": {
+      "bytes": 138760,
+      "hash_mode": "raw_bytes",
+      "path": "app.py",
+      "sha256": "cd935dff7483eff01569840092e95a2fac924e757bf7cd8475c29fb7842c17cc"
+    },
+    "defence_slide_outline": {
+      "bytes": 10075,
+      "hash_mode": "canonical_utf8_lf",
+      "path": "docs/P2_FINAL_DEFENCE_SLIDE_OUTLINE.md",
+      "sha256": "8dc929a445613e92ccd19495cdc124edafc2b649706f378eaff0d99e8f849348"
+    },
+    "docx_builder": {
+      "bytes": 387,
+      "hash_mode": "raw_bytes",
+      "path": "scripts/build_final_docx.py",
+      "sha256": "86689c041d6d19b237d7c66a2ff2d4be14bfa921a6abe2240f9f91b9b041c80b"
+    },
+    "manuscript_builder": {
+      "bytes": 56030,
+      "hash_mode": "raw_bytes",
+      "path": "scripts/build_final_v16_manuscript.py",
+      "sha256": "c083ec8bc7011f3e69ac9fe37d4357fb5f95463fcaaa634925ad47caa416a63e"
+    },
+    "manuscript_docx": {
+      "bytes": 95163,
+      "hash_mode": "raw_bytes",
+      "path": "deliverables/22097191_ZHANG_YUE_Final_Research_Project.docx",
+      "sha256": "485b76baf566ffedf1bac5f81eca54bb3ce9c170a2d6bf5612626f7159a5555f"
+    },
+    "manuscript_markdown": {
+      "bytes": 145099,
+      "hash_mode": "canonical_utf8_lf",
+      "path": "docs/P2_FINAL_MANUSCRIPT.md",
+      "sha256": "d9512b46bffa6277b5790c13dc6dd149b8294e0540380e3e6d9f706992fde08e"
+    },
+    "manuscript_pdf": {
+      "bytes": 594317,
+      "hash_mode": "raw_bytes",
+      "path": "deliverables/22097191_ZHANG_YUE_Final_Research_Project.pdf",
+      "sha256": "b26e725da0ba194e107d388d63946921f20896100e3fee123c6f2b599b577f52"
+    },
+    "readme": {
+      "bytes": 30078,
+      "hash_mode": "canonical_utf8_lf",
+      "path": "README.md",
+      "sha256": "d765f9baaeebe45046eb055a6c0b66a6c7330f95ce45aa699bffb029c0b4c14e"
+    },
+    "release_audit": {
+      "bytes": 3510,
+      "hash_mode": "canonical_utf8_lf",
+      "path": "docs/V16_FINAL_RELEASE_AUDIT.md",
+      "sha256": "cd8d078a0ba23aa4b012df3e511a107ee5c41548a05a4edb3e40ab2f3d93a076"
+    },
+    "result_registry": {
+      "bytes": 7826,
+      "hash_mode": "canonical_utf8_lf",
+      "path": "docs/FINAL_RESULTS_REGISTRY.md",
+      "sha256": "68994e7e172026817003030e515ec9f0c98ce91723ff1d8260cfa0151a6840ba"
+    },
+    "v10_freeze": {
+      "bytes": 9789,
+      "hash_mode": "canonical_utf8_lf",
+      "path": "docs/V10_TECHNICAL_FREEZE.md",
+      "sha256": "7b096b7bfeb204698d521603d1f9d870d58eee54695c8707587ca4de5648d472"
+    },
+    "v16_clinical_metrics": {
+      "bytes": 58436,
+      "hash_mode": "canonical_utf8_lf",
+      "path": "data/splits/v16/v16_impression_gate_clinical_metrics_confirmation.json",
+      "sha256": "18c707d655231db7d2b9d75dbdb3705741fdefdc76addd42db6c5d1b5cd3fe37"
+    },
+    "v16_confirmation_protocol": {
+      "bytes": 8873,
+      "hash_mode": "canonical_utf8_lf",
+      "path": "docs/V16_CONFIRMATION_PROTOCOL.md",
+      "sha256": "bbc586daa61caa8dc3ef3c2f1c4a6cf47ce2bdc353272f54f4d4709063a9e10d"
+    },
+    "v16_development_protocol": {
+      "bytes": 11612,
+      "hash_mode": "canonical_utf8_lf",
+      "path": "docs/V16_DEVELOPMENT_PROTOCOL.md",
+      "sha256": "98470667f590daaaff8c783dbc12142b72abee01ebccf30981e8376fd4e05084"
+    },
+    "v16_generation_results": {
+      "bytes": 9201,
+      "hash_mode": "canonical_utf8_lf",
+      "path": "docs/V16_GENERATION_CONFIRMATION_RESULTS.md",
+      "sha256": "e5eaa2531f9de773a58b0089250fbad0b3e33d103dfe5fb745f7b5d43a304a69"
+    },
+    "v16_generation_summary": {
+      "bytes": 39453,
+      "hash_mode": "canonical_utf8_lf",
+      "path": "data/splits/v16/v16_impression_gate_vs_base_confirmation.json",
+      "sha256": "14e1fd1a4a3d9454761f02752293adfbc8bb0fb8f5e4a4684b01ac3e90e333e6"
+    },
+    "v16_reference_deviation": {
+      "bytes": 3214,
+      "hash_mode": "canonical_utf8_lf",
+      "path": "docs/V16_PROTOCOL_DEVIATION_REFERENCE_COMPLETENESS.md",
+      "sha256": "1b7ee4b7963ecbb4007db68b841f6ee67ea56fe02d6dfa0a68274ebd43227a31"
+    },
+    "v16_retrieval_results": {
+      "bytes": 4010,
+      "hash_mode": "canonical_utf8_lf",
+      "path": "docs/V16_RETRIEVAL_CONFIRMATION_RESULTS.md",
+      "sha256": "4422beba853f26f2a74e18696aed2a3d9af6dd334345d3f03f945dcb660c2cbc"
+    },
+    "v16_retrieval_summary": {
+      "bytes": 6415,
+      "hash_mode": "canonical_utf8_lf",
+      "path": "experiments/v16_confirmation/v16_test_rankings.json",
+      "sha256": "da54e35c53d4fcf6969e0a34155916dddf9526ee9584a978ccd1f3fe2b2199ee"
+    },
+    "v16_standard_nlg": {
+      "bytes": 11878,
+      "hash_mode": "canonical_utf8_lf",
+      "path": "data/splits/v16/v16_impression_gate_standard_nlg_confirmation.json",
+      "sha256": "70330b99984c3c2b7c07393a91248fed1daace5bb7b37931566467cf9eaaef75"
+    },
+    "v16_technical_freeze": {
+      "bytes": 7383,
+      "hash_mode": "canonical_utf8_lf",
+      "path": "docs/V16_FINAL_TECHNICAL_FREEZE.md",
+      "sha256": "a76bae4b616391d6d0da8b3f015664e4de5d149e5fb9f23c5ff19a52ac3e7a6f"
+    }
+  },
+  "final_integrated_confirmation": "V16 section-aware MedGemma/QLoRA route",
+  "final_retrieval_method": "V12 RRF Top-200 plus LambdaMART",
+  "generated_on": "2026-08-29",
+  "methodological_foundation": "V10 frozen alignment-controlled study",
+  "release": "v16-final-thesis-freeze",
+  "repository": "https://github.com/yzy542968-jpg/wqf7023-medical-rag"
+}

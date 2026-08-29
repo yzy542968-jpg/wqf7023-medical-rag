@@ -9,9 +9,9 @@ from zipfile import ZipFile
 
 
 ROOT = Path(__file__).resolve().parents[1]
-MANUSCRIPT = ROOT / "docs" / "P2_V10_V11_FINAL_MANUSCRIPT.md"
+MANUSCRIPT = ROOT / "docs" / "P2_FINAL_MANUSCRIPT.md"
 DOCX = ROOT / "deliverables" / "22097191_ZHANG_YUE_Final_Research_Project.docx"
-MANIFEST = ROOT / "artifacts" / "v10_v11_final_release_manifest.json"
+MANIFEST = ROOT / "artifacts" / "v16_final_release_manifest.json"
 
 
 def _release_payload(path: Path, hash_mode: str) -> bytes:
@@ -35,13 +35,16 @@ def test_final_manuscript_has_one_current_numbered_narrative() -> None:
 
     assert duplicates == {}
     assert text.count("## 1.7 Scope and Boundaries") == 1
-    assert text.count("## 2.11 Similar-Case Multimodal RAG and Final Research Gap") == 1
+    assert text.count("## 2.11 Final Research Gap") == 1
     assert "## 2.12" not in text
     assert "## 2.13" not in text
     assert "V9 addresses these gaps" not in text
     assert "The final claims are based on the V9 held-out study" not in text
-    assert "## 4.11 Post-hoc Relevance-Construct Sensitivity" in text
-    assert "feature-metric coupling" in text
+    assert "## 4.10 Reference-Completeness Sensitivity" in text
+    assert "## 4.8 Structured Clinical Metrics" in text
+    assert "+0.06277" in text
+    assert "+0.05020" in text
+    assert "+0.04571" in text
     assert 10_000 < len(text.split()) < 30_000
     assert "\ufffd" not in text
 
@@ -70,9 +73,12 @@ def test_historical_appendix_tables_use_appendix_numbering() -> None:
 def test_final_docx_matches_the_current_section_structure() -> None:
     text = _docx_text(DOCX)
     assert text.count("1.7 Scope and Boundaries") == 1
-    assert text.count("2.11 Similar-Case Multimodal RAG and Final Research Gap") == 1
+    assert text.count("2.11 Final Research Gap") == 1
     assert "2.12 Similar-Case Multimodal RAG and the Final Research Gap" not in text
     assert "2.13 Final Research Gap" not in text
+    assert "4.10 Reference-Completeness Sensitivity" in text
+    assert "V16 impression-gated route" in text
+    assert "Final Integrated V16 Study with V10 Methodological Foundation" in text
 
 
 def test_release_manifest_hashes_all_registered_files() -> None:
@@ -91,3 +97,6 @@ def test_public_labels_do_not_misstate_the_frozen_evidence_policy() -> None:
     assert "R5 hierarchical RAG" not in readme
     assert '"Condition": "G2 R5 hierarchical RAG"' not in app
     assert "frozen V10 evidence policy is E0 whole report" in readme
+    assert "Final Integrated V16 Confirmation" in readme
+    assert "Final V12/V16 integrated confirmation" in app
+    assert "live deployment of the final V12/V16 stack" in app
