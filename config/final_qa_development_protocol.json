@@ -1,0 +1,119 @@
+{
+  "study": "Final paired historical image-report QA study",
+  "status": "development_protocol",
+  "base_freeze_commit": "53e6888b9210e4b8f8898830f0b8ce121f2370b2",
+  "feasibility_audit_commit": "8a5e60b",
+  "random_seed": 7023,
+  "data": {
+    "openi_cases": "data/processed/openi_cases.jsonl",
+    "radrestruct_commit": "b293158f0c5c1c5fa27dd615c28005eb54d7b1de",
+    "mapping_audit": "data/splits/final_qa/final_qa_feasibility_audit.json",
+    "case_mapping": "data/splits/final_qa/final_qa_case_mapping.csv",
+    "partition_source": "data/splits/v10/v10_cluster_disjoint_split.json",
+    "partition_roles": {
+      "train": 2351,
+      "calibration": 358,
+      "validation": 358,
+      "test": 530
+    },
+    "historical_bank": "all 2510 V10 Train cases with target case and target duplicate cluster excluded",
+    "target_report_visible_to_model": false,
+    "patient_level_independence_claimed": false
+  },
+  "qa_contract": {
+    "primary_mode": "independent structured QA without gold answer history",
+    "secondary_mode": "hierarchy-consistent report-vector reconstruction",
+    "answer_options_visible": true,
+    "indication_policy": "optional_pre_report_context",
+    "missing_indication": "Not provided",
+    "gold_history_visible": false,
+    "target_findings_visible": false,
+    "target_impression_visible": false,
+    "citations_generated_by_model": false
+  },
+  "arms": [
+    "b0_train_majority_by_question_path",
+    "b1_question_options_only",
+    "b2_target_image_question",
+    "b3_target_image_indication_question_no_history",
+    "b4_random_historical_case",
+    "b5_report_only_bm25_history",
+    "b6_image_retrieval_with_paired_report",
+    "b7_v12_multimodal_paired_whole_report",
+    "p1_v12_multimodal_paired_case_to_fact",
+    "p2_final_helpful_filtered_fact_evidence_with_abstention"
+  ],
+  "controls": {
+    "retrieval_alignment": "100 deterministic fixed-point-free shuffled target-image assignments",
+    "broken_historical_pair": "one deterministic wrong report assignment per paired historical image",
+    "random_history": "one deterministic other-cluster Train case",
+    "contradictory_history": "deterministic Train hard negative selected without Test outcomes"
+  },
+  "model_development": {
+    "foundation_model": "frozen local MedGemma snapshot used by V16",
+    "first_baseline": "frozen foundation model",
+    "trainable_component": "QA-specific QLoRA adapter",
+    "retriever_baseline": "frozen V12 retrieval stack",
+    "train_role": "parameter fitting only",
+    "calibration_role": "early stopping and confidence calibration",
+    "validation_role": "final policy and model selection",
+    "test_role": "one-shot confirmation only"
+  },
+  "selection_grid": {
+    "history_top_k": [1, 3, 5],
+    "fact_budget": [4, 8, 12],
+    "evidence_policy": ["whole_report", "section", "sentence", "structured_fact"],
+    "selection_metric": "supported_label_macro_f1",
+    "tie_breaks": ["lower_input_tokens", "lower_latency", "simpler_policy"]
+  },
+  "primary_endpoint": {
+    "name": "supported_label_macro_f1",
+    "unit": "case",
+    "representation": "2470-dimensional hierarchy-cleaned report answer vector",
+    "comparison": "p2_final_helpful_filtered_fact_evidence_with_abstention minus b3_target_image_indication_question_no_history",
+    "success_rule": "case-bootstrap 95% confidence interval lower bound greater than zero"
+  },
+  "secondary_endpoints": [
+    "official_radrestruct_compatible_f1",
+    "micro_f1",
+    "root_question_macro_f1",
+    "balanced_accuracy",
+    "ordinary_accuracy_with_majority_baseline",
+    "positive_recall",
+    "negative_specificity",
+    "exact_report_vector_accuracy",
+    "radgraph_complete_f1_for_open_answers",
+    "chexbert_f1_for_open_answers",
+    "token_f1_for_open_answers",
+    "ndcg_at_10",
+    "mrr",
+    "hit_at_1",
+    "hit_at_5",
+    "citation_precision",
+    "provenance_validity",
+    "negative_transfer_rate",
+    "contradiction_following_rate",
+    "coverage",
+    "selective_risk",
+    "input_tokens",
+    "latency_seconds",
+    "peak_vram_mb"
+  ],
+  "statistics": {
+    "bootstrap_unit": "case_id",
+    "bootstrap_samples": 10000,
+    "confidence_level": 0.95,
+    "paired_seed": 7023,
+    "key_secondary_adjustment": "Holm",
+    "undefined_metric_policy": "report support and return null; never replace with a favorable value"
+  },
+  "prohibitions": [
+    "No QA-row random split",
+    "No target or target-cluster report in the historical bank",
+    "No gold prior-answer history in the primary condition",
+    "No Test-driven prompt, threshold, Top-K, fact-budget, adapter, or metric selection",
+    "No case deletion or replacement after Test outcomes",
+    "No claim of physician-adjudicated diagnostic accuracy, clinical safety, patient independence, or external validation",
+    "No modification of V10-V16 frozen artifacts or metrics"
+  ]
+}
