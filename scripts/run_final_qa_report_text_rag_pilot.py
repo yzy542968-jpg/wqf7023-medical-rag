@@ -149,6 +149,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         retrieval_by_target[target_case_id] = [bank_case_ids[index] for index in order]
 
     v12_retrieval_by_target: dict[str, list[str]] = {}
+    v12_fallback_target_ids: list[str] = []
     if args.v12_ranking_rows is not None:
         ranking_rows = _read_jsonl(args.v12_ranking_rows)
         findings_rows = {
@@ -158,7 +159,9 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         }
         for target_case_id in sorted({row["case_id"] for row in selected}):
             if target_case_id not in findings_rows:
-                raise RuntimeError(f"Missing V12 findings ranking for {target_case_id}")
+                v12_retrieval_by_target[target_case_id] = retrieval_by_target[target_case_id]
+                v12_fallback_target_ids.append(target_case_id)
+                continue
             ranked = [
                 str(case_id)
                 for case_id in findings_rows[target_case_id]["rankings"]["rrf_lambdamart"]
@@ -368,6 +371,14 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         "embedding_signature": embedding_signature,
         "selected_row_count": len(selected),
         "historical_bank_case_count": len(bank_case_ids),
+        "v12_ranking_coverage": {
+            "requested": args.v12_ranking_rows is not None,
+            "target_count": len(v12_retrieval_by_target),
+            "image_only_fallback_target_count": len(v12_fallback_target_ids),
+            "image_only_fallback_target_ids_sha256": hashlib.sha256(
+                "\n".join(sorted(v12_fallback_target_ids)).encode("utf-8")
+            ).hexdigest(),
+        },
         "conditions": conditions,
         "elapsed_seconds_this_invocation": elapsed,
         "peak_vram_mb_this_invocation": torch.cuda.max_memory_allocated() / 1024**2,

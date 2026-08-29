@@ -12,7 +12,8 @@
     "top_k": 3,
     "historical_bank": "V10 Train",
     "query_role": "V10 Calibration",
-    "target_report_visible": false
+    "target_report_visible": false,
+    "missing_ranking_policy": "deterministic fallback to MedSigLIP image-only Top-3 without case deletion"
   },
   "evidence": {
     "selector": "unchanged V11 question-conditioned hierarchical selector",
