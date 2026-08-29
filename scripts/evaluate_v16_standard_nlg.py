@@ -21,6 +21,8 @@ from pycocoevalcap.rouge.rouge import Rouge
 CONDITIONS = ("no_history", "retrieved_history", "random_history")
 QUESTION_TYPES = ("findings", "impression")
 LINEAR_METRICS = ("bleu_1", "bleu_4", "rouge_l", "meteor", "cider", "bertscore_f1")
+BERTSCORE_LANGUAGE = "en"
+BERTSCORE_NUM_LAYERS = 17
 
 
 def read_jsonl(path: Path) -> list[dict[str, Any]]:
@@ -88,23 +90,27 @@ def add_bertscore(
     model_type: str,
     model_path: Path | None,
     baseline_path: Path | None,
+    num_layers: int,
     batch_size: int,
     device: str,
 ) -> str:
     from bert_score import score
 
     model_source = str(model_path) if model_path else model_type
-    _, _, f1, model_hash = score(
+    scores, model_hash = score(
         list(predictions),
         list(references),
         model_type=model_source,
+        num_layers=num_layers,
         batch_size=batch_size,
         device=device,
+        lang=BERTSCORE_LANGUAGE,
         rescale_with_baseline=True,
         baseline_path=str(baseline_path) if baseline_path else None,
         return_hash=True,
         verbose=False,
     )
+    _, _, f1 = scores
     for row, value in zip(rows, f1.cpu().numpy().tolist(), strict=True):
         row["bertscore_f1"] = float(value)
     return str(model_hash)
@@ -177,6 +183,7 @@ def run(args: argparse.Namespace) -> None:
                 model_type=args.bertscore_model,
                 model_path=args.bertscore_model_path,
                 baseline_path=baseline_path,
+                num_layers=args.bertscore_num_layers,
                 batch_size=args.bertscore_batch_size,
                 device=args.device,
             )
@@ -249,6 +256,7 @@ def run(args: argparse.Namespace) -> None:
                 if args.bertscore_model_path else None
             ),
             "bertscore_baseline_path": str(baseline_path) if baseline_path else None,
+            "bertscore_num_layers": args.bertscore_num_layers,
             "bertscore_baseline_sha256": file_sha256(baseline_path) if baseline_path else None,
             "bertscore_hashes": bert_hashes,
             "bertscore_rescale_with_baseline": True,
@@ -273,6 +281,7 @@ def main() -> None:
     parser.add_argument("--bertscore-model", default="roberta-large")
     parser.add_argument("--bertscore-model-path", type=Path)
     parser.add_argument("--bertscore-baseline-path", type=Path)
+    parser.add_argument("--bertscore-num-layers", type=int, default=BERTSCORE_NUM_LAYERS)
     parser.add_argument("--bertscore-batch-size", type=int, default=8)
     parser.add_argument("--device", default="cuda")
     parser.add_argument("--skip-bertscore", action="store_true")

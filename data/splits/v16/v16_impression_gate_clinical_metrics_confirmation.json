@@ -1,0 +1,1630 @@
+{
+  "study": "V16 paired candidate generation metrics",
+  "status": "confirmation_evaluation_complete_no_retuning",
+  "no_test_evaluation": false,
+  "counts": {
+    "cases": 568,
+    "rows_per_arm": 3408
+  },
+  "arms": {
+    "base": {
+      "no_history": {
+        "row_count": 1136,
+        "chexbert": {
+          "case_count": 568,
+          "row_count": 1136,
+          "micro_f1_14": 0.5561087705859824,
+          "macro_f1_14": 0.2718226257432665,
+          "micro_f1_5": 0.34545454545454546,
+          "macro_f1_5": 0.25042906400043885,
+          "exact_set_accuracy_5": 0.7517605633802817,
+          "mean_reference_positive_recall": 0.6301829268292682,
+          "reference_positive_recall_row_count": 984,
+          "mean_predicted_positive_precision": 0.571032103210321,
+          "predicted_positive_precision_row_count": 1111,
+          "positive_label_hamming_agreement": 0.9271252515090543,
+          "reference_positive_omission_count": 551,
+          "predicted_positive_addition_count": 608,
+          "per_condition": {
+            "Enlarged Cardiomediastinum": {
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "reference_positive_support": 60,
+              "predicted_positive_count": 2,
+              "true_positive_count": 0,
+              "omission_count": 60,
+              "addition_count": 2
+            },
+            "Cardiomegaly": {
+              "precision": 0.3485714285714286,
+              "recall": 0.6161616161616161,
+              "f1": 0.44525547445255476,
+              "reference_positive_support": 99,
+              "predicted_positive_count": 175,
+              "true_positive_count": 61,
+              "omission_count": 38,
+              "addition_count": 114
+            },
+            "Lung Opacity": {
+              "precision": 0.49612403100775193,
+              "recall": 0.47058823529411764,
+              "f1": 0.4830188679245283,
+              "reference_positive_support": 136,
+              "predicted_positive_count": 129,
+              "true_positive_count": 64,
+              "omission_count": 72,
+              "addition_count": 65
+            },
+            "Lung Lesion": {
+              "precision": 0.18181818181818182,
+              "recall": 0.0784313725490196,
+              "f1": 0.1095890410958904,
+              "reference_positive_support": 51,
+              "predicted_positive_count": 22,
+              "true_positive_count": 4,
+              "omission_count": 47,
+              "addition_count": 18
+            },
+            "Edema": {
+              "precision": 0.25,
+              "recall": 0.22727272727272727,
+              "f1": 0.23809523809523808,
+              "reference_positive_support": 22,
+              "predicted_positive_count": 20,
+              "true_positive_count": 5,
+              "omission_count": 17,
+              "addition_count": 15
+            },
+            "Consolidation": {
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "reference_positive_support": 15,
+              "predicted_positive_count": 18,
+              "true_positive_count": 0,
+              "omission_count": 15,
+              "addition_count": 18
+            },
+            "Pneumonia": {
+              "precision": 0.37142857142857144,
+              "recall": 0.35135135135135137,
+              "f1": 0.3611111111111111,
+              "reference_positive_support": 37,
+              "predicted_positive_count": 35,
+              "true_positive_count": 13,
+              "omission_count": 24,
+              "addition_count": 22
+            },
+            "Atelectasis": {
+              "precision": 0.4444444444444444,
+              "recall": 0.10126582278481013,
+              "f1": 0.16494845360824742,
+              "reference_positive_support": 79,
+              "predicted_positive_count": 18,
+              "true_positive_count": 8,
+              "omission_count": 71,
+              "addition_count": 10
+            },
+            "Pneumothorax": {
+              "precision": 0.25,
+              "recall": 0.25,
+              "f1": 0.25,
+              "reference_positive_support": 4,
+              "predicted_positive_count": 4,
+              "true_positive_count": 1,
+              "omission_count": 3,
+              "addition_count": 3
+            },
+            "Pleural Effusion": {
+              "precision": 0.3333333333333333,
+              "recall": 0.5121951219512195,
+              "f1": 0.40384615384615385,
+              "reference_positive_support": 41,
+              "predicted_positive_count": 63,
+              "true_positive_count": 21,
+              "omission_count": 20,
+              "addition_count": 42
+            },
+            "Pleural Other": {
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "reference_positive_support": 17,
+              "predicted_positive_count": 5,
+              "true_positive_count": 0,
+              "omission_count": 17,
+              "addition_count": 5
+            },
+            "Fracture": {
+              "precision": 0.3333333333333333,
+              "recall": 0.02857142857142857,
+              "f1": 0.05263157894736842,
+              "reference_positive_support": 35,
+              "predicted_positive_count": 3,
+              "true_positive_count": 1,
+              "omission_count": 34,
+              "addition_count": 2
+            },
+            "Support Devices": {
+              "precision": 0.5490196078431373,
+              "recall": 0.5833333333333334,
+              "f1": 0.5656565656565656,
+              "reference_positive_support": 48,
+              "predicted_positive_count": 51,
+              "true_positive_count": 28,
+              "omission_count": 20,
+              "addition_count": 23
+            },
+            "No Finding": {
+              "precision": 0.6590621039290241,
+              "recall": 0.8214849921011058,
+              "f1": 0.7313642756680732,
+              "reference_positive_support": 633,
+              "predicted_positive_count": 789,
+              "true_positive_count": 520,
+              "omission_count": 113,
+              "addition_count": 269
+            }
+          }
+        },
+        "linear": {
+          "token_f1": 0.16922157507621444,
+          "f1_radgraph_entity": 0.13401478498250674,
+          "f1_radgraph_entity_relation": 0.12238458153163831,
+          "f1_radgraph_complete": 0.09980965934917646
+        },
+        "answer_only_contract_valid_rate": 1.0,
+        "provenance_valid_rate": 1.0,
+        "token_ceiling_rate": 0.8785211267605634
+      },
+      "retrieved_history": {
+        "row_count": 1136,
+        "chexbert": {
+          "case_count": 568,
+          "row_count": 1136,
+          "micro_f1_14": 0.5639295088113986,
+          "macro_f1_14": 0.25976605757173904,
+          "micro_f1_5": 0.35984848484848486,
+          "macro_f1_5": 0.2956711788362384,
+          "exact_set_accuracy_5": 0.7693661971830986,
+          "mean_reference_positive_recall": 0.6521849593495935,
+          "reference_positive_recall_row_count": 984,
+          "mean_predicted_positive_precision": 0.579861111111111,
+          "predicted_positive_precision_row_count": 1104,
+          "positive_label_hamming_agreement": 0.9268737424547284,
+          "reference_positive_omission_count": 525,
+          "predicted_positive_addition_count": 638,
+          "per_condition": {
+            "Enlarged Cardiomediastinum": {
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "reference_positive_support": 60,
+              "predicted_positive_count": 7,
+              "true_positive_count": 0,
+              "omission_count": 60,
+              "addition_count": 7
+            },
+            "Cardiomegaly": {
+              "precision": 0.35714285714285715,
+              "recall": 0.45454545454545453,
+              "f1": 0.4,
+              "reference_positive_support": 99,
+              "predicted_positive_count": 126,
+              "true_positive_count": 45,
+              "omission_count": 54,
+              "addition_count": 81
+            },
+            "Lung Opacity": {
+              "precision": 0.46706586826347307,
+              "recall": 0.5735294117647058,
+              "f1": 0.5148514851485149,
+              "reference_positive_support": 136,
+              "predicted_positive_count": 167,
+              "true_positive_count": 78,
+              "omission_count": 58,
+              "addition_count": 89
+            },
+            "Lung Lesion": {
+              "precision": 0.2,
+              "recall": 0.13725490196078433,
+              "f1": 0.16279069767441862,
+              "reference_positive_support": 51,
+              "predicted_positive_count": 35,
+              "true_positive_count": 7,
+              "omission_count": 44,
+              "addition_count": 28
+            },
+            "Edema": {
+              "precision": 0.19047619047619047,
+              "recall": 0.18181818181818182,
+              "f1": 0.18604651162790697,
+              "reference_positive_support": 22,
+              "predicted_positive_count": 21,
+              "true_positive_count": 4,
+              "omission_count": 18,
+              "addition_count": 17
+            },
+            "Consolidation": {
+              "precision": 0.06666666666666667,
+              "recall": 0.06666666666666667,
+              "f1": 0.06666666666666667,
+              "reference_positive_support": 15,
+              "predicted_positive_count": 15,
+              "true_positive_count": 1,
+              "omission_count": 14,
+              "addition_count": 14
+            },
+            "Pneumonia": {
+              "precision": 0.2653061224489796,
+              "recall": 0.35135135135135137,
+              "f1": 0.3023255813953488,
+              "reference_positive_support": 37,
+              "predicted_positive_count": 49,
+              "true_positive_count": 13,
+              "omission_count": 24,
+              "addition_count": 36
+            },
+            "Atelectasis": {
+              "precision": 0.36231884057971014,
+              "recall": 0.31645569620253167,
+              "f1": 0.33783783783783783,
+              "reference_positive_support": 79,
+              "predicted_positive_count": 69,
+              "true_positive_count": 25,
+              "omission_count": 54,
+              "addition_count": 44
+            },
+            "Pneumothorax": {
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "reference_positive_support": 4,
+              "predicted_positive_count": 2,
+              "true_positive_count": 0,
+              "omission_count": 4,
+              "addition_count": 2
+            },
+            "Pleural Effusion": {
+              "precision": 0.4878048780487805,
+              "recall": 0.4878048780487805,
+              "f1": 0.4878048780487805,
+              "reference_positive_support": 41,
+              "predicted_positive_count": 41,
+              "true_positive_count": 20,
+              "omission_count": 21,
+              "addition_count": 21
+            },
+            "Pleural Other": {
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "reference_positive_support": 17,
+              "predicted_positive_count": 3,
+              "true_positive_count": 0,
+              "omission_count": 17,
+              "addition_count": 3
+            },
+            "Fracture": {
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "reference_positive_support": 35,
+              "predicted_positive_count": 0,
+              "true_positive_count": 0,
+              "omission_count": 35,
+              "addition_count": 0
+            },
+            "Support Devices": {
+              "precision": 0.5142857142857142,
+              "recall": 0.375,
+              "f1": 0.43373493975903615,
+              "reference_positive_support": 48,
+              "predicted_positive_count": 35,
+              "true_positive_count": 18,
+              "omission_count": 30,
+              "addition_count": 17
+            },
+            "No Finding": {
+              "precision": 0.6597560975609756,
+              "recall": 0.8546603475513428,
+              "f1": 0.7446662078458361,
+              "reference_positive_support": 633,
+              "predicted_positive_count": 820,
+              "true_positive_count": 541,
+              "omission_count": 92,
+              "addition_count": 279
+            }
+          }
+        },
+        "linear": {
+          "token_f1": 0.20570445579154806,
+          "f1_radgraph_entity": 0.1567299781148172,
+          "f1_radgraph_entity_relation": 0.1406223704592464,
+          "f1_radgraph_complete": 0.11564625112180238
+        },
+        "answer_only_contract_valid_rate": 1.0,
+        "provenance_valid_rate": 1.0,
+        "token_ceiling_rate": 0.8785211267605634
+      },
+      "random_history": {
+        "row_count": 1136,
+        "chexbert": {
+          "case_count": 568,
+          "row_count": 1136,
+          "micro_f1_14": 0.49713631156930127,
+          "macro_f1_14": 0.230035746574851,
+          "micro_f1_5": 0.3046594982078853,
+          "macro_f1_5": 0.2553966227364091,
+          "exact_set_accuracy_5": 0.7315140845070423,
+          "mean_reference_positive_recall": 0.5719173441734418,
+          "reference_positive_recall_row_count": 984,
+          "mean_predicted_positive_precision": 0.52516010978957,
+          "predicted_positive_precision_row_count": 1093,
+          "positive_label_hamming_agreement": 0.9171906438631791,
+          "reference_positive_omission_count": 626,
+          "predicted_positive_addition_count": 691,
+          "per_condition": {
+            "Enlarged Cardiomediastinum": {
+              "precision": 0.09090909090909091,
+              "recall": 0.016666666666666666,
+              "f1": 0.028169014084507043,
+              "reference_positive_support": 60,
+              "predicted_positive_count": 11,
+              "true_positive_count": 1,
+              "omission_count": 59,
+              "addition_count": 10
+            },
+            "Cardiomegaly": {
+              "precision": 0.3424657534246575,
+              "recall": 0.5050505050505051,
+              "f1": 0.40816326530612246,
+              "reference_positive_support": 99,
+              "predicted_positive_count": 146,
+              "true_positive_count": 50,
+              "omission_count": 49,
+              "addition_count": 96
+            },
+            "Lung Opacity": {
+              "precision": 0.33112582781456956,
+              "recall": 0.36764705882352944,
+              "f1": 0.34843205574912894,
+              "reference_positive_support": 136,
+              "predicted_positive_count": 151,
+              "true_positive_count": 50,
+              "omission_count": 86,
+              "addition_count": 101
+            },
+            "Lung Lesion": {
+              "precision": 0.11363636363636363,
+              "recall": 0.09803921568627451,
+              "f1": 0.10526315789473684,
+              "reference_positive_support": 51,
+              "predicted_positive_count": 44,
+              "true_positive_count": 5,
+              "omission_count": 46,
+              "addition_count": 39
+            },
+            "Edema": {
+              "precision": 0.3181818181818182,
+              "recall": 0.3181818181818182,
+              "f1": 0.3181818181818182,
+              "reference_positive_support": 22,
+              "predicted_positive_count": 22,
+              "true_positive_count": 7,
+              "omission_count": 15,
+              "addition_count": 15
+            },
+            "Consolidation": {
+              "precision": 0.058823529411764705,
+              "recall": 0.06666666666666667,
+              "f1": 0.0625,
+              "reference_positive_support": 15,
+              "predicted_positive_count": 17,
+              "true_positive_count": 1,
+              "omission_count": 14,
+              "addition_count": 16
+            },
+            "Pneumonia": {
+              "precision": 0.30303030303030304,
+              "recall": 0.2702702702702703,
+              "f1": 0.2857142857142857,
+              "reference_positive_support": 37,
+              "predicted_positive_count": 33,
+              "true_positive_count": 10,
+              "omission_count": 27,
+              "addition_count": 23
+            },
+            "Atelectasis": {
+              "precision": 0.09803921568627451,
+              "recall": 0.06329113924050633,
+              "f1": 0.07692307692307693,
+              "reference_positive_support": 79,
+              "predicted_positive_count": 51,
+              "true_positive_count": 5,
+              "omission_count": 74,
+              "addition_count": 46
+            },
+            "Pneumothorax": {
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "reference_positive_support": 4,
+              "predicted_positive_count": 2,
+              "true_positive_count": 0,
+              "omission_count": 4,
+              "addition_count": 2
+            },
+            "Pleural Effusion": {
+              "precision": 0.3333333333333333,
+              "recall": 0.5365853658536586,
+              "f1": 0.411214953271028,
+              "reference_positive_support": 41,
+              "predicted_positive_count": 66,
+              "true_positive_count": 22,
+              "omission_count": 19,
+              "addition_count": 44
+            },
+            "Pleural Other": {
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "reference_positive_support": 17,
+              "predicted_positive_count": 5,
+              "true_positive_count": 0,
+              "omission_count": 17,
+              "addition_count": 5
+            },
+            "Fracture": {
+              "precision": 0.14285714285714285,
+              "recall": 0.02857142857142857,
+              "f1": 0.047619047619047616,
+              "reference_positive_support": 35,
+              "predicted_positive_count": 7,
+              "true_positive_count": 1,
+              "omission_count": 34,
+              "addition_count": 6
+            },
+            "Support Devices": {
+              "precision": 0.5142857142857142,
+              "recall": 0.375,
+              "f1": 0.43373493975903615,
+              "reference_positive_support": 48,
+              "predicted_positive_count": 35,
+              "true_positive_count": 18,
+              "omission_count": 30,
+              "addition_count": 17
+            },
+            "No Finding": {
+              "precision": 0.6396276595744681,
+              "recall": 0.7598736176935229,
+              "f1": 0.6945848375451263,
+              "reference_positive_support": 633,
+              "predicted_positive_count": 752,
+              "true_positive_count": 481,
+              "omission_count": 152,
+              "addition_count": 271
+            }
+          }
+        },
+        "linear": {
+          "token_f1": 0.19608493247938885,
+          "f1_radgraph_entity": 0.14165443744630413,
+          "f1_radgraph_entity_relation": 0.12699037809791375,
+          "f1_radgraph_complete": 0.10339917138586595
+        },
+        "answer_only_contract_valid_rate": 1.0,
+        "provenance_valid_rate": 1.0,
+        "token_ceiling_rate": 0.8732394366197183
+      }
+    },
+    "impression_gate": {
+      "no_history": {
+        "row_count": 1136,
+        "chexbert": {
+          "case_count": 568,
+          "row_count": 1136,
+          "micro_f1_14": 0.5561087705859824,
+          "macro_f1_14": 0.2718226257432665,
+          "micro_f1_5": 0.34545454545454546,
+          "macro_f1_5": 0.25042906400043885,
+          "exact_set_accuracy_5": 0.7517605633802817,
+          "mean_reference_positive_recall": 0.6301829268292682,
+          "reference_positive_recall_row_count": 984,
+          "mean_predicted_positive_precision": 0.571032103210321,
+          "predicted_positive_precision_row_count": 1111,
+          "positive_label_hamming_agreement": 0.9271252515090543,
+          "reference_positive_omission_count": 551,
+          "predicted_positive_addition_count": 608,
+          "per_condition": {
+            "Enlarged Cardiomediastinum": {
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "reference_positive_support": 60,
+              "predicted_positive_count": 2,
+              "true_positive_count": 0,
+              "omission_count": 60,
+              "addition_count": 2
+            },
+            "Cardiomegaly": {
+              "precision": 0.3485714285714286,
+              "recall": 0.6161616161616161,
+              "f1": 0.44525547445255476,
+              "reference_positive_support": 99,
+              "predicted_positive_count": 175,
+              "true_positive_count": 61,
+              "omission_count": 38,
+              "addition_count": 114
+            },
+            "Lung Opacity": {
+              "precision": 0.49612403100775193,
+              "recall": 0.47058823529411764,
+              "f1": 0.4830188679245283,
+              "reference_positive_support": 136,
+              "predicted_positive_count": 129,
+              "true_positive_count": 64,
+              "omission_count": 72,
+              "addition_count": 65
+            },
+            "Lung Lesion": {
+              "precision": 0.18181818181818182,
+              "recall": 0.0784313725490196,
+              "f1": 0.1095890410958904,
+              "reference_positive_support": 51,
+              "predicted_positive_count": 22,
+              "true_positive_count": 4,
+              "omission_count": 47,
+              "addition_count": 18
+            },
+            "Edema": {
+              "precision": 0.25,
+              "recall": 0.22727272727272727,
+              "f1": 0.23809523809523808,
+              "reference_positive_support": 22,
+              "predicted_positive_count": 20,
+              "true_positive_count": 5,
+              "omission_count": 17,
+              "addition_count": 15
+            },
+            "Consolidation": {
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "reference_positive_support": 15,
+              "predicted_positive_count": 18,
+              "true_positive_count": 0,
+              "omission_count": 15,
+              "addition_count": 18
+            },
+            "Pneumonia": {
+              "precision": 0.37142857142857144,
+              "recall": 0.35135135135135137,
+              "f1": 0.3611111111111111,
+              "reference_positive_support": 37,
+              "predicted_positive_count": 35,
+              "true_positive_count": 13,
+              "omission_count": 24,
+              "addition_count": 22
+            },
+            "Atelectasis": {
+              "precision": 0.4444444444444444,
+              "recall": 0.10126582278481013,
+              "f1": 0.16494845360824742,
+              "reference_positive_support": 79,
+              "predicted_positive_count": 18,
+              "true_positive_count": 8,
+              "omission_count": 71,
+              "addition_count": 10
+            },
+            "Pneumothorax": {
+              "precision": 0.25,
+              "recall": 0.25,
+              "f1": 0.25,
+              "reference_positive_support": 4,
+              "predicted_positive_count": 4,
+              "true_positive_count": 1,
+              "omission_count": 3,
+              "addition_count": 3
+            },
+            "Pleural Effusion": {
+              "precision": 0.3333333333333333,
+              "recall": 0.5121951219512195,
+              "f1": 0.40384615384615385,
+              "reference_positive_support": 41,
+              "predicted_positive_count": 63,
+              "true_positive_count": 21,
+              "omission_count": 20,
+              "addition_count": 42
+            },
+            "Pleural Other": {
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "reference_positive_support": 17,
+              "predicted_positive_count": 5,
+              "true_positive_count": 0,
+              "omission_count": 17,
+              "addition_count": 5
+            },
+            "Fracture": {
+              "precision": 0.3333333333333333,
+              "recall": 0.02857142857142857,
+              "f1": 0.05263157894736842,
+              "reference_positive_support": 35,
+              "predicted_positive_count": 3,
+              "true_positive_count": 1,
+              "omission_count": 34,
+              "addition_count": 2
+            },
+            "Support Devices": {
+              "precision": 0.5490196078431373,
+              "recall": 0.5833333333333334,
+              "f1": 0.5656565656565656,
+              "reference_positive_support": 48,
+              "predicted_positive_count": 51,
+              "true_positive_count": 28,
+              "omission_count": 20,
+              "addition_count": 23
+            },
+            "No Finding": {
+              "precision": 0.6590621039290241,
+              "recall": 0.8214849921011058,
+              "f1": 0.7313642756680732,
+              "reference_positive_support": 633,
+              "predicted_positive_count": 789,
+              "true_positive_count": 520,
+              "omission_count": 113,
+              "addition_count": 269
+            }
+          }
+        },
+        "linear": {
+          "token_f1": 0.16922157507621444,
+          "f1_radgraph_entity": 0.13401478498250674,
+          "f1_radgraph_entity_relation": 0.12238458153163831,
+          "f1_radgraph_complete": 0.09980965934917646
+        },
+        "answer_only_contract_valid_rate": 1.0,
+        "provenance_valid_rate": 1.0,
+        "token_ceiling_rate": 0.8785211267605634
+      },
+      "retrieved_history": {
+        "row_count": 1136,
+        "chexbert": {
+          "case_count": 568,
+          "row_count": 1136,
+          "micro_f1_14": 0.5584761904761905,
+          "macro_f1_14": 0.24798032500363404,
+          "micro_f1_5": 0.35546875,
+          "macro_f1_5": 0.29090577330141487,
+          "exact_set_accuracy_5": 0.7711267605633803,
+          "mean_reference_positive_recall": 0.6413787262872629,
+          "reference_positive_recall_row_count": 984,
+          "mean_predicted_positive_precision": 0.5804925959504381,
+          "predicted_positive_precision_row_count": 1103,
+          "positive_label_hamming_agreement": 0.9271252515090543,
+          "reference_positive_omission_count": 544,
+          "predicted_positive_addition_count": 615,
+          "per_condition": {
+            "Enlarged Cardiomediastinum": {
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "reference_positive_support": 60,
+              "predicted_positive_count": 7,
+              "true_positive_count": 0,
+              "omission_count": 60,
+              "addition_count": 7
+            },
+            "Cardiomegaly": {
+              "precision": 0.3697478991596639,
+              "recall": 0.4444444444444444,
+              "f1": 0.4036697247706422,
+              "reference_positive_support": 99,
+              "predicted_positive_count": 119,
+              "true_positive_count": 44,
+              "omission_count": 55,
+              "addition_count": 75
+            },
+            "Lung Opacity": {
+              "precision": 0.45394736842105265,
+              "recall": 0.5073529411764706,
+              "f1": 0.4791666666666667,
+              "reference_positive_support": 136,
+              "predicted_positive_count": 152,
+              "true_positive_count": 69,
+              "omission_count": 67,
+              "addition_count": 83
+            },
+            "Lung Lesion": {
+              "precision": 0.17857142857142858,
+              "recall": 0.09803921568627451,
+              "f1": 0.12658227848101267,
+              "reference_positive_support": 51,
+              "predicted_positive_count": 28,
+              "true_positive_count": 5,
+              "omission_count": 46,
+              "addition_count": 23
+            },
+            "Edema": {
+              "precision": 0.1875,
+              "recall": 0.13636363636363635,
+              "f1": 0.15789473684210525,
+              "reference_positive_support": 22,
+              "predicted_positive_count": 16,
+              "true_positive_count": 3,
+              "omission_count": 19,
+              "addition_count": 13
+            },
+            "Consolidation": {
+              "precision": 0.0625,
+              "recall": 0.06666666666666667,
+              "f1": 0.06451612903225806,
+              "reference_positive_support": 15,
+              "predicted_positive_count": 16,
+              "true_positive_count": 1,
+              "omission_count": 14,
+              "addition_count": 15
+            },
+            "Pneumonia": {
+              "precision": 0.25,
+              "recall": 0.2702702702702703,
+              "f1": 0.2597402597402597,
+              "reference_positive_support": 37,
+              "predicted_positive_count": 40,
+              "true_positive_count": 10,
+              "omission_count": 27,
+              "addition_count": 30
+            },
+            "Atelectasis": {
+              "precision": 0.3333333333333333,
+              "recall": 0.27848101265822783,
+              "f1": 0.30344827586206896,
+              "reference_positive_support": 79,
+              "predicted_positive_count": 66,
+              "true_positive_count": 22,
+              "omission_count": 57,
+              "addition_count": 44
+            },
+            "Pneumothorax": {
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "reference_positive_support": 4,
+              "predicted_positive_count": 2,
+              "true_positive_count": 0,
+              "omission_count": 4,
+              "addition_count": 2
+            },
+            "Pleural Effusion": {
+              "precision": 0.5384615384615384,
+              "recall": 0.5121951219512195,
+              "f1": 0.525,
+              "reference_positive_support": 41,
+              "predicted_positive_count": 39,
+              "true_positive_count": 21,
+              "omission_count": 20,
+              "addition_count": 18
+            },
+            "Pleural Other": {
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "reference_positive_support": 17,
+              "predicted_positive_count": 4,
+              "true_positive_count": 0,
+              "omission_count": 17,
+              "addition_count": 4
+            },
+            "Fracture": {
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "reference_positive_support": 35,
+              "predicted_positive_count": 0,
+              "true_positive_count": 0,
+              "omission_count": 35,
+              "addition_count": 0
+            },
+            "Support Devices": {
+              "precision": 0.5333333333333333,
+              "recall": 0.3333333333333333,
+              "f1": 0.41025641025641024,
+              "reference_positive_support": 48,
+              "predicted_positive_count": 30,
+              "true_positive_count": 16,
+              "omission_count": 32,
+              "addition_count": 14
+            },
+            "No Finding": {
+              "precision": 0.6537997587454765,
+              "recall": 0.8562401263823065,
+              "f1": 0.7414500683994528,
+              "reference_positive_support": 633,
+              "predicted_positive_count": 829,
+              "true_positive_count": 542,
+              "omission_count": 91,
+              "addition_count": 287
+            }
+          }
+        },
+        "linear": {
+          "token_f1": 0.2559060224095707,
+          "f1_radgraph_entity": 0.18573356412366773,
+          "f1_radgraph_entity_relation": 0.16905504726414586,
+          "f1_radgraph_complete": 0.14251289401989822
+        },
+        "answer_only_contract_valid_rate": 1.0,
+        "provenance_valid_rate": 1.0,
+        "token_ceiling_rate": 0.5660211267605634
+      },
+      "random_history": {
+        "row_count": 1136,
+        "chexbert": {
+          "case_count": 568,
+          "row_count": 1136,
+          "micro_f1_14": 0.49713631156930127,
+          "macro_f1_14": 0.230035746574851,
+          "micro_f1_5": 0.3046594982078853,
+          "macro_f1_5": 0.2553966227364091,
+          "exact_set_accuracy_5": 0.7315140845070423,
+          "mean_reference_positive_recall": 0.5719173441734418,
+          "reference_positive_recall_row_count": 984,
+          "mean_predicted_positive_precision": 0.52516010978957,
+          "predicted_positive_precision_row_count": 1093,
+          "positive_label_hamming_agreement": 0.9171906438631791,
+          "reference_positive_omission_count": 626,
+          "predicted_positive_addition_count": 691,
+          "per_condition": {
+            "Enlarged Cardiomediastinum": {
+              "precision": 0.09090909090909091,
+              "recall": 0.016666666666666666,
+              "f1": 0.028169014084507043,
+              "reference_positive_support": 60,
+              "predicted_positive_count": 11,
+              "true_positive_count": 1,
+              "omission_count": 59,
+              "addition_count": 10
+            },
+            "Cardiomegaly": {
+              "precision": 0.3424657534246575,
+              "recall": 0.5050505050505051,
+              "f1": 0.40816326530612246,
+              "reference_positive_support": 99,
+              "predicted_positive_count": 146,
+              "true_positive_count": 50,
+              "omission_count": 49,
+              "addition_count": 96
+            },
+            "Lung Opacity": {
+              "precision": 0.33112582781456956,
+              "recall": 0.36764705882352944,
+              "f1": 0.34843205574912894,
+              "reference_positive_support": 136,
+              "predicted_positive_count": 151,
+              "true_positive_count": 50,
+              "omission_count": 86,
+              "addition_count": 101
+            },
+            "Lung Lesion": {
+              "precision": 0.11363636363636363,
+              "recall": 0.09803921568627451,
+              "f1": 0.10526315789473684,
+              "reference_positive_support": 51,
+              "predicted_positive_count": 44,
+              "true_positive_count": 5,
+              "omission_count": 46,
+              "addition_count": 39
+            },
+            "Edema": {
+              "precision": 0.3181818181818182,
+              "recall": 0.3181818181818182,
+              "f1": 0.3181818181818182,
+              "reference_positive_support": 22,
+              "predicted_positive_count": 22,
+              "true_positive_count": 7,
+              "omission_count": 15,
+              "addition_count": 15
+            },
+            "Consolidation": {
+              "precision": 0.058823529411764705,
+              "recall": 0.06666666666666667,
+              "f1": 0.0625,
+              "reference_positive_support": 15,
+              "predicted_positive_count": 17,
+              "true_positive_count": 1,
+              "omission_count": 14,
+              "addition_count": 16
+            },
+            "Pneumonia": {
+              "precision": 0.30303030303030304,
+              "recall": 0.2702702702702703,
+              "f1": 0.2857142857142857,
+              "reference_positive_support": 37,
+              "predicted_positive_count": 33,
+              "true_positive_count": 10,
+              "omission_count": 27,
+              "addition_count": 23
+            },
+            "Atelectasis": {
+              "precision": 0.09803921568627451,
+              "recall": 0.06329113924050633,
+              "f1": 0.07692307692307693,
+              "reference_positive_support": 79,
+              "predicted_positive_count": 51,
+              "true_positive_count": 5,
+              "omission_count": 74,
+              "addition_count": 46
+            },
+            "Pneumothorax": {
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "reference_positive_support": 4,
+              "predicted_positive_count": 2,
+              "true_positive_count": 0,
+              "omission_count": 4,
+              "addition_count": 2
+            },
+            "Pleural Effusion": {
+              "precision": 0.3333333333333333,
+              "recall": 0.5365853658536586,
+              "f1": 0.411214953271028,
+              "reference_positive_support": 41,
+              "predicted_positive_count": 66,
+              "true_positive_count": 22,
+              "omission_count": 19,
+              "addition_count": 44
+            },
+            "Pleural Other": {
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "reference_positive_support": 17,
+              "predicted_positive_count": 5,
+              "true_positive_count": 0,
+              "omission_count": 17,
+              "addition_count": 5
+            },
+            "Fracture": {
+              "precision": 0.14285714285714285,
+              "recall": 0.02857142857142857,
+              "f1": 0.047619047619047616,
+              "reference_positive_support": 35,
+              "predicted_positive_count": 7,
+              "true_positive_count": 1,
+              "omission_count": 34,
+              "addition_count": 6
+            },
+            "Support Devices": {
+              "precision": 0.5142857142857142,
+              "recall": 0.375,
+              "f1": 0.43373493975903615,
+              "reference_positive_support": 48,
+              "predicted_positive_count": 35,
+              "true_positive_count": 18,
+              "omission_count": 30,
+              "addition_count": 17
+            },
+            "No Finding": {
+              "precision": 0.6396276595744681,
+              "recall": 0.7598736176935229,
+              "f1": 0.6945848375451263,
+              "reference_positive_support": 633,
+              "predicted_positive_count": 752,
+              "true_positive_count": 481,
+              "omission_count": 152,
+              "addition_count": 271
+            }
+          }
+        },
+        "linear": {
+          "token_f1": 0.19608493247938885,
+          "f1_radgraph_entity": 0.14165443744630413,
+          "f1_radgraph_entity_relation": 0.12699037809791375,
+          "f1_radgraph_complete": 0.10339917138586595
+        },
+        "answer_only_contract_valid_rate": 1.0,
+        "provenance_valid_rate": 1.0,
+        "token_ceiling_rate": 0.8732394366197183
+      }
+    }
+  },
+  "impression_gate_minus_base": {
+    "no_history": {
+      "linear": {
+        "token_f1": {
+          "case_count": 568,
+          "mean_difference": 0.0,
+          "ci_95_low": 0.0,
+          "ci_95_high": 0.0,
+          "ci_excludes_zero": false,
+          "iterations": 10000,
+          "seed": 1626
+        },
+        "f1_radgraph_entity": {
+          "case_count": 568,
+          "mean_difference": 0.0,
+          "ci_95_low": 0.0,
+          "ci_95_high": 0.0,
+          "ci_excludes_zero": false,
+          "iterations": 10000,
+          "seed": 1627
+        },
+        "f1_radgraph_entity_relation": {
+          "case_count": 568,
+          "mean_difference": 0.0,
+          "ci_95_low": 0.0,
+          "ci_95_high": 0.0,
+          "ci_excludes_zero": false,
+          "iterations": 10000,
+          "seed": 1628
+        },
+        "f1_radgraph_complete": {
+          "case_count": 568,
+          "mean_difference": 0.0,
+          "ci_95_low": 0.0,
+          "ci_95_high": 0.0,
+          "ci_excludes_zero": false,
+          "iterations": 10000,
+          "seed": 1629
+        }
+      },
+      "chexbert": {
+        "micro_f1_14": {
+          "mean_difference": 0.0,
+          "ci_95_low": 0.0,
+          "ci_95_high": 0.0
+        },
+        "macro_f1_14": {
+          "mean_difference": 0.0,
+          "ci_95_low": 0.0,
+          "ci_95_high": 0.0
+        },
+        "micro_f1_5": {
+          "mean_difference": 0.0,
+          "ci_95_low": 0.0,
+          "ci_95_high": 0.0
+        },
+        "macro_f1_5": {
+          "mean_difference": 0.0,
+          "ci_95_low": 0.0,
+          "ci_95_high": 0.0
+        },
+        "exact_set_accuracy_5": {
+          "mean_difference": 0.0,
+          "ci_95_low": 0.0,
+          "ci_95_high": 0.0
+        },
+        "mean_reference_positive_recall": {
+          "mean_difference": 0.0,
+          "ci_95_low": 0.0,
+          "ci_95_high": 0.0
+        },
+        "mean_predicted_positive_precision": {
+          "mean_difference": 0.0,
+          "ci_95_low": 0.0,
+          "ci_95_high": 0.0
+        },
+        "positive_label_hamming_agreement": {
+          "mean_difference": 0.0,
+          "ci_95_low": 0.0,
+          "ci_95_high": 0.0
+        }
+      }
+    },
+    "retrieved_history": {
+      "linear": {
+        "token_f1": {
+          "case_count": 568,
+          "mean_difference": 0.0502015666180227,
+          "ci_95_low": 0.03962542603494894,
+          "ci_95_high": 0.06086400729713762,
+          "ci_excludes_zero": true,
+          "iterations": 10000,
+          "seed": 1726
+        },
+        "f1_radgraph_entity": {
+          "case_count": 568,
+          "mean_difference": 0.02900358600885053,
+          "ci_95_low": 0.019828853975596576,
+          "ci_95_high": 0.03840026970900698,
+          "ci_excludes_zero": true,
+          "iterations": 10000,
+          "seed": 1727
+        },
+        "f1_radgraph_entity_relation": {
+          "case_count": 568,
+          "mean_difference": 0.028432676804899474,
+          "ci_95_low": 0.0197546263219473,
+          "ci_95_high": 0.0376727619897372,
+          "ci_excludes_zero": true,
+          "iterations": 10000,
+          "seed": 1728
+        },
+        "f1_radgraph_complete": {
+          "case_count": 568,
+          "mean_difference": 0.02686664289809586,
+          "ci_95_low": 0.018326501129246386,
+          "ci_95_high": 0.035623706479476984,
+          "ci_excludes_zero": true,
+          "iterations": 10000,
+          "seed": 1729
+        }
+      },
+      "chexbert": {
+        "micro_f1_14": {
+          "mean_difference": -0.005453318335208124,
+          "ci_95_low": -0.013894696767235362,
+          "ci_95_high": 0.002759997821475826
+        },
+        "macro_f1_14": {
+          "mean_difference": -0.011785732568105,
+          "ci_95_low": -0.024386333580878237,
+          "ci_95_high": 0.0007531224243276746
+        },
+        "micro_f1_5": {
+          "mean_difference": -0.004379734848484862,
+          "ci_95_low": -0.023272102353260726,
+          "ci_95_high": 0.01350693205416921
+        },
+        "macro_f1_5": {
+          "mean_difference": -0.004765405534823519,
+          "ci_95_low": -0.02903757747627833,
+          "ci_95_high": 0.017003756908756013
+        },
+        "exact_set_accuracy_5": {
+          "mean_difference": 0.0017605633802816323,
+          "ci_95_low": -0.007042253521126862,
+          "ci_95_high": 0.010563380281690127
+        },
+        "mean_reference_positive_recall": {
+          "mean_difference": -0.010806233062330639,
+          "ci_95_low": -0.020209884701970864,
+          "ci_95_high": -0.0016986829499712568
+        },
+        "mean_predicted_positive_precision": {
+          "mean_difference": 0.0006314848393270678,
+          "ci_95_low": -0.007245740676910822,
+          "ci_95_high": 0.008438609376524618
+        },
+        "positive_label_hamming_agreement": {
+          "mean_difference": 0.00025150905432591575,
+          "ci_95_low": -0.0011946680080483496,
+          "ci_95_high": 0.001697686116700184
+        }
+      }
+    },
+    "random_history": {
+      "linear": {
+        "token_f1": {
+          "case_count": 568,
+          "mean_difference": 0.0,
+          "ci_95_low": 0.0,
+          "ci_95_high": 0.0,
+          "ci_excludes_zero": false,
+          "iterations": 10000,
+          "seed": 1826
+        },
+        "f1_radgraph_entity": {
+          "case_count": 568,
+          "mean_difference": 0.0,
+          "ci_95_low": 0.0,
+          "ci_95_high": 0.0,
+          "ci_excludes_zero": false,
+          "iterations": 10000,
+          "seed": 1827
+        },
+        "f1_radgraph_entity_relation": {
+          "case_count": 568,
+          "mean_difference": 0.0,
+          "ci_95_low": 0.0,
+          "ci_95_high": 0.0,
+          "ci_excludes_zero": false,
+          "iterations": 10000,
+          "seed": 1828
+        },
+        "f1_radgraph_complete": {
+          "case_count": 568,
+          "mean_difference": 0.0,
+          "ci_95_low": 0.0,
+          "ci_95_high": 0.0,
+          "ci_excludes_zero": false,
+          "iterations": 10000,
+          "seed": 1829
+        }
+      },
+      "chexbert": {
+        "micro_f1_14": {
+          "mean_difference": 0.0,
+          "ci_95_low": 0.0,
+          "ci_95_high": 0.0
+        },
+        "macro_f1_14": {
+          "mean_difference": 0.0,
+          "ci_95_low": 0.0,
+          "ci_95_high": 0.0
+        },
+        "micro_f1_5": {
+          "mean_difference": 0.0,
+          "ci_95_low": 0.0,
+          "ci_95_high": 0.0
+        },
+        "macro_f1_5": {
+          "mean_difference": 0.0,
+          "ci_95_low": 0.0,
+          "ci_95_high": 0.0
+        },
+        "exact_set_accuracy_5": {
+          "mean_difference": 0.0,
+          "ci_95_low": 0.0,
+          "ci_95_high": 0.0
+        },
+        "mean_reference_positive_recall": {
+          "mean_difference": 0.0,
+          "ci_95_low": 0.0,
+          "ci_95_high": 0.0
+        },
+        "mean_predicted_positive_precision": {
+          "mean_difference": 0.0,
+          "ci_95_low": 0.0,
+          "ci_95_high": 0.0
+        },
+        "positive_label_hamming_agreement": {
+          "mean_difference": 0.0,
+          "ci_95_low": 0.0,
+          "ci_95_high": 0.0
+        }
+      }
+    }
+  },
+  "within_arm_comparisons": {
+    "base": {
+      "retrieved_history_minus_no_history": {
+        "linear": {
+          "token_f1": {
+            "case_count": 568,
+            "mean_difference": 0.0364828807153336,
+            "ci_95_low": 0.029770223667449167,
+            "ci_95_high": 0.04332918977961687,
+            "ci_excludes_zero": true,
+            "iterations": 10000,
+            "seed": 2026
+          },
+          "f1_radgraph_entity": {
+            "case_count": 568,
+            "mean_difference": 0.022715193132310452,
+            "ci_95_low": 0.015366244591753031,
+            "ci_95_high": 0.03020533644443585,
+            "ci_excludes_zero": true,
+            "iterations": 10000,
+            "seed": 2027
+          },
+          "f1_radgraph_entity_relation": {
+            "case_count": 568,
+            "mean_difference": 0.01823778892760807,
+            "ci_95_low": 0.011326699083219068,
+            "ci_95_high": 0.025140423401612776,
+            "ci_excludes_zero": true,
+            "iterations": 10000,
+            "seed": 2028
+          },
+          "f1_radgraph_complete": {
+            "case_count": 568,
+            "mean_difference": 0.01583659177262591,
+            "ci_95_low": 0.009342598607594616,
+            "ci_95_high": 0.022477968518453035,
+            "ci_excludes_zero": true,
+            "iterations": 10000,
+            "seed": 2029
+          }
+        },
+        "chexbert": {
+          "micro_f1_14": {
+            "mean_difference": 0.00782073822541618,
+            "ci_95_low": -0.014659766578080937,
+            "ci_95_high": 0.030420485062250965
+          },
+          "macro_f1_14": {
+            "mean_difference": -0.012056568171527449,
+            "ci_95_low": -0.04881858268235644,
+            "ci_95_high": 0.025903643349079748
+          },
+          "micro_f1_5": {
+            "mean_difference": 0.014393939393939403,
+            "ci_95_low": -0.04261349364091507,
+            "ci_95_high": 0.07255291038578379
+          },
+          "macro_f1_5": {
+            "mean_difference": 0.04524211483579954,
+            "ci_95_low": -0.009449632345429157,
+            "ci_95_high": 0.10073999658056143
+          },
+          "exact_set_accuracy_5": {
+            "mean_difference": 0.017605633802816878,
+            "ci_95_low": -0.005281690140845008,
+            "ci_95_high": 0.041373239436619746
+          },
+          "mean_reference_positive_recall": {
+            "mean_difference": 0.022002032520325288,
+            "ci_95_low": -0.0022259625186232057,
+            "ci_95_high": 0.04694204546884626
+          },
+          "mean_predicted_positive_precision": {
+            "mean_difference": 0.008829007900789998,
+            "ci_95_low": -0.012011268213135936,
+            "ci_95_high": 0.03015203221938757
+          },
+          "positive_label_hamming_agreement": {
+            "mean_difference": -0.00025150905432591575,
+            "ci_95_low": -0.0041498993963783315,
+            "ci_95_high": 0.003646881287726389
+          }
+        }
+      },
+      "retrieved_history_minus_random_history": {
+        "linear": {
+          "token_f1": {
+            "case_count": 568,
+            "mean_difference": 0.0096195233121592,
+            "ci_95_low": 0.002108565927491554,
+            "ci_95_high": 0.016883631770900437,
+            "ci_excludes_zero": true,
+            "iterations": 10000,
+            "seed": 2126
+          },
+          "f1_radgraph_entity": {
+            "case_count": 568,
+            "mean_difference": 0.015075540668513092,
+            "ci_95_low": 0.00605319451446598,
+            "ci_95_high": 0.024100866236633076,
+            "ci_excludes_zero": true,
+            "iterations": 10000,
+            "seed": 2127
+          },
+          "f1_radgraph_entity_relation": {
+            "case_count": 568,
+            "mean_difference": 0.01363199236133264,
+            "ci_95_low": 0.005274114860115791,
+            "ci_95_high": 0.021652797212655193,
+            "ci_excludes_zero": true,
+            "iterations": 10000,
+            "seed": 2128
+          },
+          "f1_radgraph_complete": {
+            "case_count": 568,
+            "mean_difference": 0.01224707973593643,
+            "ci_95_low": 0.004518563273999165,
+            "ci_95_high": 0.02007909674089118,
+            "ci_excludes_zero": true,
+            "iterations": 10000,
+            "seed": 2129
+          }
+        },
+        "chexbert": {
+          "micro_f1_14": {
+            "mean_difference": 0.06679319724209731,
+            "ci_95_low": 0.04242814949269545,
+            "ci_95_high": 0.09122497818053596
+          },
+          "macro_f1_14": {
+            "mean_difference": 0.029730310996888026,
+            "ci_95_low": 0.005283104884280169,
+            "ci_95_high": 0.05384644188683761
+          },
+          "micro_f1_5": {
+            "mean_difference": 0.05518898664059957,
+            "ci_95_low": -0.000607851470020132,
+            "ci_95_high": 0.11206657954939243
+          },
+          "macro_f1_5": {
+            "mean_difference": 0.04027455609982927,
+            "ci_95_low": -0.012623786625464139,
+            "ci_95_high": 0.0929719123557187
+          },
+          "exact_set_accuracy_5": {
+            "mean_difference": 0.03785211267605637,
+            "ci_95_low": 0.013204225352112742,
+            "ci_95_high": 0.0625
+          },
+          "mean_reference_positive_recall": {
+            "mean_difference": 0.08026761517615177,
+            "ci_95_low": 0.05333612124580306,
+            "ci_95_high": 0.10789263133492757
+          },
+          "mean_predicted_positive_precision": {
+            "mean_difference": 0.0547010013215411,
+            "ci_95_low": 0.032035863777936054,
+            "ci_95_high": 0.07741740018013678
+          },
+          "positive_label_hamming_agreement": {
+            "mean_difference": 0.009683098591549366,
+            "ci_95_low": 0.005281690140845008,
+            "ci_95_high": 0.014084507042253613
+          }
+        }
+      }
+    },
+    "impression_gate": {
+      "retrieved_history_minus_no_history": {
+        "linear": {
+          "token_f1": {
+            "case_count": 568,
+            "mean_difference": 0.08668444733335631,
+            "ci_95_low": 0.07306078082762127,
+            "ci_95_high": 0.10055064295986421,
+            "ci_excludes_zero": true,
+            "iterations": 10000,
+            "seed": 2026
+          },
+          "f1_radgraph_entity": {
+            "case_count": 568,
+            "mean_difference": 0.05171877914116098,
+            "ci_95_low": 0.04030721570293652,
+            "ci_95_high": 0.06374986683386735,
+            "ci_excludes_zero": true,
+            "iterations": 10000,
+            "seed": 2027
+          },
+          "f1_radgraph_entity_relation": {
+            "case_count": 568,
+            "mean_difference": 0.04667046573250754,
+            "ci_95_low": 0.03537802805609555,
+            "ci_95_high": 0.058201890617827295,
+            "ci_excludes_zero": true,
+            "iterations": 10000,
+            "seed": 2028
+          },
+          "f1_radgraph_complete": {
+            "case_count": 568,
+            "mean_difference": 0.04270323467072177,
+            "ci_95_low": 0.031915768295732026,
+            "ci_95_high": 0.053764005094857036,
+            "ci_excludes_zero": true,
+            "iterations": 10000,
+            "seed": 2029
+          }
+        },
+        "chexbert": {
+          "micro_f1_14": {
+            "mean_difference": 0.0023674198902080557,
+            "ci_95_low": -0.02118160837532639,
+            "ci_95_high": 0.026227002707896536
+          },
+          "macro_f1_14": {
+            "mean_difference": -0.02384230073963245,
+            "ci_95_low": -0.06265803066324284,
+            "ci_95_high": 0.01748781679081301
+          },
+          "micro_f1_5": {
+            "mean_difference": 0.010014204545454541,
+            "ci_95_low": -0.048992075607711814,
+            "ci_95_high": 0.07004080652374149
+          },
+          "macro_f1_5": {
+            "mean_difference": 0.04047670930097602,
+            "ci_95_low": -0.023237881693163837,
+            "ci_95_high": 0.10507472538946827
+          },
+          "exact_set_accuracy_5": {
+            "mean_difference": 0.01936619718309851,
+            "ci_95_low": -0.004401408450704247,
+            "ci_95_high": 0.04401408450704225
+          },
+          "mean_reference_positive_recall": {
+            "mean_difference": 0.011195799457994648,
+            "ci_95_low": -0.013215375852306014,
+            "ci_95_high": 0.03622608126721753
+          },
+          "mean_predicted_positive_precision": {
+            "mean_difference": 0.009460492740117066,
+            "ci_95_low": -0.012268892366997497,
+            "ci_95_high": 0.03168843272748448
+          },
+          "positive_label_hamming_agreement": {
+            "mean_difference": 0.0,
+            "ci_95_low": -0.004024144869215318,
+            "ci_95_high": 0.004087022132796769
+          }
+        }
+      },
+      "retrieved_history_minus_random_history": {
+        "linear": {
+          "token_f1": {
+            "case_count": 568,
+            "mean_difference": 0.0598210899301819,
+            "ci_95_low": 0.046847730284716414,
+            "ci_95_high": 0.07288546809963213,
+            "ci_excludes_zero": true,
+            "iterations": 10000,
+            "seed": 2126
+          },
+          "f1_radgraph_entity": {
+            "case_count": 568,
+            "mean_difference": 0.04407912667736363,
+            "ci_95_low": 0.03172762980833061,
+            "ci_95_high": 0.056715663600331236,
+            "ci_excludes_zero": true,
+            "iterations": 10000,
+            "seed": 2127
+          },
+          "f1_radgraph_entity_relation": {
+            "case_count": 568,
+            "mean_difference": 0.04206466916623212,
+            "ci_95_low": 0.030217443777036408,
+            "ci_95_high": 0.05412812501285802,
+            "ci_excludes_zero": true,
+            "iterations": 10000,
+            "seed": 2128
+          },
+          "f1_radgraph_complete": {
+            "case_count": 568,
+            "mean_difference": 0.03911372263403228,
+            "ci_95_low": 0.027938359141950017,
+            "ci_95_high": 0.05075305641723261,
+            "ci_excludes_zero": true,
+            "iterations": 10000,
+            "seed": 2129
+          }
+        },
+        "chexbert": {
+          "micro_f1_14": {
+            "mean_difference": 0.06133987890688919,
+            "ci_95_low": 0.03730178570612989,
+            "ci_95_high": 0.08594487944987594
+          },
+          "macro_f1_14": {
+            "mean_difference": 0.017944578428783026,
+            "ci_95_low": -0.007037859548875009,
+            "ci_95_high": 0.043682530471882856
+          },
+          "micro_f1_5": {
+            "mean_difference": 0.05080925179211471,
+            "ci_95_low": -0.006051718304789366,
+            "ci_95_high": 0.10929451682489581
+          },
+          "macro_f1_5": {
+            "mean_difference": 0.035509150565005754,
+            "ci_95_low": -0.023727855875876887,
+            "ci_95_high": 0.09589770120190859
+          },
+          "exact_set_accuracy_5": {
+            "mean_difference": 0.039612676056338,
+            "ci_95_low": 0.015845070422535246,
+            "ci_95_high": 0.06426056338028174
+          },
+          "mean_reference_positive_recall": {
+            "mean_difference": 0.06946138211382114,
+            "ci_95_low": 0.04341200694929323,
+            "ci_95_high": 0.0963403599100571
+          },
+          "mean_predicted_positive_precision": {
+            "mean_difference": 0.055332486160868166,
+            "ci_95_low": 0.03282579400846879,
+            "ci_95_high": 0.07828330246526727
+          },
+          "positive_label_hamming_agreement": {
+            "mean_difference": 0.009934607645875282,
+            "ci_95_low": 0.005658953722333937,
+            "ci_95_high": 0.014273138832997967
+          }
+        }
+      }
+    }
+  },
+  "runtime": {
+    "bootstrap_iterations": 10000,
+    "bootstrap_seed": 1626,
+    "radgraph_model": "modern-radgraph-xl",
+    "f1chexbert_version": "0.0.2",
+    "f1chexbert_checkpoint_sha256": "6550703c92d640e1e04d8105a7a185d76ece0f25fcbf033d292785bf22c0fde1"
+  },
+  "inputs": {
+    "base_rows_sha256": "9f026288281174ceb9ec59a219cd08f8a2841edbb6d0baef015884f2c345fb6f",
+    "candidate_label": "impression_gate",
+    "candidate_rows_sha256": "e9871a21abc381797af7dc0649a0d29c017ab9da7a7b14ef2e93c36d56b35ce8"
+  },
+  "claim_boundary": "Confirmation automated report-reference consistency; CheXbert and RadGraph are not clinical diagnosis accuracy, safety, physician agreement, or external validation."
+}

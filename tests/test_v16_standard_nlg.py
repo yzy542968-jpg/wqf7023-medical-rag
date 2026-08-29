@@ -1,6 +1,16 @@
 from __future__ import annotations
 
-from scripts.evaluate_v16_standard_nlg import lexical_scores, paired_case_bootstrap
+from scripts.evaluate_v16_standard_nlg import (
+    BERTSCORE_LANGUAGE,
+    BERTSCORE_NUM_LAYERS,
+    lexical_scores,
+    paired_case_bootstrap,
+)
+
+
+def test_bertscore_language_is_explicit_english() -> None:
+    assert BERTSCORE_LANGUAGE == "en"
+    assert BERTSCORE_NUM_LAYERS == 17
 
 
 def test_identical_text_has_strong_lexical_scores() -> None:

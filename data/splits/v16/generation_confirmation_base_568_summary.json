@@ -1,0 +1,49 @@
+{
+  "study": "V16 QLoRA paired generation pilot",
+  "status": "confirmation_generation_complete_no_retuning",
+  "model_arm": "base",
+  "no_test_evaluation": false,
+  "counts": {
+    "cases": 568,
+    "rows": 3408,
+    "conditions": [
+      "no_history",
+      "retrieved_history",
+      "random_history"
+    ],
+    "selection_manifest_cases": 568
+  },
+  "inputs": {
+    "cases_sha256": "56e367190396011d4d67f43e7e733389a8346890bf8729e82fb4326d063bbd68",
+    "split_sha256": "b4c1b091c3dbff0399d07c8350f4d8d68ce8ce52e0157dcc96f46af8c8baa7b3",
+    "selection_rows_sha256": "68f0cb7e836c1b92e6210f8d3ea9c3dfc2e7b99c7198f896608c66647da9de11",
+    "selected_case_ids_sha256": "13b34fb825ec2d7a11ddcab070c482c48930829d4821dcd88328fdbceb1536c3",
+    "ranking_rows_sha256": "cde42d4812a7b97ded0a5bb6af926943f2b6b94abedebc71c07c582818097851",
+    "model_revision": "91850547d9f0b2fdd21aa7c5f4f3d1a8a52c243b",
+    "adapter_config_sha256": null
+  },
+  "configuration": {
+    "conditions": [
+      "no_history",
+      "retrieved_history",
+      "random_history"
+    ],
+    "question_types": [
+      "findings",
+      "impression"
+    ],
+    "history_top_k": 3,
+    "max_new_tokens": 96,
+    "answer_sentence_limit": 2,
+    "selection_seed": 1617,
+    "evaluation_scope": "confirmation",
+    "random_history_domain": "v16-confirmation-random-history",
+    "expected_case_count": 568
+  },
+  "runtime": {
+    "elapsed_seconds": 2802.2429477999976,
+    "peak_gpu_memory_mib": 6087.00537109375
+  },
+  "rows_sha256": "9f026288281174ceb9ec59a219cd08f8a2841edbb6d0baef015884f2c345fb6f",
+  "claim_boundary": "Confirmation automated answer-reference consistency; not diagnostic accuracy, clinical safety, physician utility, or external validation."
+}
