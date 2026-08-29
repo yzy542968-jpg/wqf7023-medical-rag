@@ -1,0 +1,72 @@
+{
+  "hierarchy_cleaning": "repository implementation adapted from the official MIT-licensed evaluator",
+  "interpretation_boundary": "Element accuracy is inflated by sparse report vectors and is not the primary endpoint. Supported-label macro-F1 is the prespecified development selector.",
+  "label_count": 2470,
+  "majority_positive_label_count": 241,
+  "manifest": "data/splits/final_qa/final_qa_development_manifest.json",
+  "prediction": "per-label majority fitted on mapped V10 Train target vectors",
+  "protocol_commit": "ba5ac18",
+  "results": {
+    "calibration": {
+      "changed_prediction_elements": 0,
+      "hierarchy_cleaned": {
+        "case_count": 358,
+        "element_accuracy": 0.9955816162667089,
+        "exact_report_vector_accuracy": 0.39106145251396646,
+        "label_count": 2470,
+        "micro_f1": 0.9775891243869561,
+        "predicted_positive_rate": 0.09757085020242914,
+        "reference_positive_rate": 0.0995827019202497,
+        "supported_label_count": 858,
+        "supported_label_macro_f1": 0.2790549488473777,
+        "supported_label_macro_precision": 0.27742183328775505,
+        "supported_label_macro_recall": 0.28088578088578087
+      },
+      "raw": {
+        "case_count": 358,
+        "element_accuracy": 0.9955816162667089,
+        "exact_report_vector_accuracy": 0.39106145251396646,
+        "label_count": 2470,
+        "micro_f1": 0.9775891243869561,
+        "predicted_positive_rate": 0.09757085020242914,
+        "reference_positive_rate": 0.0995827019202497,
+        "supported_label_count": 858,
+        "supported_label_macro_f1": 0.2790549488473777,
+        "supported_label_macro_precision": 0.27742183328775505,
+        "supported_label_macro_recall": 0.28088578088578087
+      }
+    },
+    "validation": {
+      "changed_prediction_elements": 0,
+      "hierarchy_cleaned": {
+        "case_count": 358,
+        "element_accuracy": 0.9957207156266257,
+        "exact_report_vector_accuracy": 0.38268156424581007,
+        "label_count": 2470,
+        "micro_f1": 0.9782833268290443,
+        "predicted_positive_rate": 0.09757085020242914,
+        "reference_positive_rate": 0.0994797910116934,
+        "supported_label_count": 837,
+        "supported_label_macro_f1": 0.2860940458627296,
+        "supported_label_macro_precision": 0.28443563404817684,
+        "supported_label_macro_recall": 0.28793309438470727
+      },
+      "raw": {
+        "case_count": 358,
+        "element_accuracy": 0.9957207156266257,
+        "exact_report_vector_accuracy": 0.38268156424581007,
+        "label_count": 2470,
+        "micro_f1": 0.9782833268290443,
+        "predicted_positive_rate": 0.09757085020242914,
+        "reference_positive_rate": 0.0994797910116934,
+        "supported_label_count": 837,
+        "supported_label_macro_f1": 0.2860940458627296,
+        "supported_label_macro_precision": 0.28443563404817684,
+        "supported_label_macro_recall": 0.28793309438470727
+      }
+    }
+  },
+  "status": "development_only_no_test",
+  "study": "Final QA B0 Train-majority development baseline",
+  "train_case_count": 2351
+}

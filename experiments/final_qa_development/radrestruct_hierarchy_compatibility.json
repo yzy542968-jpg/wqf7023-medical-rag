@@ -1,0 +1,27 @@
+{
+  "all_exact": true,
+  "boundary": "This audit checks hierarchy-cleaning compatibility only. Final project metrics intentionally do not reproduce the official evaluator's aggregate-row averaging behavior.",
+  "comparison": {
+    "all_zero_predictions": {
+      "different_elements": 0,
+      "elements": 19760,
+      "exact_match": true,
+      "rows": 8
+    },
+    "train_majority_predictions": {
+      "different_elements": 0,
+      "elements": 19760,
+      "exact_match": true,
+      "rows": 8
+    },
+    "validation_reference_vectors": {
+      "different_elements": 0,
+      "elements": 19760,
+      "exact_match": true,
+      "rows": 8
+    }
+  },
+  "official_commit": "b293158f0c5c1c5fa27dd615c28005eb54d7b1de",
+  "official_repository": "C:\\Users\\yz542_dntjhas\\Documents\\New project\\Rad-ReStruct",
+  "rows_per_condition": 8
+}

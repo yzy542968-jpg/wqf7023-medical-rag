@@ -6,10 +6,28 @@ from .radrestruct import (
     canonical_openi_case_id,
     iter_radrestruct_cases,
 )
+from .structured_metrics import (
+    StructuredQAMetrics,
+    fit_label_majority,
+    load_answer_vector,
+    load_report_keys,
+    repeat_prediction,
+    stack_answer_vectors,
+    structured_qa_metrics,
+)
+from .radrestruct_hierarchy import RadReStructHierarchy
 
 __all__ = [
     "RadReStructCase",
     "RadReStructQuestion",
     "canonical_openi_case_id",
     "iter_radrestruct_cases",
+    "StructuredQAMetrics",
+    "fit_label_majority",
+    "load_answer_vector",
+    "load_report_keys",
+    "repeat_prediction",
+    "stack_answer_vectors",
+    "structured_qa_metrics",
+    "RadReStructHierarchy",
 ]
