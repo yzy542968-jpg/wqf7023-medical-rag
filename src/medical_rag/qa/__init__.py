@@ -20,6 +20,7 @@ from .structured_decoding import (
     decode_answer_probabilities,
     knn_answer_probabilities,
 )
+from .question_vectorizer import RadReStructQuestionVectorizer
 
 __all__ = [
     "RadReStructCase",
@@ -36,4 +37,5 @@ __all__ = [
     "RadReStructHierarchy",
     "decode_answer_probabilities",
     "knn_answer_probabilities",
+    "RadReStructQuestionVectorizer",
 ]

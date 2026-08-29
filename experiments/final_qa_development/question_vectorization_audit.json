@@ -1,0 +1,13 @@
+{
+  "all_exact": true,
+  "case_count": 3597,
+  "input_boundary": "Each QA row is mapped from its own text/options/path and order. Gold history is not an input. This audit uses reference answers only to verify mapping.",
+  "mismatched_case_count": 0,
+  "mismatched_cases_preview": [],
+  "question_count": 176855,
+  "question_ids_seen": 718,
+  "radrestruct_commit": "b293158f0c5c1c5fa27dd615c28005eb54d7b1de",
+  "report_keys_sha256": "bf694d8039a12d79b43450b8377c7a203dd2c69aaa1e55fc19f53e415a616273",
+  "report_vector_dimensions": 2470,
+  "study": "Final QA ordered-question vectorization audit"
+}
