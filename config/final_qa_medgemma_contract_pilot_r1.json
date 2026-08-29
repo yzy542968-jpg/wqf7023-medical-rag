@@ -1,0 +1,56 @@
+{
+  "study": "Final QA MedGemma compact-answer contract pilot revision 1",
+  "status": "frozen_before_pilot_generation",
+  "supersedes": "config/final_qa_medgemma_contract_pilot.json",
+  "amendment_reason": "The original pre-execution quota requested 16 fixed-choice rows, but the Calibration role contains only 5. The run stopped before model loading or generation.",
+  "protocol_commit": "ba5ac18",
+  "seed": 7023,
+  "role": "calibration_only",
+  "observed_role_type_counts_before_generation": {
+    "single_choice": 17137,
+    "multi_choice": 849,
+    "fixed_choice": 5,
+    "total": 17991
+  },
+  "conditions": [
+    "b1_question_options_only",
+    "b3_target_image_indication_question_no_history"
+  ],
+  "sampling": {
+    "method": "SHA-256 domain-separated deterministic stratification",
+    "domain": "final-qa-medgemma-contract-pilot",
+    "single_choice": 187,
+    "multi_choice": 64,
+    "fixed_choice": 5,
+    "total": 256
+  },
+  "model": {
+    "id": "google/medgemma-1.5-4b-it",
+    "revision": "91850547d9f0b2fdd21aa7c5f4f3d1a8a52c243b",
+    "quantization": "NF4",
+    "decoding": "greedy",
+    "batch_size": 8,
+    "max_new_tokens": 16,
+    "local_files_only": true
+  },
+  "answer_contract": {
+    "format": "JSON array of zero-based option indices only",
+    "example": "[0,2]",
+    "invalid_output": "empty prediction retained as contract failure",
+    "gold_history_visible": false,
+    "target_report_visible": false
+  },
+  "outcomes": [
+    "exact_answer_set_accuracy",
+    "option_micro_f1",
+    "single_choice_accuracy",
+    "multi_choice_exact_accuracy",
+    "fixed_choice_accuracy",
+    "contract_valid_rate",
+    "mean_input_tokens",
+    "mean_output_tokens",
+    "elapsed_seconds",
+    "peak_vram_mb"
+  ],
+  "boundary": "format and signal preflight only; no Test access and no confirmatory claim"
+}

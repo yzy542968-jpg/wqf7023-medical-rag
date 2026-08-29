@@ -227,7 +227,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     summary = {
         "study": config["study"],
         "status": "calibration_contract_pilot_complete_no_test",
-        "config": "config/final_qa_medgemma_contract_pilot.json",
+        "config": "config/final_qa_medgemma_contract_pilot_r1.json",
         "selected_row_count": len(selected),
         "conditions": by_condition,
         "elapsed_seconds_this_invocation": elapsed,
@@ -247,7 +247,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--config",
         type=Path,
-        default=ROOT / "config/final_qa_medgemma_contract_pilot.json",
+        default=ROOT / "config/final_qa_medgemma_contract_pilot_r1.json",
     )
     parser.add_argument(
         "--manifest",

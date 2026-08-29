@@ -20,3 +20,14 @@ validity, token counts, runtime and peak VRAM.
 This is a format and signal preflight, not model selection and not confirmation.
 It cannot support a Test claim. Prompt changes after this run must be documented
 and evaluated on Calibration before any complete Validation run.
+
+## Pre-generation amendment r1
+
+The original quota requested 16 fixed-choice rows. Execution stopped before
+model loading or generation because Calibration contains only 5 fixed-choice
+rows (`17,137` single-choice, `849` multi-choice, `5` fixed-choice). Revision 1
+therefore retains all 5 fixed-choice rows, 64 multi-choice rows and increases
+single-choice rows to 187, preserving the planned total of 256. No outcome was
+available when this feasibility correction was made. The executable revision is
+`config/final_qa_medgemma_contract_pilot_r1.json`; the original config remains
+versioned as an audit record.
