@@ -1,0 +1,63 @@
+{
+  "study": "Final QA balanced-history MedGemma QLoRA pilot",
+  "status": "train_internal_monitoring_complete",
+  "model": {
+    "name": "google/medgemma-1.5-4b-it",
+    "revision": "91850547d9f0b2fdd21aa7c5f4f3d1a8a52c243b"
+  },
+  "inputs": {
+    "examples_sha256": "44ec84dfe9e1b85e47149874de32f56bcaa6846001295d699410ab973b855ff3",
+    "row_count": 1800,
+    "case_count": 477,
+    "train_row_count": 1629,
+    "internal_row_count": 171,
+    "train_case_count": 432,
+    "internal_case_count": 45,
+    "internal_case_ids_sha256": "d58b649f3da688f6d1466a5505b36085b43943fd4f9e3e9d76a924214a85e1f2",
+    "skipped_training_row_count": 0,
+    "skipped_internal_row_count": 0
+  },
+  "configuration": {
+    "seed": 7026,
+    "internal_split_seed": 7031,
+    "internal_fraction": 0.1,
+    "conditions": [
+      "no_history",
+      "random_history",
+      "relevant_fact_history"
+    ],
+    "learning_rate": 0.0002,
+    "gradient_accumulation": 16,
+    "max_forward_steps": 384,
+    "quantization": "4bit_nf4_double_quant_bfloat16",
+    "lora_rank": 8,
+    "lora_alpha": 16,
+    "lora_dropout": 0.05,
+    "target_suffixes": [
+      "q_proj",
+      "v_proj"
+    ]
+  },
+  "model_statistics": {
+    "target_module_count": 68,
+    "trainable_parameter_count": 2228224,
+    "total_parameter_count": 2492451184,
+    "trainable_fraction": 0.0008939890234576405,
+    "frozen_parameter_count": 2490222960
+  },
+  "training": {
+    "epochs_entered": 1,
+    "forward_steps": 384,
+    "optimizer_steps": 24,
+    "mean_tail_loss": 0.20305770695209502,
+    "internal_loss_mean": 0.279763444326818,
+    "internal_eval_examples": 24,
+    "peak_gpu_memory_mib": 7934.13232421875,
+    "elapsed_seconds": 7731.789881500008
+  },
+  "artifacts": {
+    "adapter_dir": "C:\\Users\\yz542_dntjhas\\Documents\\New project\\wqf7023-medical-rag\\experiments\\final_qa_development\\final_qa_qlora_384\\adapter",
+    "adapter_config_sha256": "da632197b6f08368d13f96f292256c0cd5b9dfffdc7b3a8b05a3f884d1c91812"
+  },
+  "claim_boundary": "Train-only adaptation with case-level internal monitoring; no Calibration, Validation, Test, clinical-accuracy, or positive-effect claim."
+}
