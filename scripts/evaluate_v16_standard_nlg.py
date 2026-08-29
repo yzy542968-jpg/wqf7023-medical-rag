@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import importlib.metadata
 import json
 import statistics
@@ -32,6 +33,14 @@ def row_key(row: Mapping[str, Any]) -> tuple[str, str, str]:
 
 def mean(values: Sequence[float]) -> float:
     return statistics.fmean(values) if values else 0.0
+
+
+def file_sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
 def validate(rows: Sequence[Mapping[str, Any]], label: str) -> None:
@@ -77,18 +86,22 @@ def add_bertscore(
     predictions: Sequence[str],
     *,
     model_type: str,
+    model_path: Path | None,
+    baseline_path: Path | None,
     batch_size: int,
     device: str,
 ) -> str:
     from bert_score import score
 
+    model_source = str(model_path) if model_path else model_type
     _, _, f1, model_hash = score(
         list(predictions),
         list(references),
-        model_type=model_type,
+        model_type=model_source,
         batch_size=batch_size,
         device=device,
         rescale_with_baseline=True,
+        baseline_path=str(baseline_path) if baseline_path else None,
         return_hash=True,
         verbose=False,
     )
@@ -140,6 +153,14 @@ def run(args: argparse.Namespace) -> None:
     row_scores: dict[str, dict[tuple[str, str, str], dict[str, float]]] = {}
     summaries: dict[str, Any] = {}
     bert_hashes: dict[str, str] = {}
+    baseline_path = args.bertscore_baseline_path
+    if args.bertscore_model_path and baseline_path is None:
+        import bert_score
+
+        baseline_path = (
+            Path(bert_score.__file__).resolve().parent
+            / "rescale_baseline/en/roberta-large.tsv"
+        )
     for label, rows in arms.items():
         references = [str(row.get("reference_answer") or "") for row in rows]
         predictions = [str(row.get("answer") or "") for row in rows]
@@ -154,6 +175,8 @@ def run(args: argparse.Namespace) -> None:
                 references,
                 predictions,
                 model_type=args.bertscore_model,
+                model_path=args.bertscore_model_path,
+                baseline_path=baseline_path,
                 batch_size=args.bertscore_batch_size,
                 device=args.device,
             )
@@ -220,6 +243,13 @@ def run(args: argparse.Namespace) -> None:
             "rouge_score": importlib.metadata.version("rouge-score"),
             "bert_score": importlib.metadata.version("bert-score"),
             "bertscore_model": args.bertscore_model,
+            "bertscore_model_path": str(args.bertscore_model_path) if args.bertscore_model_path else None,
+            "bertscore_model_weights_sha256": (
+                file_sha256(args.bertscore_model_path / "model.safetensors")
+                if args.bertscore_model_path else None
+            ),
+            "bertscore_baseline_path": str(baseline_path) if baseline_path else None,
+            "bertscore_baseline_sha256": file_sha256(baseline_path) if baseline_path else None,
             "bertscore_hashes": bert_hashes,
             "bertscore_rescale_with_baseline": True,
             "meteor": "nltk.translate.meteor_score with WordNet",
@@ -241,6 +271,8 @@ def main() -> None:
     parser.add_argument("--right-label", default="right")
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--bertscore-model", default="roberta-large")
+    parser.add_argument("--bertscore-model-path", type=Path)
+    parser.add_argument("--bertscore-baseline-path", type=Path)
     parser.add_argument("--bertscore-batch-size", type=int, default=8)
     parser.add_argument("--device", default="cuda")
     parser.add_argument("--skip-bertscore", action="store_true")
