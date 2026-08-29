@@ -326,7 +326,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         "conditions": conditions,
         "elapsed_seconds_this_invocation": elapsed,
         "peak_vram_mb_this_invocation": torch.cuda.max_memory_allocated() / 1024**2,
-        "rows_output_local_only": str(args.rows_output.relative_to(ROOT)),
+        "rows_output_local_only": str(args.rows_output.resolve().relative_to(ROOT)),
         "boundary": config["boundary"],
     }
     args.summary_output.write_text(

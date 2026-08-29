@@ -1,0 +1,46 @@
+{
+  "adapter_dir": "C:\\Users\\yz542_dntjhas\\Documents\\New project\\wqf7023-medical-rag\\experiments\\final_qa_development\\final_qa_qlora_pilot\\adapter",
+  "boundary": "Calibration mechanism pilot only; historical reports are other-patient analogies; no Test, clinical-accuracy or external-validation claim",
+  "conditions": {
+    "b3_no_history_r2": {
+      "contract_valid_rate": 1.0,
+      "exact_answer_set_accuracy": 0.703125,
+      "fixed_choice_accuracy": 1.0,
+      "mean_evidence_units": 0.0,
+      "mean_input_tokens": 417.5703125,
+      "mean_output_tokens": 4.125,
+      "multi_choice_exact_accuracy": 0.421875,
+      "negative_transfer_from_b3": 0.0,
+      "option_micro_f1": 0.7089552238805971,
+      "provenance_complete_rate": 1.0,
+      "row_count": 256,
+      "single_choice_accuracy": 0.7914438502673797
+    },
+    "p1_top3_image_neighbors_question_conditioned_evidence": {
+      "baseline_correct_denominator": 180,
+      "contract_valid_rate": 0.99609375,
+      "exact_answer_set_accuracy": 0.734375,
+      "fixed_choice_accuracy": 0.8,
+      "mean_evidence_units": 5.98046875,
+      "mean_input_tokens": 556.70703125,
+      "mean_output_tokens": 4.0625,
+      "multi_choice_exact_accuracy": 0.4375,
+      "negative_transfer_count": 8,
+      "negative_transfer_from_b3": 0.044444444444444446,
+      "option_micro_f1": 0.7289719626168224,
+      "provenance_complete_rate": 1.0,
+      "row_count": 256,
+      "single_choice_accuracy": 0.8342245989304813
+    }
+  },
+  "config": "config/final_qa_report_text_rag_pilot.json",
+  "elapsed_seconds_this_invocation": 0.0003217000048607588,
+  "embedding_signature": "8e5b69370462df61b75f8aea125441db49f8fb356ea026b442aae71bfaa8b526",
+  "historical_bank_case_count": 2348,
+  "model_arm": "qlora",
+  "peak_vram_mb_this_invocation": 3093.61572265625,
+  "rows_output_local_only": "experiments\\final_qa_development\\final_qa_qlora_calibration_rows.jsonl",
+  "selected_row_count": 256,
+  "status": "calibration_rag_pilot_complete_no_validation_no_test",
+  "study": "Final QA paired report-text RAG Calibration pilot"
+}

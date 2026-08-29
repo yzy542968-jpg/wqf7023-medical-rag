@@ -1,0 +1,120 @@
+{
+  "adapter_relevant_history_effect": {
+    "case_grouped_bootstrap": {
+      "case_count": 164,
+      "exact_accuracy_difference_ci95_high": 0.06642681426814258,
+      "exact_accuracy_difference_ci95_low": -0.003891430569066134,
+      "option_micro_f1_difference_ci95_high": 0.05575422534084718,
+      "option_micro_f1_difference_ci95_low": -0.015748808026215737,
+      "replicates": 10000,
+      "seed": 7033
+    },
+    "no_history": {
+      "contract_valid_rate": 1.0,
+      "exact_answer_set_accuracy": 0.703125,
+      "fixed_choice_exact_accuracy": 1.0,
+      "multi_choice_exact_accuracy": 0.421875,
+      "option_micro_f1": 0.7089552238805971,
+      "row_count": 256,
+      "single_choice_exact_accuracy": 0.7914438502673797
+    },
+    "relevant_history": {
+      "contract_valid_rate": 0.99609375,
+      "exact_answer_set_accuracy": 0.734375,
+      "fixed_choice_exact_accuracy": 0.8,
+      "multi_choice_exact_accuracy": 0.4375,
+      "option_micro_f1": 0.7289719626168224,
+      "row_count": 256,
+      "single_choice_exact_accuracy": 0.8342245989304813
+    },
+    "relevant_minus_no_history": {
+      "exact_answer_set_accuracy": 0.03125,
+      "option_micro_f1": 0.020016738736225337
+    }
+  },
+  "adapter_rows_sha256": "02b9862c30e9e63fc05e89b06ee7921b84490145ef3c15f399325e5c0c7f5241",
+  "base_rows_sha256": "4adbcdc2b5030bd0f68afd2ba1b8c9b3847ff9df35c8115db93347c1cab4d2ee",
+  "boundary": "Calibration development evidence only. Validation and Test were not accessed; metrics are structured-answer agreement, not clinical accuracy.",
+  "comparison": {
+    "no_history": {
+      "adapter": {
+        "contract_valid_rate": 1.0,
+        "exact_answer_set_accuracy": 0.703125,
+        "fixed_choice_exact_accuracy": 1.0,
+        "multi_choice_exact_accuracy": 0.421875,
+        "option_micro_f1": 0.7089552238805971,
+        "row_count": 256,
+        "single_choice_exact_accuracy": 0.7914438502673797
+      },
+      "adapter_minus_base": {
+        "contract_valid_rate": 0.00390625,
+        "exact_answer_set_accuracy": 0.609375,
+        "option_micro_f1": 0.583507195206762
+      },
+      "base": {
+        "contract_valid_rate": 0.99609375,
+        "exact_answer_set_accuracy": 0.09375,
+        "fixed_choice_exact_accuracy": 1.0,
+        "multi_choice_exact_accuracy": 0.078125,
+        "option_micro_f1": 0.12544802867383512,
+        "row_count": 256,
+        "single_choice_exact_accuracy": 0.0748663101604278
+      },
+      "case_grouped_bootstrap": {
+        "case_count": 164,
+        "exact_accuracy_difference_ci95_high": 0.6842159188955995,
+        "exact_accuracy_difference_ci95_low": 0.5313774843096234,
+        "option_micro_f1_difference_ci95_high": 0.6570632277898599,
+        "option_micro_f1_difference_ci95_low": 0.5083843556829656,
+        "replicates": 10000,
+        "seed": 7033
+      }
+    },
+    "relevant_history": {
+      "adapter": {
+        "contract_valid_rate": 0.99609375,
+        "exact_answer_set_accuracy": 0.734375,
+        "fixed_choice_exact_accuracy": 0.8,
+        "multi_choice_exact_accuracy": 0.4375,
+        "option_micro_f1": 0.7289719626168224,
+        "row_count": 256,
+        "single_choice_exact_accuracy": 0.8342245989304813
+      },
+      "adapter_minus_base": {
+        "contract_valid_rate": 0.0859375,
+        "exact_answer_set_accuracy": 0.625,
+        "option_micro_f1": 0.5719626168224299
+      },
+      "base": {
+        "contract_valid_rate": 0.91015625,
+        "exact_answer_set_accuracy": 0.109375,
+        "fixed_choice_exact_accuracy": 0.6,
+        "multi_choice_exact_accuracy": 0.03125,
+        "option_micro_f1": 0.15700934579439252,
+        "row_count": 256,
+        "single_choice_exact_accuracy": 0.12299465240641712
+      },
+      "case_grouped_bootstrap": {
+        "case_count": 164,
+        "exact_accuracy_difference_ci95_high": 0.6926229508196722,
+        "exact_accuracy_difference_ci95_low": 0.5555555555555556,
+        "option_micro_f1_difference_ci95_high": 0.6457391232945383,
+        "option_micro_f1_difference_ci95_low": 0.4978364266297467,
+        "replicates": 10000,
+        "seed": 7033
+      }
+    }
+  },
+  "isolation_audit": {
+    "calibration_case_count": 358,
+    "case_id_overlap_count": 0,
+    "duplicate_cluster_overlap_count": 0,
+    "manifest_sha256": "97f0759ac81fcdebbdeeb07f773845ee8762a789f20eb9c8d537d2034540d6e9",
+    "training_case_count": 477,
+    "training_rows_sha256": "44ec84dfe9e1b85e47149874de32f56bcaa6846001295d699410ab973b855ff3"
+  },
+  "paired_row_count_per_condition": 256,
+  "prespecified_promotion_rule_passed": true,
+  "status": "calibration_development_evaluation_complete",
+  "study": "Final QA QLoRA paired Calibration evaluation"
+}
