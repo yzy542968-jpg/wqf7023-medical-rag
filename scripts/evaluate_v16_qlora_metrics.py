@@ -1,4 +1,4 @@
-"""Evaluate V16 base/QLoRA rows with Token-F1, CheXbert, and RadGraph."""
+"""Evaluate paired V16 candidate/base rows with CheXbert and RadGraph."""
 
 from __future__ import annotations
 
@@ -35,7 +35,6 @@ from medical_rag.evaluation.chexbert_pathology import (  # noqa: E402
 from medical_rag.similar_case.v10_split import file_sha256  # noqa: E402
 
 
-ARMS = ("base", "qlora")
 CONDITIONS = ("no_history", "retrieved_history", "random_history")
 QUESTION_TYPES = ("findings", "impression")
 
@@ -57,8 +56,6 @@ def mean(values: Sequence[float]) -> float:
 
 
 def validate_matrix(rows: Sequence[Mapping[str, Any]], arm: str) -> None:
-    if {str(row.get("model_arm")) for row in rows} != {arm}:
-        raise RuntimeError(f"Unexpected model arm in {arm} rows")
     keys = [
         (str(row["case_id"]), str(row["question_type"]), str(row["condition"]))
         for row in rows
@@ -131,24 +128,27 @@ def save_radgraph_subset(path: Path, rows: Sequence[Mapping[str, Any]]) -> None:
 
 def run(args: argparse.Namespace) -> None:
     base = read_jsonl(args.base_rows)
-    qlora = read_jsonl(args.qlora_rows)
+    candidate = read_jsonl(args.candidate_rows)
+    if args.candidate_label == "base":
+        raise RuntimeError("Candidate label must differ from base")
+    arms = ("base", args.candidate_label)
     validate_matrix(base, "base")
-    validate_matrix(qlora, "qlora")
+    validate_matrix(candidate, args.candidate_label)
     base_keys = {(str(row["case_id"]), str(row["question_type"]), str(row["condition"])) for row in base}
-    qlora_keys = {(str(row["case_id"]), str(row["question_type"]), str(row["condition"])) for row in qlora}
-    if base_keys != qlora_keys:
-        raise RuntimeError("Base and QLoRA matrices differ")
+    candidate_keys = {(str(row["case_id"]), str(row["question_type"]), str(row["condition"])) for row in candidate}
+    if base_keys != candidate_keys:
+        raise RuntimeError("Base and candidate matrices differ")
 
     checkpoint = resolve_checkpoint()
     labels = label_unique_texts(
-        [*base, *qlora],
+        [*base, *candidate],
         cache_path=args.chexbert_cache,
         checkpoint_hash=file_sha256(checkpoint),
         device=args.device,
         batch_size=args.chexbert_batch_size,
     )
     enriched: dict[str, list[dict[str, Any]]] = {}
-    for arm, rows in (("base", base), ("qlora", qlora)):
+    for arm, rows in (("base", base), (args.candidate_label, candidate)):
         enriched[arm] = []
         for source in rows:
             row = dict(source)
@@ -161,7 +161,7 @@ def run(args: argparse.Namespace) -> None:
             enriched[arm].append(row)
 
     radgraph_by_arm: dict[str, dict[tuple[str, str, str], dict[str, float]]] = {}
-    for arm in ARMS:
+    for arm in arms:
         rows = enriched[arm]
         cache_path = args.radgraph_output.with_name(
             f"{args.radgraph_output.stem}_{arm}{args.radgraph_output.suffix}"
@@ -179,7 +179,7 @@ def run(args: argparse.Namespace) -> None:
             row.update(scored[key])
 
     arm_condition_metrics: dict[str, Any] = {}
-    for arm in ARMS:
+    for arm in arms:
         arm_condition_metrics[arm] = {}
         for condition in CONDITIONS:
             selected = [row for row in enriched[arm] if row["condition"] == condition]
@@ -208,9 +208,9 @@ def run(args: argparse.Namespace) -> None:
                 ),
             }
 
-    qlora_minus_base: dict[str, Any] = {}
+    candidate_minus_base: dict[str, Any] = {}
     for condition_index, condition in enumerate(CONDITIONS):
-        q_rows = [row for row in enriched["qlora"] if row["condition"] == condition]
+        q_rows = [row for row in enriched[args.candidate_label] if row["condition"] == condition]
         b_rows = [row for row in enriched["base"] if row["condition"] == condition]
         linear_metrics = {metric: paired_linear_bootstrap(
             q_rows,
@@ -229,7 +229,7 @@ def run(args: argparse.Namespace) -> None:
             np.stack([row["reference_labels"] for row in b_rows]),
             np.stack([row["prediction_labels"] for row in b_rows]),
         )
-        qlora_minus_base[condition] = {
+        candidate_minus_base[condition] = {
             "linear": linear_metrics,
             "chexbert": paired_case_bootstrap(
                 q_stats,
@@ -240,7 +240,7 @@ def run(args: argparse.Namespace) -> None:
         }
 
     within_arm_comparisons: dict[str, dict[str, Any]] = {}
-    for arm in ARMS:
+    for arm in arms:
         within_arm_comparisons[arm] = {}
         for comparison_index, (left_condition, right_condition) in enumerate(
             (("retrieved_history", "no_history"), ("retrieved_history", "random_history"))
@@ -283,7 +283,7 @@ def run(args: argparse.Namespace) -> None:
             }
 
     output = {
-        "study": "V16 paired QLoRA generation metrics",
+        "study": "V16 paired candidate generation metrics",
         "status": f"{args.evaluation_scope}_evaluation_complete_no_retuning",
         "no_test_evaluation": args.evaluation_scope != "confirmation",
         "counts": {
@@ -291,7 +291,7 @@ def run(args: argparse.Namespace) -> None:
             "rows_per_arm": len(base),
         },
         "arms": arm_condition_metrics,
-        "qlora_minus_base": qlora_minus_base,
+        f"{args.candidate_label}_minus_base": candidate_minus_base,
         "within_arm_comparisons": within_arm_comparisons,
         "runtime": {
             "bootstrap_iterations": args.bootstrap_iterations,
@@ -302,7 +302,8 @@ def run(args: argparse.Namespace) -> None:
         },
         "inputs": {
             "base_rows_sha256": file_sha256(args.base_rows),
-            "qlora_rows_sha256": file_sha256(args.qlora_rows),
+            "candidate_label": args.candidate_label,
+            "candidate_rows_sha256": file_sha256(args.candidate_rows),
         },
         "claim_boundary": (
             f"{args.evaluation_scope.capitalize()} automated report-reference consistency; CheXbert and "
@@ -318,7 +319,8 @@ def run(args: argparse.Namespace) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--base-rows", type=Path, required=True)
-    parser.add_argument("--qlora-rows", type=Path, required=True)
+    parser.add_argument("--candidate-rows", "--qlora-rows", dest="candidate_rows", type=Path, required=True)
+    parser.add_argument("--candidate-label", default="qlora")
     parser.add_argument("--chexbert-cache", type=Path, default=ROOT / "experiments/v16_adaptation/v16_chexbert_cache.json")
     parser.add_argument("--radgraph-output", type=Path, default=ROOT / "experiments/v16_adaptation/v16_radgraph.csv")
     parser.add_argument("--output", type=Path, required=True)
