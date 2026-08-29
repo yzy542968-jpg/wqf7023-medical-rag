@@ -114,6 +114,9 @@ experiments/model_cache/
 experiments/final_qa_development/*.pt
 experiments/final_qa_development/*.npz
 experiments/final_qa_development/**/*.npz
+experiments/final_qa_development/**/*.safetensors
+experiments/final_qa_development/**/adapter/
+experiments/final_qa_development/**/processor/
 
 # V10 local per-query rows, shuffled mappings, generations, and review packages
 experiments/v10_publication/*.json
