@@ -1,0 +1,626 @@
+{
+  "audit_decisions": {
+    "radrestruct_replaces_openi": false,
+    "reason": "Rad-ReStruct supplies structured QA labels on IU-Xray/OpenI. The existing V10 partition is retained to prevent exact/near-duplicate clusters from crossing development and confirmation roles.",
+    "use_radrestruct_official_split_for_final_confirmation": false,
+    "use_v10_cluster_disjoint_partitioning": true
+  },
+  "images": {
+    "image_reference_match_rate": 1.0,
+    "matched_images_not_marked_frontal_locally": 0,
+    "matched_local_image_references": 3720,
+    "radrestruct_frontal_image_references": 3720
+  },
+  "mapping": {
+    "mapped_case_ids_sha256": "3c370ab06b6890650f52d2b31e7c8f1c0c506855330274a80c1b6d2090318720",
+    "mapping_rate": 1.0,
+    "matched_openi_case_count": 3597,
+    "official_split_by_v10_partition": {
+      "test": {
+        "calibration": 37,
+        "test": 63,
+        "train": 223,
+        "validation": 37
+      },
+      "train": {
+        "calibration": 285,
+        "test": 415,
+        "train": 1882,
+        "validation": 295
+      },
+      "val": {
+        "calibration": 36,
+        "test": 52,
+        "train": 246,
+        "validation": 26
+      }
+    },
+    "official_split_counts": {
+      "test": 360,
+      "train": 2877,
+      "val": 360
+    },
+    "official_split_crossing_v10_cluster_count": 87,
+    "official_split_crossing_v10_clusters": {
+      "CXR100": [
+        "test",
+        "train",
+        "val"
+      ],
+      "CXR1005": [
+        "test",
+        "train",
+        "val"
+      ],
+      "CXR1010": [
+        "train",
+        "val"
+      ],
+      "CXR1024": [
+        "train",
+        "val"
+      ],
+      "CXR1042": [
+        "train",
+        "val"
+      ],
+      "CXR1046": [
+        "test",
+        "train"
+      ],
+      "CXR1047": [
+        "test",
+        "train",
+        "val"
+      ],
+      "CXR1051": [
+        "test",
+        "train",
+        "val"
+      ],
+      "CXR1055": [
+        "test",
+        "train",
+        "val"
+      ],
+      "CXR1078": [
+        "test",
+        "train",
+        "val"
+      ],
+      "CXR1093": [
+        "test",
+        "train",
+        "val"
+      ],
+      "CXR11": [
+        "test",
+        "train"
+      ],
+      "CXR1101": [
+        "test",
+        "train"
+      ],
+      "CXR1109": [
+        "test",
+        "train",
+        "val"
+      ],
+      "CXR1114": [
+        "test",
+        "train",
+        "val"
+      ],
+      "CXR1118": [
+        "test",
+        "train",
+        "val"
+      ],
+      "CXR1136": [
+        "test",
+        "train"
+      ],
+      "CXR1144": [
+        "test",
+        "train",
+        "val"
+      ],
+      "CXR1162": [
+        "test",
+        "train",
+        "val"
+      ],
+      "CXR1165": [
+        "train",
+        "val"
+      ],
+      "CXR1191": [
+        "test",
+        "train"
+      ],
+      "CXR12": [
+        "test",
+        "train",
+        "val"
+      ],
+      "CXR1206": [
+        "train",
+        "val"
+      ],
+      "CXR1260": [
+        "test",
+        "train",
+        "val"
+      ],
+      "CXR1270": [
+        "test",
+        "train"
+      ],
+      "CXR1274": [
+        "test",
+        "train",
+        "val"
+      ],
+      "CXR129": [
+        "test",
+        "train",
+        "val"
+      ],
+      "CXR1304": [
+        "test",
+        "train",
+        "val"
+      ],
+      "CXR1308": [
+        "train",
+        "val"
+      ],
+      "CXR1316": [
+        "test",
+        "train"
+      ],
+      "CXR1323": [
+        "train",
+        "val"
+      ],
+      "CXR1330": [
+        "test",
+        "train"
+      ],
+      "CXR1334": [
+        "train",
+        "val"
+      ],
+      "CXR1335": [
+        "test",
+        "train",
+        "val"
+      ],
+      "CXR1347": [
+        "test",
+        "train"
+      ],
+      "CXR1359": [
+        "test",
+        "train"
+      ],
+      "CXR1366": [
+        "test",
+        "train"
+      ],
+      "CXR1367": [
+        "test",
+        "train"
+      ],
+      "CXR1377": [
+        "test",
+        "train",
+        "val"
+      ],
+      "CXR138": [
+        "test",
+        "train",
+        "val"
+      ],
+      "CXR1402": [
+        "test",
+        "train",
+        "val"
+      ],
+      "CXR141": [
+        "test",
+        "train",
+        "val"
+      ],
+      "CXR1432": [
+        "test",
+        "train",
+        "val"
+      ],
+      "CXR1435": [
+        "train",
+        "val"
+      ],
+      "CXR1442": [
+        "test",
+        "train"
+      ],
+      "CXR1456": [
+        "train",
+        "val"
+      ],
+      "CXR1477": [
+        "test",
+        "train"
+      ],
+      "CXR1480": [
+        "test",
+        "train",
+        "val"
+      ],
+      "CXR1481": [
+        "train",
+        "val"
+      ],
+      "CXR1515": [
+        "train",
+        "val"
+      ],
+      "CXR1548": [
+        "train",
+        "val"
+      ],
+      "CXR1551": [
+        "test",
+        "train",
+        "val"
+      ],
+      "CXR1622": [
+        "test",
+        "train",
+        "val"
+      ],
+      "CXR1636": [
+        "test",
+        "train"
+      ],
+      "CXR164": [
+        "test",
+        "train"
+      ],
+      "CXR1656": [
+        "test",
+        "train"
+      ],
+      "CXR1675": [
+        "train",
+        "val"
+      ],
+      "CXR1684": [
+        "test",
+        "train",
+        "val"
+      ],
+      "CXR1780": [
+        "train",
+        "val"
+      ],
+      "CXR1809": [
+        "train",
+        "val"
+      ],
+      "CXR1911": [
+        "test",
+        "train"
+      ],
+      "CXR1932": [
+        "train",
+        "val"
+      ],
+      "CXR196": [
+        "train",
+        "val"
+      ],
+      "CXR1974": [
+        "test",
+        "train"
+      ],
+      "CXR1975": [
+        "test",
+        "train",
+        "val"
+      ],
+      "CXR1978": [
+        "test",
+        "train"
+      ],
+      "CXR2025": [
+        "train",
+        "val"
+      ],
+      "CXR2056": [
+        "test",
+        "train"
+      ],
+      "CXR2067": [
+        "train",
+        "val"
+      ],
+      "CXR2068": [
+        "test",
+        "train"
+      ],
+      "CXR2215": [
+        "test",
+        "train"
+      ],
+      "CXR223": [
+        "test",
+        "train"
+      ],
+      "CXR2245": [
+        "test",
+        "train"
+      ],
+      "CXR2367": [
+        "test",
+        "train"
+      ],
+      "CXR238": [
+        "train",
+        "val"
+      ],
+      "CXR2394": [
+        "train",
+        "val"
+      ],
+      "CXR2443": [
+        "test",
+        "train"
+      ],
+      "CXR2632": [
+        "test",
+        "train"
+      ],
+      "CXR2686": [
+        "test",
+        "train"
+      ],
+      "CXR2754": [
+        "train",
+        "val"
+      ],
+      "CXR2856": [
+        "train",
+        "val"
+      ],
+      "CXR2964": [
+        "test",
+        "train"
+      ],
+      "CXR3166": [
+        "test",
+        "train"
+      ],
+      "CXR3317": [
+        "test",
+        "train",
+        "val"
+      ],
+      "CXR375": [
+        "test",
+        "val"
+      ],
+      "CXR538": [
+        "train",
+        "val"
+      ],
+      "CXR571": [
+        "train",
+        "val"
+      ]
+    },
+    "radrestruct_case_count": 3597,
+    "unmatched_case_ids": [],
+    "unmatched_openi_case_count": 0,
+    "v10_cluster_count": 2845,
+    "v10_partition_counts": {
+      "calibration": 358,
+      "test": 530,
+      "train": 2351,
+      "validation": 358
+    }
+  },
+  "openi_fields_on_mapped_cases": {
+    "findings_nonempty": 3112,
+    "impression_nonempty": 3568,
+    "indication_nonempty": 3519,
+    "indication_placeholder_ratio_le_0_5": 3199
+  },
+  "question_distribution_by_v10_partition": {
+    "calibration": {
+      "answer_type_counts": {
+        "fixed_choice": 5,
+        "multi_choice": 849,
+        "single_choice": 17137
+      },
+      "case_count": 358,
+      "total_questions": 17991,
+      "yes_no_answer_counts": {
+        "no": 15413,
+        "yes": 1064
+      },
+      "yes_no_option_rows": 16477
+    },
+    "test": {
+      "answer_type_counts": {
+        "fixed_choice": 14,
+        "multi_choice": 1312,
+        "single_choice": 25421
+      },
+      "case_count": 530,
+      "total_questions": 26747,
+      "yes_no_answer_counts": {
+        "no": 22869,
+        "yes": 1572
+      },
+      "yes_no_option_rows": 24441
+    },
+    "train": {
+      "answer_type_counts": {
+        "fixed_choice": 30,
+        "multi_choice": 5265,
+        "single_choice": 108958
+      },
+      "case_count": 2351,
+      "total_questions": 114253,
+      "yes_no_answer_counts": {
+        "no": 98472,
+        "yes": 6502
+      },
+      "yes_no_option_rows": 104974
+    },
+    "validation": {
+      "answer_type_counts": {
+        "fixed_choice": 8,
+        "multi_choice": 879,
+        "single_choice": 16977
+      },
+      "case_count": 358,
+      "total_questions": 17864,
+      "yes_no_answer_counts": {
+        "no": 15317,
+        "yes": 1048
+      },
+      "yes_no_option_rows": 16365
+    }
+  },
+  "questions": {
+    "answer_type_counts": {
+      "fixed_choice": 57,
+      "multi_choice": 8305,
+      "single_choice": 168493
+    },
+    "empty_answer_rows": 0,
+    "multi_answer_rows": 1146,
+    "option_count_distribution": {
+      "1": 57,
+      "10": 271,
+      "11": 284,
+      "12": 153,
+      "13": 457,
+      "14": 427,
+      "2": 163802,
+      "3": 2593,
+      "4": 2945,
+      "5": 2420,
+      "6": 581,
+      "7": 1106,
+      "8": 1122,
+      "9": 637
+    },
+    "questions_per_case": {
+      "maximum": 169,
+      "mean": 49.16736169029747,
+      "median": 39,
+      "minimum": 28
+    },
+    "rows_with_history": 76139,
+    "top_answers": {
+      "aorta": 162,
+      "apex": 124,
+      "bilateral": 116,
+      "bronchovascular": 81,
+      "degenerative": 458,
+      "hyperdistention": 208,
+      "hypoinflation": 265,
+      "interstitial": 149,
+      "left": 252,
+      "left lower lobe": 970,
+      "left pleural space": 122,
+      "left upper lobe": 467,
+      "middle lobe": 602,
+      "mild": 807,
+      "multiple": 274,
+      "no": 152071,
+      "no selection": 5611,
+      "patchy": 98,
+      "prominent": 118,
+      "ribs": 108,
+      "right": 349,
+      "right lower lobe": 872,
+      "right pleural space": 143,
+      "right upper lobe": 496,
+      "round": 101,
+      "small": 163,
+      "thoracic vertebrae": 274,
+      "tortuous": 229,
+      "unspecified": 1581,
+      "yes": 10186
+    },
+    "top_path_roots": {
+      "abdomen": 10827,
+      "breast": 7264,
+      "cardiovascular system": 18529,
+      "foreign objects": 7567,
+      "lung": 56428,
+      "lymph nodes": 7918,
+      "mediastinum": 11060,
+      "pleura": 13604,
+      "skeletal system": 25218,
+      "thorax": 7565,
+      "trachea": 10875
+    },
+    "top_question_texts": {
+      "Are there any diseases in the abdomen?": 3597,
+      "Are there any diseases in the breast?": 3597,
+      "Are there any diseases in the cardiovascular system?": 3597,
+      "Are there any diseases in the lung?": 3597,
+      "Are there any diseases in the mediastinum?": 3597,
+      "Are there any diseases in the pleura?": 3597,
+      "Are there any diseases in the skeletal system?": 3597,
+      "Are there any diseases in the thorax?": 3597,
+      "Are there any diseases in the trachea?": 3597,
+      "Are there any foreign objects?": 3597,
+      "Are there any signs in the abdomen?": 3597,
+      "Are there any signs in the breast?": 3597,
+      "Are there any signs in the cardiovascular system?": 3597,
+      "Are there any signs in the lung?": 3597,
+      "Are there any signs in the mediastinum?": 3597,
+      "Are there any signs in the pleura?": 3597,
+      "Are there any signs in the skeletal system?": 3597,
+      "Are there any signs in the thorax?": 3597,
+      "Are there any signs in the trachea?": 3597,
+      "In which part of the body?": 3645,
+      "Is there anything abnormal in the abdomen?": 3597,
+      "Is there anything abnormal in the cardiovascular system?": 3597,
+      "Is there anything abnormal in the lung?": 3597,
+      "Is there anything abnormal in the lymph nodes?": 3597,
+      "Is there anything abnormal in the mediastinum?": 3597,
+      "Is there anything abnormal in the pleura?": 3597,
+      "Is there anything abnormal in the skeletal system?": 3597,
+      "Is there anything abnormal in the trachea?": 3597,
+      "What are the attributes?": 4363,
+      "What is the degree?": 4516
+    },
+    "total_questions": 176855,
+    "unique_paths": 522,
+    "unique_question_texts": 232,
+    "yes_no_answer_counts": {
+      "no": 152071,
+      "yes": 10186
+    },
+    "yes_no_option_rows": 162257
+  },
+  "sources": {
+    "openi_case_count": 3851,
+    "openi_cases_path": "data/processed/openi_cases.jsonl",
+    "openi_cases_sha256": "56e367190396011d4d67f43e7e733389a8346890bf8729e82fb4326d063bbd68",
+    "radrestruct_commit": "b293158f0c5c1c5fa27dd615c28005eb54d7b1de",
+    "radrestruct_root": "Rad-ReStruct/data/radrestruct",
+    "v10_split_path": "data/splits/v10/v10_cluster_disjoint_split.json",
+    "v10_split_sha256": "b4c1b091c3dbff0399d07c8350f4d8d68ce8ce52e0157dcc96f46af8c8baa7b3"
+  },
+  "status": "data_mapping_audit_only",
+  "study": "Final QA feasibility audit"
+}
