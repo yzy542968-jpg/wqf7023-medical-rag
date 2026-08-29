@@ -110,6 +110,10 @@ experiments/v16_confirmation/*.json
 experiments/v16_confirmation/*.csv
 experiments/model_cache/
 
+# Final QA local generation rows and trainable structured-head assets
+experiments/final_qa_development/*.pt
+experiments/final_qa_development/*.npz
+
 # V10 local per-query rows, shuffled mappings, generations, and review packages
 experiments/v10_publication/*.json
 experiments/v10_publication/*.jsonl

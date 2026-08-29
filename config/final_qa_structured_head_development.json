@@ -1,0 +1,49 @@
+{
+  "study": "Final QA deployable structured-head development",
+  "status": "frozen_before_training_outcomes",
+  "protocol_commit": "ba5ac18",
+  "seed": 7023,
+  "scope": "secondary hierarchy-consistent report-vector reconstruction",
+  "roles": {
+    "train": "parameter fitting",
+    "calibration": "early stopping and decoding thresholds",
+    "validation": "single paired no-history/history development report",
+    "test": "prohibited"
+  },
+  "frozen_inputs": {
+    "target_image": "MedSigLIP 1152-dimensional case-image embedding",
+    "indication": "Train-fitted TF-IDF followed by 128-dimensional TruncatedSVD",
+    "history_retrieval": "Top-1 cosine target-image to V10 Train image with target duplicate cluster excluded",
+    "history_payload": "MedSigLIP embedding of the retrieved case's real report text",
+    "history_similarity": "cosine similarity scalar",
+    "history_presence": "binary scalar",
+    "target_report_visible": false,
+    "historical_gold_vector_visible": false
+  },
+  "model": {
+    "architecture": "MLP 2434 to 512 to 2470",
+    "activation": "GELU",
+    "dropout": 0.2,
+    "loss": "binary cross entropy with Train-fitted square-root inverse-prevalence positive weights clipped to [1,10]",
+    "history_dropout_probability": 0.5,
+    "optimizer": "AdamW",
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "batch_size": 64,
+    "maximum_epochs": 30,
+    "early_stopping_patience": 5
+  },
+  "decoding": {
+    "checkpoint_selector": "Calibration supported-label macro-F1 at thresholds 0.5/0.5",
+    "multi_choice_threshold": [0.25, 0.35, 0.5],
+    "fixed_choice_threshold": [0.25, 0.35, 0.5],
+    "threshold_selector": "Calibration supported-label macro-F1",
+    "tie_break": "threshold pair closest to 0.5, then larger thresholds"
+  },
+  "paired_conditions": [
+    "same_model_no_history",
+    "same_model_top1_paired_report_embedding"
+  ],
+  "primary_development_metric": "supported_label_macro_f1",
+  "boundary": "secondary structured reconstruction; no clinician correctness claim, no external validation, and no replacement of the independent-QA primary endpoint"
+}
