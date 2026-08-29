@@ -95,8 +95,10 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             )
     selected: list[dict[str, Any]] = []
     for stratum, quota in config["base_question_sampling"].items():
-        if stratum == "total":
+        if stratum in {"method", "total"}:
             continue
+        if stratum not in candidates or not isinstance(quota, int):
+            raise ValueError(f"Unsupported sampling quota entry: {stratum}={quota!r}")
         ranked = sorted(
             candidates[stratum],
             key=lambda row: (
