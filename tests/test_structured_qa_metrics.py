@@ -6,6 +6,7 @@ import numpy as np
 import pytest
 
 from medical_rag.qa.structured_metrics import (
+    bootstrap_supported_macro_f1_difference,
     fit_label_majority,
     load_answer_vector,
     repeat_prediction,
@@ -36,3 +37,19 @@ def test_load_answer_vector_validates_keys(tmp_path) -> None:
     assert load_answer_vector(path, ("a", "b")).tolist() == [1, 0]
     with pytest.raises(ValueError):
         load_answer_vector(path, ("a", "c"))
+
+
+def test_case_bootstrap_reports_paired_macro_difference() -> None:
+    targets = np.asarray([[1, 0], [1, 1], [0, 1], [0, 0]], dtype=np.uint8)
+    better = targets.copy()
+    worse = np.zeros_like(targets)
+    result = bootstrap_supported_macro_f1_difference(
+        targets,
+        better,
+        worse,
+        samples=200,
+        seed=7,
+        chunk_size=20,
+    )
+    assert result["observed_difference"] == pytest.approx(1.0)
+    assert result["ci95_low"] > 0

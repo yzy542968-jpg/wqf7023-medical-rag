@@ -7,6 +7,7 @@ from .radrestruct import (
     iter_radrestruct_cases,
 )
 from .structured_metrics import (
+    bootstrap_supported_macro_f1_difference,
     StructuredQAMetrics,
     fit_label_majority,
     load_answer_vector,
@@ -39,6 +40,7 @@ __all__ = [
     "canonical_openi_case_id",
     "iter_radrestruct_cases",
     "StructuredQAMetrics",
+    "bootstrap_supported_macro_f1_difference",
     "fit_label_majority",
     "load_answer_vector",
     "load_report_keys",

@@ -158,3 +158,76 @@ def stack_answer_vectors(vectors: Iterable[np.ndarray]) -> np.ndarray:
     if len(lengths) != 1 or rows[0].ndim != 1:
         raise ValueError("All answer vectors must be one-dimensional and equal length")
     return np.stack(rows)
+
+
+def bootstrap_supported_macro_f1_difference(
+    targets: np.ndarray,
+    predictions_a: np.ndarray,
+    predictions_b: np.ndarray,
+    *,
+    samples: int = 10000,
+    seed: int = 7023,
+    chunk_size: int = 100,
+) -> dict[str, float | int]:
+    target_matrix = _binary_matrix(targets, "targets")
+    a_matrix = _binary_matrix(predictions_a, "predictions_a")
+    b_matrix = _binary_matrix(predictions_b, "predictions_b")
+    if target_matrix.shape != a_matrix.shape or target_matrix.shape != b_matrix.shape:
+        raise ValueError("Bootstrap target and prediction matrices must align")
+    if samples <= 0 or chunk_size <= 0:
+        raise ValueError("Bootstrap samples and chunk size must be positive")
+    supported = target_matrix.sum(axis=0) > 0
+    if not supported.any():
+        raise ValueError("Bootstrap frame has no supported labels")
+    target = target_matrix[:, supported].astype(np.float32)
+
+    def contributions(predictions: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+        predicted = predictions[:, supported].astype(np.float32)
+        return (
+            target * predicted,
+            (1.0 - target) * predicted,
+            target * (1.0 - predicted),
+        )
+
+    a_tp, a_fp, a_fn = contributions(a_matrix)
+    b_tp, b_fp, b_fn = contributions(b_matrix)
+    rng = np.random.default_rng(seed)
+    differences: list[np.ndarray] = []
+    case_count = len(target_matrix)
+    probabilities = np.full(case_count, 1.0 / case_count)
+    for offset in range(0, samples, chunk_size):
+        current = min(chunk_size, samples - offset)
+        counts = rng.multinomial(case_count, probabilities, size=current).astype(
+            np.float32
+        )
+
+        def macro(tp_rows: np.ndarray, fp_rows: np.ndarray, fn_rows: np.ndarray) -> np.ndarray:
+            tp = counts @ tp_rows
+            fp = counts @ fp_rows
+            fn = counts @ fn_rows
+            denominator = 2.0 * tp + fp + fn
+            f1 = np.divide(
+                2.0 * tp,
+                denominator,
+                out=np.zeros_like(tp),
+                where=denominator > 0,
+            )
+            return f1.mean(axis=1)
+
+        differences.append(macro(a_tp, a_fp, a_fn) - macro(b_tp, b_fp, b_fn))
+    values = np.concatenate(differences).astype(np.float64)
+    observed = (
+        structured_qa_metrics(target_matrix, a_matrix).supported_label_macro_f1
+        - structured_qa_metrics(target_matrix, b_matrix).supported_label_macro_f1
+    )
+    return {
+        "samples": samples,
+        "seed": seed,
+        "case_count": case_count,
+        "supported_label_count": int(supported.sum()),
+        "observed_difference": float(observed),
+        "bootstrap_mean_difference": float(values.mean()),
+        "ci95_low": float(np.quantile(values, 0.025)),
+        "ci95_high": float(np.quantile(values, 0.975)),
+        "probability_difference_greater_than_zero": float((values > 0).mean()),
+    }

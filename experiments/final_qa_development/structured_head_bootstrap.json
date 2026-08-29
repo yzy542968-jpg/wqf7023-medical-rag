@@ -1,0 +1,17 @@
+{
+  "bootstrap": {
+    "bootstrap_mean_difference": 0.0018293989568948746,
+    "case_count": 358,
+    "ci95_high": 0.007291739434003827,
+    "ci95_low": -0.0034601449966430663,
+    "observed_difference": 0.002068238884749829,
+    "probability_difference_greater_than_zero": 0.7445,
+    "samples": 10000,
+    "seed": 7023,
+    "supported_label_count": 837
+  },
+  "contrast": "same_model_top1_paired_report_embedding minus same_model_no_history",
+  "interpretation": "A confidence interval spanning zero does not establish a historical-input benefit. This secondary reconstruction result cannot replace independent QA.",
+  "status": "development_validation_no_test",
+  "study": "Final QA structured-head paired case bootstrap"
+}
