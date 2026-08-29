@@ -38,7 +38,11 @@ def main() -> None:
     parser.add_argument("--radgraph", type=Path, default=ROOT / "data/processed/v9_radgraph_modern_xl.jsonl")
     parser.add_argument("--split", type=Path, default=ROOT / "data/splits/v10/v10_cluster_disjoint_split.json")
     parser.add_argument("--output", type=Path, default=ROOT / "experiments/v12_optimization/retrieval/v12_medcpt_query_embeddings.npz")
-    parser.add_argument("--query-partition", choices=("validation", "test"), default="validation")
+    parser.add_argument(
+        "--query-partition",
+        choices=("calibration", "validation", "test"),
+        default="validation",
+    )
     parser.add_argument("--device", choices=("cpu", "cuda"), default=None)
     parser.add_argument("--batch-size", type=int, default=32)
     args = parser.parse_args()

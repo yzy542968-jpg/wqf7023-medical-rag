@@ -77,7 +77,11 @@ def main() -> None:
     parser.add_argument("--query-cache", type=Path, default=ROOT / "experiments/v12_optimization/retrieval/v12_medcpt_query_embeddings.npz")
     parser.add_argument("--checkpoints", type=Path, default=ROOT / "experiments/v10_publication/reranker_checkpoints")
     parser.add_argument("--output", type=Path, default=ROOT / "experiments/v12_optimization/retrieval/v12_validation_rankings.json")
-    parser.add_argument("--query-partition", choices=("validation", "test"), default="validation")
+    parser.add_argument(
+        "--query-partition",
+        choices=("calibration", "validation", "test"),
+        default="validation",
+    )
     parser.add_argument("--device", choices=("cpu", "cuda"), default=None)
     args = parser.parse_args()
 
@@ -238,11 +242,11 @@ def main() -> None:
     rows_path = args.output.with_name(args.output.stem + "_rows.jsonl").resolve()
     summary: dict[str, Any] = {
         "study": f"V12 {args.query_partition} ranking and qrel sensitivity",
-        "status": (
-            "validation_only_development"
-            if args.query_partition == "validation"
-            else "v16_confirmation_test_ranking_complete_no_retuning"
-        ),
+        "status": {
+            "calibration": "calibration_only_development",
+            "validation": "validation_only_development",
+            "test": "v16_confirmation_test_ranking_complete_no_retuning",
+        }[args.query_partition],
         "no_test_evaluation": args.query_partition != "test",
         "inputs": {
             "cases_sha256": file_sha256(args.cases),
