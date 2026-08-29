@@ -26,6 +26,12 @@ from .medgemma_contract import (
     parse_option_indices,
     parse_option_indices_with_wrapper_repair,
 )
+from .structured_head import (
+    FeatureBlocks,
+    StructuredHistoryHead,
+    history_feature_block,
+    retrieve_top1_history,
+)
 
 __all__ = [
     "RadReStructCase",
@@ -46,4 +52,8 @@ __all__ = [
     "build_compact_qa_prompt",
     "parse_option_indices",
     "parse_option_indices_with_wrapper_repair",
+    "FeatureBlocks",
+    "StructuredHistoryHead",
+    "history_feature_block",
+    "retrieve_top1_history",
 ]
