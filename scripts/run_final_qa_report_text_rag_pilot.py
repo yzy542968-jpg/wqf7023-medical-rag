@@ -148,6 +148,28 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         order = np.argsort(-scores, kind="stable")[:3]
         retrieval_by_target[target_case_id] = [bank_case_ids[index] for index in order]
 
+    v12_retrieval_by_target: dict[str, list[str]] = {}
+    if args.v12_ranking_rows is not None:
+        ranking_rows = _read_jsonl(args.v12_ranking_rows)
+        findings_rows = {
+            str(row["case_id"]): row
+            for row in ranking_rows
+            if str(row["question_type"]) == "findings"
+        }
+        for target_case_id in sorted({row["case_id"] for row in selected}):
+            if target_case_id not in findings_rows:
+                raise RuntimeError(f"Missing V12 findings ranking for {target_case_id}")
+            ranked = [
+                str(case_id)
+                for case_id in findings_rows[target_case_id]["rankings"]["rrf_lambdamart"]
+                if str(case_id) in bank_case_ids
+                and bank_clusters[str(case_id)] != cluster_by_target[target_case_id]
+                and str(case_id) != target_case_id
+            ]
+            if len(ranked) < 3:
+                raise RuntimeError(f"V12 ranking has fewer than three eligible cases for {target_case_id}")
+            v12_retrieval_by_target[target_case_id] = ranked[:3]
+
     evidence_cache: dict[tuple[str, str, int], tuple[list[str], list[dict[str, Any]]]] = {}
     for row in selected:
         target_case_id = row["case_id"]
@@ -178,6 +200,29 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             [f"{unit.provenance_id} | {unit.text}" for unit in hierarchical.units],
             hierarchical.as_records(),
         )
+        if v12_retrieval_by_target:
+            v12_top_ids = v12_retrieval_by_target[target_case_id]
+            v12_cases = [raw_cases[case_id] for case_id in v12_top_ids]
+            v12_hierarchical = select_hierarchical_evidence(
+                v12_cases,
+                query=row["question"],
+                facts_by_case={
+                    case_id: tuple(radgraph[case_id].facts) for case_id in v12_top_ids
+                },
+                plan=plan,
+                maximum_cases=3,
+                maximum_units_per_case=2,
+                maximum_total_units=6,
+                maximum_characters=1200,
+            )
+            evidence_cache[(
+                "p1_v12_lambdamart_top3_question_conditioned_evidence",
+                target_case_id,
+                row["question_index"],
+            )] = (
+                [f"{unit.provenance_id} | {unit.text}" for unit in v12_hierarchical.units],
+                v12_hierarchical.as_records(),
+            )
 
     existing = _existing_rows(args.rows_output)
     generator = MedGemmaImageGenerator(cache_dir=args.cache_dir, local_files_only=True)
@@ -348,6 +393,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--cache-dir", type=Path, default=ROOT / ".hf_cache")
     parser.add_argument("--adapter-dir", type=Path, default=None)
     parser.add_argument("--conditions", nargs="+", default=None)
+    parser.add_argument("--v12-ranking-rows", type=Path, default=None)
     parser.add_argument("--rows-output", type=Path, default=ROOT / "experiments/final_qa_development/report_text_rag_pilot_rows.jsonl")
     parser.add_argument("--summary-output", type=Path, default=ROOT / "experiments/final_qa_development/report_text_rag_pilot_summary.json")
     return parser.parse_args()

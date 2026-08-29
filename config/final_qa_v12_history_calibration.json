@@ -1,0 +1,33 @@
+{
+  "study": "Final QA V12 LambdaMART history Calibration pilot",
+  "status": "frozen_before_generation",
+  "seed": 7023,
+  "conditions": [
+    "b3_no_history_r2",
+    "p1_v12_lambdamart_top3_question_conditioned_evidence"
+  ],
+  "retrieval": {
+    "ranker": "frozen V12 LambdaMART",
+    "ranking_view": "findings",
+    "top_k": 3,
+    "historical_bank": "V10 Train",
+    "query_role": "V10 Calibration",
+    "target_report_visible": false
+  },
+  "evidence": {
+    "selector": "unchanged V11 question-conditioned hierarchical selector",
+    "maximum_cases": 3,
+    "maximum_units_per_case": 2,
+    "maximum_total_units": 6,
+    "maximum_characters": 1200
+  },
+  "generation": {
+    "model": "google/medgemma-1.5-4b-it",
+    "adapter": "selected 384-step Final-QA q/v QLoRA",
+    "batch_size": 8,
+    "max_new_tokens": 32,
+    "stop_token": "<end_of_turn>",
+    "decoding": "greedy"
+  },
+  "boundary": "Calibration retrieval-policy development only; no Validation, Test, clinical-accuracy, or external-validation claim"
+}
