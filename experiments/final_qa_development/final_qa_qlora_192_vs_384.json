@@ -1,0 +1,79 @@
+{
+  "boundary": "Calibration duration selection only; no Validation or Test access.",
+  "candidate_forward_steps": 384,
+  "conditions": {
+    "no_history": {
+      "candidate": {
+        "contract_valid_rate": 1.0,
+        "exact_answer_set_accuracy": 0.73046875,
+        "fixed_choice_exact_accuracy": 1.0,
+        "multi_choice_exact_accuracy": 0.328125,
+        "option_micro_f1": 0.7323420074349443,
+        "row_count": 256,
+        "single_choice_exact_accuracy": 0.8609625668449198
+      },
+      "candidate_minus_previous": {
+        "contract_valid_rate": 0.0,
+        "exact_answer_set_accuracy": 0.02734375,
+        "option_micro_f1": 0.0233867835543472
+      },
+      "case_grouped_bootstrap": {
+        "case_count": 164,
+        "exact_accuracy_difference_ci95_high": 0.0683776932826362,
+        "exact_accuracy_difference_ci95_low": -0.012246152559384445,
+        "option_micro_f1_difference_ci95_high": 0.06324989963284587,
+        "option_micro_f1_difference_ci95_low": -0.01582766522321399,
+        "replicates": 10000,
+        "seed": 7033
+      },
+      "previous": {
+        "contract_valid_rate": 1.0,
+        "exact_answer_set_accuracy": 0.703125,
+        "fixed_choice_exact_accuracy": 1.0,
+        "multi_choice_exact_accuracy": 0.421875,
+        "option_micro_f1": 0.7089552238805971,
+        "row_count": 256,
+        "single_choice_exact_accuracy": 0.7914438502673797
+      }
+    },
+    "relevant_history": {
+      "candidate": {
+        "contract_valid_rate": 1.0,
+        "exact_answer_set_accuracy": 0.75,
+        "fixed_choice_exact_accuracy": 1.0,
+        "multi_choice_exact_accuracy": 0.3125,
+        "option_micro_f1": 0.7541589648798521,
+        "row_count": 256,
+        "single_choice_exact_accuracy": 0.893048128342246
+      },
+      "candidate_minus_previous": {
+        "contract_valid_rate": 0.00390625,
+        "exact_answer_set_accuracy": 0.015625,
+        "option_micro_f1": 0.025187002263029723
+      },
+      "case_grouped_bootstrap": {
+        "case_count": 164,
+        "exact_accuracy_difference_ci95_high": 0.06227678571428563,
+        "exact_accuracy_difference_ci95_low": -0.02941176470588236,
+        "option_micro_f1_difference_ci95_high": 0.06869036185131228,
+        "option_micro_f1_difference_ci95_low": -0.016223864592287043,
+        "replicates": 10000,
+        "seed": 7033
+      },
+      "previous": {
+        "contract_valid_rate": 0.99609375,
+        "exact_answer_set_accuracy": 0.734375,
+        "fixed_choice_exact_accuracy": 0.8,
+        "multi_choice_exact_accuracy": 0.4375,
+        "option_micro_f1": 0.7289719626168224,
+        "row_count": 256,
+        "single_choice_exact_accuracy": 0.8342245989304813
+      }
+    }
+  },
+  "mean_option_micro_f1_gain": 0.024286892908688462,
+  "next_action": "train_next_prespecified_duration",
+  "prespecified_advancement_rule_passed": true,
+  "previous_forward_steps": 192,
+  "study": "Final QA sequential QLoRA duration selection"
+}
