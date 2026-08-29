@@ -138,7 +138,10 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     selected = _select_rows(config, manifest, args.radrestruct_root)
     raw_cases = {str(row["case_id"]): row for row in _read_jsonl(args.cases)}
     existing = _existing_rows(args.rows_output)
-    generator = MedGemmaImageGenerator(local_files_only=True)
+    generator = MedGemmaImageGenerator(
+        cache_dir=args.cache_dir,
+        local_files_only=True,
+    )
     torch.cuda.reset_peak_memory_stats()
     start = time.perf_counter()
 
@@ -262,6 +265,11 @@ def parse_args() -> argparse.Namespace:
         "--image-root",
         type=Path,
         default=ROOT / "data/raw/openi_official_images",
+    )
+    parser.add_argument(
+        "--cache-dir",
+        type=Path,
+        default=ROOT / ".hf_cache",
     )
     parser.add_argument(
         "--rows-output",
