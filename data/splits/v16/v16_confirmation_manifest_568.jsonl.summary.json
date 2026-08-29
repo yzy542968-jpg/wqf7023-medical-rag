@@ -1,0 +1,14 @@
+{
+  "study": "V16 generation adaptation confirmation",
+  "status": "confirmation_manifest_instantiated_after_protocol_freeze",
+  "case_count": 568,
+  "case_ids_sha256": "13b34fb825ec2d7a11ddcab070c482c48930829d4821dcd88328fdbceb1536c3",
+  "ranking_rows_sha256": "cde42d4812a7b97ded0a5bb6af926943f2b6b94abedebc71c07c582818097851",
+  "manifest_sha256": "68f0cb7e836c1b92e6210f8d3ea9c3dfc2e7b99c7198f896608c66647da9de11",
+  "spectrum_counts": {
+    "abnormal": 359,
+    "indeterminate": 14,
+    "normal": 195
+  },
+  "replacement_policy": "no replacement after instantiation"
+}

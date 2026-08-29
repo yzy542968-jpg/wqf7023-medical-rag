@@ -33,18 +33,22 @@ def main() -> None:
     args = parser.parse_args()
 
     rows = read_jsonl(args.ranking_rows)
+    expected_types = {"findings", "impression"}
     by_case: dict[str, set[str]] = {}
     spectrum: dict[str, str] = {}
     for row in rows:
         case_id = str(row["case_id"]).strip()
         question_type = str(row["question_type"]).strip()
+        # Retrieval exports also contain the prespecified acute diagnostic query.
+        # V16 generation confirmation is limited to the two report-section tasks.
+        if question_type not in expected_types:
+            continue
         by_case.setdefault(case_id, set()).add(question_type)
         spectrum[case_id] = str(row.get("spectrum", "indeterminate"))
         ranking = row.get("rankings", {}).get("rrf_lambdamart", [])
         if len(ranking) < 3 or len(set(ranking[:3])) != 3:
             raise RuntimeError(f"Incomplete Top-3 ranking for {case_id}:{question_type}")
 
-    expected_types = {"findings", "impression"}
     invalid = {case_id: sorted(types) for case_id, types in by_case.items() if types != expected_types}
     if invalid:
         raise RuntimeError(f"Incomplete question matrix: {invalid}")

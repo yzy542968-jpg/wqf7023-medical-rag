@@ -21,6 +21,14 @@ def test_confirmation_manifest_requires_complete_two_question_matrix(tmp_path: P
         }
         for question_type in ("findings", "impression")
     ]
+    rows.append(
+        {
+            "case_id": "CXR1",
+            "question_type": "acute",
+            "spectrum": "normal",
+            "rankings": {"rrf_lambdamart": ["CXR5", "CXR6", "CXR7"]},
+        }
+    )
     rankings.write_text(
         "".join(json.dumps(row) + "\n" for row in rows), encoding="utf-8"
     )

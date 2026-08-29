@@ -1,0 +1,199 @@
+{
+  "study": "V12 test ranking and qrel sensitivity",
+  "status": "v16_confirmation_test_ranking_complete_no_retuning",
+  "no_test_evaluation": false,
+  "inputs": {
+    "cases_sha256": "56e367190396011d4d67f43e7e733389a8346890bf8729e82fb4326d063bbd68",
+    "radgraph_sha256": "631aa3e11cc52005656ee8a66de3de1ee5d3411a2f271a3c5f8a14de39b51599",
+    "split_sha256": "b4c1b091c3dbff0399d07c8350f4d8d68ce8ce52e0157dcc96f46af8c8baa7b3",
+    "model_sha256": "8c83d6188daa66939ae6a7865c14eada827c4cf625cc0314beaa4988ec2f086c",
+    "train_case_count": 2506,
+    "query_partition": "test",
+    "query_case_count": 568
+  },
+  "metrics": {
+    "r5_full_bank": {
+      "qrel_v2": {
+        "ndcg10": 0.5531268040202152,
+        "normal_ndcg10": 0.571582137565073,
+        "abnormal_ndcg10": 0.5426817958116646,
+        "indeterminate_ndcg10": 0.5639102258503866
+      },
+      "label_only": {
+        "ndcg10": 0.33325728465594573,
+        "normal_ndcg10": 0.7112798073364991,
+        "abnormal_ndcg10": 0.11806929899808485,
+        "indeterminate_ndcg10": 0.5859783509748161
+      },
+      "fact_only": {
+        "ndcg10": 0.3318048892217864,
+        "normal_ndcg10": 0.3178584473163933,
+        "abnormal_ndcg10": 0.3396161122640789,
+        "indeterminate_ndcg10": 0.32575682489097657
+      }
+    },
+    "rrf_candidate": {
+      "qrel_v2": {
+        "ndcg10": 0.5429199066005642,
+        "normal_ndcg10": 0.5715019744111779,
+        "abnormal_ndcg10": 0.5268732387168319,
+        "indeterminate_ndcg10": 0.5562949456855776
+      },
+      "label_only": {
+        "ndcg10": 0.28604769441653516,
+        "normal_ndcg10": 0.6557053854989667,
+        "abnormal_ndcg10": 0.07471785179004499,
+        "indeterminate_ndcg10": 0.556345104547665
+      },
+      "fact_only": {
+        "ndcg10": 0.2888667628997017,
+        "normal_ndcg10": 0.2842313622887041,
+        "abnormal_ndcg10": 0.2918647540052149,
+        "indeterminate_ndcg10": 0.2765542137757932
+      }
+    },
+    "rrf_r5_rerank": {
+      "qrel_v2": {
+        "ndcg10": 0.5536303823707946,
+        "normal_ndcg10": 0.5729609488840762,
+        "abnormal_ndcg10": 0.5426163512149966,
+        "indeterminate_ndcg10": 0.5668144334309104
+      },
+      "label_only": {
+        "ndcg10": 0.3348927079900164,
+        "normal_ndcg10": 0.718507901765004,
+        "abnormal_ndcg10": 0.11660895757275018,
+        "indeterminate_ndcg10": 0.5891001089668721
+      },
+      "fact_only": {
+        "ndcg10": 0.3323901639970629,
+        "normal_ndcg10": 0.31904109512637413,
+        "abnormal_ndcg10": 0.33970991179021265,
+        "indeterminate_ndcg10": 0.33062437628588914
+      }
+    },
+    "rrf_lambdamart": {
+      "qrel_v2": {
+        "ndcg10": 0.6158996160474296,
+        "normal_ndcg10": 0.648967426690435,
+        "abnormal_ndcg10": 0.5978365027320395,
+        "indeterminate_ndcg10": 0.6185020878216425
+      },
+      "label_only": {
+        "ndcg10": 0.37254094382007946,
+        "normal_ndcg10": 0.8612729891009419,
+        "abnormal_ndcg10": 0.0881155297147259,
+        "indeterminate_ndcg10": 0.8586820033953473
+      },
+      "fact_only": {
+        "ndcg10": 0.3450674908022417,
+        "normal_ndcg10": 0.338710308363012,
+        "abnormal_ndcg10": 0.34869378286587294,
+        "indeterminate_ndcg10": 0.3406254711455377
+      }
+    },
+    "full_bank_lambdamart": {
+      "qrel_v2": {
+        "ndcg10": 0.541500209788104,
+        "normal_ndcg10": 0.5522404673911858,
+        "abnormal_ndcg10": 0.5359552170846515,
+        "indeterminate_ndcg10": 0.534093220355139
+      },
+      "label_only": {
+        "ndcg10": 0.31632496458907083,
+        "normal_ndcg10": 0.7250113911825845,
+        "abnormal_ndcg10": 0.08193665242107656,
+        "indeterminate_ndcg10": 0.6342928847729838
+      },
+      "fact_only": {
+        "ndcg10": 0.29258968418428594,
+        "normal_ndcg10": 0.2763342319765312,
+        "abnormal_ndcg10": 0.30261026546366393,
+        "indeterminate_ndcg10": 0.2620485771282479
+      }
+    }
+  },
+  "bootstrap_vs_r5": {
+    "rrf_candidate": {
+      "qrel_v2": {
+        "difference": -0.010206897419651074,
+        "ci95_low": -0.015786887832722044,
+        "ci95_high": -0.004801303782793319,
+        "case_count": 568
+      },
+      "label_only": {
+        "difference": -0.04720959023941065,
+        "ci95_low": -0.0603772722636786,
+        "ci95_high": -0.03412412146070472,
+        "case_count": 568
+      },
+      "fact_only": {
+        "difference": -0.04293812632208473,
+        "ci95_low": -0.049702702270687286,
+        "ci95_high": -0.03625240820756467,
+        "case_count": 568
+      }
+    },
+    "rrf_r5_rerank": {
+      "qrel_v2": {
+        "difference": 0.0005035783505794553,
+        "ci95_low": -0.00015970730190228172,
+        "ci95_high": 0.0011475103070753957,
+        "case_count": 568
+      },
+      "label_only": {
+        "difference": 0.0016354233340706015,
+        "ci95_low": 3.661045392205051e-05,
+        "ci95_high": 0.003297518364897605,
+        "case_count": 568
+      },
+      "fact_only": {
+        "difference": 0.0005852747752765374,
+        "ci95_low": -0.0002761579778010027,
+        "ci95_high": 0.0014182964545352993,
+        "case_count": 568
+      }
+    },
+    "rrf_lambdamart": {
+      "qrel_v2": {
+        "difference": 0.0627728120272143,
+        "ci95_low": 0.054601777926610966,
+        "ci95_high": 0.07082237262639514,
+        "case_count": 568
+      },
+      "label_only": {
+        "difference": 0.03928365916413366,
+        "ci95_low": 0.024501019121576737,
+        "ci95_high": 0.05443451685304829,
+        "case_count": 568
+      },
+      "fact_only": {
+        "difference": 0.013262601580455254,
+        "ci95_low": 0.004047932853878274,
+        "ci95_high": 0.022432968752708445,
+        "case_count": 568
+      }
+    },
+    "full_bank_lambdamart": {
+      "qrel_v2": {
+        "difference": -0.011626594232111232,
+        "ci95_low": -0.020257168856513106,
+        "ci95_high": -0.0028774996461843816,
+        "case_count": 568
+      },
+      "label_only": {
+        "difference": -0.01693232006687494,
+        "ci95_low": -0.030282329039775034,
+        "ci95_high": -0.0032256478780232213,
+        "case_count": 568
+      },
+      "fact_only": {
+        "difference": -0.039215205037500485,
+        "ci95_low": -0.0496670827640501,
+        "ci95_high": -0.02884761103696363,
+        "case_count": 568
+      }
+    }
+  },
+  "rows_path": "experiments\\v16_confirmation\\v16_test_rankings_rows.jsonl"
+}
