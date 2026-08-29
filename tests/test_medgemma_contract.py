@@ -3,6 +3,7 @@ from __future__ import annotations
 from medical_rag.qa.medgemma_contract import (
     build_compact_qa_prompt,
     parse_option_indices,
+    parse_option_indices_with_wrapper_repair,
 )
 
 
@@ -37,3 +38,23 @@ def test_parser_retains_invalid_output_as_empty() -> None:
     assert parse_option_indices(
         "[3]", option_count=2, answer_type="single_choice"
     )["indices"] == []
+
+
+def test_wrapper_repair_is_bounded() -> None:
+    repaired = parse_option_indices_with_wrapper_repair(
+        "```json\n[0,2]\n```<end_of_turn>",
+        option_count=3,
+        answer_type="multi_choice",
+    )
+    assert repaired["indices"] == [0, 2]
+    assert repaired["repairs"] == ["terminal_end_of_turn", "outer_markdown_fence"]
+    assert parse_option_indices_with_wrapper_repair(
+        "Answer: [0]<end_of_turn>",
+        option_count=2,
+        answer_type="single_choice",
+    )["contract_valid"] is False
+    assert parse_option_indices_with_wrapper_repair(
+        "```json\n[0,\n```<end_of_turn>",
+        option_count=2,
+        answer_type="single_choice",
+    )["contract_valid"] is False

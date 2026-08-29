@@ -75,4 +75,42 @@ def parse_option_indices(
     }
 
 
-__all__ = ["build_compact_qa_prompt", "parse_option_indices"]
+def parse_option_indices_with_wrapper_repair(
+    raw_output: str,
+    *,
+    option_count: int,
+    answer_type: str,
+) -> dict[str, Any]:
+    raw = str(raw_output or "").strip()
+    normalized = raw
+    repairs: list[str] = []
+    end_token = "<end_of_turn>"
+    if normalized.endswith(end_token):
+        normalized = normalized[: -len(end_token)].strip()
+        repairs.append("terminal_end_of_turn")
+    fenced = re.fullmatch(
+        r"```(?:json)?\s*(.*?)\s*```",
+        normalized,
+        flags=re.IGNORECASE | re.DOTALL,
+    )
+    if fenced:
+        normalized = fenced.group(1).strip()
+        repairs.append("outer_markdown_fence")
+    parsed = parse_option_indices(
+        normalized,
+        option_count=option_count,
+        answer_type=answer_type,
+    )
+    return {
+        **parsed,
+        "raw_output": raw,
+        "normalized_output": normalized,
+        "repairs": repairs,
+    }
+
+
+__all__ = [
+    "build_compact_qa_prompt",
+    "parse_option_indices",
+    "parse_option_indices_with_wrapper_repair",
+]
