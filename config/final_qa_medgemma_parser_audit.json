@@ -1,0 +1,34 @@
+{
+  "study": "Final QA post-hoc MedGemma wrapper-repair audit",
+  "status": "frozen_after_wrapper_inspection_before_repaired_metrics",
+  "source_rows": "experiments/final_qa_development/medgemma_contract_pilot_rows.jsonl",
+  "source_summary_commit": "960d4fd",
+  "development_role": "Calibration",
+  "known_failure": "strict raw-array contract validity was 0 because outputs included terminal model tokens, Markdown fences, or token-ceiling truncation",
+  "repair_rules_in_order": [
+    "strip surrounding ASCII whitespace",
+    "strip exactly one terminal <end_of_turn> token",
+    "strip exactly one outer Markdown code fence optionally labelled json",
+    "parse only if the remaining complete payload is one JSON array",
+    "require unique integer indices in range and valid answer-type cardinality"
+  ],
+  "prohibited_repairs": [
+    "no extraction from explanatory prose",
+    "no completion of truncated arrays",
+    "no correction using gold answers",
+    "no selective regeneration",
+    "no replacement or deletion of failed rows"
+  ],
+  "reporting": [
+    "strict original metrics retained",
+    "repaired metrics reported separately",
+    "repair category counts",
+    "remaining failure count and examples without source report text"
+  ],
+  "future_contract_if_supported": {
+    "generation_stop_token": "<end_of_turn>",
+    "max_new_tokens": 32,
+    "same deterministic wrapper normalizer frozen before complete development runs"
+  },
+  "boundary": "post-hoc parser development on Calibration only; not an outcome-blind validation or Test result"
+}
