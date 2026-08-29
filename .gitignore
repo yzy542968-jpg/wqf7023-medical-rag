@@ -104,6 +104,9 @@ experiments/v16_adaptation/**/*.pt
 experiments/v16_adaptation/**/*.safetensors
 experiments/v16_adaptation/**/adapter/
 experiments/v16_adaptation/**/processor/
+experiments/v16_confirmation/*.jsonl
+experiments/v16_confirmation/*.npz
+experiments/model_cache/
 
 # V10 local per-query rows, shuffled mappings, generations, and review packages
 experiments/v10_publication/*.json
