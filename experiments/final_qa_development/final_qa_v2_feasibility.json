@@ -1,0 +1,144 @@
+{
+  "boundary": "This is an oracle-payload upper-bound diagnostic, not a preregistered or confirmatory experiment. The earlier aligned-history oracle result was already known before this v2 pairing-and-fusion pilot. Historical structured answers are derived from paired historical reports and are unavailable as direct labels in deployment. Validation was already inspected in Final-QA v1 and is development-only here; Test remains inaccessible.",
+  "config": "config/final_qa_v2_feasibility.json",
+  "embedding_signature": "8e5b69370462df61b75f8aea125441db49f8fb356ea026b442aae71bfaa8b526",
+  "go_rule": {
+    "aligned_fusion_exceeds_shuffled_mean": true,
+    "fusion_improves_image_only": true,
+    "history_used": true,
+    "passed": true
+  },
+  "historical_bank_case_count": 2351,
+  "image_only_full_validation_reproduction": {
+    "case_count": 358,
+    "element_accuracy": 0.9951247370682831,
+    "exact_report_vector_accuracy": 0.37988826815642457,
+    "label_count": 2470,
+    "micro_f1": 0.9752311130773518,
+    "predicted_positive_rate": 0.09735032682695136,
+    "reference_positive_rate": 0.0994797910116934,
+    "supported_label_count": 837,
+    "supported_label_macro_f1": 0.30983877737421966,
+    "supported_label_macro_precision": 0.32787754385115203,
+    "supported_label_macro_recall": 0.3075369536296703
+  },
+  "interpretation": "The narrow prespecified macro-F1 GO rule passed, but fixed fusion did not improve question-level exact accuracy or option micro-F1. This is conditional feasibility evidence for selective paired-history gating, not evidence that unconditional fusion is suitable.",
+  "model_inference_performed": false,
+  "pilot_holdout": {
+    "aligned_fusion": {
+      "case_count": 188,
+      "element_accuracy": 0.9928008441726247,
+      "exact_report_vector_accuracy": 0.22872340425531915,
+      "label_count": 2470,
+      "micro_f1": 0.9638066367130407,
+      "predicted_positive_rate": 0.09948962012231889,
+      "reference_positive_rate": 0.09941855456973038,
+      "supported_label_count": 678,
+      "supported_label_macro_f1": 0.39849143306585866,
+      "supported_label_macro_precision": 0.3993673608991807,
+      "supported_label_macro_recall": 0.4066644422703535
+    },
+    "aligned_fusion_minus_image_only_macro_f1": 0.03025852792102246,
+    "aligned_fusion_minus_image_only_question_exact_accuracy": -0.003095644748078663,
+    "aligned_fusion_minus_image_only_question_option_micro_f1": -0.0073135109960265066,
+    "aligned_fusion_question_level": {
+      "exact_answer_set_accuracy": 0.8503415883859948,
+      "option_micro_f1": 0.8784624704003524,
+      "question_count": 9368
+    },
+    "aligned_history_only": {
+      "case_count": 188,
+      "element_accuracy": 0.9932078559738134,
+      "exact_report_vector_accuracy": 0.22872340425531915,
+      "label_count": 2470,
+      "micro_f1": 0.9658191906712617,
+      "predicted_positive_rate": 0.0992936514773021,
+      "reference_positive_rate": 0.09941855456973038,
+      "supported_label_count": 678,
+      "supported_label_macro_f1": 0.3899899588767899,
+      "supported_label_macro_precision": 0.3919224021482819,
+      "supported_label_macro_recall": 0.39521649195864483
+    },
+    "aligned_history_question_level": {
+      "exact_answer_set_accuracy": 0.8558923996584116,
+      "option_micro_f1": 0.8848825669864373,
+      "question_count": 9368
+    },
+    "case_bootstrap_aligned_fusion_vs_image_only": {
+      "bootstrap_mean_difference": 0.026563575655221938,
+      "case_count": 188,
+      "ci95_high": 0.036009640991687776,
+      "ci95_low": 0.016452533751726152,
+      "observed_difference": 0.03025852792102246,
+      "probability_difference_greater_than_zero": 1.0,
+      "samples": 2000,
+      "seed": 7048,
+      "supported_label_count": 678
+    },
+    "image_history_question_complementarity": {
+      "both_correct_count": 7781,
+      "history_only_correct_count": 237,
+      "history_only_correct_rate": 0.025298889837745517,
+      "image_only_correct_count": 214,
+      "image_only_correct_rate": 0.022843723313407345,
+      "neither_correct_count": 1136,
+      "oracle_source_selection_exact_accuracy": 0.8787361229718189,
+      "question_count": 9368
+    },
+    "image_only": {
+      "case_count": 188,
+      "element_accuracy": 0.9951869239383238,
+      "exact_report_vector_accuracy": 0.3829787234042553,
+      "label_count": 2470,
+      "micro_f1": 0.9755473134867233,
+      "predicted_positive_rate": 0.097413644586097,
+      "reference_positive_rate": 0.09941855456973038,
+      "supported_label_count": 678,
+      "supported_label_macro_f1": 0.3682329051448362,
+      "supported_label_macro_precision": 0.3761004968170091,
+      "supported_label_macro_recall": 0.3682592629265277
+    },
+    "image_only_question_level": {
+      "exact_answer_set_accuracy": 0.8534372331340735,
+      "option_micro_f1": 0.8857759813963789,
+      "question_count": 9368
+    },
+    "shuffled_pair_fusion_macro_f1": {
+      "aligned_exceeds_all_shuffles": true,
+      "aligned_minus_mean": 0.026586485473437282,
+      "maximum": 0.3760356072536206,
+      "mean": 0.3719049475924214,
+      "minimum": 0.36752101300486967,
+      "plus_one_monte_carlo_p": 0.047619047619047616,
+      "replicates": 20
+    },
+    "shuffled_pair_history_macro_f1": {
+      "aligned_minus_mean": 0.030702835596815137,
+      "maximum": 0.36346075431031916,
+      "mean": 0.35928712327997475,
+      "minimum": 0.3551331039542745,
+      "replicates": 20
+    }
+  },
+  "pilot_holdout_case_count": 188,
+  "pilot_selection_case_count": 170,
+  "selected_on_pilot_selection": {
+    "alpha": 0.5,
+    "metrics": {
+      "case_count": 170,
+      "element_accuracy": 0.9932745891879019,
+      "exact_report_vector_accuracy": 0.29411764705882354,
+      "label_count": 2470,
+      "micro_f1": 0.9661925968491117,
+      "predicted_positive_rate": 0.09938556799237913,
+      "reference_positive_rate": 0.09954751131221719,
+      "supported_label_count": 665,
+      "supported_label_macro_f1": 0.41162878725389934,
+      "supported_label_macro_precision": 0.419582967877483,
+      "supported_label_macro_recall": 0.40982526041309225
+    }
+  },
+  "status": "go_for_deployable_development",
+  "study": "Final-QA v2 paired-history offline feasibility pilot",
+  "test_accessed": false
+}

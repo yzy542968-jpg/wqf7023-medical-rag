@@ -1,0 +1,49 @@
+{
+  "study": "Final-QA v2 paired-history offline feasibility pilot",
+  "status": "locally_fixed_before_v2_pilot_execution_with_prior_oracle_diagnostic_known",
+  "seed": 7047,
+  "roles": {
+    "historical_bank": "Final-QA Train",
+    "pilot_frame": "previously inspected Final-QA Validation, reused as development data",
+    "test": "prohibited"
+  },
+  "pilot_split": {
+    "method": "SHA-256 parity of final-qa-v2-pilot-fit|case_id",
+    "hash_prefix": "final-qa-v2-pilot-fit|case_id",
+    "selection_partition": 0,
+    "holdout_partition": 1
+  },
+  "historical_policy": {
+    "retrieval": "Top-1 cosine-similar MedSigLIP historical image",
+    "payload": "paired report-derived Rad-ReStruct answer vector",
+    "weighting": "uniform",
+    "softmax_temperature": 0.05
+  },
+  "fusion": {
+    "target_source": "cached Final-QA image-only QLoRA predictions",
+    "alpha_grid": [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
+    "selection_metric": "supported-label macro-F1 on the pilot selection partition",
+    "tie_break": "larger target-image weight",
+    "multi_choice_threshold": 0.5,
+    "fixed_choice_threshold": 0.5
+  },
+  "pairing_control": {
+    "replicates": 20,
+    "method": "SHA-256 ordered, fixed-point-free cyclic report-payload rotation",
+    "retrieval_images_unchanged": true
+  },
+  "bootstrap": {
+    "replicates": 2000,
+    "unit": "case",
+    "seed": 7048
+  },
+  "go_rule": {
+    "required": [
+      "aligned fusion minus image-only macro-F1 is positive on the pilot holdout",
+      "aligned fusion exceeds the mean shuffled-pair fusion on the pilot holdout",
+      "selected target-image alpha is below 1.0"
+    ],
+    "interpretation": "A GO result justifies development of a deployable report-derived paired-history method; it is not confirmatory evidence."
+  },
+  "boundary": "This is an oracle-payload upper-bound diagnostic, not a preregistered or confirmatory experiment. The earlier aligned-history oracle result was already known before this v2 pairing-and-fusion pilot. Historical structured answers are derived from paired historical reports and are unavailable as direct labels in deployment. Validation was already inspected in Final-QA v1 and is development-only here; Test remains inaccessible."
+}
