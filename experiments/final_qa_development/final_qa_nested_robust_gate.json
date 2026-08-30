@@ -1,0 +1,206 @@
+{
+  "advancement": {
+    "history_used": true,
+    "nested_oof_exact_noninferior": true,
+    "nested_oof_macro_exceeds_b3": true,
+    "nested_oof_macro_exceeds_random": true,
+    "nested_oof_option_micro_noninferior": true,
+    "passed": true
+  },
+  "baselines": {
+    "image_only": {
+      "question": {
+        "contract_valid_rate": 1.0,
+        "exact_answer_set_accuracy": 0.8496977160770264,
+        "fixed_choice_exact_accuracy": 1.0,
+        "multi_choice_exact_accuracy": 0.4334470989761092,
+        "option_micro_f1": 0.848366813199043,
+        "row_count": 17864,
+        "single_choice_exact_accuracy": 0.8711786534723449
+      },
+      "structured": {
+        "case_count": 358,
+        "element_accuracy": 0.9951247370682831,
+        "exact_report_vector_accuracy": 0.37988826815642457,
+        "label_count": 2470,
+        "micro_f1": 0.9752311130773518,
+        "predicted_positive_rate": 0.09735032682695136,
+        "reference_positive_rate": 0.0994797910116934,
+        "supported_label_count": 837,
+        "supported_label_macro_f1": 0.30983877737421966,
+        "supported_label_macro_precision": 0.32787754385115203,
+        "supported_label_macro_recall": 0.3075369536296703
+      }
+    },
+    "random_history": {
+      "question": {
+        "contract_valid_rate": 0.9998320644872369,
+        "exact_answer_set_accuracy": 0.878358710255262,
+        "fixed_choice_exact_accuracy": 1.0,
+        "multi_choice_exact_accuracy": 0.45164960182025027,
+        "option_micro_f1": 0.8762407896566106,
+        "row_count": 17864,
+        "single_choice_exact_accuracy": 0.9003946515874418
+      },
+      "structured": {
+        "case_count": 358,
+        "element_accuracy": 0.9953667473367561,
+        "exact_report_vector_accuracy": 0.38268156424581007,
+        "label_count": 2470,
+        "micro_f1": 0.9764693044172462,
+        "predicted_positive_rate": 0.09742270372967227,
+        "reference_positive_rate": 0.0994797910116934,
+        "supported_label_count": 837,
+        "supported_label_macro_f1": 0.3056516892868953,
+        "supported_label_macro_precision": 0.3207260247327824,
+        "supported_label_macro_recall": 0.3041948488743793
+      }
+    }
+  },
+  "boundary": "This is a final post-hoc development audit. Nested OOF isolates outer cases from fold-specific hyperparameter selection, but the method family was motivated by already known Validation results. No Test, confirmation, clinical-accuracy, or external-validation claim is permitted.",
+  "case_count": 358,
+  "interpretation": "The nested-OOF conservative gate passed all development conditions. A separate final-fit and confirmation protocol may now be considered; Test remains locked.",
+  "nested_oof": {
+    "case_bootstrap_macro_f1_vs_b3": {
+      "bootstrap_mean_difference": 0.0001639175832271576,
+      "case_count": 358,
+      "ci95_high": 0.0008408740162849426,
+      "ci95_low": -0.0005367413163185119,
+      "observed_difference": 0.00047571197522611186,
+      "probability_difference_greater_than_zero": 0.695,
+      "samples": 5000,
+      "seed": 7056,
+      "supported_label_count": 837
+    },
+    "history_only_recovery_count": 449,
+    "history_selected_disagreement_count": 529,
+    "history_selected_row_count": 2096,
+    "image_correct_to_history_wrong_count": 62,
+    "minus_image_only": {
+      "option_micro_f1": 0.02127822964061432,
+      "question_exact": 0.021663681146439795,
+      "supported_label_macro_f1": 0.00047571197522611186
+    },
+    "question": {
+      "contract_valid_rate": 0.9999440214957457,
+      "exact_answer_set_accuracy": 0.8713613972234662,
+      "fixed_choice_exact_accuracy": 1.0,
+      "multi_choice_exact_accuracy": 0.45164960182025027,
+      "option_micro_f1": 0.8696450428396573,
+      "row_count": 17864,
+      "single_choice_exact_accuracy": 0.8930317488366614
+    },
+    "structured": {
+      "case_count": 358,
+      "element_accuracy": 0.9952027684165291,
+      "exact_report_vector_accuracy": 0.37988826815642457,
+      "label_count": 2470,
+      "micro_f1": 0.9756274131274131,
+      "predicted_positive_rate": 0.09734919593784633,
+      "reference_positive_rate": 0.0994797910116934,
+      "supported_label_count": 837,
+      "supported_label_macro_f1": 0.3103144893494458,
+      "supported_label_macro_precision": 0.32833003764371343,
+      "supported_label_macro_recall": 0.30750767652948435
+    }
+  },
+  "new_generation_performed": false,
+  "outer_fold_case_counts": {
+    "0": 63,
+    "1": 73,
+    "2": 73,
+    "3": 69,
+    "4": 80
+  },
+  "outer_fold_selection": [
+    {
+      "admissible_grid_count": 60,
+      "evaluation_case_count": 63,
+      "grid_count": 60,
+      "outer_fold": 0,
+      "outer_history_row_count": 386,
+      "selected_inner_policy": {
+        "admissible": true,
+        "inner_oof_exact": 0.8703501839487668,
+        "inner_oof_history_row_count": 1759,
+        "inner_oof_macro_f1": 0.3372169010775631,
+        "inner_oof_option_micro_f1": 0.8686116564001896,
+        "minimum_margin": 0.05,
+        "minimum_support": 5
+      },
+      "training_case_count": 295
+    },
+    {
+      "admissible_grid_count": 60,
+      "evaluation_case_count": 73,
+      "grid_count": 60,
+      "outer_fold": 1,
+      "outer_history_row_count": 402,
+      "selected_inner_policy": {
+        "admissible": true,
+        "inner_oof_exact": 0.8716150534647965,
+        "inner_oof_history_row_count": 1851,
+        "inner_oof_macro_f1": 0.328667298943496,
+        "inner_oof_option_micro_f1": 0.8699851667874021,
+        "minimum_margin": 0.03,
+        "minimum_support": 5
+      },
+      "training_case_count": 285
+    },
+    {
+      "admissible_grid_count": 60,
+      "evaluation_case_count": 73,
+      "grid_count": 60,
+      "outer_fold": 2,
+      "outer_history_row_count": 630,
+      "selected_inner_policy": {
+        "admissible": true,
+        "inner_oof_exact": 0.8754011839383782,
+        "inner_oof_history_row_count": 2058,
+        "inner_oof_macro_f1": 0.33215626962479444,
+        "inner_oof_option_micro_f1": 0.8740210496474007,
+        "minimum_margin": 0.02,
+        "minimum_support": 5
+      },
+      "training_case_count": 285
+    },
+    {
+      "admissible_grid_count": 60,
+      "evaluation_case_count": 69,
+      "grid_count": 60,
+      "outer_fold": 3,
+      "outer_history_row_count": 320,
+      "selected_inner_policy": {
+        "admissible": true,
+        "inner_oof_exact": 0.8686281460475009,
+        "inner_oof_history_row_count": 1098,
+        "inner_oof_macro_f1": 0.3434682594476628,
+        "inner_oof_option_micro_f1": 0.8671624431678003,
+        "minimum_margin": 0.1,
+        "minimum_support": 5
+      },
+      "training_case_count": 289
+    },
+    {
+      "admissible_grid_count": 60,
+      "evaluation_case_count": 80,
+      "grid_count": 60,
+      "outer_fold": 4,
+      "outer_history_row_count": 358,
+      "selected_inner_policy": {
+        "admissible": true,
+        "inner_oof_exact": 0.8674385964912281,
+        "inner_oof_history_row_count": 1750,
+        "inner_oof_macro_f1": 0.3170076364396516,
+        "inner_oof_option_micro_f1": 0.8656830944159604,
+        "minimum_margin": 0.05,
+        "minimum_support": 5
+      },
+      "training_case_count": 278
+    }
+  ],
+  "question_count": 17864,
+  "status": "go_for_confirmation_design",
+  "study": "Final-QA nested-OOF robust question-policy gate",
+  "test_accessed": false
+}
