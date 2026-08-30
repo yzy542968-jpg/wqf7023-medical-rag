@@ -405,7 +405,11 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         conditions[condition]["baseline_correct_denominator"] = eligible
     summary = {
         "study": config["study"],
-        "status": "calibration_rag_pilot_complete_no_validation_no_test",
+        "status": (
+            "full_validation_generation_complete_no_test_access"
+            if str(config.get("role", "")).lower() == "validation"
+            else "calibration_rag_pilot_complete_no_validation_no_test"
+        ),
         "model_arm": arm,
         "adapter_dir": str(args.adapter_dir.resolve()) if args.adapter_dir is not None else None,
         "config": str(args.config.resolve().relative_to(ROOT)),

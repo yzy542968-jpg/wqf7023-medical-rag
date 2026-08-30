@@ -10,6 +10,7 @@ from pathlib import Path
 from typing import Any
 
 import numpy as np
+from sklearn.metrics import accuracy_score, classification_report
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
@@ -80,6 +81,74 @@ def aggregate_binary_metrics(targets: np.ndarray, predictions: np.ndarray) -> di
     }
 
 
+def official_compatible_metrics(
+    targets: np.ndarray,
+    predictions: np.ndarray,
+    report_keys: tuple[str, ...],
+) -> dict[str, Any]:
+    """Reproduce the aggregate metric arithmetic used by Rad-ReStruct.
+
+    Inputs have already passed through the repository's port of the official
+    hierarchy cleaner. The upstream evaluator averages every supported row in
+    scikit-learn's multilabel classification report, including its aggregate
+    rows. We retain that behavior here for direct compatibility and report the
+    less ambiguous supported-label macro-F1 separately as the primary metric.
+    """
+
+    target = np.asarray(targets, dtype=np.uint8)
+    predicted = np.asarray(predictions, dtype=np.uint8)
+    if target.shape != predicted.shape:
+        raise ValueError("Official-compatible target and prediction shapes differ")
+    if target.ndim != 2 or target.shape[1] != len(report_keys):
+        raise ValueError("Official-compatible matrices do not match report keys")
+
+    def report_summary(indices: np.ndarray) -> dict[str, float | int]:
+        selected_target = target[:, indices]
+        selected_prediction = predicted[:, indices]
+        report = classification_report(
+            selected_target,
+            selected_prediction,
+            output_dict=True,
+            zero_division=1,
+        )
+        supported = [
+            value
+            for value in report.values()
+            if isinstance(value, dict) and float(value.get("support", 0)) > 0
+        ]
+        if not supported:
+            raise ValueError("Official-compatible metric has no supported rows")
+        return {
+            "vector_element_count": int(selected_target.size),
+            "label_count": int(len(indices)),
+            "f1": float(np.mean([row["f1-score"] for row in supported])),
+            "precision": float(np.mean([row["precision"] for row in supported])),
+            "recall": float(np.mean([row["recall"] for row in supported])),
+            "element_accuracy": float(
+                accuracy_score(selected_target.ravel(), selected_prediction.ravel())
+            ),
+            "exact_vector_accuracy": float(
+                accuracy_score(selected_target, selected_prediction)
+            ),
+        }
+
+    all_indices = np.arange(len(report_keys), dtype=int)
+    root_indices = np.asarray(
+        [
+            index
+            for index, key in enumerate(report_keys)
+            if key.endswith("_no") or key.endswith("_yes")
+        ],
+        dtype=int,
+    )
+    if not len(root_indices):
+        raise ValueError("No Rad-ReStruct root-question labels were identified")
+    return {
+        "upstream_aggregate": report_summary(all_indices),
+        "root_questions": report_summary(root_indices),
+    }
+
+
 def row_summary(rows: list[dict[str, Any]]) -> dict[str, Any]:
     result = metrics(rows)
     result.update(
@@ -127,6 +196,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     config = load_json(args.config)
     manifest = load_json(args.manifest)
     rows = read_jsonl(args.rows)
+    generation_summary = load_json(args.generation_summary)
     expected_questions = int(config["expected_question_count"])
     rows_by_condition = {
         condition: keyed_full(rows, condition) for condition in CONDITIONS
@@ -157,6 +227,9 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         "b0_train_label_majority": {
             "structured": structured_qa_metrics(targets, majority).as_dict(),
             "aggregate_binary": aggregate_binary_metrics(targets, majority),
+            "official_compatible": official_compatible_metrics(
+                targets, majority, hierarchy.report_keys
+            ),
         }
     }
     for condition in CONDITIONS:
@@ -164,6 +237,9 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         systems[condition] = {
             "structured": structured_qa_metrics(targets, predictions[condition]).as_dict(),
             "aggregate_binary": aggregate_binary_metrics(targets, predictions[condition]),
+            "official_compatible": official_compatible_metrics(
+                targets, predictions[condition], hierarchy.report_keys
+            ),
             "question_level": row_summary(condition_rows),
         }
         if condition != B3:
@@ -213,6 +289,21 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             float(systems[B4]["structured"]["supported_label_macro_f1"])
             > float(systems[selected]["structured"]["supported_label_macro_f1"])
         ),
+        "runtime": {
+            "elapsed_seconds_total": float(
+                generation_summary["elapsed_seconds_this_invocation"]
+            ),
+            "seconds_per_generated_question_condition": float(
+                generation_summary["elapsed_seconds_this_invocation"] / len(rows)
+            ),
+            "peak_vram_mb": float(
+                generation_summary["peak_vram_mb_this_invocation"]
+            ),
+            "scope": (
+                "One uninterrupted invocation covering all four conditions; "
+                "condition-specific latency was not instrumented prospectively"
+            ),
+        },
         "boundary": config["boundary"],
     }
     args.output.write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n", encoding="utf-8")
@@ -231,6 +322,12 @@ def main() -> None:
     )
     parser.add_argument("--radrestruct-root", type=Path, required=True)
     parser.add_argument("--rows", type=Path, required=True)
+    parser.add_argument(
+        "--generation-summary",
+        type=Path,
+        default=ROOT
+        / "experiments/final_qa_development/final_qa_validation_generation_summary.json",
+    )
     parser.add_argument("--output", type=Path, required=True)
     print(json.dumps(run(parser.parse_args()), indent=2, sort_keys=True))
 

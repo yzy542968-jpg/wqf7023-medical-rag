@@ -1,0 +1,320 @@
+{
+  "boundary": "Validation policy selection only; Test inaccessible until a later committed confirmation protocol",
+  "case_count": 358,
+  "label_count": 2470,
+  "prespecified_validation_advancement_rule_passed": false,
+  "question_count": 17864,
+  "random_history_control_exceeds_selected": true,
+  "role": "Validation",
+  "runtime": {
+    "elapsed_seconds_total": 36951.239414299984,
+    "peak_vram_mb": 4380.51513671875,
+    "scope": "One uninterrupted invocation covering all four conditions; condition-specific latency was not instrumented prospectively",
+    "seconds_per_generated_question_condition": 0.517118778189375
+  },
+  "selected_meaningful_history_policy": "b6_top1_image_neighbor_whole_report",
+  "status": "full_validation_complete_no_test_access",
+  "study": "Final paired historical image-report QA full Validation",
+  "systems": {
+    "b0_train_label_majority": {
+      "aggregate_binary": {
+        "balanced_accuracy": 0.9837904885254689,
+        "negative_specificity": 0.9986839031814883,
+        "positive_recall": 0.9688970738694496
+      },
+      "official_compatible": {
+        "root_questions": {
+          "element_accuracy": 0.9473743016759777,
+          "exact_vector_accuracy": 0.38268156424581007,
+          "f1": 0.6032911802234147,
+          "label_count": 50,
+          "precision": 0.9675673830947578,
+          "recall": 0.6196113675006073,
+          "vector_element_count": 17900
+        },
+        "upstream_aggregate": {
+          "element_accuracy": 0.9957207156266257,
+          "exact_vector_accuracy": 0.38268156424581007,
+          "f1": 0.28910690990037574,
+          "label_count": 2470,
+          "precision": 0.9964760624834672,
+          "recall": 0.29092300220868744,
+          "vector_element_count": 884260
+        }
+      },
+      "structured": {
+        "case_count": 358,
+        "element_accuracy": 0.9957207156266257,
+        "exact_report_vector_accuracy": 0.38268156424581007,
+        "label_count": 2470,
+        "micro_f1": 0.9782833268290443,
+        "predicted_positive_rate": 0.09757085020242914,
+        "reference_positive_rate": 0.0994797910116934,
+        "supported_label_count": 837,
+        "supported_label_macro_f1": 0.2860940458627296,
+        "supported_label_macro_precision": 0.28443563404817684,
+        "supported_label_macro_recall": 0.28793309438470727
+      }
+    },
+    "b3_no_history_r2": {
+      "aggregate_binary": {
+        "balanced_accuracy": 0.9816343265123049,
+        "negative_specificity": 0.9984754374640522,
+        "positive_recall": 0.9647932155605575
+      },
+      "official_compatible": {
+        "root_questions": {
+          "element_accuracy": 0.9464804469273743,
+          "exact_vector_accuracy": 0.37988826815642457,
+          "f1": 0.6227245591279965,
+          "label_count": 50,
+          "precision": 0.8835733285918349,
+          "recall": 0.6316385657803757,
+          "vector_element_count": 17900
+        },
+        "upstream_aggregate": {
+          "element_accuracy": 0.9951247370682831,
+          "exact_vector_accuracy": 0.37988826815642457,
+          "f1": 0.3127256603434643,
+          "label_count": 2470,
+          "precision": 0.9374043593934227,
+          "recall": 0.3104269616981264,
+          "vector_element_count": 884260
+        }
+      },
+      "question_level": {
+        "contract_valid_rate": 1.0,
+        "exact_answer_set_accuracy": 0.8496977160770264,
+        "fixed_choice_exact_accuracy": 1.0,
+        "mean_evidence_units": 0.0,
+        "mean_input_tokens": 412.1368674429019,
+        "mean_output_tokens": 4.052395879982087,
+        "multi_choice_exact_accuracy": 0.4334470989761092,
+        "option_micro_f1": 0.848366813199043,
+        "provenance_complete_rate": 1.0,
+        "row_count": 17864,
+        "single_choice_exact_accuracy": 0.8711786534723449
+      },
+      "structured": {
+        "case_count": 358,
+        "element_accuracy": 0.9951247370682831,
+        "exact_report_vector_accuracy": 0.37988826815642457,
+        "label_count": 2470,
+        "micro_f1": 0.9752311130773518,
+        "predicted_positive_rate": 0.09735032682695136,
+        "reference_positive_rate": 0.0994797910116934,
+        "supported_label_count": 837,
+        "supported_label_macro_f1": 0.30983877737421966,
+        "supported_label_macro_precision": 0.32787754385115203,
+        "supported_label_macro_recall": 0.3075369536296703
+      }
+    },
+    "b4_deterministic_random_history": {
+      "aggregate_binary": {
+        "balanced_accuracy": 0.9824714976560401,
+        "negative_specificity": 0.998569623782171,
+        "positive_recall": 0.9663733715299093
+      },
+      "case_bootstrap_structured_vs_b3": {
+        "bootstrap_mean_difference": -0.0034640684336423875,
+        "case_count": 358,
+        "ci95_high": 0.0022225782275199888,
+        "ci95_low": -0.009052804112434388,
+        "observed_difference": -0.004187088087324375,
+        "probability_difference_greater_than_zero": 0.1199,
+        "samples": 10000,
+        "seed": 7023,
+        "supported_label_count": 837
+      },
+      "negative_transfer_from_b3": {
+        "baseline_correct_denominator": 15179,
+        "count": 169,
+        "rate": 0.01113380328084854
+      },
+      "official_compatible": {
+        "root_questions": {
+          "element_accuracy": 0.946927374301676,
+          "exact_vector_accuracy": 0.3854748603351955,
+          "f1": 0.6170246572501225,
+          "label_count": 50,
+          "precision": 0.897676639984441,
+          "recall": 0.6273957117629338,
+          "vector_element_count": 17900
+        },
+        "upstream_aggregate": {
+          "element_accuracy": 0.9953667473367561,
+          "exact_vector_accuracy": 0.38268156424581007,
+          "f1": 0.30856478503877977,
+          "label_count": 2470,
+          "precision": 0.9481341393364788,
+          "recall": 0.3071049942760371,
+          "vector_element_count": 884260
+        }
+      },
+      "question_level": {
+        "contract_valid_rate": 0.9998320644872369,
+        "exact_answer_set_accuracy": 0.878358710255262,
+        "fixed_choice_exact_accuracy": 1.0,
+        "mean_evidence_units": 1.8819413345275415,
+        "mean_input_tokens": 483.45846394984324,
+        "mean_output_tokens": 4.100313479623824,
+        "multi_choice_exact_accuracy": 0.45164960182025027,
+        "option_micro_f1": 0.8762407896566106,
+        "provenance_complete_rate": 1.0,
+        "row_count": 17864,
+        "single_choice_exact_accuracy": 0.9003946515874418
+      },
+      "structured": {
+        "case_count": 358,
+        "element_accuracy": 0.9953667473367561,
+        "exact_report_vector_accuracy": 0.38268156424581007,
+        "label_count": 2470,
+        "micro_f1": 0.9764693044172462,
+        "predicted_positive_rate": 0.09742270372967227,
+        "reference_positive_rate": 0.0994797910116934,
+        "supported_label_count": 837,
+        "supported_label_macro_f1": 0.3056516892868953,
+        "supported_label_macro_precision": 0.3207260247327824,
+        "supported_label_macro_recall": 0.3041948488743793
+      }
+    },
+    "b6_top1_image_neighbor_whole_report": {
+      "aggregate_binary": {
+        "balanced_accuracy": 0.9817711737526233,
+        "negative_specificity": 0.9985445074306726,
+        "positive_recall": 0.9649978400745742
+      },
+      "case_bootstrap_structured_vs_b3": {
+        "bootstrap_mean_difference": -0.012027925920486451,
+        "case_count": 358,
+        "ci95_high": -0.0023479394614696505,
+        "ci95_low": -0.02048986554145813,
+        "observed_difference": -0.016498358588858897,
+        "probability_difference_greater_than_zero": 0.003,
+        "samples": 10000,
+        "seed": 7023,
+        "supported_label_count": 837
+      },
+      "negative_transfer_from_b3": {
+        "baseline_correct_denominator": 15179,
+        "count": 199,
+        "rate": 0.013110218064431122
+      },
+      "official_compatible": {
+        "root_questions": {
+          "element_accuracy": 0.9459217877094972,
+          "exact_vector_accuracy": 0.3743016759776536,
+          "f1": 0.6100362238354095,
+          "label_count": 50,
+          "precision": 0.8502276456409298,
+          "recall": 0.6224597652738534,
+          "vector_element_count": 17900
+        },
+        "upstream_aggregate": {
+          "element_accuracy": 0.9952072919729491,
+          "exact_vector_accuracy": 0.3743016759776536,
+          "f1": 0.2963045659471288,
+          "label_count": 2470,
+          "precision": 0.9407656252084319,
+          "recall": 0.2952487278640158,
+          "vector_element_count": 884260
+        }
+      },
+      "question_level": {
+        "contract_valid_rate": 0.9998880429914913,
+        "exact_answer_set_accuracy": 0.8789744738020601,
+        "fixed_choice_exact_accuracy": 1.0,
+        "mean_evidence_units": 1.9041648007165248,
+        "mean_input_tokens": 485.4303067622033,
+        "mean_output_tokens": 4.089117778772951,
+        "multi_choice_exact_accuracy": 0.4448236632536974,
+        "option_micro_f1": 0.8771998109483166,
+        "provenance_complete_rate": 1.0,
+        "row_count": 17864,
+        "single_choice_exact_accuracy": 0.9013960063615479
+      },
+      "structured": {
+        "case_count": 358,
+        "element_accuracy": 0.9952072919729491,
+        "exact_report_vector_accuracy": 0.3743016759776536,
+        "label_count": 2470,
+        "micro_f1": 0.9756453577914167,
+        "predicted_positive_rate": 0.09730848393006582,
+        "reference_positive_rate": 0.0994797910116934,
+        "supported_label_count": 837,
+        "supported_label_macro_f1": 0.29334041878536077,
+        "supported_label_macro_precision": 0.3061587910378151,
+        "supported_label_macro_recall": 0.29229165765505477
+      }
+    },
+    "p1_top3_image_neighbors_question_conditioned_evidence": {
+      "aggregate_binary": {
+        "balanced_accuracy": 0.9793928754899321,
+        "negative_specificity": 0.9984942747276759,
+        "positive_recall": 0.9602914762521884
+      },
+      "case_bootstrap_structured_vs_b3": {
+        "bootstrap_mean_difference": -0.013109873479604722,
+        "case_count": 358,
+        "ci95_high": -0.003052484989166262,
+        "ci95_low": -0.02172197252511978,
+        "observed_difference": -0.017578679938986652,
+        "probability_difference_greater_than_zero": 0.0022,
+        "samples": 10000,
+        "seed": 7023,
+        "supported_label_count": 837
+      },
+      "negative_transfer_from_b3": {
+        "baseline_correct_denominator": 15179,
+        "count": 403,
+        "rate": 0.026549838592792675
+      },
+      "official_compatible": {
+        "root_questions": {
+          "element_accuracy": 0.9413407821229051,
+          "exact_vector_accuracy": 0.34916201117318435,
+          "f1": 0.6041493709106764,
+          "label_count": 50,
+          "precision": 0.7655324025609301,
+          "recall": 0.6176623862500847,
+          "vector_element_count": 17900
+        },
+        "upstream_aggregate": {
+          "element_accuracy": 0.9946938683192726,
+          "exact_vector_accuracy": 0.3463687150837989,
+          "f1": 0.2952150367394242,
+          "label_count": 2470,
+          "precision": 0.9373473658934678,
+          "recall": 0.2942762878267651,
+          "vector_element_count": 884260
+        }
+      },
+      "question_level": {
+        "contract_valid_rate": 0.9996081504702194,
+        "exact_answer_set_accuracy": 0.8632445141065831,
+        "fixed_choice_exact_accuracy": 1.0,
+        "mean_evidence_units": 5.97962382445141,
+        "mean_input_tokens": 551.7128862516794,
+        "mean_output_tokens": 4.185848634124496,
+        "multi_choice_exact_accuracy": 0.3890784982935154,
+        "option_micro_f1": 0.8609183276886347,
+        "provenance_complete_rate": 1.0,
+        "row_count": 17864,
+        "single_choice_exact_accuracy": 0.8877304588560995
+      },
+      "structured": {
+        "case_count": 358,
+        "element_accuracy": 0.9946938683192726,
+        "exact_report_vector_accuracy": 0.3463687150837989,
+        "label_count": 2470,
+        "micro_f1": 0.9729782651262973,
+        "predicted_positive_rate": 0.09688553140479045,
+        "reference_positive_rate": 0.0994797910116934,
+        "supported_label_count": 837,
+        "supported_label_macro_f1": 0.292260097435233,
+        "supported_label_macro_precision": 0.2991477200143568,
+        "supported_label_macro_recall": 0.2913317975964757
+      }
+    }
+  }
+}
