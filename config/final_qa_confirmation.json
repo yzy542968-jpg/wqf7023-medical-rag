@@ -27,6 +27,7 @@
     "quantization": "NF4",
     "batch_size": 8,
     "max_new_tokens": 32,
+    "stop_token": "<end_of_turn>",
     "decoding": "greedy",
     "resume_by_run_key": true
   },

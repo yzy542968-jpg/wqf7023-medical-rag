@@ -405,10 +405,12 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         conditions[condition]["baseline_correct_denominator"] = eligible
     summary = {
         "study": config["study"],
-        "status": (
-            "full_validation_generation_complete_no_test_access"
-            if str(config.get("role", "")).lower() == "validation"
-            else "calibration_rag_pilot_complete_no_validation_no_test"
+        "status": {
+            "validation": "full_validation_generation_complete_no_test_access",
+            "test": "full_test_generation_complete_frozen_configuration",
+        }.get(
+            str(config.get("role", "")).lower(),
+            "calibration_rag_pilot_complete_no_validation_no_test",
         ),
         "model_arm": arm,
         "adapter_dir": str(args.adapter_dir.resolve()) if args.adapter_dir is not None else None,
@@ -440,7 +442,11 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", type=Path, default=ROOT / "config/final_qa_report_text_rag_pilot.json")
     parser.add_argument("--selection-config", type=Path, default=ROOT / "config/final_qa_medgemma_contract_pilot_r1.json")
-    parser.add_argument("--selection-role", choices=("calibration", "validation"), default=None)
+    parser.add_argument(
+        "--selection-role",
+        choices=("calibration", "validation", "test"),
+        default=None,
+    )
     parser.add_argument("--manifest", type=Path, default=ROOT / "data/splits/final_qa/final_qa_development_manifest.json")
     parser.add_argument("--radrestruct-root", type=Path, required=True)
     parser.add_argument("--cases", type=Path, default=ROOT / "data/processed/openi_cases.jsonl")

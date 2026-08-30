@@ -3,7 +3,7 @@
   "history_question_id_count": 58,
   "image_only_question_id_count": 660,
   "input_hashes": {
-    "confirmation_config_sha256": "d85f2f105cee67244b350983173dc81e57bf784af4695feefce6875570d7e5a1",
+    "confirmation_config_sha256": "8870bdf71490f7e7eb58f352d3fa38a956becd2cb2fc4fdd44ddcabb306786f5",
     "development_manifest_sha256": "97f0759ac81fcdebbdeeb07f773845ee8762a789f20eb9c8d537d2034540d6e9",
     "validation_rows_sha256": "bc040f296d4e77e6cec7b52919ccb63d56f5ea36d8684959feb9b8a2f16addf2"
   },
