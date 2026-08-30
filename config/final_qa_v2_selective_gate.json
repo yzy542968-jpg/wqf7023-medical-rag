@@ -1,0 +1,90 @@
+{
+  "study": "Final-QA v2 multimodal paired-history selective gate development",
+  "status": "locally_frozen_before_selective_gate_outcomes",
+  "seed": 7050,
+  "roles": {
+    "historical_bank": "Final-QA Train",
+    "development_frame": "previously inspected Final-QA Validation reused as development only",
+    "test": "prohibited"
+  },
+  "case_partitions": {
+    "selection_partition": "the 170-case v2 feasibility selection partition",
+    "gate_train_rule": "SHA-256 parity of final-qa-v2-gate-train|case_id equals 0",
+    "gate_calibration_rule": "remaining cases in the 170-case selection partition",
+    "development_holdout": "the fixed 188-case v2 feasibility holdout"
+  },
+  "question_encoder": {
+    "model": "google/medsiglip-448",
+    "revision": "9cea28a1a1195f665105faa6e8544c112fd960a4",
+    "input": "question text only",
+    "max_tokens": 64,
+    "batch_size": 64,
+    "device": "cuda"
+  },
+  "candidate_frame": {
+    "image_shortlist_k": 20,
+    "same_duplicate_cluster_excluded": true,
+    "features": [
+      "target_to_historical_image_cosine",
+      "target_image_to_historical_report_cosine",
+      "question_to_historical_report_cosine",
+      "historical_image_to_own_report_cosine",
+      "reciprocal_image_rank",
+      "image_similarity_margin_from_top1"
+    ]
+  },
+  "candidate_models": [
+    "image_top1",
+    "logistic_mcr_lite"
+  ],
+  "source_gate": {
+    "policy": "retain the common answer when sources agree; classify only disagreements",
+    "models": [
+      "image_similarity_threshold",
+      "logistic_regression",
+      "two_layer_mlp"
+    ],
+    "default_when_uncertain": "image_only",
+    "numeric_features": [
+      "selected_image_similarity",
+      "selected_target_image_report_similarity",
+      "selected_question_report_similarity",
+      "selected_pair_consistency",
+      "candidate_relevance_probability",
+      "candidate_probability_margin",
+      "top3_answer_agreement",
+      "image_history_option_overlap",
+      "image_answer_count",
+      "history_answer_count"
+    ],
+    "categorical_features": [
+      "question_id",
+      "answer_type"
+    ]
+  },
+  "selection": {
+    "primary_metric": "question-level exact answer-set accuracy",
+    "tie_tolerance": 0.0005,
+    "tie_break": "simpler model, then higher image-only retention",
+    "option_micro_f1_noninferiority_margin": -0.001,
+    "supported_label_macro_f1_noninferiority_margin": -0.005
+  },
+  "development_holdout_go_rule": {
+    "required": [
+      "question-level exact answer-set accuracy exceeds image-only",
+      "option micro-F1 difference is at least -0.001",
+      "supported-label macro-F1 difference is at least -0.005",
+      "history is used for at least one disagreement",
+      "the selected method exceeds its shuffled-pair counterpart"
+    ],
+    "test_access_after_go": false,
+    "next_step_after_go": "replace oracle historical labels with report-derived structured facts before any confirmation protocol"
+  },
+  "controls": {
+    "shuffled_pair_replicates": 20,
+    "fixed_point_free": true,
+    "random_history": true,
+    "fixed_fusion": true
+  },
+  "boundary": "This remains an oracle-payload development experiment because historical Rad-ReStruct labels are derived from reports. It tests whether observable multimodal relevance can select useful paired history without new MedGemma inference. It is not clinical validation, external validation, or confirmation; Final-QA Test remains uninstantiated and inaccessible."
+}
