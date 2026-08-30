@@ -338,7 +338,7 @@ The frozen primary denominator remains 568 cases. Empty Findings rows score zero
 
 Experiments ran locally on an NVIDIA GeForce RTX 5070 Laptop GPU with approximately 8 GB memory. Model revisions, adapters, split files, result summaries and scripts are fingerprinted with SHA-256. Large generations, model caches, report text and pixels remain local. Public aggregate files contain no report text or image pixels.
 
-Technical interruptions could be resumed under unchanged frozen settings. Outcome-driven reruns, case replacement, Test-driven model selection, prompt revision, qrel substitution and selective result deletion were prohibited. The final repository test suite contains 315 passing tests after the completeness audit.
+Technical interruptions could be resumed under unchanged frozen settings. Outcome-driven reruns, case replacement, Test-driven model selection, prompt revision, qrel substitution and selective result deletion were prohibited. The final repository test suite contains 337 passing tests after the Final-QA Validation extension and completeness audit.
 
 # Chapter 4: Results
 
@@ -1061,7 +1061,7 @@ The negative and mixed results contribute to the research value. Weak Hit@1 evid
 
 **Repository:** https://github.com/yzy542968-jpg/wqf7023-medical-rag
 
-**Final development branch at manuscript build:** `v12-optimization-pilot`
+**Final integration branch at manuscript build:** `final-qa-study`
 
 ```powershell
 & ".\.venv\Scripts\python.exe" -m pytest -q
@@ -1087,3 +1087,11 @@ Independent blinded radiologist evaluation was not conducted and remains Future 
 ## Appendix N: Reference-Completeness Deviation
 
 The V16 protocol expected non-empty Findings and Impression references. The instantiated frame contained 81 cases with empty Findings, producing 243 empty rows per arm. The all-row primary analysis is retained. The non-empty-reference sensitivity remains positive. Full counts, impact analysis and corrective actions are recorded in `docs/V16_PROTOCOL_DEVIATION_REFERENCE_COMPLETENESS.md`.
+
+## Appendix O: Post-Primary Structured Final-QA Validation Extension
+
+After the V12/V16 primary study was frozen, a separate protocol-governed development extension mapped Rad-ReStruct's structured questions onto the duplicate-cluster-disjoint OpenI roles. A 384-step q/v QLoRA adapter was selected using Train and Calibration only. Full Validation then evaluated 358 cases, 17,864 questions and four frozen conditions: image-only question answering without history, deterministic random history, a Top-1 image-neighbour report, and question-conditioned evidence from Top-3 image neighbours. Test remained inaccessible.
+
+The fine-tuned generator achieved strong question-level performance. Exact answer-set accuracy was 0.84970 without history, 0.87836 with random history, 0.87897 with Top-1 image-neighbour history and 0.86324 with question-conditioned Top-3 evidence. Single-choice accuracy reached 0.90140 for the Top-1 condition. However, the prespecified report-level primary metric did not improve. Supported-label macro-F1 was 0.30984 without history, 0.30565 with random history, 0.29334 with Top-1 image-neighbour history and 0.29226 with question-conditioned evidence. Top-1 history minus no history was -0.01650 with 95% paired case-bootstrap interval [-0.02049, -0.00235]; question-conditioned evidence minus no history was -0.01758 [-0.02172, -0.00305].
+
+The advancement rule therefore failed and no Test confirmation was run. This extension shows that structured QA accuracy can be high while complete report-vector macro-F1 degrades, and that relevant historical context must outperform both no-history and random-history controls before it can be credited as a RAG contribution. It is retained as a negative/mixed Validation result and does not replace the frozen V12/V16 primary claims. The complete decision record is `docs/FINAL_QA_VALIDATION_DECISION_RECORD.md`; large per-question rows remain local under repository policy.

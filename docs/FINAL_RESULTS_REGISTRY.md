@@ -1,6 +1,6 @@
 # Final Results Registry
 
-Generated from locked artifacts and development summaries on 2026-08-29.
+Generated from locked artifacts and development summaries on 2026-08-30.
 
 ## Dataset
 
@@ -141,6 +141,31 @@ Interpretation: the Validation-selected multi-source candidate frame plus learne
 | Non-empty-reference route minus base, 95% CI | +0.04571 [0.03371, 0.05763] |
 
 All six prespecified standard NLG metric intervals favored the V16 route in the retrieved-history condition. The routed method also exceeded no history and random history. CheXbert remained mixed, including a small supported decline in reference-positive recall; this negative secondary result is retained. A post-run protocol audit found 81 cases with empty Findings references. The frozen primary denominator was retained, and a non-empty-reference sensitivity remained positive. Interpretation is limited to automated same-source report-reference consistency and structured fact overlap.
+
+## Post-Primary Structured Final-QA Validation Extension
+
+| Measure | Validation-only value |
+|---|---:|
+| Cases / questions per condition | 358 / 17,864 |
+| Generated rows across four conditions | 71,456 |
+| No-history exact answer-set accuracy | 0.84970 |
+| Random-history exact answer-set accuracy | 0.87836 |
+| Top-1 image-history exact answer-set accuracy | **0.87897** |
+| Question-conditioned Top-3 exact answer-set accuracy | 0.86324 |
+| No-history supported-label macro-F1 | **0.30984** |
+| Random-history supported-label macro-F1 | 0.30565 |
+| Top-1 image-history supported-label macro-F1 | 0.29334 |
+| Question-conditioned Top-3 supported-label macro-F1 | 0.29226 |
+| Top-1 minus no history, 95% CI | -0.01650 [-0.02049, -0.00235] |
+| Question-conditioned minus no history, 95% CI | -0.01758 [-0.02172, -0.00305] |
+| Final-QA Test access | **Not run** |
+
+Interpretation: QLoRA produced strong structured question-level accuracy, but
+the prespecified historical-RAG advancement rule failed. Meaningful history
+degraded report-level supported-label macro-F1, and deterministic random
+history remained competitive. The extension is retained as a negative/mixed
+Validation result; it does not replace V12/V16 or support a relevance-specific
+RAG claim. See `docs/FINAL_QA_VALIDATION_DECISION_RECORD.md`.
 
 ## Final Evidence Boundary
 

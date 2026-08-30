@@ -59,7 +59,7 @@ def main() -> None:
         "final_integrated_confirmation": "V16 section-aware MedGemma/QLoRA route",
         "acceptance": {
             "python_compileall": "passed",
-            "pytest": {"passed": 315, "failed": 0, "errors": 0},
+            "pytest": {"passed": 337, "failed": 0, "errors": 0},
             "docx_pdf_pages": 56,
             "docx_all_pages_visually_inspected": True,
             "final_pptx_generated": False,

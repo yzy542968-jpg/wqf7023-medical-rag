@@ -9,7 +9,7 @@
     "pytest": {
       "errors": 0,
       "failed": 0,
-      "passed": 315
+      "passed": 337
     },
     "python_compileall": "passed"
   },
@@ -22,10 +22,10 @@
       "sha256": "cd935dff7483eff01569840092e95a2fac924e757bf7cd8475c29fb7842c17cc"
     },
     "defence_slide_outline": {
-      "bytes": 10075,
+      "bytes": 11270,
       "hash_mode": "canonical_utf8_lf",
       "path": "docs/P2_FINAL_DEFENCE_SLIDE_OUTLINE.md",
-      "sha256": "8dc929a445613e92ccd19495cdc124edafc2b649706f378eaff0d99e8f849348"
+      "sha256": "00b652ad77afd6757550066924a0625a174c01a9d2775499d87d07b14e20f09b"
     },
     "docx_builder": {
       "bytes": 387,
@@ -34,46 +34,46 @@
       "sha256": "86689c041d6d19b237d7c66a2ff2d4be14bfa921a6abe2240f9f91b9b041c80b"
     },
     "manuscript_builder": {
-      "bytes": 56030,
+      "bytes": 58003,
       "hash_mode": "raw_bytes",
       "path": "scripts/build_final_v16_manuscript.py",
-      "sha256": "c083ec8bc7011f3e69ac9fe37d4357fb5f95463fcaaa634925ad47caa416a63e"
+      "sha256": "5df4a5c07976e162fd2c191bd95d965e02159a6a0a3965e192d891765c499320"
     },
     "manuscript_docx": {
-      "bytes": 95163,
+      "bytes": 95940,
       "hash_mode": "raw_bytes",
       "path": "deliverables/22097191_ZHANG_YUE_Final_Research_Project.docx",
-      "sha256": "485b76baf566ffedf1bac5f81eca54bb3ce9c170a2d6bf5612626f7159a5555f"
+      "sha256": "3cfe94e11f8b1285288d483198a1401f798fc490a96545169ec61f26793713e4"
     },
     "manuscript_markdown": {
-      "bytes": 145099,
+      "bytes": 147072,
       "hash_mode": "canonical_utf8_lf",
       "path": "docs/P2_FINAL_MANUSCRIPT.md",
-      "sha256": "d9512b46bffa6277b5790c13dc6dd149b8294e0540380e3e6d9f706992fde08e"
+      "sha256": "4b0e9b1f51576212858c1f9b20b31dfffc1ff02c365e372393ef13e6799f028c"
     },
     "manuscript_pdf": {
-      "bytes": 594317,
+      "bytes": 598057,
       "hash_mode": "raw_bytes",
       "path": "deliverables/22097191_ZHANG_YUE_Final_Research_Project.pdf",
-      "sha256": "b26e725da0ba194e107d388d63946921f20896100e3fee123c6f2b599b577f52"
+      "sha256": "ba6adca5bca75c38afa22a18fa969e2af496d209226763ce191e3ed529fea496"
     },
     "readme": {
-      "bytes": 30078,
+      "bytes": 31441,
       "hash_mode": "canonical_utf8_lf",
       "path": "README.md",
-      "sha256": "d765f9baaeebe45046eb055a6c0b66a6c7330f95ce45aa699bffb029c0b4c14e"
+      "sha256": "ac7c3862d91fbda343b3954ac8758d5e7cf9ae00a83c1a83ab87e21c485ef131"
     },
     "release_audit": {
-      "bytes": 3510,
+      "bytes": 3892,
       "hash_mode": "canonical_utf8_lf",
       "path": "docs/V16_FINAL_RELEASE_AUDIT.md",
-      "sha256": "cd8d078a0ba23aa4b012df3e511a107ee5c41548a05a4edb3e40ab2f3d93a076"
+      "sha256": "a093c654fa73cbe25297739048cd4303777947608f7d80beea01a40f0f900a76"
     },
     "result_registry": {
-      "bytes": 7826,
+      "bytes": 9137,
       "hash_mode": "canonical_utf8_lf",
       "path": "docs/FINAL_RESULTS_REGISTRY.md",
-      "sha256": "68994e7e172026817003030e515ec9f0c98ce91723ff1d8260cfa0151a6840ba"
+      "sha256": "7bd0c420eabff5e0a3bcb081a84f971e3a3c995d3f3bce77bd30dab1b6663e7a"
     },
     "v10_freeze": {
       "bytes": 9789,
@@ -144,7 +144,7 @@
   },
   "final_integrated_confirmation": "V16 section-aware MedGemma/QLoRA route",
   "final_retrieval_method": "V12 RRF Top-200 plus LambdaMART",
-  "generated_on": "2026-08-29",
+  "generated_on": "2026-08-30",
   "methodological_foundation": "V10 frozen alignment-controlled study",
   "release": "v16-final-thesis-freeze",
   "repository": "https://github.com/yzy542968-jpg/wqf7023-medical-rag"

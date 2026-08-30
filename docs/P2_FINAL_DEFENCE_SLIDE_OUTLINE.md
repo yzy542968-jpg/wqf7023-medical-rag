@@ -209,3 +209,29 @@ This outline is the maintained defence deliverable. It specifies the content of 
 ## Backup Slides
 
 Prepare optional backup slides for model revisions and hardware, qrel construction, subgroup results, standard NLG metrics, RadGraph/CheXbert definitions, runtime, version chronology, and repository reproduction commands. Keep independent clinical evaluation and MIMIC-CXR explicitly labelled Future Work with no scores.
+
+### Backup - Structured Final-QA Validation Extension
+
+**Why it was added:** To measure explicit answer accuracy on Rad-ReStruct rather
+than relying only on free-text report-reference overlap.
+
+**Frame:** 358 Validation cases, 17,864 questions, 71,456 rows; 384-step q/v
+QLoRA; Test not accessed.
+
+**Question-level result:** exact answer-set accuracy was 84.97% without history,
+87.84% with random history, 87.90% with Top-1 image-neighbour history, and
+86.32% with question-conditioned Top-3 evidence. Top-1 single-choice accuracy
+was 90.14%.
+
+**Primary report-level result:** supported-label macro-F1 was 0.30984 without
+history versus 0.29334 with Top-1 history and 0.29226 with question-conditioned
+history. Both meaningful-history differences had 95% case-bootstrap intervals
+fully below zero.
+
+**Decision:** The advancement rule failed; no Final-QA Test confirmation was
+run. The study shows strong fine-tuned QA accuracy but no relevance-specific
+historical-RAG benefit under this structured endpoint.
+
+**Visual:** Two-panel chart: high question-level accuracy on the left and lower
+report-level macro-F1 with history on the right. Label it Validation extension,
+not final confirmation.

@@ -166,6 +166,30 @@ A clean 48-case MedGemma development diagnostic (24 report-indexed normal, 24 re
 
 The deterministic planner was also evaluated once on a separately committed 96-item reserved wording set: accuracy `0.9167`, macro-F1 `0.9196`, and indication-invariance `1.0000`. Labels remain author-defined rather than clinician-authored. These findings support engineering efficiency, auditability and wording robustness; they do not establish clinical answer validity or confirmed generation superiority. No V11 confirmation cohort was instantiated; no physician or external validation is claimed. See `docs/V11_REMAINING_OPTIMIZATION_AUDIT.md`, `docs/V11_MEDGEMMA_GENERATION_RESULTS.md`, and `docs/V11_PLANNER_RESERVED_SET_RESULTS.md`.
 
+### Post-Primary Structured Final-QA Validation
+
+A separate protocol-governed extension mapped Rad-ReStruct questions onto the
+cluster-disjoint OpenI roles and trained a 384-step q/v QLoRA adapter without
+using Final-QA Validation or Test outcomes. Full Validation covered 358 cases,
+17,864 questions and four frozen conditions (71,456 generated rows).
+
+- Exact answer-set accuracy was `0.84970` without history, `0.87836` with
+  deterministic random history, `0.87897` with a Top-1 image-neighbour report,
+  and `0.86324` with question-conditioned Top-3 evidence.
+- The prespecified supported-label macro-F1 was `0.30984`, `0.30565`, `0.29334`
+  and `0.29226`, respectively.
+- Top-1 image history minus no history was `-0.01650`, 95% paired
+  case-bootstrap CI `[-0.02049,-0.00235]`; question-conditioned history minus
+  no history was `-0.01758`, CI `[-0.02172,-0.00305]`.
+- The frozen advancement rule failed. Final-QA Test remains uninstantiated and
+  unaccessed; the extension is a negative/mixed Validation result rather than a
+  successful RAG confirmation.
+
+The result demonstrates high structured question-level accuracy but no
+relevance-specific historical-RAG gain under the tested prompt and retrievers.
+It does not replace the frozen V12/V16 primary study. See
+`docs/FINAL_QA_VALIDATION_DECISION_RECORD.md`.
+
 ## Submission Status
 
 Automated V1-V16 experiments, supplemental validity audits, and Dashboard integration are complete in the corresponding repository history. The V9 researcher accepted all 24 assistant-proposed exploratory labels without modification; this was not independent clinical adjudication. The blinded clinical package remains Future Work and every independent-review rating remains blank.
@@ -252,7 +276,7 @@ Inspect or rebuild the final V12/V16 aggregate evaluations and manuscript with:
 & ".\.venv\Scripts\python.exe" scripts\build_final_docx.py
 ```
 
-The final full local-data suite contains **315 passing tests**. Model-backed confirmation commands require the pinned local snapshots and large local artifacts documented by the V16 protocols; aggregate summaries remain versioned for inspection. The clean 48-case V11 MedGemma diagnostic remains development evidence rather than confirmation.
+The final full local-data suite contains **337 passing tests**. Model-backed confirmation commands require the pinned local snapshots and large local artifacts documented by the V16 and Final-QA protocols; aggregate summaries remain versioned for inspection. The clean 48-case V11 MedGemma diagnostic and full Final-QA Validation remain development evidence rather than confirmation.
 
 The manifest command verifies required files, locked SHA-256 values, tracked-file exclusions, file-size limits, the declared human-evaluation disposition, repository publication, and conditional V3 status. Use `--strict` only for the final submission gate; it exits unsuccessfully while external requirements such as the remote repository remain pending.
 

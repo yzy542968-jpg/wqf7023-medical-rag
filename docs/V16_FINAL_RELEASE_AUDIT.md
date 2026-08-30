@@ -13,7 +13,7 @@ No final PPTX is part of this release. The student will create the presentation 
 
 ## Scientific identity
 
-V10 remains the methodological foundation and image-alignment study. V12 is the final learned retrieval method. V16 is the final integrated held-out method confirmation, combining frozen V12 retrieval with the Validation-selected section-aware MedGemma/QLoRA route. V11 and V13-V15 remain development or mechanism evidence.
+V10 remains the methodological foundation and image-alignment study. V12 is the final learned retrieval method. V16 is the final integrated held-out method confirmation, combining frozen V12 retrieval with the Validation-selected section-aware MedGemma/QLoRA route. V11 and V13-V15 remain development or mechanism evidence. The later structured Final-QA study is a post-primary Validation extension; its advancement rule failed and its Test role was not accessed.
 
 The release preserves the following non-negotiable evidence boundaries:
 
@@ -26,7 +26,7 @@ The release preserves the following non-negotiable evidence boundaries:
 
 ## Document verification
 
-- Markdown length: 19,366 words, within the requested 10,000-30,000 range and close to the 20,000-word target.
+- Markdown length: 19,612 words, within the requested 10,000-30,000 range and close to the 20,000-word target.
 - Rendered document length: 56 pages.
 - All 56 rendered pages were visually inspected in contact sheets.
 - The final cover, running header, table of contents, chapter starts, tables, lists, code blocks, appendices, and final page were inspected after version-label corrections.
@@ -36,7 +36,7 @@ The release preserves the following non-negotiable evidence boundaries:
 ## Software verification
 
 - Python compilation: passed.
-- Full local-data test suite: 315 passed before final release packaging.
+- Full local-data test suite: 337 passed after Final-QA integration.
 - Dashboard aggregate panel reads only version-controlled frozen V12/V16 summaries.
 - The live upload workflow remains explicitly labelled as the V10 demonstration path.
 - Raw reports, image pixels, model weights, prompt packs, per-row generations, private reviewer keys, and secrets remain excluded under repository policy.
@@ -49,6 +49,7 @@ The release preserves the following non-negotiable evidence boundaries:
 - Token-ceiling rate: `87.85% -> 56.60%`.
 - Non-empty-reference sensitivity: `+0.04571`, 95% CI `[+0.03371,+0.05763]`.
 - CheXbert reference-positive recall decreased slightly; this negative secondary result is retained.
+- Post-primary Final-QA exact answer-set accuracy reached `0.87897` with Top-1 image-neighbour history, but supported-label macro-F1 was `0.29334` versus `0.30984` without history. The advancement rule failed; no Final-QA Test result is claimed.
 
 ## Acceptance decision
 
