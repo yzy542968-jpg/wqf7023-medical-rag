@@ -1,0 +1,249 @@
+{
+  "boundary": "This remains an oracle-payload development experiment because historical Rad-ReStruct labels are derived from reports. It tests whether observable multimodal relevance can select useful paired history without new MedGemma inference. It is not clinical validation, external validation, or confirmation; Final-QA Test remains uninstantiated and inaccessible.",
+  "candidate_selection": {
+    "calibration_exact_delta_logistic_minus_image_top1": -0.02008226469876606,
+    "candidates": [
+      {
+        "gate_calibration_history_metrics": {
+          "question": {
+            "exact_answer_set_accuracy": 0.8715218969271715,
+            "option_micro_f1": 0.8976651763537009,
+            "question_count": 4133
+          },
+          "structured": {
+            "case_count": 86,
+            "element_accuracy": 0.9917710196779964,
+            "exact_report_vector_accuracy": 0.313953488372093,
+            "label_count": 2470,
+            "micro_f1": 0.95732421875,
+            "predicted_positive_rate": 0.09359758968082102,
+            "reference_positive_rate": 0.09922794463798136,
+            "supported_label_count": 513,
+            "supported_label_macro_f1": 0.5040146076324487,
+            "supported_label_macro_precision": 0.5356815790837953,
+            "supported_label_macro_recall": 0.4877993810662284
+          }
+        },
+        "policy": "image_top1"
+      },
+      {
+        "gate_calibration_history_metrics": {
+          "question": {
+            "exact_answer_set_accuracy": 0.8514396322284055,
+            "option_micro_f1": 0.8766031627443656,
+            "question_count": 4133
+          },
+          "structured": {
+            "case_count": 86,
+            "element_accuracy": 0.9853450710855851,
+            "exact_report_vector_accuracy": 0.09302325581395349,
+            "label_count": 2470,
+            "micro_f1": 0.9216993233895918,
+            "predicted_positive_rate": 0.08793428114113548,
+            "reference_positive_rate": 0.09922794463798136,
+            "supported_label_count": 513,
+            "supported_label_macro_f1": 0.47064660690588417,
+            "supported_label_macro_precision": 0.5084217948443663,
+            "supported_label_macro_recall": 0.4468184349375855
+          }
+        },
+        "policy": "logistic_mcr_lite"
+      }
+    ],
+    "selected_policy": "image_top1"
+  },
+  "candidate_training": {
+    "candidate_row_count": 87260,
+    "positive_count": 73394,
+    "positive_rate": 0.8410955764382306
+  },
+  "case_partitions": {
+    "development_holdout": 188,
+    "gate_calibration": 86,
+    "gate_train": 84,
+    "mlp_internal_early_stopping": 46,
+    "mlp_internal_train": 38,
+    "selection": 170
+  },
+  "development_holdout": {
+    "case_bootstrap_selected_vs_image_only_exact": {
+      "case_count": 188,
+      "ci95_high": 0.0013966264016876187,
+      "ci95_low": -0.009483364594784315,
+      "observed_difference": -0.004214567694976262,
+      "probability_difference_greater_than_zero": 0.0682,
+      "samples": 5000,
+      "seed": 7051
+    },
+    "history_only_recovery_count": 166,
+    "history_use_count": 356,
+    "history_use_rate": 0.038001707941929974,
+    "image_correct_to_history_wrong_count": 161,
+    "image_only": {
+      "question": {
+        "exact_answer_set_accuracy": 0.8534372331340735,
+        "option_micro_f1": 0.8857759813963789,
+        "question_count": 9368
+      },
+      "structured": {
+        "case_count": 188,
+        "element_accuracy": 0.9951869239383238,
+        "exact_report_vector_accuracy": 0.3829787234042553,
+        "label_count": 2470,
+        "micro_f1": 0.9755473134867233,
+        "predicted_positive_rate": 0.097413644586097,
+        "reference_positive_rate": 0.09941855456973038,
+        "supported_label_count": 678,
+        "supported_label_macro_f1": 0.3682329051448362,
+        "supported_label_macro_precision": 0.3761004968170091,
+        "supported_label_macro_recall": 0.3682592629265277
+      }
+    },
+    "net_exact_question_gain_count_before_hierarchy_side_effects": 5,
+    "selected_gate": {
+      "question": {
+        "exact_answer_set_accuracy": 0.8539709649871904,
+        "option_micro_f1": 0.8842988899320705,
+        "question_count": 9368
+      },
+      "structured": {
+        "case_count": 188,
+        "element_accuracy": 0.9953527435610302,
+        "exact_report_vector_accuracy": 0.26063829787234044,
+        "label_count": 2470,
+        "micro_f1": 0.9764235458637417,
+        "predicted_positive_rate": 0.09769575329485744,
+        "reference_positive_rate": 0.09941855456973038,
+        "supported_label_count": 678,
+        "supported_label_macro_f1": 0.3878423486941899,
+        "supported_label_macro_precision": 0.4145294027186856,
+        "supported_label_macro_recall": 0.3829120244689549
+      }
+    },
+    "selected_gate_minus_image_only_exact": 0.0005337318531168922,
+    "selected_gate_minus_image_only_macro_f1": 0.019609443549353678,
+    "selected_gate_minus_image_only_option_micro_f1": -0.001477091464308411,
+    "shuffled_pair_control": {
+      "aligned_exceeds_all_shuffles": true,
+      "aligned_minus_shuffled_mean_exact": 0.011822160546541283,
+      "exact_maximum": 0.8463919726729291,
+      "exact_mean": 0.8421488044406491,
+      "exact_minimum": 0.8371050384286934,
+      "macro_f1_mean": 0.3665754838488611,
+      "plus_one_monte_carlo_p": 0.047619047619047616,
+      "replicates": 20
+    }
+  },
+  "embedding_signature": "8e5b69370462df61b75f8aea125441db49f8fb356ea026b442aae71bfaa8b526",
+  "gate_selection": {
+    "candidates": [
+      {
+        "complexity": 0,
+        "history_use_count": 163,
+        "metrics": {
+          "question": {
+            "exact_answer_set_accuracy": 0.8732155819017663,
+            "option_micro_f1": 0.8995155881256987,
+            "question_count": 4133
+          },
+          "structured": {
+            "case_count": 86,
+            "element_accuracy": 0.9960032012051596,
+            "exact_report_vector_accuracy": 0.313953488372093,
+            "label_count": 2470,
+            "micro_f1": 0.9797088979708898,
+            "predicted_positive_rate": 0.097745033424348,
+            "reference_positive_rate": 0.09922794463798136,
+            "supported_label_count": 513,
+            "supported_label_macro_f1": 0.5139433391197901,
+            "supported_label_macro_precision": 0.5351294992035737,
+            "supported_label_macro_recall": 0.5072403631605071
+          }
+        },
+        "name": "image_similarity_threshold",
+        "threshold": 0.8528193962574006
+      },
+      {
+        "complexity": 1,
+        "history_use_count": 117,
+        "metrics": {
+          "question": {
+            "exact_answer_set_accuracy": 0.873457536898137,
+            "option_micro_f1": 0.9021712003993012,
+            "question_count": 4133
+          },
+          "structured": {
+            "case_count": 86,
+            "element_accuracy": 0.9961585538084926,
+            "exact_report_vector_accuracy": 0.3488372093023256,
+            "label_count": 2470,
+            "micro_f1": 0.9804766006316394,
+            "predicted_positive_rate": 0.0975331889652575,
+            "reference_positive_rate": 0.09922794463798136,
+            "supported_label_count": 513,
+            "supported_label_macro_f1": 0.4958822458148206,
+            "supported_label_macro_precision": 0.5146360447317808,
+            "supported_label_macro_recall": 0.4925926916374301
+          }
+        },
+        "name": "logistic_regression",
+        "threshold": 0.44
+      },
+      {
+        "complexity": 2,
+        "history_use_count": 162,
+        "metrics": {
+          "question": {
+            "exact_answer_set_accuracy": 0.8729736269053956,
+            "option_micro_f1": 0.8999129677980853,
+            "question_count": 4133
+          },
+          "structured": {
+            "case_count": 86,
+            "element_accuracy": 0.9960173241690989,
+            "exact_report_vector_accuracy": 0.3372093023255814,
+            "label_count": 2470,
+            "micro_f1": 0.9797772147057418,
+            "predicted_positive_rate": 0.0977120798418228,
+            "reference_positive_rate": 0.09922794463798136,
+            "supported_label_count": 513,
+            "supported_label_macro_f1": 0.5095410877559803,
+            "supported_label_macro_precision": 0.5273718727670914,
+            "supported_label_macro_recall": 0.504448392747826
+          }
+        },
+        "name": "two_layer_mlp",
+        "threshold": 0.29
+      }
+    ],
+    "selected_model": "image_similarity_threshold",
+    "selected_threshold": 0.8528193962574006
+  },
+  "gate_training": {
+    "disagreement_rows": 262,
+    "history_better_rate": 0.5190839694656488,
+    "history_better_rows": 136,
+    "mlp_best_epoch": 70,
+    "mlp_best_validation_loss": 0.6812135577201843,
+    "mlp_device": "cuda"
+  },
+  "go_rule": {
+    "aligned_exceeds_all_shuffled_exact": true,
+    "history_used": true,
+    "macro_f1_noninferior": true,
+    "option_micro_f1_noninferior": false,
+    "passed": false,
+    "question_exact_improves": true
+  },
+  "historical_bank": {
+    "eligible_image_report_pairs": 2348,
+    "excluded_missing_embedding_pairs": 3,
+    "manifest_train_cases": 2351
+  },
+  "interpretation": "The selective gate did not pass every fixed development advancement criterion. It must not be promoted or run on Test.",
+  "new_medgemma_inference_performed": false,
+  "question_text_sha256": "6ff15e0ec9eb3bb89a5148100c41dbd8466d48042321db2af32a71195517add8",
+  "status": "stop_or_redesign",
+  "study": "Final-QA v2 multimodal paired-history selective gate development",
+  "test_accessed": false
+}

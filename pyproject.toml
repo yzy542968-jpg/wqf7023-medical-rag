@@ -32,11 +32,13 @@ models = [
   "transformers>=4.45,<5",
   "open_clip_torch>=2.23,<4",
   "peft>=0.20,<1",
+  "protobuf>=5,<8",
   "qwen-vl-utils>=0.0.8,<1",
   "hi-ml-multimodal==0.2.2",
 ]
 documents = ["python-docx>=1.1,<2"]
 test = [
+  "pycocoevalcap==1.2",
   "pytest>=8,<10",
   "torch>=2.3",
 ]
@@ -53,6 +55,8 @@ all = [
   "transformers>=4.45,<5",
   "open_clip_torch>=2.23,<4",
   "peft>=0.20,<1",
+  "protobuf>=5,<8",
+  "pycocoevalcap==1.2",
   "qwen-vl-utils>=0.0.8,<1",
   "hi-ml-multimodal==0.2.2",
 ]

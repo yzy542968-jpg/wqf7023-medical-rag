@@ -1,0 +1,15 @@
+{
+  "case_count": 358,
+  "device": "cuda",
+  "elapsed_seconds": 58.141704400011804,
+  "embedding_dimension": 1152,
+  "model": "google/medsiglip-448",
+  "output": "experiments/final_qa_development/final_qa_v2_question_embeddings.npz",
+  "question_instance_count": 17864,
+  "question_text_sha256": "6ff15e0ec9eb3bb89a5148100c41dbd8466d48042321db2af32a71195517add8",
+  "revision": "9cea28a1a1195f665105faa6e8544c112fd960a4",
+  "role": "Final-QA Validation reused as development only",
+  "study": "Final-QA v2 multimodal paired-history selective gate development",
+  "test_accessed": false,
+  "unique_question_count": 202
+}
