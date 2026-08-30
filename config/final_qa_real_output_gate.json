@@ -1,0 +1,61 @@
+{
+  "study": "Final-QA real-output question-conditional source gate",
+  "status": "post_hoc_development_protocol_frozen_before_oof_outcomes",
+  "seed": 7053,
+  "role": "previously inspected Final-QA Validation reused as development only",
+  "test": "prohibited",
+  "conditions": {
+    "image_only": "b3_no_history_r2",
+    "paired_history": "b6_top1_image_neighbor_whole_report",
+    "random_history_control": "b4_deterministic_random_history"
+  },
+  "cross_validation": {
+    "folds": 5,
+    "unit": "case_id",
+    "assignment": "SHA-256(final-qa-real-output-gate|7053|case_id) modulo 5"
+  },
+  "candidate_policies": [
+    "question_id_exact_utility",
+    "question_id_macro_f1_utility",
+    "logistic_disagreement_gate"
+  ],
+  "logistic_features": {
+    "numeric": [
+      "top1_image_similarity",
+      "image_history_option_overlap",
+      "image_answer_count",
+      "history_answer_count",
+      "option_count"
+    ],
+    "categorical": [
+      "question_id",
+      "answer_type"
+    ],
+    "target": "paired history exact and image-only not exact on a disagreement",
+    "threshold_grid": [0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9],
+    "threshold_selection": "maximize training-fold supported-label macro-F1 subject to exact and option micro-F1 not below image-only by more than 0.001"
+  },
+  "selection": {
+    "primary": "five-fold out-of-fold supported-label macro-F1",
+    "required_secondary": [
+      "question exact answer-set accuracy",
+      "option micro-F1",
+      "history-use rate",
+      "negative transfer and recovery"
+    ],
+    "tie_tolerance": 0.0005,
+    "tie_break": "higher exact accuracy, then higher option micro-F1, then simpler policy"
+  },
+  "advancement": {
+    "requirements": [
+      "OOF macro-F1 exceeds image-only",
+      "OOF question exact accuracy is not below image-only by more than 0.001",
+      "OOF option micro-F1 is not below image-only by more than 0.001",
+      "OOF macro-F1 exceeds random history",
+      "history is used for at least one disagreement"
+    ],
+    "test_access_after_go": false,
+    "next_step_after_go": "train the selected gate on all development cases, freeze a separate confirmation protocol, then decide whether the cost of B3/B6 Test generation is justified"
+  },
+  "boundary": "This is post-hoc development informed by known Validation outcomes. OOF predictions prevent case reuse within each fold but do not make Validation an untouched confirmation set. No clinical-accuracy, external-validation, or Test claim is permitted."
+}
