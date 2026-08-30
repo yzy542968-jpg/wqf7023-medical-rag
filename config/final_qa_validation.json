@@ -5,7 +5,7 @@
   "expected_case_count": 358,
   "expected_question_count": 17864,
   "conditions": [
-    "b3_no_history",
+    "b3_no_history_r2",
     "b4_deterministic_random_history",
     "b6_top1_image_neighbor_whole_report",
     "p1_top3_image_neighbors_question_conditioned_evidence"

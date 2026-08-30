@@ -23,6 +23,7 @@ from medical_rag.qa.medgemma_contract import (  # noqa: E402
     build_compact_qa_prompt,
     parse_option_indices_with_wrapper_repair,
 )
+from medical_rag.qa.radrestruct import iter_radrestruct_cases  # noqa: E402
 from medical_rag.similar_case.radgraph_adapter import (  # noqa: E402
     read_radgraph_case_records,
 )
@@ -107,13 +108,52 @@ def _provenance_complete(records: list[dict[str, Any]]) -> bool:
     return all(required <= set(record) and all(record[key] != "" for key in required) for record in records)
 
 
+def _select_role_rows(
+    manifest: dict[str, Any], radrestruct_root: Path, role: str
+) -> list[dict[str, Any]]:
+    if role not in manifest["roles"]:
+        raise ValueError(f"Unknown Final-QA manifest role: {role}")
+    role_ids = {str(case["case_id"]) for case in manifest["roles"][role]["cases"]}
+    selected: list[dict[str, Any]] = []
+    for case in iter_radrestruct_cases(radrestruct_root):
+        if case.case_id not in role_ids:
+            continue
+        for index, question in enumerate(case.questions):
+            selected.append(
+                {
+                    "case_id": case.case_id,
+                    "source_report_id": case.source_report_id,
+                    "official_split": case.official_split,
+                    "question_index": index,
+                    "question": question.question,
+                    "options": list(question.options),
+                    "gold_answers": list(question.answers),
+                    "answer_type": question.answer_type,
+                    "path": question.path,
+                }
+            )
+    selected.sort(key=lambda row: (row["case_id"], row["question_index"]))
+    if {row["case_id"] for row in selected} != role_ids:
+        raise RuntimeError(f"Rad-ReStruct rows do not cover every {role} manifest case")
+    return selected
+
+
 def run(args: argparse.Namespace) -> dict[str, Any]:
     import torch
 
     config = _load_json(args.config)
     selection_config = _load_json(args.selection_config)
     manifest = _load_json(args.manifest)
-    selected = _select_rows(selection_config, manifest, args.radrestruct_root)
+    selected = (
+        _select_role_rows(manifest, args.radrestruct_root, args.selection_role)
+        if args.selection_role is not None
+        else _select_rows(selection_config, manifest, args.radrestruct_root)
+    )
+    expected_questions = config.get("expected_question_count")
+    if expected_questions is not None and len(selected) != int(expected_questions):
+        raise RuntimeError(
+            f"Expected {expected_questions} selected questions, found {len(selected)}"
+        )
     raw_cases = {str(row["case_id"]): row for row in _read_jsonl(args.cases)}
     embeddings, embedding_signature = _embedding_map(args.embeddings)
     radgraph = read_radgraph_case_records(args.radgraph)
@@ -395,6 +435,7 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", type=Path, default=ROOT / "config/final_qa_report_text_rag_pilot.json")
     parser.add_argument("--selection-config", type=Path, default=ROOT / "config/final_qa_medgemma_contract_pilot_r1.json")
+    parser.add_argument("--selection-role", choices=("calibration", "validation"), default=None)
     parser.add_argument("--manifest", type=Path, default=ROOT / "data/splits/final_qa/final_qa_development_manifest.json")
     parser.add_argument("--radrestruct-root", type=Path, required=True)
     parser.add_argument("--cases", type=Path, default=ROOT / "data/processed/openi_cases.jsonl")
