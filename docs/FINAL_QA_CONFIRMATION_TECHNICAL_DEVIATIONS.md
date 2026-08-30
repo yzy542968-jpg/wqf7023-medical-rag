@@ -19,3 +19,13 @@ unused P1 cache.
 This deviation occurred after the manifest was instantiated but before any
 Test generation or outcome inspection. The corrected runner was subjected to
 the full test suite and committed before confirmation generation resumed.
+
+## Pre-output interpreter correction
+
+The next invocation used the system Python 3.14 interpreter. It loaded the
+frozen MedGemma checkpoint but stopped before adapter attachment because that
+interpreter did not contain PEFT. No output row was generated. The study was
+then resumed with the repository's existing `.venv` (Python 3.12), which
+contains PEFT 0.20.0, Transformers 4.57.6, bitsandbytes 0.50.1 and CUDA-enabled
+PyTorch. No package was installed or upgraded and no experimental parameter
+changed.
