@@ -1,0 +1,339 @@
+{
+  "advancement": {
+    "history_used": true,
+    "oof_exact_noninferior": true,
+    "oof_macro_exceeds_image_only": false,
+    "oof_macro_exceeds_random_history": false,
+    "oof_option_micro_noninferior": true,
+    "passed": false
+  },
+  "baselines": {
+    "image_only": {
+      "question": {
+        "contract_valid_rate": 1.0,
+        "exact_answer_set_accuracy": 0.8496977160770264,
+        "fixed_choice_exact_accuracy": 1.0,
+        "multi_choice_exact_accuracy": 0.4334470989761092,
+        "option_micro_f1": 0.848366813199043,
+        "row_count": 17864,
+        "single_choice_exact_accuracy": 0.8711786534723449
+      },
+      "structured": {
+        "case_count": 358,
+        "element_accuracy": 0.9951247370682831,
+        "exact_report_vector_accuracy": 0.37988826815642457,
+        "label_count": 2470,
+        "micro_f1": 0.9752311130773518,
+        "predicted_positive_rate": 0.09735032682695136,
+        "reference_positive_rate": 0.0994797910116934,
+        "supported_label_count": 837,
+        "supported_label_macro_f1": 0.30983877737421966,
+        "supported_label_macro_precision": 0.32787754385115203,
+        "supported_label_macro_recall": 0.3075369536296703
+      }
+    },
+    "paired_history": {
+      "question": {
+        "contract_valid_rate": 0.9998880429914913,
+        "exact_answer_set_accuracy": 0.8789744738020601,
+        "fixed_choice_exact_accuracy": 1.0,
+        "multi_choice_exact_accuracy": 0.4448236632536974,
+        "option_micro_f1": 0.8771998109483166,
+        "row_count": 17864,
+        "single_choice_exact_accuracy": 0.9013960063615479
+      },
+      "structured": {
+        "case_count": 358,
+        "element_accuracy": 0.9952072919729491,
+        "exact_report_vector_accuracy": 0.3743016759776536,
+        "label_count": 2470,
+        "micro_f1": 0.9756453577914167,
+        "predicted_positive_rate": 0.09730848393006582,
+        "reference_positive_rate": 0.0994797910116934,
+        "supported_label_count": 837,
+        "supported_label_macro_f1": 0.29334041878536077,
+        "supported_label_macro_precision": 0.3061587910378151,
+        "supported_label_macro_recall": 0.29229165765505477
+      }
+    },
+    "random_history": {
+      "question": {
+        "contract_valid_rate": 0.9998320644872369,
+        "exact_answer_set_accuracy": 0.878358710255262,
+        "fixed_choice_exact_accuracy": 1.0,
+        "multi_choice_exact_accuracy": 0.45164960182025027,
+        "option_micro_f1": 0.8762407896566106,
+        "row_count": 17864,
+        "single_choice_exact_accuracy": 0.9003946515874418
+      },
+      "structured": {
+        "case_count": 358,
+        "element_accuracy": 0.9953667473367561,
+        "exact_report_vector_accuracy": 0.38268156424581007,
+        "label_count": 2470,
+        "micro_f1": 0.9764693044172462,
+        "predicted_positive_rate": 0.09742270372967227,
+        "reference_positive_rate": 0.0994797910116934,
+        "supported_label_count": 837,
+        "supported_label_macro_f1": 0.3056516892868953,
+        "supported_label_macro_precision": 0.3207260247327824,
+        "supported_label_macro_recall": 0.3041948488743793
+      }
+    }
+  },
+  "boundary": "This is post-hoc development informed by known Validation outcomes. OOF predictions prevent case reuse within each fold but do not make Validation an untouched confirmation set. No clinical-accuracy, external-validation, or Test claim is permitted.",
+  "case_count": 358,
+  "fold_case_counts": {
+    "0": 75,
+    "1": 72,
+    "2": 76,
+    "3": 67,
+    "4": 68
+  },
+  "interpretation": "No real-output OOF policy satisfied all development requirements. The Final-QA Test must remain locked.",
+  "logistic_fold_training": [
+    {
+      "disagreement_training_count": 786,
+      "evaluation_case_count": 75,
+      "fold": 0,
+      "history_better_training_count": 578,
+      "selected_threshold": {
+        "admissible": true,
+        "exact": 0.8824415435375126,
+        "macro_f1": 0.33880139197297654,
+        "option_micro_f1": 0.8810355894729335,
+        "threshold": 0.55
+      },
+      "train_case_count": 283
+    },
+    {
+      "disagreement_training_count": 797,
+      "evaluation_case_count": 72,
+      "fold": 1,
+      "history_better_training_count": 562,
+      "selected_threshold": {
+        "admissible": true,
+        "exact": 0.8799658872859072,
+        "macro_f1": 0.32721528185649296,
+        "option_micro_f1": 0.878364060182242,
+        "threshold": 0.55
+      },
+      "train_case_count": 286
+    },
+    {
+      "disagreement_training_count": 811,
+      "evaluation_case_count": 76,
+      "fold": 2,
+      "history_better_training_count": 582,
+      "selected_threshold": {
+        "admissible": true,
+        "exact": 0.8764148928596853,
+        "macro_f1": 0.33523229956535144,
+        "option_micro_f1": 0.8752211763040555,
+        "threshold": 0.6
+      },
+      "train_case_count": 282
+    },
+    {
+      "disagreement_training_count": 838,
+      "evaluation_case_count": 67,
+      "fold": 3,
+      "history_better_training_count": 601,
+      "selected_threshold": {
+        "admissible": true,
+        "exact": 0.876513811402912,
+        "macro_f1": 0.3210289331565317,
+        "option_micro_f1": 0.8749788644279869,
+        "threshold": 0.6
+      },
+      "train_case_count": 291
+    },
+    {
+      "disagreement_training_count": 804,
+      "evaluation_case_count": 68,
+      "fold": 4,
+      "history_better_training_count": 565,
+      "selected_threshold": {
+        "admissible": true,
+        "exact": 0.8767859572730984,
+        "macro_f1": 0.33041022083765803,
+        "option_micro_f1": 0.8750295777980597,
+        "threshold": 0.6
+      },
+      "train_case_count": 290
+    }
+  ],
+  "new_generation_performed": false,
+  "oof_candidates": [
+    {
+      "case_bootstrap_macro_f1_vs_b3": {
+        "bootstrap_mean_difference": -0.005516963356733322,
+        "case_count": 358,
+        "ci95_high": 0.0008789151906967135,
+        "ci95_low": -0.011056878417730332,
+        "observed_difference": -0.0075375572350301345,
+        "probability_difference_greater_than_zero": 0.1138,
+        "samples": 5000,
+        "seed": 7054,
+        "supported_label_count": 837
+      },
+      "history_only_recovery_count": 623,
+      "history_selected_disagreement_count": 739,
+      "history_selected_row_count": 5047,
+      "image_correct_to_history_wrong_count": 104,
+      "name": "question_id_exact_utility",
+      "question": {
+        "contract_valid_rate": 1.0,
+        "exact_answer_set_accuracy": 0.8787505597850426,
+        "fixed_choice_exact_accuracy": 1.0,
+        "multi_choice_exact_accuracy": 0.45733788395904434,
+        "option_micro_f1": 0.8772818343722173,
+        "row_count": 17864,
+        "single_choice_exact_accuracy": 0.9005124580314543
+      },
+      "structured": {
+        "case_count": 358,
+        "element_accuracy": 0.9952547893153597,
+        "exact_report_vector_accuracy": 0.37988826815642457,
+        "label_count": 2470,
+        "micro_f1": 0.9758925390970619,
+        "predicted_positive_rate": 0.09735598127247642,
+        "reference_positive_rate": 0.0994797910116934,
+        "supported_label_count": 837,
+        "supported_label_macro_f1": 0.30230122013918953,
+        "supported_label_macro_precision": 0.31467433159527913,
+        "supported_label_macro_recall": 0.3007869159233492
+      }
+    },
+    {
+      "case_bootstrap_macro_f1_vs_b3": {
+        "bootstrap_mean_difference": -0.0037434460520744325,
+        "case_count": 358,
+        "ci95_high": 0.002270692586898803,
+        "ci95_low": -0.009091726690530776,
+        "observed_difference": -0.005355719306493312,
+        "probability_difference_greater_than_zero": 0.3638,
+        "samples": 5000,
+        "seed": 7054,
+        "supported_label_count": 837
+      },
+      "history_only_recovery_count": 588,
+      "history_selected_disagreement_count": 722,
+      "history_selected_row_count": 4266,
+      "image_correct_to_history_wrong_count": 95,
+      "name": "question_id_macro_f1_utility",
+      "question": {
+        "contract_valid_rate": 0.9998880429914913,
+        "exact_answer_set_accuracy": 0.877295118674429,
+        "fixed_choice_exact_accuracy": 1.0,
+        "multi_choice_exact_accuracy": 0.4539249146757679,
+        "option_micro_f1": 0.8754832429425671,
+        "row_count": 17864,
+        "single_choice_exact_accuracy": 0.8991576839253107
+      },
+      "structured": {
+        "case_count": 358,
+        "element_accuracy": 0.9952525275371497,
+        "exact_report_vector_accuracy": 0.37988826815642457,
+        "label_count": 2470,
+        "micro_f1": 0.975882434047247,
+        "predicted_positive_rate": 0.09736729016352656,
+        "reference_positive_rate": 0.0994797910116934,
+        "supported_label_count": 837,
+        "supported_label_macro_f1": 0.30448305806772635,
+        "supported_label_macro_precision": 0.3224002724381207,
+        "supported_label_macro_recall": 0.3021970752144317
+      }
+    },
+    {
+      "case_bootstrap_macro_f1_vs_b3": {
+        "bootstrap_mean_difference": -0.004372870492935181,
+        "case_count": 358,
+        "ci95_high": 0.0018085889518260955,
+        "ci95_low": -0.009940049797296523,
+        "observed_difference": -0.005800884023198116,
+        "probability_difference_greater_than_zero": 0.25,
+        "samples": 5000,
+        "seed": 7054,
+        "supported_label_count": 837
+      },
+      "history_only_recovery_count": 530,
+      "history_selected_disagreement_count": 607,
+      "history_selected_row_count": 607,
+      "image_correct_to_history_wrong_count": 77,
+      "name": "logistic_disagreement_gate",
+      "question": {
+        "contract_valid_rate": 1.0,
+        "exact_answer_set_accuracy": 0.8750559785042543,
+        "fixed_choice_exact_accuracy": 1.0,
+        "multi_choice_exact_accuracy": 0.4482366325369738,
+        "option_micro_f1": 0.8735740915920094,
+        "row_count": 17864,
+        "single_choice_exact_accuracy": 0.8970960711550922
+      },
+      "structured": {
+        "case_count": 358,
+        "element_accuracy": 0.9951711035215887,
+        "exact_report_vector_accuracy": 0.3770949720670391,
+        "label_count": 2470,
+        "micro_f1": 0.9754608983495012,
+        "predicted_positive_rate": 0.09730396037364576,
+        "reference_positive_rate": 0.0994797910116934,
+        "supported_label_count": 837,
+        "supported_label_macro_f1": 0.30403789335102155,
+        "supported_label_macro_precision": 0.31824487701577575,
+        "supported_label_macro_recall": 0.3020947096247911
+      }
+    }
+  ],
+  "question_count": 17864,
+  "selected_minus_image_only": {
+    "option_micro_f1": 0.02711642974352413,
+    "question_exact": 0.02759740259740262,
+    "supported_label_macro_f1": -0.005355719306493312
+  },
+  "selected_policy": "question_id_macro_f1_utility",
+  "selected_policy_result": {
+    "case_bootstrap_macro_f1_vs_b3": {
+      "bootstrap_mean_difference": -0.0037434460520744325,
+      "case_count": 358,
+      "ci95_high": 0.002270692586898803,
+      "ci95_low": -0.009091726690530776,
+      "observed_difference": -0.005355719306493312,
+      "probability_difference_greater_than_zero": 0.3638,
+      "samples": 5000,
+      "seed": 7054,
+      "supported_label_count": 837
+    },
+    "history_only_recovery_count": 588,
+    "history_selected_disagreement_count": 722,
+    "history_selected_row_count": 4266,
+    "image_correct_to_history_wrong_count": 95,
+    "name": "question_id_macro_f1_utility",
+    "question": {
+      "contract_valid_rate": 0.9998880429914913,
+      "exact_answer_set_accuracy": 0.877295118674429,
+      "fixed_choice_exact_accuracy": 1.0,
+      "multi_choice_exact_accuracy": 0.4539249146757679,
+      "option_micro_f1": 0.8754832429425671,
+      "row_count": 17864,
+      "single_choice_exact_accuracy": 0.8991576839253107
+    },
+    "structured": {
+      "case_count": 358,
+      "element_accuracy": 0.9952525275371497,
+      "exact_report_vector_accuracy": 0.37988826815642457,
+      "label_count": 2470,
+      "micro_f1": 0.975882434047247,
+      "predicted_positive_rate": 0.09736729016352656,
+      "reference_positive_rate": 0.0994797910116934,
+      "supported_label_count": 837,
+      "supported_label_macro_f1": 0.30448305806772635,
+      "supported_label_macro_precision": 0.3224002724381207,
+      "supported_label_macro_recall": 0.3021970752144317
+    }
+  },
+  "status": "stop",
+  "study": "Final-QA real-output question-conditional source gate",
+  "test_accessed": false
+}
