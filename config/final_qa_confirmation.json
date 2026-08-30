@@ -1,0 +1,65 @@
+{
+  "study": "Final paired historical image-report QA confirmation",
+  "status": "frozen_before_final_gate_fit_and_test_manifest_instantiation",
+  "protocol_commit": "PENDING_PROTOCOL_COMMIT",
+  "role": "Test",
+  "seed": 7023,
+  "expected_case_count": 530,
+  "expected_question_count": 26747,
+  "conditions": [
+    "b3_no_history_r2",
+    "b4_deterministic_random_history",
+    "b6_top1_image_neighbor_whole_report"
+  ],
+  "final_policy": {
+    "default_source": "b3_no_history_r2",
+    "candidate_source": "b6_top1_image_neighbor_whole_report",
+    "minimum_support": 5,
+    "minimum_macro_margin": 0.05,
+    "utility_source": "all 358 Final-QA Validation development cases",
+    "fit_before_test_manifest": true
+  },
+  "generation": {
+    "model": "google/medgemma-1.5-4b-it",
+    "revision": "91850547d9f0b2fdd21aa7c5f4f3d1a8a52c243b",
+    "adapter": "experiments/final_qa_development/final_qa_qlora_384/adapter",
+    "adapter_forward_steps": 384,
+    "quantization": "NF4",
+    "batch_size": 8,
+    "max_new_tokens": 32,
+    "decoding": "greedy",
+    "resume_by_run_key": true
+  },
+  "retrieval": {
+    "bank": "eligible Final-QA Train cases",
+    "same_duplicate_cluster_excluded": true,
+    "b6_top_k": 1,
+    "random_history": "deterministic other-cluster Train case"
+  },
+  "primary_hypotheses": {
+    "h1_question_exact_superiority": "final nested gate minus B3 case-grouped 95% CI lower bound > 0",
+    "h2_macro_noninferiority": {
+      "comparison": "final nested gate minus B3 supported-label macro-F1",
+      "margin": -0.005,
+      "criterion": "case-grouped 95% CI lower bound >= -0.005"
+    }
+  },
+  "secondary_hypotheses": {
+    "relevance_specific_macro": "final nested gate supported-label macro-F1 exceeds B4 random history",
+    "paired_history_exact": "report B6 versus B3 exact and option micro-F1 without treating it as the final policy",
+    "negative_transfer": "report image-correct-to-history-wrong and history-only recovery"
+  },
+  "statistics": {
+    "bootstrap_unit": "case_id",
+    "bootstrap_replicates": 10000,
+    "seed": 7057,
+    "report_absolute_and_relative_effects": true,
+    "no_post_test_threshold_or_policy_change": true
+  },
+  "failure_policy": {
+    "technical_failure": "resume identical run keys under unchanged config",
+    "case_data_failure": "record protocol deviation; no silent replacement",
+    "hypothesis_failure": "report negative or mixed result; no Test-driven retuning"
+  },
+  "boundary": "This is same-source cluster-disjoint confirmation on report-derived structured QA. It is not external validation, physician-adjudicated clinical accuracy, safety validation, or proof of patient benefit."
+}
