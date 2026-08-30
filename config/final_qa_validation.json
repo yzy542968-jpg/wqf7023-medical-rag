@@ -1,0 +1,51 @@
+{
+  "study": "Final paired historical image-report QA full Validation",
+  "status": "frozen_before_validation_generation",
+  "role": "Validation",
+  "expected_case_count": 358,
+  "expected_question_count": 17864,
+  "conditions": [
+    "b3_no_history",
+    "b4_deterministic_random_history",
+    "b6_top1_image_neighbor_whole_report",
+    "p1_top3_image_neighbors_question_conditioned_evidence"
+  ],
+  "generator": {
+    "model": "google/medgemma-1.5-4b-it",
+    "revision": "91850547d9f0b2fdd21aa7c5f4f3d1a8a52c243b",
+    "adapter_forward_steps": 384,
+    "batch_size": 8,
+    "max_new_tokens": 32,
+    "stop_token": "<end_of_turn>",
+    "decoding": "greedy"
+  },
+  "retrieval": {
+    "bank": "eligible V10 Train cases",
+    "same_duplicate_cluster_excluded": true,
+    "b6_top_k": 1,
+    "p1_top_k": 3,
+    "p1_maximum_units_per_case": 2,
+    "p1_maximum_total_units": 6,
+    "p1_maximum_characters": 1200
+  },
+  "selection": {
+    "eligible_candidates": [
+      "b6_top1_image_neighbor_whole_report",
+      "p1_top3_image_neighbors_question_conditioned_evidence"
+    ],
+    "primary_metric": "supported_label_macro_f1",
+    "tie_breaks": ["lower_mean_input_tokens", "simpler_b6"],
+    "advancement_requires": [
+      "supported_label_macro_f1_point_estimate_above_b3",
+      "option_micro_f1_point_estimate_above_b3",
+      "contract_validity_decrease_no_more_than_0.01"
+    ],
+    "random_history_never_selectable": true
+  },
+  "statistics": {
+    "bootstrap_unit": "case_id",
+    "bootstrap_replicates": 10000,
+    "seed": 7023
+  },
+  "boundary": "Validation policy selection only; Test inaccessible until a later committed confirmation protocol"
+}
