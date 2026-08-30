@@ -1,0 +1,38 @@
+{
+  "study": "Final-QA nested-OOF robust question-policy gate",
+  "status": "post_hoc_protocol_frozen_before_nested_oof_outcomes",
+  "seed": 7055,
+  "role": "previously inspected Final-QA Validation reused as development only",
+  "test": "prohibited",
+  "sources": {
+    "default": "b3_no_history_r2",
+    "candidate": "b6_top1_image_neighbor_whole_report",
+    "random_control": "b4_deterministic_random_history"
+  },
+  "outer_folds": 5,
+  "inner_folds": 4,
+  "outer_assignment": "SHA-256(final-qa-robust-outer|7055|case_id) modulo 5",
+  "inner_assignment": "SHA-256(final-qa-robust-inner|7055|outer_fold|case_id) modulo 4",
+  "policy": "For each question ID, use B6 only when training support reaches the minimum and B6 option-label macro-F1 exceeds B3 by at least the minimum margin; otherwise retain B3.",
+  "minimum_support_grid": [5, 10, 20, 40, 80, 120],
+  "minimum_macro_margin_grid": [0.0, 0.01, 0.02, 0.03, 0.05, 0.075, 0.1, 0.15, 0.2, 1.0],
+  "inner_selection": {
+    "primary": "inner-OOF supported-label macro-F1",
+    "constraints": {
+      "question_exact_delta_minimum": -0.001,
+      "option_micro_f1_delta_minimum": -0.001
+    },
+    "tie_break": "higher question exact, then higher option micro-F1, then larger margin, then larger support"
+  },
+  "outer_advancement": {
+    "requirements": [
+      "nested-OOF supported-label macro-F1 exceeds B3",
+      "nested-OOF question exact is not below B3 by more than 0.001",
+      "nested-OOF option micro-F1 is not below B3 by more than 0.001",
+      "nested-OOF macro-F1 exceeds random history",
+      "B6 is used for at least one disagreement"
+    ],
+    "test_access_after_go": false
+  },
+  "boundary": "This is a final post-hoc development audit. Nested OOF isolates outer cases from fold-specific hyperparameter selection, but the method family was motivated by already known Validation results. No Test, confirmation, clinical-accuracy, or external-validation claim is permitted."
+}
