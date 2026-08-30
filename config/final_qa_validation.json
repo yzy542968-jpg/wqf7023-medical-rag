@@ -2,6 +2,7 @@
   "study": "Final paired historical image-report QA full Validation",
   "status": "frozen_before_validation_generation",
   "role": "Validation",
+  "seed": 7023,
   "expected_case_count": 358,
   "expected_question_count": 17864,
   "conditions": [
@@ -10,7 +11,7 @@
     "b6_top1_image_neighbor_whole_report",
     "p1_top3_image_neighbors_question_conditioned_evidence"
   ],
-  "generator": {
+  "generation": {
     "model": "google/medgemma-1.5-4b-it",
     "revision": "91850547d9f0b2fdd21aa7c5f4f3d1a8a52c243b",
     "adapter_forward_steps": 384,
