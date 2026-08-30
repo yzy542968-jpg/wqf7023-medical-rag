@@ -1,7 +1,7 @@
 {
   "study": "Final paired historical image-report QA confirmation",
   "status": "frozen_before_final_gate_fit_and_test_manifest_instantiation",
-  "protocol_commit": "PENDING_PROTOCOL_COMMIT",
+  "protocol_commit": "3c4fc26ca0a8ca8062197f8064de507e475d5aa7",
   "role": "Test",
   "seed": 7023,
   "expected_case_count": 530,
