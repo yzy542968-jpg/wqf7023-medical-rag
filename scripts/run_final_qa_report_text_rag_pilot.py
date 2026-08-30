@@ -144,6 +144,10 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     config = _load_json(args.config)
     selection_config = _load_json(args.selection_config)
     manifest = _load_json(args.manifest)
+    active_conditions = list(args.conditions or config["conditions"])
+    unknown = sorted(set(active_conditions) - set(config["conditions"]))
+    if unknown:
+        raise ValueError(f"Unknown RAG pilot conditions: {unknown}")
     selected = (
         _select_role_rows(manifest, args.radrestruct_root, args.selection_role)
         if args.selection_role is not None
@@ -224,29 +228,46 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             bank_clusters=bank_clusters,
             seed=int(config["seed"]),
         )
-        evidence_cache[("b3_no_history_r2", target_case_id, row["question_index"])] = ([], [])
-        evidence_cache[("b4_deterministic_random_history", target_case_id, row["question_index"])] = _whole_report_evidence(raw_cases[random_case_id])
+        if "b3_no_history_r2" in active_conditions:
+            evidence_cache[("b3_no_history_r2", target_case_id, row["question_index"])] = ([], [])
+        if "b4_deterministic_random_history" in active_conditions:
+            evidence_cache[("b4_deterministic_random_history", target_case_id, row["question_index"])] = _whole_report_evidence(raw_cases[random_case_id])
         top_ids = retrieval_by_target[target_case_id]
-        evidence_cache[("b6_top1_image_neighbor_whole_report", target_case_id, row["question_index"])] = _whole_report_evidence(raw_cases[top_ids[0]])
-        retrieved_cases = [raw_cases[case_id] for case_id in top_ids]
-        plan = plan_question(row["question"], raw_cases[target_case_id].get("indication", ""))
-        hierarchical = select_hierarchical_evidence(
-            retrieved_cases,
-            query=row["question"],
-            facts_by_case={case_id: tuple(radgraph[case_id].facts) for case_id in top_ids},
-            plan=plan,
-            maximum_cases=3,
-            maximum_units_per_case=2,
-            maximum_total_units=6,
-            maximum_characters=1200,
+        if "b6_top1_image_neighbor_whole_report" in active_conditions:
+            evidence_cache[("b6_top1_image_neighbor_whole_report", target_case_id, row["question_index"])] = _whole_report_evidence(raw_cases[top_ids[0]])
+        p1_requested = (
+            "p1_top3_image_neighbors_question_conditioned_evidence"
+            in active_conditions
         )
-        evidence_cache[("p1_top3_image_neighbors_question_conditioned_evidence", target_case_id, row["question_index"])] = (
-            [f"{unit.provenance_id} | {unit.text}" for unit in hierarchical.units],
-            hierarchical.as_records(),
+        v12_requested = (
+            "p1_v12_lambdamart_top3_question_conditioned_evidence"
+            in active_conditions
         )
-        if v12_retrieval_by_target:
+        if p1_requested:
+            retrieved_cases = [raw_cases[case_id] for case_id in top_ids]
+            plan = plan_question(
+                row["question"], raw_cases[target_case_id].get("indication", "")
+            )
+            hierarchical = select_hierarchical_evidence(
+                retrieved_cases,
+                query=row["question"],
+                facts_by_case={case_id: tuple(radgraph[case_id].facts) for case_id in top_ids},
+                plan=plan,
+                maximum_cases=3,
+                maximum_units_per_case=2,
+                maximum_total_units=6,
+                maximum_characters=1200,
+            )
+            evidence_cache[("p1_top3_image_neighbors_question_conditioned_evidence", target_case_id, row["question_index"])] = (
+                [f"{unit.provenance_id} | {unit.text}" for unit in hierarchical.units],
+                hierarchical.as_records(),
+            )
+        if v12_retrieval_by_target and v12_requested:
             v12_top_ids = v12_retrieval_by_target[target_case_id]
             v12_cases = [raw_cases[case_id] for case_id in v12_top_ids]
+            plan = plan_question(
+                row["question"], raw_cases[target_case_id].get("indication", "")
+            )
             v12_hierarchical = select_hierarchical_evidence(
                 v12_cases,
                 query=row["question"],
@@ -284,11 +305,6 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         )
         generator.model.eval()
         arm = "qlora"
-    active_conditions = list(args.conditions or config["conditions"])
-    unknown = sorted(set(active_conditions) - set(config["conditions"]))
-    if unknown:
-        raise ValueError(f"Unknown RAG pilot conditions: {unknown}")
-
     def result_key(condition: str, row: dict[str, Any]) -> str:
         base_key = f"{condition}|{row['case_id']}|{row['question_index']}"
         return base_key if arm == "base" else f"{arm}|{base_key}"
