@@ -169,9 +169,10 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         and (raw_cases[case_id].get("findings") or raw_cases[case_id].get("impression"))
     )
     bank_matrix = np.stack([embeddings[case_id] for case_id in bank_case_ids])
+    target_manifest_role = args.selection_role or "calibration"
     cluster_by_target = {
         case["case_id"]: case["cluster_id"]
-        for case in manifest["roles"]["calibration"]["cases"]
+        for case in manifest["roles"][target_manifest_role]["cases"]
     }
     retrieval_by_target: dict[str, list[str]] = {}
     for target_case_id in sorted({row["case_id"] for row in selected}):
