@@ -333,7 +333,7 @@ def parse_args() -> argparse.Namespace:
         "--output",
         type=Path,
         default=ROOT
-        / "experiments/final_qa_confirmation/final_qa_confirmation_result.json",
+        / "data/splits/final_qa/final_qa_confirmation_result.json",
     )
     return parser.parse_args()
 

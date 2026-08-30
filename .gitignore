@@ -120,6 +120,9 @@ experiments/final_qa_development/**/*.safetensors
 experiments/final_qa_development/**/adapter/
 experiments/final_qa_development/**/processor/
 
+# Final-QA confirmation generations, logs and resumable runtime state
+experiments/final_qa_confirmation/
+
 # V10 local per-query rows, shuffled mappings, generations, and review packages
 experiments/v10_publication/*.json
 experiments/v10_publication/*.jsonl
