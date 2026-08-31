@@ -1,0 +1,44 @@
+{
+  "study": "V17 matched historical-evidence QLoRA-384 generation pilot",
+  "status": "protocol-deviation-correction-before-qlora-generation",
+  "deviation_record": "docs/V17_PROTOCOL_DEVIATION_001.md",
+  "retrieval_protocol_commit": "106f07d",
+  "retrieval_implementation_commit": "6905e33",
+  "pilot_manifest_commit": "452d98a",
+  "seed": 17017,
+  "role": "final_qa_calibration_only",
+  "sampling": {
+    "domain": "v17-generation-pilot",
+    "target_question_count": 2500,
+    "maximum_question_count": 3000,
+    "complete_cases": true
+  },
+  "conditions": ["no_history", "related", "random", "mismatched"],
+  "evidence": {
+    "selector": "v11_case_to_fact_deterministic",
+    "maximum_cases": 3,
+    "maximum_units_per_case": 2,
+    "maximum_total_units": 6,
+    "maximum_characters": 1200,
+    "matched_across_history_arms": true
+  },
+  "model": {
+    "id": "google/medgemma-1.5-4b-it",
+    "revision": "91850547d9f0b2fdd21aa7c5f4f3d1a8a52c243b",
+    "adapter": "experiments/final_qa_development/final_qa_qlora_384/adapter",
+    "adapter_status": "previously-trained-and-selected-frozen-final-qa-generator",
+    "quantization": "NF4",
+    "decoding": "greedy",
+    "batch_size": 8,
+    "max_new_tokens": 32,
+    "stop_token": "<end_of_turn>",
+    "local_files_only": true
+  },
+  "evaluation": {
+    "bootstrap_unit": "case_id",
+    "bootstrap_replicates": 10000,
+    "confidence_level": 0.95
+  },
+  "boundary": "Post-deviation Calibration exploratory repeat; Final-QA Test remains sealed"
+}
+

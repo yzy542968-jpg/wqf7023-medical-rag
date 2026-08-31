@@ -193,6 +193,19 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             )
 
     generator = MedGemmaImageGenerator(cache_dir=args.cache_dir, local_files_only=bool(config["model"]["local_files_only"]))
+    adapter_value = config["model"].get("adapter")
+    adapter_dir = args.adapter_dir or (ROOT / str(adapter_value) if adapter_value else None)
+    model_arm = "base"
+    if adapter_dir is not None:
+        from peft import PeftModel
+
+        if not (adapter_dir / "adapter_config.json").is_file():
+            raise FileNotFoundError(adapter_dir / "adapter_config.json")
+        generator.model = PeftModel.from_pretrained(
+            generator.model, str(adapter_dir), is_trainable=False
+        )
+        generator.model.eval()
+        model_arm = "qlora_384"
     torch.cuda.reset_peak_memory_stats()
     started = time.perf_counter()
     for condition in config["conditions"]:
@@ -305,6 +318,8 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         "status": "generation_pilot_success" if all(success_checks.values()) else "generation_pilot_mixed_or_negative",
         "data_role": "final_qa_calibration",
         "test_accessed": False,
+        "model_arm": model_arm,
+        "adapter_dir": str(adapter_dir.resolve()) if adapter_dir is not None else None,
         "case_count": len({row["case_id"] for row in selected}),
         "question_count_per_condition": len(selected),
         "condition_metrics": metrics,
@@ -330,6 +345,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--radgraph", type=Path, default=ROOT / "data/processed/v9_radgraph_modern_xl.jsonl")
     parser.add_argument("--image-root", type=Path, default=ROOT / "data/raw/openi_official_images")
     parser.add_argument("--cache-dir", type=Path, default=ROOT / ".hf_cache")
+    parser.add_argument("--adapter-dir", type=Path)
     parser.add_argument("--rows-output", type=Path, default=ROOT / "experiments/v17_exploratory/v17_generation_pilot_rows.jsonl")
     parser.add_argument("--summary-output", type=Path, default=ROOT / "experiments/v17_exploratory/v17_generation_pilot_summary.json")
     parser.add_argument("--limit-questions", type=int)
@@ -338,4 +354,3 @@ def parse_args() -> argparse.Namespace:
 
 if __name__ == "__main__":
     print(json.dumps(run(parse_args()), indent=2, sort_keys=True))
-
