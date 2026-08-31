@@ -1,0 +1,82 @@
+{
+  "study_id": "v17-question-conditioned-history",
+  "status": "post-confirmation-exploratory",
+  "seed": 17017,
+  "data_roles": {
+    "historical_bank": "final_qa_train",
+    "development": "final_qa_calibration",
+    "internal_evaluation": "final_qa_validation",
+    "sealed": "final_qa_test"
+  },
+  "retrieval": {
+    "shortlist_source": "frozen_medsiglip_image_similarity",
+    "shortlist_k": 100,
+    "output_k": 3,
+    "normalization": "per_query_minmax",
+    "normalization_constant_feature_value": 0.0,
+    "feature_order": [
+      "image_similarity",
+      "question_fact_max",
+      "question_sentence_max",
+      "indication_sentence_max",
+      "intent_preference_coverage"
+    ],
+    "recipes": [
+      {
+        "name": "image_only",
+        "weights": [1.0, 0.0, 0.0, 0.0, 0.0]
+      },
+      {
+        "name": "image_fact_equal",
+        "weights": [0.5, 0.5, 0.0, 0.0, 0.0]
+      },
+      {
+        "name": "image_question",
+        "weights": [0.4, 0.35, 0.25, 0.0, 0.0]
+      },
+      {
+        "name": "full_query",
+        "weights": [0.35, 0.3, 0.2, 0.1, 0.05]
+      }
+    ],
+    "selection_metric": "balanced_top1_qid_answer_agreement",
+    "tie_tolerance": 0.001,
+    "tie_break": "recipe_order_simpler_first"
+  },
+  "controls": {
+    "arms": ["related", "random", "mismatched"],
+    "random_domain": "v17-random-control",
+    "mismatched_domain": "v17-mismatched-control",
+    "exclude_same_case": true,
+    "exclude_same_duplicate_cluster": true,
+    "identical_evidence_pipeline": true
+  },
+  "evidence": {
+    "max_cases": 3,
+    "max_units_per_case": 2,
+    "max_total_units": 6,
+    "max_characters": 1200,
+    "primary_query": "actual_question",
+    "secondary_query": "indication",
+    "required_provenance": ["case_id", "section", "unit_id"]
+  },
+  "generation_pilot": {
+    "conditional_on_retrieval_go": true,
+    "target_question_count_min": 2000,
+    "target_question_count_max": 3000,
+    "sample_complete_cases": true,
+    "arms": ["no_history", "related", "random", "mismatched"],
+    "primary_metric": "exact_accuracy",
+    "bootstrap_unit": "case_id",
+    "bootstrap_replicates": 10000,
+    "confidence_level": 0.95
+  },
+  "boundaries": {
+    "use_test": false,
+    "foundation_model_finetuning": false,
+    "human_evaluation": false,
+    "clinical_accuracy_claim": false,
+    "patient_level_independence_claim": false,
+    "external_validation_claim": false
+  }
+}
