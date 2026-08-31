@@ -128,7 +128,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
                 "training_case_count": len({key[0] for key in training_keys}),
                 "evaluation_case_count": len({key[0] for key in evaluation_keys}),
                 "feature": feature_name,
-                "threshold": threshold,
+                "threshold": threshold if np.isfinite(threshold) else "infinity_no_history",
                 "training_related_selective_exact": best_exact,
             }
         )
@@ -197,4 +197,3 @@ def parse_args() -> argparse.Namespace:
 
 if __name__ == "__main__":
     print(json.dumps(run(parse_args()), indent=2, sort_keys=True))
-

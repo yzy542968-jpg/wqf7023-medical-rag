@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import sys
 import time
@@ -62,6 +63,43 @@ def _selected_questions(root: Path, case_ids: set[str]) -> list[dict[str, Any]]:
                 }
             )
     return sorted(selected, key=lambda row: (row["case_id"], row["question_index"]))
+
+
+def _whole_report(case: dict[str, Any]) -> tuple[list[str], list[dict[str, Any]], dict[str, float]]:
+    rendered: list[str] = []
+    records: list[dict[str, Any]] = []
+    character_count = 0
+    for section in ("findings", "impression"):
+        text = " ".join(str(case.get(section) or "").split())
+        if text:
+            case_id = str(case["case_id"])
+            rendered.append(f"{case_id} | {section} | {text}")
+            records.append(
+                {
+                    "provenance_id": f"{case_id}:{section}:whole_section:0",
+                    "case_id": case_id,
+                    "section": section,
+                    "unit_type": "whole_section",
+                    "unit_index": 0,
+                    "text": text,
+                    "source_sha256": hashlib.sha256(text.encode("utf-8")).hexdigest(),
+                    "score": 0.0,
+                }
+            )
+            character_count += len(text)
+    return (
+        rendered,
+        records,
+        {
+            "unit_count": float(len(records)),
+            "case_count": float(bool(records)),
+            "sentence_count": 0.0,
+            "fact_count": 0.0,
+            "character_count": float(character_count),
+            "provenance_complete_rate": 1.0,
+            "duplicate_text_rate": 0.0,
+        },
+    )
 
 
 def _metrics(rows: Iterable[dict[str, Any]]) -> dict[str, Any]:
@@ -164,6 +202,17 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     radgraph = read_radgraph_case_records(args.radgraph)
     facts_by_case = {case_id: tuple(record.facts) for case_id, record in radgraph.items() if record.status == "ok"}
     existing = {str(row["run_key"]): row for row in _read_jsonl(args.rows_output)}
+    if args.reuse_no_history_rows is not None and not any(
+        key.startswith("no_history|") for key in existing
+    ):
+        reusable = [
+            row
+            for row in _read_jsonl(args.reuse_no_history_rows)
+            if row.get("condition") == "no_history"
+            and str(row.get("case_id")) in set(manifest["case_ids"])
+        ]
+        _append_rows(args.rows_output, reusable)
+        existing.update({str(row["run_key"]): row for row in reusable})
     evidence_cache: dict[tuple[str, str, int], tuple[list[str], list[dict[str, Any]], dict[str, float]]] = {}
 
     for row in selected:
@@ -175,6 +224,9 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         evidence_cache[("no_history", *key)] = ([], [], evidence_profile([]))
         for condition in ("related", "random", "mismatched"):
             case_ids = [str(value) for value in retrieval["control_rankings"][condition]]
+            if config["evidence"]["selector"] == "whole_report_top1":
+                evidence_cache[(condition, *key)] = _whole_report(raw_cases[case_ids[0]])
+                continue
             hierarchical = select_hierarchical_evidence(
                 [raw_cases[case_id] for case_id in case_ids],
                 query=row["question"],
@@ -348,6 +400,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--image-root", type=Path, default=ROOT / "data/raw/openi_official_images")
     parser.add_argument("--cache-dir", type=Path, default=ROOT / ".hf_cache")
     parser.add_argument("--adapter-dir", type=Path)
+    parser.add_argument("--reuse-no-history-rows", type=Path)
     parser.add_argument("--rows-output", type=Path, default=ROOT / "experiments/v17_exploratory/v17_generation_pilot_rows.jsonl")
     parser.add_argument("--summary-output", type=Path, default=ROOT / "experiments/v17_exploratory/v17_generation_pilot_summary.json")
     parser.add_argument("--limit-questions", type=int)

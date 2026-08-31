@@ -1,0 +1,34 @@
+{
+  "study": "V17 matched Top-1 whole-report QLoRA-384 extension",
+  "status": "frozen-posthoc-before-extension-generation",
+  "extension_record": "docs/V17_EVIDENCE_POLICY_EXTENSION.md",
+  "seed": 17017,
+  "role": "final_qa_calibration_only",
+  "conditions": ["no_history", "related", "random", "mismatched"],
+  "evidence": {
+    "selector": "whole_report_top1",
+    "maximum_cases": 1,
+    "maximum_units_per_case": 2,
+    "maximum_total_units": 2,
+    "maximum_characters": 4000,
+    "matched_across_history_arms": true
+  },
+  "model": {
+    "id": "google/medgemma-1.5-4b-it",
+    "revision": "91850547d9f0b2fdd21aa7c5f4f3d1a8a52c243b",
+    "adapter": "experiments/final_qa_development/final_qa_qlora_384/adapter",
+    "adapter_status": "previously-trained-and-selected-frozen-final-qa-generator",
+    "quantization": "NF4",
+    "decoding": "greedy",
+    "batch_size": 8,
+    "max_new_tokens": 32,
+    "stop_token": "<end_of_turn>",
+    "local_files_only": true
+  },
+  "evaluation": {
+    "bootstrap_unit": "case_id",
+    "bootstrap_replicates": 10000,
+    "confidence_level": 0.95
+  },
+  "boundary": "Post-hoc Calibration whole-report extension; Final-QA Test remains sealed"
+}
