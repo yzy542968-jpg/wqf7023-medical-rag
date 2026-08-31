@@ -309,6 +309,8 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     control_best_positive = max(metrics[name]["stratum_exact_accuracy"].get("positive", 0.0) for name in ("random", "mismatched"))
     control_best_nonbinary = max(metrics[name]["stratum_exact_accuracy"].get("non_binary", 0.0) for name in ("random", "mismatched"))
     success_checks = {
+        "primary_exact_above_random": metrics["related"]["exact_answer_set_accuracy"] > metrics["random"]["exact_answer_set_accuracy"],
+        "primary_exact_above_mismatched": metrics["related"]["exact_answer_set_accuracy"] > metrics["mismatched"]["exact_answer_set_accuracy"],
         "related_balanced_above_random": metrics["related"]["balanced_stratum_accuracy"] > metrics["random"]["balanced_stratum_accuracy"],
         "related_balanced_above_mismatched": metrics["related"]["balanced_stratum_accuracy"] > metrics["mismatched"]["balanced_stratum_accuracy"],
         "gain_not_negative_only": related_strata.get("positive", 0.0) > control_best_positive or related_strata.get("non_binary", 0.0) > control_best_nonbinary,
