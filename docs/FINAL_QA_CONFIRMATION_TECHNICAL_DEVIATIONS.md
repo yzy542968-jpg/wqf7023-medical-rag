@@ -29,3 +29,13 @@ then resumed with the repository's existing `.venv` (Python 3.12), which
 contains PEFT 0.20.0, Transformers 4.57.6, bitsandbytes 0.50.1 and CUDA-enabled
 PyTorch. No package was installed or upgraded and no experimental parameter
 changed.
+
+## Unchanged-config background resume
+
+After 816 complete rows had been written, the interactive process was stopped
+between append batches and resumed as a hidden background process so the
+overnight confirmation would not depend on an open desktop terminal. The
+runner loaded the existing rows by unique run key and generated only missing
+keys. The same committed code, manifest, model revision, adapter, conditions,
+batch size, prompt, decoding and parser were used. The final file contains
+exactly 80,241 unique rows: 26,747 for each of B3, B4 and B6.

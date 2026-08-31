@@ -128,23 +128,33 @@ def case_grouped_exact_bootstrap(
             right[key]["gold_indices"]
         )
         differences[key[0]].append(float(left_exact) - float(right_exact))
-    case_values = np.asarray(
-        [np.mean(differences[case_id]) for case_id in sorted(differences)],
-        dtype=float,
+    case_ids = sorted(differences)
+    correct_differences = np.asarray(
+        [sum(differences[case_id]) for case_id in case_ids], dtype=float
+    )
+    question_counts = np.asarray(
+        [len(differences[case_id]) for case_id in case_ids], dtype=float
     )
     rng = np.random.default_rng(seed)
     estimates = np.empty(samples, dtype=float)
     for offset in range(0, samples, 1000):
         current = min(1000, samples - offset)
         indices = rng.integers(
-            0, len(case_values), size=(current, len(case_values))
+            0, len(case_ids), size=(current, len(case_ids))
         )
-        estimates[offset : offset + current] = case_values[indices].mean(axis=1)
+        estimates[offset : offset + current] = (
+            correct_differences[indices].sum(axis=1)
+            / question_counts[indices].sum(axis=1)
+        )
     return {
         "samples": samples,
         "seed": seed,
-        "case_count": int(len(case_values)),
-        "observed_difference": float(case_values.mean()),
+        "case_count": int(len(case_ids)),
+        "question_count": int(question_counts.sum()),
+        "estimand": "question-level exact accuracy with case-cluster bootstrap",
+        "observed_difference": float(
+            correct_differences.sum() / question_counts.sum()
+        ),
         "ci95_low": float(np.quantile(estimates, 0.025)),
         "ci95_high": float(np.quantile(estimates, 0.975)),
         "probability_difference_greater_than_zero": float((estimates > 0).mean()),
@@ -243,6 +253,32 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         samples=bootstrap_samples,
         seed=bootstrap_seed + 1,
     )
+    b6_exact_vs_b3 = case_grouped_exact_bootstrap(
+        rows_by_condition[B6],
+        rows_by_condition[B3],
+        samples=bootstrap_samples,
+        seed=bootstrap_seed + 2,
+    )
+    b6_macro_vs_b3 = bootstrap_supported_macro_f1_difference(
+        targets,
+        predictions[B6],
+        predictions[B3],
+        samples=bootstrap_samples,
+        seed=bootstrap_seed + 2,
+    )
+    b4_exact_vs_b3 = case_grouped_exact_bootstrap(
+        rows_by_condition[B4],
+        rows_by_condition[B3],
+        samples=bootstrap_samples,
+        seed=bootstrap_seed + 3,
+    )
+    b4_macro_vs_b3 = bootstrap_supported_macro_f1_difference(
+        targets,
+        predictions[B4],
+        predictions[B3],
+        samples=bootstrap_samples,
+        seed=bootstrap_seed + 3,
+    )
     noninferiority_margin = float(
         config["primary_hypotheses"]["h2_macro_noninferiority"]["margin"]
     )
@@ -274,6 +310,32 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         },
         "secondary": {
             "final_macro_vs_random_b4": macro_vs_b4,
+            "b6_exact_vs_b3": b6_exact_vs_b3,
+            "b6_macro_vs_b3": b6_macro_vs_b3,
+            "b4_exact_vs_b3_descriptive": b4_exact_vs_b3,
+            "b4_macro_vs_b3_descriptive": b4_macro_vs_b3,
+            "question_metric_deltas": {
+                "final_minus_b3_exact": float(
+                    systems[FINAL]["question_level"]["exact_answer_set_accuracy"]
+                    - systems[B3]["question_level"]["exact_answer_set_accuracy"]
+                ),
+                "final_minus_b3_option_micro_f1": float(
+                    systems[FINAL]["question_level"]["option_micro_f1"]
+                    - systems[B3]["question_level"]["option_micro_f1"]
+                ),
+                "b6_minus_b3_exact": float(
+                    systems[B6]["question_level"]["exact_answer_set_accuracy"]
+                    - systems[B3]["question_level"]["exact_answer_set_accuracy"]
+                ),
+                "b6_minus_b3_option_micro_f1": float(
+                    systems[B6]["question_level"]["option_micro_f1"]
+                    - systems[B3]["question_level"]["option_micro_f1"]
+                ),
+                "b4_minus_b3_exact": float(
+                    systems[B4]["question_level"]["exact_answer_set_accuracy"]
+                    - systems[B3]["question_level"]["exact_answer_set_accuracy"]
+                ),
+            },
             "b6_negative_transfer_from_b3": negative_transfer(
                 rows_by_condition[B3], rows_by_condition[B6]
             ),

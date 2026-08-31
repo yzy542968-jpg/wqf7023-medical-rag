@@ -10,10 +10,15 @@ from scripts.evaluate_final_qa_confirmation import (
 )
 
 
-def _row(case_id: str, predicted: list[int], gold: list[int]) -> dict:
+def _row(
+    case_id: str,
+    predicted: list[int],
+    gold: list[int],
+    question_index: int = 0,
+) -> dict:
     return {
         "case_id": case_id,
-        "question_index": 0,
+        "question_index": question_index,
         "predicted_indices": predicted,
         "gold_indices": gold,
     }
@@ -48,3 +53,18 @@ def test_case_grouped_exact_bootstrap_is_paired_by_case() -> None:
     assert np.isclose(result["observed_difference"], 1.0)
     assert np.isclose(result["ci95_low"], 1.0)
     assert np.isclose(result["ci95_high"], 1.0)
+
+
+def test_exact_bootstrap_preserves_question_level_estimand() -> None:
+    keys = [("CXR1", 0), ("CXR1", 1), ("CXR2", 0)]
+    left = {
+        key: _row(key[0], [0] if key[0] == "CXR1" else [], [0], key[1])
+        for key in keys
+    }
+    right = {
+        key: _row(key[0], [], [0], key[1])
+        for key in keys
+    }
+    result = case_grouped_exact_bootstrap(left, right, samples=100, seed=7)
+    assert result["question_count"] == 3
+    assert np.isclose(result["observed_difference"], 2 / 3)
