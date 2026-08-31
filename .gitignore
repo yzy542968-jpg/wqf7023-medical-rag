@@ -124,6 +124,11 @@ experiments/final_qa_development/**/processor/
 # Final-QA confirmation generations, logs and resumable runtime state
 experiments/final_qa_confirmation/
 
+# V17 local report-derived retrieval and generation rows/summaries. Compact
+# public results and exact artifact hashes live under data/splits/final_qa.
+experiments/v17_exploratory/
+experiments/v17_smoke/
+
 # V10 local per-query rows, shuffled mappings, generations, and review packages
 experiments/v10_publication/*.json
 experiments/v10_publication/*.jsonl

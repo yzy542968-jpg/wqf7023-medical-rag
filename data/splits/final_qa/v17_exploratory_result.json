@@ -1,0 +1,58 @@
+{
+  "study": "V17 question-conditioned historical evidence exploratory study",
+  "status": "calibration_development_complete_not_advanced",
+  "test_accessed": false,
+  "retrieval": {
+    "case_count": 358,
+    "question_count": 17991,
+    "selected_recipe": "full_query",
+    "image_only_balanced_top1_agreement": 0.33377648802605614,
+    "selected_balanced_top1_agreement": 0.3941290862826092,
+    "image_only_positive_top1_agreement": 0.19830827067669174,
+    "selected_positive_top1_agreement": 0.40131578947368424,
+    "related_top3_exact": 0.7850036129175699,
+    "random_top3_exact": 0.6637207492635206,
+    "mismatched_top3_exact": 0.6901228391973765
+  },
+  "qlora_compact_facts": {
+    "no_history_exact": 0.8488645262333594,
+    "related_exact": 0.8241973375097885,
+    "random_exact": 0.8594361785434612,
+    "mismatched_exact": 0.8578700078308535,
+    "outcome": "primary_exact_failed_positive_accuracy_increased"
+  },
+  "qlora_whole_report": {
+    "no_history_exact": 0.8488645262333594,
+    "related_exact": 0.8841033672670321,
+    "random_exact": 0.8817541111981206,
+    "mismatched_exact": 0.8852779953014879,
+    "related_minus_no_history": 0.035238841033672696,
+    "related_minus_no_history_ci95": [0.021681215208392807, 0.048197079248601234],
+    "related_minus_random": 0.002349256068911454,
+    "related_minus_random_ci95": [-0.006759373386081263, 0.01107728865801618],
+    "related_minus_mismatched": -0.0011746280344557825,
+    "related_minus_mismatched_ci95": [-0.009267507194128154, 0.007309600182598437]
+  },
+  "frozen_question_gate": {
+    "selected_question_count": 324,
+    "related_exact": 0.8770555990602976,
+    "random_exact": 0.8758809710258418,
+    "mismatched_exact": 0.874706342991386,
+    "related_minus_random_ci95": [-0.006374912169592246, 0.007819347036991858],
+    "related_minus_mismatched_ci95": [-0.0033482610223737734, 0.007705260582833028]
+  },
+  "artifact_sha256": {
+    "retrieval_summary": "a82870594026d89b67ca58dad2a958eb7aee0f1af08e6a7e20b1e697bbcca8b9",
+    "retrieval_rows_local": "1dfe0558db5968c32b85906977eac4beaa1ee58acd8b8857816dc01981985c00",
+    "base_generation_summary": "2d5c452acca5cc81861759de2b5305e7ac2dfd5c842cb58fadebc17c7e53fbd3",
+    "qlora_fact_summary": "28e539dc63ea106b935dbdb7d3ef7f83cbe2853a3072f3b887f1380a2f724e21",
+    "crossfit_gate_summary": "6649d8b0948aa3ba187794f1d52097c027d35a89cffa196467fca85bd3628274",
+    "whole_report_summary": "38aeea1ba36c7837a16c732548d36c49fa55a6ec1b1637317c0b4b895b93e8ef",
+    "frozen_question_gate_summary": "45150883e4a375e401d0fcbe4e0fd02c2c37233e2ade17c6897bdc1daefd4c5d"
+  },
+  "verification": {
+    "pytest_passed": 362,
+    "compileall_passed": true
+  },
+  "boundary": "Automatic same-source Calibration exploration only; no V17 Validation/Test, clinical-accuracy, patient-level-independence, or external-validation claim"
+}

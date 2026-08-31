@@ -10,7 +10,7 @@ This repository contains the reproducible implementation and frozen evidence for
 - **Publication-extension release:** `v10-publication-freeze`
 - **Final thesis package:** `v10-v11-final-thesis-freeze`
 - **Final integrated release:** `v16-final-thesis-freeze`
-- **Current status:** V16 automated confirmation, final manuscript, software audit, and repository integration complete; independent clinical review and authorized external validation remain Future Work
+- **Current status:** V16 remains the final automated confirmation. V17 adds a completed Calibration-only relevance-specificity exploration without reopening Validation/Test; independent clinical review and authorized external validation remain Future Work
 
 ## Study Structure
 
@@ -30,6 +30,7 @@ The final study deliberately separates two different tasks instead of treating t
 12. **V12 final retrieval method:** fuses BM25, MedCPT, and MedSigLIP rankings, retains the Top-200 union, and applies a frozen 17-feature LambdaMART reranker selected on Validation.
 13. **V13-V15 mechanism development:** explores concept prediction, transfer, and generation adaptation on non-Test data without replacing the frozen confirmation path.
 14. **V16 final integrated confirmation:** applies V12 retrieval and a Validation-selected section-aware QLoRA route once to the 568-case executable Test frame, with no post-Test retuning.
+15. **V17 relevance-specificity exploration:** uses actual QA questions to rerank the frozen image Top-100, then compares Related, Random, and Mismatched historical evidence through identical pipelines on Calibration only. Retrieval proxy relevance improved strongly; Related whole-report QA numerically exceeded Random but not significantly, so V17 stopped without Validation/Test advancement.
 
 The demonstrated Agent follows explicit `scope`, `retrieve`, `generate`, `audit`, and `review/abstain` states. Routing rules are deterministic, and the verifier is a risk signal rather than a clinical correctness label.
 
@@ -46,6 +47,15 @@ The demonstrated Agent follows explicit `scope`, `retrieve`, `generate`, `audit`
 - A post-run completeness audit found 81 cases with empty Findings references, producing 243 zero-reference rows per arm. The frozen 568-case denominator was retained; a non-empty-reference sensitivity remained positive at `+0.04571`, 95% CI `[+0.03371,+0.05763]`.
 
 These are automated same-source results under report-derived references and qrels. They do not establish physician-rated similarity, diagnostic accuracy, clinical safety, verified patient-level independence, or external generalization. See `docs/V16_FINAL_TECHNICAL_FREEZE.md` and `docs/FINAL_RESULTS_REGISTRY.md`.
+
+### V17 Relevance-Specificity Exploration
+
+- Calibration-only retrieval: 358 cases and 17,991 questions; Final-QA Test was not accessed.
+- Balanced Top-1 same-question report-answer agreement improved from `0.33378` with image-only retrieval to `0.39413` with actual-question-conditioned reranking; positive agreement improved from `0.19831` to `0.40132`.
+- In the frozen 51-case / 2,554-question QLoRA whole-report pilot, Exact Accuracy was no history `0.84886`, Random `0.88175`, Related `0.88410`, and Mismatched `0.88528`.
+- Related exceeded no history by `+0.03524`, 95% case-bootstrap CI `[+0.02168,+0.04820]`. Related exceeded Random numerically by `+0.00235`, but the CI `[-0.00676,+0.01108]` crossed zero; Related did not exceed Mismatched.
+- A pre-existing frozen question-ID gate placed selective Related (`0.87706`) numerically above Random (`0.87588`) and Mismatched (`0.87471`), but both relevance-specific intervals crossed zero.
+- V17 therefore supports improved question-specific retrieval and a history-versus-no-history QA effect, but does not confirm that downstream gain is uniquely caused by history relevance. It did not advance to Validation or Test. See `docs/V17_EXPLORATORY_RESULT.md`.
 
 ### V1 Open-Corpus Stress Test
 
