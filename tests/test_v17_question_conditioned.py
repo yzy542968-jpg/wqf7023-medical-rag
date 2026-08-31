@@ -7,6 +7,7 @@ from medical_rag.similar_case.v17_question_conditioned import (
     deterministic_top_ids,
     fixed_point_free_permutation,
     minmax,
+    select_complete_case_pilot,
     set_f1,
     summarize_proxy_rows,
     weighted_ranking,
@@ -51,4 +52,16 @@ def test_proxy_summary_balances_strata() -> None:
     summary = summarize_proxy_rows(rows)
     assert summary["balanced_top1_qid_answer_agreement"] == 1.0 / 3.0
     assert summary["top3_any_exact"] == 2.0 / 3.0
+
+
+def test_complete_case_pilot_respects_question_bounds() -> None:
+    selected = select_complete_case_pilot(
+        {"a": 40, "b": 50, "c": 60, "d": 70},
+        domain="pilot",
+        seed=4,
+        target_questions=100,
+        maximum_questions=150,
+    )
+    total = sum({"a": 40, "b": 50, "c": 60, "d": 70}[case_id] for case_id in selected)
+    assert 100 <= total <= 150
 

@@ -112,13 +112,43 @@ def fixed_point_free_permutation(keys: Sequence[str], *, domain: str, seed: int)
     return {value: ordered[(index + 1) % len(ordered)] for index, value in enumerate(ordered)}
 
 
+def select_complete_case_pilot(
+    question_counts: Mapping[str, int], *, domain: str, seed: int, target_questions: int,
+    maximum_questions: int,
+) -> list[str]:
+    if target_questions < 1 or maximum_questions < target_questions:
+        raise ValueError("Invalid pilot question bounds")
+    ordered = sorted(
+        (str(case_id) for case_id in question_counts),
+        key=lambda case_id: (
+            hashlib.sha256(f"{domain}|{seed}|{case_id}".encode("utf-8")).hexdigest(),
+            case_id,
+        ),
+    )
+    selected: list[str] = []
+    total = 0
+    for case_id in ordered:
+        count = int(question_counts[case_id])
+        if count < 1:
+            raise ValueError(f"Case {case_id} has no questions")
+        if total >= target_questions:
+            break
+        if total + count > maximum_questions:
+            continue
+        selected.append(case_id)
+        total += count
+    if total < target_questions:
+        raise ValueError("Could not reach the pilot target without exceeding its maximum")
+    return selected
+
+
 __all__ = [
     "answer_stratum",
     "deterministic_top_ids",
     "fixed_point_free_permutation",
     "minmax",
+    "select_complete_case_pilot",
     "set_f1",
     "summarize_proxy_rows",
     "weighted_ranking",
 ]
-
